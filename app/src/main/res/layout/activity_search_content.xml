@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="@dimen/left_distance"
+        android:layout_marginTop="15dp"
+        android:text="@string/Hot_Search"
+        android:textSize="11sp" />
+
+    <View
+        style="@style/myline"
+        android:layout_marginLeft="@dimen/left_distance" />
+
+    <com.example.stamp.view.FlowLayout
+        android:id="@+id/search_fl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/left_distance"
+        android:layout_marginRight="@dimen/left_distance"
+        android:layout_marginTop="8dp" />
+
+    <LinearLayout
+        android:id="@+id/search_Historical_LV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="@dimen/left_distance"
+            android:layout_marginTop="15dp"
+            android:text="@string/Historical_Search"
+            android:textSize="11sp" />
+
+        <View
+            style="@style/myline"
+            android:layout_marginLeft="@dimen/left_distance" />
+
+        <ListView
+            android:id="@+id/search_lv"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="1dp"
+            android:layout_marginLeft="@dimen/left_distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/search_clean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:drawableLeft="@mipmap/clean_up"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="@string/clean_search_historical"
+            android:textColor="#000"
+            android:textSize="9sp" />
+    </LinearLayout>
+</LinearLayout>

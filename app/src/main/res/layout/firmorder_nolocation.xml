@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--地址的布局-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/FirmOrder_NoAddress"
+    android:layout_width="match_parent"
+    android:minHeight="85dp"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="85dp"
+        android:drawableLeft="@mipmap/add_white"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="添加收获地址"
+        android:textColor="#333"
+        android:textSize="14dp"/>
+
+    <View style="@style/myline"/>
+</LinearLayout>

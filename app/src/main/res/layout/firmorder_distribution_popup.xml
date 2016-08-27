@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--支付页面底部弹出的配送方式PopupWindow-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/firmOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <View style="@style/myline"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance"
+                android:layout_weight="1"
+                android:text="@string/EMS"
+                android:textColor="@color/black"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance"
+                android:text="@string/freight"
+                android:textColor="@color/black"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance"
+                android:text="￥10.00"
+                android:textColor="@color/red_font"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:id="@+id/EMS_click"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:src="@drawable/circle_select_bg"/>
+        </LinearLayout>
+
+        <View style="@style/myline"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance"
+                android:layout_weight="1"
+                android:text="@string/Wind_express"
+                android:textColor="@color/black"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance"
+                android:text="@string/freight"
+                android:textColor="@color/black"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance"
+                android:text="￥10.00"
+                android:textColor="@color/red_font"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:id="@+id/Wind_click"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:src="@drawable/circle_select_bg"/>
+        </LinearLayout>
+
+        <View style="@style/myline"/>
+
+        <TextView
+            android:id="@+id/popup_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center"
+            android:text="@string/finish"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+
+        <View style="@style/myline"/>
+    </LinearLayout>
+</RelativeLayout>

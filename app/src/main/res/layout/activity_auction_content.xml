@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFACAAAA"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:background="#d3d3d3"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="新中国邮票"
+                android:textColor="#666"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFACAAAA"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:background="#d3d3d3"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="民国邮票"
+                android:textColor="#666"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFACAAAA"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:background="#d3d3d3"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="解放区邮票"
+                android:textColor="#666"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFACAAAA"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:background="#d3d3d3"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="清代邮票"
+                android:textColor="#666"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View style="@style/myline" />
+
+    <com.example.stamp.view.HorizontalListView
+        android:id="@+id/stamp_hl"
+        android:layout_width="match_parent"
+        android:layout_height="31dp" />
+
+
+    <View
+        style="@style/myline"
+        android:layout_marginTop="@dimen/distance" />
+
+    <!--<LinearLayout-->
+
+    <!--android:id="@+id/market_radioGroup"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="28dp"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<Button-->
+    <!--android:id="@+id/market_rb_synthesize"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@null"-->
+    <!--android:button="@null"-->
+    <!--android:drawablePadding="5dp"-->
+    <!--android:drawableRight="@mipmap/top_arrow"-->
+    <!--android:gravity="center"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--android:paddingRight="10dp"-->
+    <!--android:text="@string/synthesize"-->
+    <!--android:textColor="#666"-->
+    <!--android:textSize="9sp" />-->
+
+    <!--<View-->
+    <!--android:layout_width="1dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="3dp"-->
+    <!--android:layout_marginTop="3dp"-->
+    <!--android:background="#dedfe3" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/market_rb_sales"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@null"-->
+    <!--android:button="@null"-->
+    <!--android:drawablePadding="3dp"-->
+    <!--android:drawableRight="@mipmap/top_arrow"-->
+    <!--android:gravity="center"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--android:paddingRight="10dp"-->
+    <!--android:text="@string/Release_time"-->
+    <!--android:textColor="#666666"-->
+    <!--android:textSize="9sp" />-->
+
+    <!--<View-->
+    <!--android:layout_width="1dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="3dp"-->
+    <!--android:layout_marginTop="3dp"-->
+    <!--android:background="#dedfe3" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/market_rb_value"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@null"-->
+    <!--android:button="@null"-->
+    <!--android:drawablePadding="3dp"-->
+    <!--android:drawableRight="@mipmap/top_arrow"-->
+    <!--android:gravity="center"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--android:paddingRight="10dp"-->
+    <!--android:text="@string/price"-->
+    <!--android:textColor="#666666"-->
+    <!--android:textSize="9sp" />-->
+
+    <!--<View-->
+    <!--android:layout_width="1dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="3dp"-->
+    <!--android:layout_marginTop="3dp"-->
+    <!--android:background="#dedfe3" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/stamptap_filter"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@null"-->
+    <!--android:button="@null"-->
+    <!--android:drawablePadding="3dp"-->
+    <!--android:drawableRight="@mipmap/filter"-->
+    <!--android:gravity="center"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--android:paddingRight="10dp"-->
+    <!--android:text="@string/filter"-->
+    <!--android:textColor="#666666"-->
+    <!--android:textSize="9sp" />-->
+    <!--</LinearLayout>-->
+
+    <View style="@style/myline" />
+
+    <!--<GridView-->
+    <!--android:id="@+id/stamp_gl"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:horizontalSpacing="10dp"-->
+    <!--android:listSelector="@android:color/transparent"-->
+    <!--android:numColumns="2"-->
+    <!--android:overScrollMode="never"-->
+    <!--android:scrollbars="none"-->
+    <!--android:stretchMode="columnWidth"-->
+    <!--android:verticalSpacing="10dp" />-->
+
+    <ListView
+        android:id="@+id/stamp_lv"
+        android:listSelector="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+</LinearLayout>

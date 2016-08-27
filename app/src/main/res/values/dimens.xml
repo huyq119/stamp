@@ -1,0 +1,15 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!--左边的距离-->
+    <dimen name="left_distance">9dp</dimen>
+
+    <!--基础大小-->
+    <dimen name="fount_size">12sp</dimen>
+
+    <!--安全边距-->
+    <dimen name="distance">12dp</dimen>
+</resources>

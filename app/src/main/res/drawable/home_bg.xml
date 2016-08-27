@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 首页的状态选择器 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@mipmap/home" android:state_checked="true" />
+    <item android:drawable="@mipmap/home_normal"/>
+
+</selector>

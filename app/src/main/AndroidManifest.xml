@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.example.stamp">
+
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <application
+        android:name=".ui.MyApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/NoTitleBar">
+        <activity android:name=".activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask"/>
+        <!-- 扫描二维码 -->
+        <activity android:name=".zxing.activity.CaptureActivity"/>
+        <!-- 搜索 -->
+        <activity
+            android:name=".activity.SearchActivity"
+            android:launchMode="singleTask"/>
+        <!-- 搜索的详情页面 -->
+        <activity android:name=".activity.SearchDetailActivity"/>
+        <!-- 邮票目录详情页 -->
+        <activity
+            android:name=".activity.StampTapDetailActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults"/>
+        <!-- 分享弹出页面 -->
+        <activity
+            android:name=".activity.SharedActivity"
+            android:theme="@style/MyDialogStyleBottom"/>
+        />
+        <activity android:name=".activity.StampActivity"/>
+        <activity android:name=".activity.SelfMallDetailActivity"/>
+        <activity
+            android:name=".activity.StampDetailActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults"/>
+        <activity android:name=".activity.AuctionActivity"/>
+        <activity android:name=".activity.ScanActivity"/>
+        <activity android:name=".activity.AuctionDetailActivity"/>
+        <activity android:name=".activity.DesignerActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.UsMeActivity"/>
+        <activity android:name=".activity.ResettingPassWordActivity"/>
+        <activity android:name=".activity.RegisterActivity"/>
+        <activity android:name=".activity.WithdrawActivity"/>
+        <activity android:name=".activity.CardActivity"/>
+        <activity
+            android:name=".activity.ReviseCardActivity"
+            android:label="@string/title_activity_revise"/>
+        <activity android:name=".activity.ApplyWithdrawActivity"/>
+        <activity android:name=".activity.UnBundlingActivity"/>
+        <activity android:name=".activity.ScanDetailsActivity"/>
+        <activity android:name=".activity.AffirmBuyBackActivity"/>
+        <activity android:name=".activity.FastMailInfoActivity"/>
+        <activity android:name=".activity.FastMailSubmitActivity"/>
+        <activity android:name=".activity.PressWordManagerActivity"/>
+        <activity android:name=".activity.LoginPressWordActivity"/>
+        <activity android:name=".activity.WithdrawPressWordActivity"/>
+        <activity android:name=".activity.ServiceProtocolActivity"/>
+        <activity android:name=".activity.MyStampActivity">
+        </activity>
+        <activity android:name=".activity.FirmOrderActivity">
+        </activity>
+        <activity android:name=".activity.ManagerAddressActivity">
+        </activity>
+        <activity android:name=".activity.EditReceiptAddressActivity">
+        </activity>
+        <activity android:name=".activity.AuctionRecordActivity">
+        </activity>
+        <activity android:name=".activity.MyCollectionActivity">
+        </activity>
+        <activity
+            android:name=".activity.DesignerDetailActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults">
+        </activity>
+        <activity android:name=".activity.CreatNewAddressActivity">
+        </activity>
+        <activity android:name=".activity.OrderAuditingActivity">
+        </activity>
+        <activity android:name=".activity.OrderActivity">
+        </activity>
+        <activity android:name=".activity.OrderCloseActivity">
+        </activity>
+        <activity android:name=".activity.OrderFinishActivity">
+        </activity>
+        <activity android:name=".activity.OrderRejectActivity">
+        </activity>
+        <activity android:name=".activity.OrderWaitActivity">
+        </activity>
+        <activity android:name=".activity.LogisticsDetailsActivity">
+        </activity>
+        <activity android:name=".activity.OrderDetailsActivity">
+        </activity>
+        <activity android:name=".activity.HomeImageH5Activity">
+        </activity>
+    </application>
+
+</manifest>

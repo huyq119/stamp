@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--竞拍记录页面-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <View
+        style="@style/myline"/>
+
+    <LinearLayout
+        android:id="@+id/record_radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/record_all"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/recordAll"
+            android:textColor="#666"
+            android:textSize="12sp"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="3dp"
+            android:background="#dedfe3"/>
+
+        <Button
+            android:id="@+id/btn_recording"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/recording"
+            android:textColor="#666"
+            android:textSize="12sp"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="3dp"
+            android:background="#dedfe3"/>
+
+        <Button
+            android:id="@+id/btn_recordout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/recordOut"
+            android:textColor="#666"
+            android:textSize="12sp"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="3dp"
+            android:background="#dedfe3"/>
+
+        <Button
+            android:id="@+id/record_success"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/recordSuccess"
+            android:textColor="#666"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+    <View
+        style="@style/myline"/>
+
+    <ListView
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:listSelector="@android:color/transparent"
+        android:id="@+id/record_auction_LV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

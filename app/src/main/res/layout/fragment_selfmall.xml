@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="9dp"-->
+        <!--android:layout_marginTop="12dp"-->
+        <!--android:orientation="vertical">-->
+
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="9dp"-->
+            <!--android:text="@string/category"-->
+            <!--android:textColor="#000"-->
+            <!--android:textSize="12sp" />-->
+
+
+        <!--<View style="@style/myline" />-->
+
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="9dp"-->
+
+            <!--android:orientation="vertical">-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="9dp"-->
+                <!--android:layout_marginTop="9dp"-->
+                <!--android:text="@string/vieStamp"-->
+                <!--android:textColor="#666"-->
+                <!--android:textSize="9sp" />-->
+
+
+            <!--<com.example.stamp.view.NoScrollGridView-->
+                <!--android:id="@+id/stamptap_pop_years"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:gravity="center"-->
+                <!--android:horizontalSpacing="16dp"-->
+                <!--android:listSelector="@android:color/transparent"-->
+                <!--android:numColumns="4"-->
+                <!--android:overScrollMode="never"-->
+                <!--android:scrollbars="none"-->
+                <!--android:stretchMode="columnWidth"-->
+                <!--android:verticalSpacing="8dp" />-->
+
+            <!--<View style="@style/myline" />-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="9dp"-->
+                <!--android:layout_marginTop="9dp"-->
+                <!--android:text="@string/metal_stamp"-->
+                <!--android:textColor="#666"-->
+                <!--android:textSize="9sp" />-->
+
+
+            <!--<com.example.stamp.view.NoScrollGridView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:gravity="center"-->
+                <!--android:horizontalSpacing="16dp"-->
+                <!--android:listSelector="@android:color/transparent"-->
+                <!--android:numColumns="4"-->
+                <!--android:overScrollMode="never"-->
+                <!--android:scrollbars="none"-->
+                <!--android:stretchMode="columnWidth"-->
+                <!--android:verticalSpacing="8dp" />-->
+
+            <!--<View style="@style/myline" />-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="9dp"-->
+                <!--android:layout_marginTop="9dp"-->
+                <!--android:text="@string/stamp"-->
+                <!--android:textColor="#666"-->
+                <!--android:textSize="9sp" />-->
+
+
+            <!--<com.example.stamp.view.NoScrollGridView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:gravity="center"-->
+                <!--android:horizontalSpacing="16dp"-->
+                <!--android:listSelector="@android:color/transparent"-->
+                <!--android:numColumns="4"-->
+                <!--android:overScrollMode="never"-->
+                <!--android:scrollbars="none"-->
+                <!--android:stretchMode="columnWidth"-->
+                <!--android:verticalSpacing="8dp" />-->
+
+            <!--<View style="@style/myline" />-->
+        <!--</LinearLayout>-->
+
+
+        <!--<TextView-->
+
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="9dp"-->
+            <!--android:layout_marginTop="12dp"-->
+            <!--android:text="@string/brand"-->
+            <!--android:textSize="12sp" />-->
+
+
+        <!--<View style="@style/myline" />-->
+
+        <!--<com.example.stamp.view.NoScrollGridView-->
+            <!--android:id="@+id/stamptap_pop_category"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:gravity="center"-->
+            <!--android:horizontalSpacing="16dp"-->
+            <!--android:listSelector="@android:color/transparent"-->
+            <!--android:numColumns="3"-->
+            <!--android:overScrollMode="never"-->
+            <!--android:scrollbars="none"-->
+            <!--android:stretchMode="columnWidth"-->
+            <!--android:verticalSpacing="8dp" />-->
+
+    <!--</LinearLayout>-->
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="9dp"
+        android:layout_marginTop="12dp"
+        android:text="自营商城"
+        android:textSize="12sp" />
+</LinearLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 扫码回收商品详情页面 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <com.example.stamp.view.DragLayout
+        android:id="@+id/scanDetail_dragLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <FrameLayout
+            android:id="@+id/first"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <FrameLayout
+            android:id="@+id/second"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.example.stamp.view.DragLayout>
+
+    <TextView
+        android:id="@+id/scan_buyBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_click_bg"
+        android:gravity="center"
+        android:text="申请回购"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+</LinearLayout>

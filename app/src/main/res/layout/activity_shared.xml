@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/shared_finish"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:id="@+id/pop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="63dp"
+        android:layout_alignParentBottom="true"
+        android:background="#dfe3e6"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/weixin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/weixin" />
+
+        <ImageView
+            android:id="@+id/pengyouquan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/pengyouquan" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/shared_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="#f2f2f2"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textColor="#000"
+        android:textSize="12sp" />
+
+
+</LinearLayout>

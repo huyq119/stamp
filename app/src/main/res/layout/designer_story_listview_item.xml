@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/story_item_icon_image"
+        android:layout_width="119dp"
+        android:layout_height="119dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="15dp"
+        android:background="@drawable/roct_bg"
+        android:padding="10dp"
+        android:src="@mipmap/ic_launcher"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="54dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="54dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/story_item_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="15dp"
+            android:text="陈绍华:《葵已年，未采用稿》"
+            android:textColor="#000"
+            android:textSize="15sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/story_item_author_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/author_"
+                android:textColor="#999"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/story_author_detail_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="陈绍华"
+                android:textColor="#666"
+                android:textSize="13sp"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

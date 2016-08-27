@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.example.stamp.view.NoScrollViewpager
+        android:id="@+id/Main_ViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <View style="@style/myline" />
+
+
+    <RadioGroup
+        android:id="@+id/Main_RadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/Radio_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/home_bg"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/home"
+            android:textColor="@drawable/red_text_bg"
+            android:textSize="8sp" />
+
+        <RadioButton
+            android:id="@+id/Radio_stamptap"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawablePadding="5dp"
+            android:drawableTop="@drawable/stamptap_bg"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/stamptap"
+            android:textColor="@drawable/red_text_bg"
+            android:textSize="8sp" />
+
+        <RadioButton
+            android:id="@+id/Radio_panstamp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/panstamp_bg"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/panstamp"
+            android:textColor="@drawable/red_text_bg"
+            android:textSize="8sp" />
+
+        <RadioButton
+            android:id="@+id/Radio_shop"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/shop_bg"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/shop"
+            android:textColor="@drawable/red_text_bg"
+            android:textSize="8sp" />
+
+        <RadioButton
+            android:id="@+id/Radio_my"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/my_bg"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/my"
+            android:textColor="@drawable/red_text_bg"
+            android:textSize="8sp" />
+    </RadioGroup>
+
+</LinearLayout>

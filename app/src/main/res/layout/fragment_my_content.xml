@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:overScrollMode="never"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="vertical">
+
+
+        <include
+            layout="@layout/my_no_login"
+            android:visibility="visible" />
+
+        <include
+            layout="@layout/my_login"
+            android:visibility="gone" />
+
+
+        <View
+            style="@style/myline"
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/Commodity_order"
+                android:textColor="#000"
+                android:textSize="@dimen/fount_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/right_arrow" />
+        </LinearLayout>
+
+        <View
+            style="@style/myline"
+            android:layout_marginLeft="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@mipmap/pay"
+                android:gravity="center"
+                android:paddingTop="9dp"
+                android:text="待付款" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@mipmap/goods"
+                android:gravity="center"
+                android:paddingTop="9dp"
+                android:text="待收货" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@mipmap/finish"
+                android:gravity="center"
+                android:paddingTop="9dp"
+                android:text="已完成" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@mipmap/drawback"
+                android:gravity="center"
+                android:paddingTop="9dp"
+                android:text="退款/退货" />
+        </LinearLayout>
+
+        <View style="@style/myline" />
+
+        <LinearLayout
+            android:id="@+id/my_auctionRecord"
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/Auction_record"
+                android:textColor="#000"
+                android:textSize="@dimen/fount_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/right_arrow" />
+        </LinearLayout>
+
+        <View style="@style/myline" />
+
+        <LinearLayout
+            android:id="@+id/my_order_buy_back"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="#fff">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/Buy_back_order"
+                android:textColor="#000"
+                android:textSize="@dimen/fount_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/right_arrow" />
+        </LinearLayout>
+
+        <View style="@style/myline" />
+
+        <View
+            style="@style/myline"
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:id="@+id/my_Stamp"
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/My_collection"
+                android:textColor="#000"
+                android:textSize="@dimen/fount_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/right_arrow" />
+        </LinearLayout>
+
+        <View style="@style/myline" />
+
+        <LinearLayout
+            android:id="@+id/my_collection"
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/favorite"
+                android:textColor="#000"
+                android:textSize="@dimen/fount_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/right_arrow" />
+        </LinearLayout>
+
+        <View style="@style/myline" />
+
+        <LinearLayout
+            android:id="@+id/my_Address"
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/Receipt_address"
+                android:textColor="#000"
+                android:textSize="@dimen/fount_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/right_arrow" />
+        </LinearLayout>
+
+        <View style="@style/myline" />
+
+        <LinearLayout
+            android:id="@+id/my_PressWordManager"
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/Password_management"
+                android:textColor="#000"
+                android:textSize="@dimen/fount_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/right_arrow" />
+        </LinearLayout>
+
+        <View style="@style/myline" />
+
+        <View
+            style="@style/myline"
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:id="@+id/my_usMe"
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/about_us"
+                android:textColor="#000"
+                android:textSize="@dimen/fount_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/right_arrow" />
+        </LinearLayout>
+
+        <View style="@style/myline" />
+
+        <LinearLayout
+            android:id="@+id/my_update"
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="@string/Version_update"
+                android:textColor="#000"
+                android:textSize="@dimen/fount_size" />
+
+            <TextView
+                android:id="@+id/my_version"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/current_version"
+                android:textColor="#999"
+                android:textSize="@dimen/fount_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/right_arrow" />
+        </LinearLayout>
+
+        <View style="@style/myline" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/high_praise"
+                android:textColor="#000"
+                android:textSize="@dimen/fount_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/right_arrow" />
+        </LinearLayout>
+
+        <View style="@style/myline" />
+
+        <include
+            layout="@layout/my_quit_login"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+</ScrollView>

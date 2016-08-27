@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<!--<WebView
+    android:id="@+id/designer_story_details_web"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+</WebView>-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="这是H5页面"
+        android:textSize="20dp"
+        android:gravity="center"
+        />
+
+
+</LinearLayout>

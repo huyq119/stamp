@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><!--分类的popupWindow的条目-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/classify"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:minHeight="25dp"
+        android:layout_marginLeft="@dimen/distance"
+        android:textColor="#333"
+        android:textSize="12sp" />
+
+    <View style="@style/myline" />
+</LinearLayout>

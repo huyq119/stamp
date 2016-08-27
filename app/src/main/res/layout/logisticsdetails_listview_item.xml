@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--物流信息条目页面-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="62dp"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:layout_width="62dp"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/logistics_top"
+            android:layout_width="1px"
+            android:layout_height="15dp"
+            android:background="@color/grey"/>
+
+        <ImageView
+            android:id="@+id/logistics_image"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@mipmap/circle_grey"/>
+
+        <View
+            android:id="@+id/logistics_bottom"
+            android:layout_width="1px"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/grey"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="81dp"
+        android:orientation="vertical">
+
+        <View style="@style/myline"/>
+
+        <TextView
+            android:id="@+id/logistics_route"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="14dp"
+            android:layout_weight="1"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/logistics_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="15dp"
+            android:textSize="12sp"/>
+
+        <View
+            android:id="@+id/logisticsDetails_bottom"
+            style="@style/myline"/>
+    </LinearLayout>
+</LinearLayout>

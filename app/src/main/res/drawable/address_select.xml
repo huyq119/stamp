@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--地址默认选择的按钮背景-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@mipmap/toggle_red" android:state_checked="true"/>
+    <item android:drawable="@mipmap/toggle_grey" android:state_checked="false"/>
+</selector>

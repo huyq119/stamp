@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <ListView
+        android:id="@+id/managerAddress_LV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:dividerHeight="15dp"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:divider="@color/background"/>
+
+    <TextView
+        android:id="@+id/managerAddress_TV"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="@string/addNewAddress"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:background="@color/red_font"
+        android:textColor="@color/white"/>
+</LinearLayout>
