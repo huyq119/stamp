@@ -263,11 +263,9 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         String stamp_sn = mList.get(i).getStamp_sn();// 编号
-        String stamp_img = mList.get(i).getStamp_img();// 图片
         String current_price = mList.get(i).getCurrent_price(); // 当前价格
         Bundle bundle = new Bundle();
         bundle.putString(StaticField.STAMPDETAIL_SN, stamp_sn);
-        bundle.putString(StaticField.STAMPDETAIL_IMG, stamp_img);
         bundle.putString(StaticField.STAMPDETAIL_PRICE, current_price);
         openActivityWitchAnimation(StampTapDetailActivity.class, bundle);
     }

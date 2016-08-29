@@ -70,7 +70,6 @@ public class StaticField {
 
     //邮市目录传值的键
     public static final String STAMPDETAIL_SN = "stampDetail_sn";// 编号
-    public static final String STAMPDETAIL_IMG = "stampDetail_img";// 图片
     public static final String STAMPDETAIL_PRICE = "stampDetail_price";// 当前价格
 
     //设计家列表查询

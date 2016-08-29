@@ -54,7 +54,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
 
-    private String mStampSn,mStampImg,mStampPrice;//邮票标识(编号，图片，价格)
+    private String mStampSn,mStampPrice;//邮票标识(编号，价格)
     private List<Fragment> mList;
     private String[] arr = {"邮票信息", "价格行情", "邮票故事"};
     private String[] arrImage = {"http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg",
@@ -111,7 +111,6 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         //获取传邮市传过来的内容
         Bundle bundle = getIntent().getExtras();
         mStampSn = bundle.getString(StaticField.STAMPDETAIL_SN);
-        mStampImg = bundle.getString(StaticField.STAMPDETAIL_IMG);
         mStampPrice = bundle.getString(StaticField.STAMPDETAIL_PRICE);
 
         mBack = (ImageView) mStampTapDetailTitle.findViewById(R.id.base_title_back);
