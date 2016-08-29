@@ -51,11 +51,19 @@ public class StampTapBean extends BaseBean {
         this.stamp_list = stamp_list;
     }
 
-    public class StampList {
-        public String stamp_sn;
-        public String stamp_img;
-        public String stamp_name;
-        public String current_price;
+    public static class StampList {
+        public String stamp_sn;// 邮票编号
+        public String stamp_img;// 邮票图片
+        public String stamp_name;// 邮票名称
+        public String current_price;// 当前价格
+
+        public StampList(String stamp_name,String current_price,String stamp_img) {
+            super();
+
+            this.stamp_sn = stamp_name;
+            this.current_price = current_price;
+            this.stamp_img = stamp_img;
+        }
 
         public String getStamp_sn() {
             return stamp_sn;

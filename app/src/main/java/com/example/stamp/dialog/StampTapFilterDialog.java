@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import com.example.stamp.R;
 import com.example.stamp.StaticField;
 import com.example.stamp.adapter.StampTapFilterGridViewAdapter;
+import com.example.stamp.adapter.StampTapFilterThemeGridViewAdapter;
 import com.example.stamp.base.BaseDialogFragment;
 import com.example.stamp.http.HttpUtils;
 import com.example.stamp.listener.GridViewOnItemClickListener;
+import com.example.stamp.listener.GridViewThemeOnItemClickListener;
 import com.example.stamp.utils.Encrypt;
 import com.example.stamp.utils.MyLog;
 import com.example.stamp.utils.SortUtils;
@@ -26,12 +28,21 @@ import java.util.HashMap;
  */
 public class StampTapFilterDialog extends BaseDialogFragment {
 
+    private String[] arr;
+    private String[] arrs;
+    private String[] arres;
     private View mFilterView;
     private int Current = -1;//当前选择的年代角标
-    private GridViewOnItemClickListener mYearListener, mCategoryListener, mThemeListener;//年份的监听,类别的监听,题材的监听
-    private String[] arr = {"清代邮票", "清代邮票", "清代邮票", "清代邮票", "清代邮票", "清代邮票", "清代邮票", "清代邮票", "清代邮票", "清代邮票"};
+    private GridViewOnItemClickListener mYearListener, mCategoryListener;//年份的监听,类别的监听
+    private GridViewThemeOnItemClickListener mThemeListener;// 题材的监听
 
-    public StampTapFilterDialog() {
+
+    public StampTapFilterDialog(String[] arr,String[] arrs,String[] arres) {
+        this.arr = arr;
+        this.arrs = arrs;
+        this.arres = arres;
+
+
     }
 
     @Nullable
@@ -83,8 +94,8 @@ public class StampTapFilterDialog extends BaseDialogFragment {
 
         //创建适配器
         StampTapFilterGridViewAdapter mYearAdapter = new StampTapFilterGridViewAdapter(getActivity(), arr);
-        StampTapFilterGridViewAdapter mCategoryAdapter = new StampTapFilterGridViewAdapter(getActivity(), arr);
-        StampTapFilterGridViewAdapter mThemeAdapter = new StampTapFilterGridViewAdapter(getActivity(), arr);
+        StampTapFilterGridViewAdapter mCategoryAdapter = new StampTapFilterGridViewAdapter(getActivity(), arrs);
+        StampTapFilterThemeGridViewAdapter mThemeAdapter = new StampTapFilterThemeGridViewAdapter(getActivity(), arres);
 
         //设置适配器
         mYearGV.setAdapter(mYearAdapter);
@@ -99,7 +110,7 @@ public class StampTapFilterDialog extends BaseDialogFragment {
         mCategoryListener = new GridViewOnItemClickListener(Current, mCategoryAdapter);
         mCategoryGV.setOnItemClickListener(mCategoryListener);
         //题材的监听
-        mThemeListener = new GridViewOnItemClickListener(Current, mThemeAdapter);
+        mThemeListener = new GridViewThemeOnItemClickListener(Current, mThemeAdapter);
         mThemeGV.setOnItemClickListener(mThemeListener);
 
         //重置按钮

@@ -14,4 +14,15 @@
         android:textColor="#333"
         android:textSize="9dp" />
 
+    <TextView
+        android:id="@+id/stamptap_filter_theme_item_content"
+        android:layout_width="51dp"
+        android:layout_height="22dp"
+        android:background="@drawable/rounded_rectangle"
+        android:gravity="center"
+        android:text="人物"
+        android:textColor="#333"
+        android:textSize="9dp"
+        android:visibility="gone" />
+
 </LinearLayout>

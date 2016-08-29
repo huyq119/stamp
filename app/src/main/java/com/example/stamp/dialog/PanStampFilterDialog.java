@@ -12,10 +12,8 @@ import android.view.ViewGroup;
 import com.example.stamp.R;
 import com.example.stamp.adapter.PanStampDialogPagerAdapter;
 import com.example.stamp.base.BaseDialogFragment;
-import com.example.stamp.fragment.popfragment.SelfMallFragment;
 import com.viewpagerindicator.TabPageIndicator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,11 +23,12 @@ import java.util.List;
 public class PanStampFilterDialog extends BaseDialogFragment {
 
     private List<Fragment> mList;
-    private String[] arr = {"自营商城", "第三方商家", "邮市", "竞拍"};
-    private List<Fragment> mPopupList;//展示PopupWindow页面的Fragment的集合
+    private String[] arr;
 
 
-    public PanStampFilterDialog() {
+    public PanStampFilterDialog(List<Fragment> mList, String[] arr) {
+        this.mList = mList;
+        this.arr = arr;
     }
 
     @Nullable
@@ -37,17 +36,6 @@ public class PanStampFilterDialog extends BaseDialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //创建显示的View
         View mFilterView = CreateBaseView(inflater, R.layout.base_viewpagerindicator);
-
-
-        //初始化集合
-        mPopupList = new ArrayList<>();
-
-        SelfMallFragment mallFragment = new SelfMallFragment();
-
-        mPopupList.add(mallFragment);
-        mPopupList.add(mallFragment);
-        mPopupList.add(mallFragment);
-        mPopupList.add(mallFragment);
 
         //初始化控件
         FragmentPagerAdapter adapter = new PanStampDialogPagerAdapter(getChildFragmentManager(), mList, arr);

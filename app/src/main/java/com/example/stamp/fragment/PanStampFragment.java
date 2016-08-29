@@ -1,6 +1,7 @@
 package com.example.stamp.fragment;
 
 
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -8,20 +9,14 @@ import android.widget.GridView;
 import com.example.stamp.R;
 import com.example.stamp.StaticField;
 import com.example.stamp.adapter.PanStampGridViewAdapter;
+import com.example.stamp.adapter.StampMarketGridViewAdapter;
 import com.example.stamp.base.BaseFragment;
 import com.example.stamp.bean.StampTapBean;
 import com.example.stamp.dialog.PanStampFilterDialog;
-import com.example.stamp.http.HttpUtils;
-import com.example.stamp.utils.Encrypt;
-import com.example.stamp.utils.MyLog;
-import com.example.stamp.utils.SortUtils;
-import com.example.stamp.utils.ThreadManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.stamp.fragment.popfragment.SelfMallFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -33,7 +28,8 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
     private View mPanStampContent;//内容View
     private View mPanStampTitle;//标题View
     private Button mFilter;//筛选
-
+    private List<Fragment> mPopupList;//展示PopupWindow页面的Fragment的集合
+    private String[] arr = {"自营商城", "第三方商家", "邮市", "竞拍"};
     private GridView mPanStampGV;//本页的GridView
 
     private ArrayList<StampTapBean> mList;//存放数据的集合
@@ -48,34 +44,9 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
     public View CreateSuccess() {
         mPanStampContent = View.inflate(getActivity(), R.layout.fragment_panstamp_content, null);
         initView();
-        initData();
         initAdapter();
         initListener();
         return mPanStampContent;
-    }
-
-    private void initData() {
-        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                HashMap<String, String> params = new HashMap<>();
-                params.put(StaticField.SERVICE_TYPE, "cn.com.chinau.sysparam.query");
-                String mapSort = SortUtils.MapSort(params);
-                String md5code = Encrypt.MD5(mapSort);
-                MyLog.e(md5code);
-                params.put(StaticField.SIGN, md5code);
-
-                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-
-                MyLog.e(result);
-
-                try {
-                    JSONObject json = new JSONObject("sys_param_value");
-                } catch (JSONException e) {
-                    MyLog.e("失败");
-                }
-            }
-        });
     }
 
 
@@ -108,26 +79,26 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.panStamp_filter://筛选按钮
-//                setPopupWindowListData();
-                PanStampFilterDialog filterDialogFragment = new PanStampFilterDialog();
+                setPopupWindowListData();
+                PanStampFilterDialog filterDialogFragment = new PanStampFilterDialog(mPopupList, arr);
                 filterDialogFragment.show(getChildFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
                 break;
 
         }
     }
 
-//    /**
-//     * 这个最后看在哪里写
-//     */
-//    private void setPopupWindowListData() {
-//        //初始化集合
-//        mPopupList = new ArrayList<>();
-//
-//        SelfMallFragment mallFragment = new SelfMallFragment();
-//
-//        mPopupList.add(mallFragment);
-//        mPopupList.add(mallFragment);
-//        mPopupList.add(mallFragment);
-//        mPopupList.add(mallFragment);
-//    }
+    /**
+     * 这个最后看在哪里写
+     */
+    private void setPopupWindowListData() {
+        //初始化集合
+        mPopupList = new ArrayList<>();
+
+        SelfMallFragment mallFragment = new SelfMallFragment();
+
+        mPopupList.add(mallFragment);
+        mPopupList.add(mallFragment);
+        mPopupList.add(mallFragment);
+        mPopupList.add(mallFragment);
+    }
 }

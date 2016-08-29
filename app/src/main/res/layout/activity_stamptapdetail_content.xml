@@ -1,83 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.stamp.view.VerticalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/home_SV"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/background"
-    android:overScrollMode="never"
-    android:scrollbars="none">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.example.stamp.view.VerticalScrollView
+        android:id="@+id/home_SV"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#f8f8f8"
-        android:orientation="vertical">
-
-        <include layout="@layout/base_viewpager" />
-
-        <View style="@style/myline" />
+        android:background="@color/background"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/left_distance"
-                android:gravity="center_vertical"
-                android:text="@string/market_price"
-                android:textColor="#666" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/left_distance"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="10000"
-                android:textColor="#e20000" />
-
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="12dp"
-                android:background="@mipmap/rectangle_red"
-                android:gravity="center"
-                android:text="@string/join_stamp"
-                android:textColor="#e20000"
-                android:textSize="9sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/left_distance"
-                android:src="@mipmap/shop_normal" />
-        </LinearLayout>
-
-        <View style="@style/myline" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/distance"
-            android:background="@color/background"/>
-
-        <View style="@style/myline" />
-
-        <com.viewpagerindicator.TabPageIndicator
-            android:visibility="gone"
-            android:id="@+id/stamptapdetail_indicator"
-            android:layout_width="match_parent"
-            android:layout_height="45dp" />
-
-        <com.example.stamp.view.CustomViewPager
-            android:id="@+id/stamptapdetail_viewpager"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:overScrollMode="never"
-            android:scrollbars="none" />
-    </LinearLayout>
-</com.example.stamp.view.VerticalScrollView>
+            android:background="#f8f8f8"
+            android:orientation="vertical">
+
+            <include layout="@layout/base_viewpager" />
+
+            <View style="@style/myline" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/left_distance"
+                    android:gravity="center_vertical"
+                    android:text="@string/market_price"
+                    android:textColor="#666" />
+
+                <TextView
+                    android:id="@+id/stamp_details_price"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/left_distance"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="10000"
+                    android:textColor="#e20000" />
+
+                <TextView
+                    android:id="@+id/stamp_details_add_album"
+                    android:layout_width="40dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="12dp"
+                    android:background="@mipmap/rectangle_red"
+                    android:gravity="center"
+                    android:text="@string/join_stamp"
+                    android:textColor="#e20000"
+                    android:textSize="9sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="25dp"
+                    android:src="@mipmap/shop_normal" />
+
+
+            </LinearLayout>
+
+            <View style="@style/myline" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/distance"
+                android:background="@color/background" />
+
+            <View style="@style/myline" />
+
+            <com.viewpagerindicator.TabPageIndicator
+                android:id="@+id/stamptapdetail_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="gone" />
+
+            <com.example.stamp.view.CustomViewPager
+                android:id="@+id/stamptapdetail_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
+        </LinearLayout>
+    </com.example.stamp.view.VerticalScrollView>
+    <!--置顶按钮-->
+    <Button
+        android:id="@+id/stamp_top_detail_top_btn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="63dp"
+        android:layout_marginRight="10dp"
+        android:background="@mipmap/top"
+        android:gravity="center"
+        android:visibility="gone"
+        />
+</RelativeLayout>
