@@ -39,7 +39,7 @@ public class DesignerStoryDetailActivity extends BaseActivity implements View.On
 
     private void initView() {
         mBack = (ImageView) mStampTapDetailTitle.findViewById(R.id.base_title_back);
-        mShared = (ImageView) mStampTapDetailTitle.findViewById(R.id.base_search);
+        mShared = (ImageView) mStampTapDetailTitle.findViewById(R.id.base_shared);
         mTitle = (TextView) mStampTapDetailTitle.findViewById(R.id.base_title);
         mTitle.setText("设计故事");
         mShared.setOnClickListener(this);
@@ -53,7 +53,7 @@ public class DesignerStoryDetailActivity extends BaseActivity implements View.On
             case R.id.base_title_back://返回
                 finishWitchAnimation();
                 break;
-            case R.id.base_search://分享按钮
+            case R.id.base_shared://分享按钮
             openActivity(SharedActivity.class);
             break;
         }

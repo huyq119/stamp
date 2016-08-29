@@ -15,17 +15,6 @@
         android:orientation="horizontal"
         android:padding="1dp">
 
-        <com.example.stamp.view.RotateTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/tag"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:text="邮票目录"
-            android:textColor="#fff"
-            android:textSize="10sp"/>
-
-
         <ImageView
             android:id="@+id/works_works_img"
             android:layout_width="match_parent"
@@ -34,6 +23,19 @@
             android:layout_margin="10dp"
             android:scaleType="centerInside"
             android:src="@mipmap/ic_launcher"/>
+
+        <com.example.stamp.view.RotateTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/tag"
+            android:paddingRight="7dp"
+            android:paddingTop="9dp"
+            android:text="邮票目录"
+            android:textColor="#fff"
+            android:textSize="9sp"/>
+
+
+
     </com.example.stamp.view.SquareView>
 
 
