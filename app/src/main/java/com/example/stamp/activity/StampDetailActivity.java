@@ -1,21 +1,31 @@
 package com.example.stamp.activity;
 
 import android.media.Image;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.stamp.R;
+import com.example.stamp.StaticField;
 import com.example.stamp.adapter.HomeViewPagerAdapter;
 import com.example.stamp.adapter.StampDetailPagerAdapter;
 import com.example.stamp.base.BaseActivity;
+import com.example.stamp.bean.StampTapDetailBean;
 import com.example.stamp.fragment.stampdetailfragment.StampDetailInfoFragment;
 import com.example.stamp.utils.MyToast;
+import com.example.stamp.utils.ScreenUtils;
 import com.example.stamp.view.CustomViewPager;
+import com.example.stamp.view.VerticalScrollView;
+import com.google.gson.Gson;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -25,7 +35,7 @@ import java.util.List;
 /**
  * 邮市详情页
  */
-public class StampDetailActivity extends BaseActivity implements View.OnClickListener{
+public class StampDetailActivity extends BaseActivity implements View.OnClickListener,View.OnTouchListener{
 
 
     private View mStampDetailTitle,mStampDetailContent;
@@ -38,7 +48,28 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
             "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"};
     private ImageView mBack,mShared,mCollect,mShoppingCart;// 返回，分享，收藏，购物车
     private TextView mTitle,mNumber,mAddShoppingCart,mBuyNow;// 标题，商家账号，加入购物车，立即购买
-
+    private Button mTopBtn;
+    private VerticalScrollView home_SV;
+    private View contentView;
+    private int lastY = 0;
+    private int scrollY; // 标记上次滑动位置
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case StaticField.TOUCH_EVENT_ID:// SrcollView滑动监听
+                    View scroller = (View) msg.obj;
+                    if (lastY == scroller.getScrollY()) {
+                        handleStop(scroller);
+                    } else {
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(
+                                StaticField.TOUCH_EVENT_ID, scroller), StaticField.HOME_SV_COUNT);
+                        lastY = scroller.getScrollY();
+                    }
+                    break;
+            }
+        }
+    };
     @Override
     public View CreateTitle() {
         mStampDetailTitle = View.inflate(this, R.layout.base_detail_title, null);
@@ -67,6 +98,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         mTitle = (TextView) mStampDetailTitle.findViewById(R.id.base_title);
         mTitle.setText("庚申年");
         mShared = (ImageView) mStampDetailTitle.findViewById(R.id.base_shared);
+        mTopBtn = (Button)mStampDetailContent.findViewById(R.id.base_top_btn);
 
         // 商家账号
         mNumber =(TextView) mStampDetailContent.findViewById(R.id.stamp_details_number);
@@ -78,6 +110,8 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         mShoppingCart =(ImageView) mStampDetailContent.findViewById(R.id.stamp_details_shoppingCart);
         mAddShoppingCart =(TextView) mStampDetailContent.findViewById(R.id.stamp_details_addShoppingCart);
         mBuyNow =(TextView) mStampDetailContent.findViewById(R.id.stamp_details_buyNow);
+
+        home_SV = (VerticalScrollView) mStampDetailContent.findViewById(R.id.home_SV);
 
         //轮播条的View
         mTopVP = (ViewPager) mStampDetailContent.findViewById(R.id.base_viewpager);
@@ -106,6 +140,8 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         mShoppingCart.setOnClickListener(this);
         mAddShoppingCart.setOnClickListener(this);
         mBuyNow.setOnClickListener(this);
+        mTopBtn.setOnClickListener(this);
+        home_SV.setOnTouchListener(this);
 
     }
     @Override
@@ -126,14 +162,69 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 MyToast.showShort(this, "点击了收藏");
                 break;
             case R.id.stamp_details_shoppingCart:// 购物车
-                MyToast.showShort(this, "点击了购物车需要跳转1701页面");
+                MyToast.showShort(this, "购物车需要跳转1701页面");
                 break;
             case R.id.stamp_details_addShoppingCart:// 加入购物车
-                MyToast.showShort(this, "点击了加入购物车");
+                MyToast.showShort(this, "加入购物车");
                 break;
             case R.id.stamp_details_buyNow:// 立即购买
-                MyToast.showShort(this, "点击了立即购买");
+                MyToast.showShort(this, "立即购买跳转至1001页面");
+                break;
+            case R.id.base_top_btn:// 置顶
+                home_SV.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        home_SV.fullScroll(ScrollView.FOCUS_UP); // 滚动到顶部
+                    }
+                });
+                mTopBtn.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    /**
+     *  ScrollView 滑动的监听事件
+     */
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            mHandler.sendMessageDelayed(
+                    mHandler.obtainMessage(StaticField.TOUCH_EVENT_ID, view), StaticField.HOME_SV_COUNT);
+        }
+        return false;
+    }
+
+    /**
+     * ScrollView 停止
+     *
+     * @param view
+     */
+    private void handleStop(Object view) {
+        ScrollView scroller = (ScrollView) view;
+        scrollY = scroller.getScrollY();
+        doOnBorderListener(); // 显示置顶按钮的方法
+    }
+
+
+    /**
+     * 显示置顶按钮的方法
+     *
+     * 其中getChildAt表示得到ScrollView的child View， 因为ScrollView只允许一个child
+     * view，所以contentView.getMeasuredHeight()表示得到子View的高度,
+     * getScrollY()表示得到y轴的滚动距离，getHeight()为scrollView的高度。
+     * 当getScrollY()达到最大时加上scrollView的高度就的就等于它内容的高度了啊~
+     */
+    private void doOnBorderListener() {
+        // 滑动到底部底部
+        if (contentView != null && contentView.getMeasuredHeight() <= home_SV.getScrollY() + home_SV.getHeight()) {
+            mTopBtn.setVisibility(View.VISIBLE);
+        } else if (home_SV.getScrollY() <  ScreenUtils
+                .getScreenHeight(StampDetailActivity.this)/3) { // 下滑 ScrollView滑动的距离小于当前手机屏幕高度的1/3就隐藏
+            mTopBtn.setVisibility(View.GONE);
+        } else if (home_SV.getScrollY() > ScreenUtils
+                .getScreenHeight(StampDetailActivity.this)/2) {// 上滑 ScrollView滑动的距离大于当前手机屏幕高度的1/2就显示
+            mTopBtn.setVisibility(View.VISIBLE);
+        }
+
     }
 }

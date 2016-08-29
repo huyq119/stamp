@@ -220,8 +220,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
                 home_SV.post(new Runnable() {
                     @Override
                     public void run() {
-                        // 滚动到顶部
-                        home_SV.fullScroll(ScrollView.FOCUS_UP);
+                        home_SV.fullScroll(ScrollView.FOCUS_UP);  // 滚动到顶部
                     }
                 });
                 mTopBtn.setVisibility(View.GONE);
@@ -247,7 +246,6 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
      * @param view
      */
     private void handleStop(Object view) {
-//        Log.i("哈哈~~~>", "停止了");
         ScrollView scroller = (ScrollView) view;
         scrollY = scroller.getScrollY();
         doOnBorderListener(); // 显示置顶按钮的方法

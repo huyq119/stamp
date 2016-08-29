@@ -327,17 +327,28 @@
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
-
+    <View style="@style/myline" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
+        android:layout_marginTop="12dp"
+        android:background="#dddfe3"
+        android:text="       2004年是中国农历甲申年，即十二生肖的猴年。猴是人类的近亲，虽不像家畜直接影响人们的生活，但其机警敏捷、活泼灵巧、 聪慧似人，仍受到人们的格外关注。中国神话传说中把猴子看作人类的始祖，有沟通天地的神奇力量，因而有人在渡船的桅杆上刻猴以镇妖辟邪，并塑造出孙悟空这 一名声赫赫的齐天大圣、万猴之王，数百年来家喻户晓。因猴字与古代贵族爵位中侯爵谐音，于是也为“猴”添加了象征吉祥的意义，出现了不少与猴有关的成语典故。猴子可以说是十二生肖中最聪明的动物，它总是给人一种活泼可爱，聪明伶俐的印象。
+      猴，在人们的心目中的形象是复杂的、多面的。它头脑机警、聪明伶俐、行动敏捷、活泼可爱；是动物中乐于助人的智者；是神通广大、惩恶扬善和驱邪逐魔的义士；在娱乐、游艺、审美鉴赏活动中也是受人喜爱的宠物，特别是当它与岁时节庆、居室装饰及爵位[侯]的揩言相联系的时候，尤具吉祥、喜庆色彩。
+       2004年1月5日，为了迎接“甲申年”的到来，国家邮政局发行了《甲申年》特种邮票，全套1枚。
+       2004年是中国农历甲申年，即十二生肖的猴年。猴是人类的近亲，虽不像家畜直接影响人们的生活，但其机警敏捷、活泼灵巧、 聪慧似人，仍受到人们的格外关注。中国神话传说中把猴子看作人类的始祖，有沟通天地的神奇力量，因而有人在渡船的桅杆上刻猴以镇妖辟邪，并塑造出孙悟空这 一名声赫赫的齐天大圣、万猴之王，数百年来家喻户晓。因猴字与古代贵族爵位中侯爵谐音，于是也为“猴”添加了象征吉祥的意义，出现了不少与猴有关的成语典故。猴子可以说是十二生肖中最聪明的动物，它总是给人一种活泼可爱，聪明伶俐的印象。
+      猴，在人们的心目中的形象是复杂的、多面的。它头脑机警、聪明伶俐、行动敏捷、活泼可爱；是动物中乐于助人的智者；是神通广大、惩恶扬善和驱邪逐魔的义士；在娱乐、游艺、审美鉴赏活动中也是受人喜爱的宠物，特别是当它与岁时节庆、居室装饰及爵位[侯]的揩言相联系的时候，尤具吉祥、喜庆色彩。
+       2004年1月5日，为了迎接“甲申年”的到来，国家邮政局发行了《甲申年》特种邮票，全套1枚。
+       "
         android:textColor="@color/font"
-        android:text="底下是H5页面"
-        android:layout_marginTop="30dp"
-        android:background="#d1d1d1"
-        android:gravity="center_horizontal"
-        android:textSize="10sp" />
+        android:textSize="13sp" />
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="155dp"
+        android:layout_margin="10dp"
+        android:src="@mipmap/title_icon" />
 
     <!--<WebView
         android:layout_marginTop="@dimen/distance"

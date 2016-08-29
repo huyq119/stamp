@@ -1,307 +1,321 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+   >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="9">
-
-
-        <com.example.stamp.view.VerticalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:overScrollMode="never"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <include layout="@layout/base_viewpager" />
-
-                <View style="@style/myline" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/distance"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/left_distance"
-                        android:layout_marginRight="5dp"
-                        android:text="庚申年"
-                        android:textColor="#000"
-                        android:textSize="14sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/appraisal" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/distance"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:text="@string/selling_price"
-                        android:textColor="@color/font"
-                        android:textSize="9sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:layout_weight="1"
-                        android:text="￥1000000.00"
-                        android:textColor="@color/red_font"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:text="@string/freightcolon"
-                        android:textColor="@color/font"
-                        android:textSize="9sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:layout_weight="1"
-                        android:text="￥10.00"
-                        android:textColor="@color/font"
-                        android:textSize="9sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:text="@string/sales_volumecolon"
-                        android:textColor="@color/font"
-                        android:textSize="9sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:layout_weight="2"
-                        android:text="100"
-                        android:textColor="@color/font"
-                        android:textSize="9sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/distance"
-                    android:layout_marginTop="@dimen/distance"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:text="服务费(1%):"
-                        android:textColor="@color/font"
-                        android:textSize="9sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:layout_weight="1"
-                        android:text="￥10.00"
-                        android:textColor="@color/font"
-                        android:textSize="9sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/distance"
-                        android:src="@mipmap/auction_icon" />
-                </LinearLayout>
-
-                <View style="@style/myline" />
-
-                <View
-                    style="@style/myline"
-                    android:layout_marginTop="@dimen/distance" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="@dimen/distance"
-                    android:drawableLeft="@mipmap/sellerinfo"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_vertical"
-                    android:text="商家信息"
-                    android:textColor="@color/font"
-                    android:textSize="@dimen/fount_size" />
-
-                <View
-                    style="@style/myline"
-                    android:layout_marginLeft="@dimen/distance" />
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/left_distance"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:text="商家名称:"
-                        android:textColor="@color/font"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:layout_weight="1"
-                        android:text="黄先生"
-                        android:textColor="@color/font"
-                        android:textSize="10sp" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/distance"
-                    android:layout_marginTop="@dimen/left_distance"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:text="商家账号:"
-                        android:textColor="@color/font"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:id="@+id/stamp_details_number"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/distance"
-                        android:layout_weight="1"
-                        android:textColor="@color/font"
-                        android:textSize="10sp" />
-
-                </LinearLayout>
-
-                <View style="@style/myline" />
-
-                <View
-                    style="@style/myline"
-                    android:layout_marginTop="@dimen/distance" />
-
-                <com.viewpagerindicator.TabPageIndicator
-                    android:id="@+id/stampdetail_indicator"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp" />
-
-                <com.example.stamp.view.CustomViewPager
-                    android:id="@+id/stampdetail_viewpager"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:overScrollMode="never"
-                    android:scrollbars="none" />
-
-                <View style="@style/myline" />
-
-            </LinearLayout>
-        </com.example.stamp.view.VerticalScrollView>
-    </LinearLayout>
-    <!-- 底下的代码，导航栏是不随SrcollView滑动的-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_weight="1"
         android:orientation="vertical">
-
-        <View style="@style/myline" />
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="9">
+
+
+            <com.example.stamp.view.VerticalScrollView
+                android:id="@+id/home_SV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/base_viewpager" />
+
+                    <View style="@style/myline" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/distance"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/left_distance"
+                            android:layout_marginRight="5dp"
+                            android:text="庚申年"
+                            android:textColor="#000"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/appraisal" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/distance"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:text="@string/selling_price"
+                            android:textColor="@color/font"
+                            android:textSize="9sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:layout_weight="1"
+                            android:text="￥1000000.00"
+                            android:textColor="@color/red_font"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:text="@string/freightcolon"
+                            android:textColor="@color/font"
+                            android:textSize="9sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:layout_weight="1"
+                            android:text="￥10.00"
+                            android:textColor="@color/font"
+                            android:textSize="9sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:text="@string/sales_volumecolon"
+                            android:textColor="@color/font"
+                            android:textSize="9sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:layout_weight="2"
+                            android:text="100"
+                            android:textColor="@color/font"
+                            android:textSize="9sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/distance"
+                        android:layout_marginTop="@dimen/distance"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:text="服务费(1%):"
+                            android:textColor="@color/font"
+                            android:textSize="9sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:layout_weight="1"
+                            android:text="￥10.00"
+                            android:textColor="@color/font"
+                            android:textSize="9sp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/distance"
+                            android:src="@mipmap/auction_icon" />
+                    </LinearLayout>
+
+                    <View style="@style/myline" />
+
+                    <View
+                        style="@style/myline"
+                        android:layout_marginTop="@dimen/distance" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="@dimen/distance"
+                        android:drawableLeft="@mipmap/sellerinfo"
+                        android:drawablePadding="8dp"
+                        android:gravity="center_vertical"
+                        android:text="商家信息"
+                        android:textColor="@color/font"
+                        android:textSize="@dimen/fount_size" />
+
+                    <View
+                        style="@style/myline"
+                        android:layout_marginLeft="@dimen/distance" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/left_distance"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:text="商家名称:"
+                            android:textColor="@color/font"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:layout_weight="1"
+                            android:text="黄先生"
+                            android:textColor="@color/font"
+                            android:textSize="10sp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/distance"
+                        android:layout_marginTop="@dimen/left_distance"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:text="商家账号:"
+                            android:textColor="@color/font"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/stamp_details_number"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/distance"
+                            android:layout_weight="1"
+                            android:textColor="@color/font"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <View style="@style/myline" />
+
+                    <View
+                        style="@style/myline"
+                        android:layout_marginTop="@dimen/distance" />
+
+                    <com.viewpagerindicator.TabPageIndicator
+                        android:id="@+id/stampdetail_indicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp" />
+
+                    <com.example.stamp.view.CustomViewPager
+                        android:id="@+id/stampdetail_viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        android:scrollbars="none" />
+
+                    <View style="@style/myline" />
+
+                </LinearLayout>
+            </com.example.stamp.view.VerticalScrollView>
+        </LinearLayout>
+        <!-- 底下的代码，导航栏是不随SrcollView滑动的-->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <View style="@style/myline" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
 
 
-            <ImageView
-                android:id="@+id/stamp_details_collect"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:src="@mipmap/start" />
+                <ImageView
+                    android:id="@+id/stamp_details_collect"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:src="@mipmap/start" />
 
-            <View style="@style/mylist" />
+                <View style="@style/mylist" />
 
-            <ImageView
-                android:id="@+id/stamp_details_shoppingCart"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:src="@mipmap/shop_gray" />
+                <ImageView
+                    android:id="@+id/stamp_details_shoppingCart"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:src="@mipmap/shop_gray" />
 
-            <TextView
-                android:id="@+id/stamp_details_addShoppingCart"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2.5"
-                android:background="#ff8503"
-                android:gravity="center"
-                android:text="加入购物车"
-                android:textColor="#fff"
-                android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/stamp_details_addShoppingCart"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:background="#ff8503"
+                    android:gravity="center"
+                    android:text="加入购物车"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/stamp_details_buyNow"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2.5"
-                android:background="#e20000"
-                android:gravity="center"
-                android:text="立即购买"
-                android:textColor="#fff"
-                android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/stamp_details_buyNow"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:background="#e20000"
+                    android:gravity="center"
+                    android:text="立即购买"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <!--置顶按钮-->
+    <include layout="@layout/top_btn"
+        />
+
+</RelativeLayout>
