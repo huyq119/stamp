@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?><!--设计家详情页面-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.example.stamp.view.VerticalScrollView
+        android:id="@+id/home_SV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f8f8f8"
+            android:orientation="vertical">
+
+            <include layout="@layout/base_viewpager" />
+
+            <View style="@style/myline" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/distance"
+                android:background="@color/background" />
+
+            <View style="@style/myline" />
+
+            <com.viewpagerindicator.TabPageIndicator
+                android:id="@+id/designerdetail_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:visibility="gone" />
+
+            <com.example.stamp.view.CustomViewPager
+                android:id="@+id/designerdetail_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
+        </LinearLayout>
+    </com.example.stamp.view.VerticalScrollView>
+    <!--置顶按钮-->
+    <Button
+        android:id="@+id/designerdetail_top_btn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="63dp"
+        android:layout_marginRight="10dp"
+        android:background="@mipmap/top"
+        android:gravity="center"
+        android:visibility="gone" />
+</RelativeLayout>
