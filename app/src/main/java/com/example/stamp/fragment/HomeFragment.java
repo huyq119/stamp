@@ -18,6 +18,7 @@ import com.example.stamp.activity.DesignerActivity;
 import com.example.stamp.activity.HomeImageH5Activity;
 import com.example.stamp.activity.ScanActivity;
 import com.example.stamp.activity.SearchActivity;
+import com.example.stamp.activity.SelfMallActivity;
 import com.example.stamp.activity.SelfMallDetailActivity;
 import com.example.stamp.activity.StampActivity;
 import com.example.stamp.adapter.HomeGridViewAdapter;
@@ -225,7 +226,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 openActivityWitchAnimation(StampActivity.class);
                 break;
             case R.id.home_mall://商城
-                openActivityWitchAnimation(SelfMallDetailActivity.class);
+                openActivityWitchAnimation(SelfMallActivity.class);
                 break;
             case R.id.home_auction://竞拍
                 openActivityWitchAnimation(AuctionActivity.class);

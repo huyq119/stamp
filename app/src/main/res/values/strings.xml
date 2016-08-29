@@ -19,6 +19,8 @@
     <string name="price">价格</string>
     <string name="filter">筛选</string>
     <string name="Years">年代</string>
+    <string name="comingOver">即将结束</string>
+    <string name="WaitingShooting">等待开拍</string>
     <string name="category">类别:</string>
     <string name="theme">题材</string>
     <string name="resetting">重置</string>
@@ -211,6 +213,6 @@
     <string name="order_number">订单号:</string>
     <string name="Exclusive_recommendation">专属推荐</string>
     <string name="Order_time">下单时间:</string>
-
+    <string name="stamp_tap_details_story">1979年平凡的一天，艺坛大师黄永玉在家中接到了学生——国家邮政总局前总设计师邵柏林的拜访，并邀请他设计新中国成立第一套生肖邮票——“猴票”。为了纪念刚刚逝去的爱宠小猴，大师欣然应允。但黄永玉当时可能无论如何也不会料到，这枚小小的猴票的诞生，开启了怎样的邮票神话，会在今后的中国邮市经历怎样的风生水起。猴票由于是第一枚生肖邮票，图像美观，印刷精致，深受集邮爱好者欢迎，猴票在邮票市场价格上升很快。四方联和整版邮票的价格要更高。猴票价格上涨速度惊人。不愧是中国集邮的标志藏品。同时也是中国集邮市场的风向标。首套新邮票、新邮品均蕴有一种“龙头效应”，集邮者的求全心理，往往使这些首套邮品身价不凡，增值可观。尽管猴票发行之初很多人并未留意，但随着上世纪八十年代后期全国各地诸多邮市相继建立，集邮所蕴涵的经济意义愈发显露出来，猴票也就随之紧俏起来。至1992年，第二轮生肖猴票面市时，很多集邮者恍然大悟，怎么手上少了第一套猴票呢？于是“庚申猴”的价格在市场更是直线飙升，供求极度失衡。　虽然后来发行了第二套、第三套生肖邮票，其中也有猴票，但通常猴票是指1980年发行的第一张猴票。 猴票由于是雕版印刷，其票面的猴身上的毛在阳光犹如真的毛皮一般光彩熠熠。这也是甄别庚申猴的真伪的重要依据。所以有猴票的朋友要特别爱惜你猴票的票面，票面的好坏是价格高低的重要因素。</string>
 
 </resources>
