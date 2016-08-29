@@ -50,6 +50,10 @@
             android:theme="@style/MyDialogStyleBottom"/>
         />
         <activity android:name=".activity.StampActivity"/>
+
+        <!-- 商城 -->
+        <activity android:name=".activity.SelfMallActivity"/>
+        <!--商城详情-->
         <activity android:name=".activity.SelfMallDetailActivity"/>
         <activity
             android:name=".activity.StampDetailActivity"
@@ -116,8 +120,7 @@
         </activity>
         <activity android:name=".activity.HomeImageH5Activity">
         </activity>
-        <activity android:name=".activity.SelfMallActivity">
-        </activity>
+
     </application>
 
 </manifest>

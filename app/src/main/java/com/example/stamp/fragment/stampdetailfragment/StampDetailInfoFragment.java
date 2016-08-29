@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.example.stamp.R;
 
 /**
- * 邮市详情页 邮票信息
+ * 邮市详情页Fragment 邮票信息
  */
 public class StampDetailInfoFragment extends Fragment {
 

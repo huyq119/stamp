@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="猴票"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -38,6 +39,7 @@
             android:layout_height="wrap_content"
             android:text="@string/stampnumbercolon"
             android:textColor="@color/font"
+
             android:textSize="10sp" />
 
         <TextView
@@ -45,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="普27"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -67,6 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="居民"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -89,6 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="陈汉民 华建心 何洁"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -111,6 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="普通邮票"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -133,6 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="邮政"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -155,6 +162,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="2"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -177,6 +185,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="60（10x6）"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -199,6 +208,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="邮电部"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -221,6 +231,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="1990-01-25"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -243,6 +254,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="有背胶"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -265,6 +277,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="北京邮票厂"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -287,6 +300,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="P13x13.5"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
@@ -309,14 +323,26 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
+            android:text="影写版"
             android:textColor="@color/font"
             android:textSize="10sp" />
     </LinearLayout>
 
-    <WebView
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/font"
+        android:text="底下是H5页面"
+        android:layout_marginTop="30dp"
+        android:background="#d1d1d1"
+        android:gravity="center_horizontal"
+        android:textSize="10sp" />
+
+    <!--<WebView
         android:layout_marginTop="@dimen/distance"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
 
 
 </LinearLayout>

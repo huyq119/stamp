@@ -30,6 +30,8 @@
     <string name="Hot_Search">热门搜索</string>
     <string name="clean_search_historical">清除搜索历史</string>
     <string name="classify">分类</string>
+    <string name="stamptap_class">类别</string>
+    <string name="person">人物</string>
     <string name="sales">销量</string>
     <string name="vieStamp">竞品邮集</string>
     <string name="metal_stamp">贵金属邮票</string>
