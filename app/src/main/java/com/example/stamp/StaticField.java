@@ -15,6 +15,8 @@ public class StaticField {
 
     //常用的字段
     public static final int SUCCESS = 0;
+    public static final int TOUCH_EVENT_ID = 2;// SrcollView滑动的ID
+    public static final int HOME_SV_COUNT = 1;// Handler发送的结果码
 
     //步长
     public final static int OFFSETNUM = 20;
@@ -67,7 +69,9 @@ public class StaticField {
 
 
     //邮市目录传值的键
-    public static final String STAMPDETAIL = "stampDetail";
+    public static final String STAMPDETAIL_SN = "stampDetail_sn";// 编号
+    public static final String STAMPDETAIL_IMG = "stampDetail_img";// 图片
+    public static final String STAMPDETAIL_PRICE = "stampDetail_price";// 当前价格
 
     //设计家列表查询
     public static final String DESIGNERLIST = "cn.com.chinau.designerlist.query";

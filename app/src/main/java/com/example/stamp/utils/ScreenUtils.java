@@ -108,4 +108,13 @@ public class ScreenUtils {
 
     }
 
+    /**
+     * 获取屏幕中控件底部位置的高度--即控件底部的Y点
+     *
+     * @return
+     */
+    public static int getScreenViewBottomHeight(View view) {
+        return view.getBottom();
+    }
+
 }

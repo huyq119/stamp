@@ -54,9 +54,12 @@
         <activity
             android:name=".activity.StampDetailActivity"
             android:theme="@style/Theme.PageIndicatorDefaults"/>
+
         <activity android:name=".activity.AuctionActivity"/>
         <activity android:name=".activity.ScanActivity"/>
-        <activity android:name=".activity.AuctionDetailActivity"/>
+        <activity android:name=".activity.AuctionDetailActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults"
+            />
         <activity android:name=".activity.DesignerActivity"/>
         <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.UsMeActivity"/>
@@ -93,8 +96,8 @@
             android:name=".activity.DesignerDetailActivity"
             android:theme="@style/Theme.PageIndicatorDefaults">
         </activity>
-        <activity android:name=".activity.CreatNewAddressActivity">
-        </activity>
+        <!--<activity android:name=".activity.CreatNewAddressActivity">
+        </activity>-->
         <activity android:name=".activity.OrderAuditingActivity">
         </activity>
         <activity android:name=".activity.OrderActivity">
@@ -112,6 +115,8 @@
         <activity android:name=".activity.OrderDetailsActivity">
         </activity>
         <activity android:name=".activity.HomeImageH5Activity">
+        </activity>
+        <activity android:name=".activity.SelfMallActivity">
         </activity>
     </application>
 
