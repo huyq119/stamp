@@ -26,13 +26,13 @@ public class StampInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mStampInfo = View.inflate(getActivity(), R.layout.fragment_stamp_info, null);
-        mVB = (WebView) mStampInfo.findViewById(R.id.StampInfo_wb);
+//        mVB = (WebView) mStampInfo.findViewById(R.id.StampInfo_wb);
         return mStampInfo;
     }
 
 
-    public void setInfoContent(String url) {
-        MyLog.e("谁为空:" + (mVB == null));
-        mVB.loadUrl(url);
-    }
+//    public void setInfoContent(String url) {
+//        MyLog.e("谁为空:" + (mVB == null));
+//        mVB.loadUrl(url);
+//    }
 }

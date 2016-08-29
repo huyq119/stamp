@@ -61,7 +61,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
             "http://img1.3lian.com/2015/a1/114/d/58.jpg", "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"};
     private StampInfoFragment stampInfoFragment;
     private StampTapDetailBean stampTapDetailBean;
-    private TextView mPrice,mAddAlbum;
+    private TextView mPrice,mAddAlbum,mTitle;
     private Button mTopBtn;
     private VerticalScrollView home_SV;
     private View contentView;
@@ -114,6 +114,8 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         mStampPrice = bundle.getString(StaticField.STAMPDETAIL_PRICE);
 
         mBack = (ImageView) mStampTapDetailTitle.findViewById(R.id.base_title_back);
+        mTitle = (TextView) mStampTapDetailTitle.findViewById(R.id.base_title);
+        mTitle.setText("庚申年");
         mShared = (ImageView) mStampTapDetailTitle.findViewById(R.id.base_shared);
 
         mPrice = (TextView) mStampTapDetailContent.findViewById(R.id.stamp_details_price);

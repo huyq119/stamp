@@ -22,9 +22,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/Years"
-                android:textSize="12sp" />
+                android:textColor="#000"
+                android:layout_marginBottom="6dp"
+                android:textSize="15sp" />
 
-            <View style="@style/myline" />
+            <View style="@style/myline"
+                />
 
             <com.example.stamp.view.NoScrollGridView
                 android:id="@+id/stamptap_pop_years"
@@ -46,11 +49,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/category"
-                android:textSize="12sp" />
+                android:textColor="#000"
+                android:layout_marginBottom="6dp"
+                android:textSize="15sp" />
 
-            <View style="@style/myline" />
+            <View style="@style/myline"
+                />
 
             <com.example.stamp.view.NoScrollGridView
                 android:id="@+id/stamptap_pop_category"
@@ -72,11 +78,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/theme"
-                android:textSize="12sp" />
+                android:textColor="#000"
+                android:layout_marginBottom="6dp"
+                android:textSize="15sp" />
 
-            <View style="@style/myline" />
+            <View style="@style/myline"
+
+                />
 
             <com.example.stamp.view.NoScrollGridView
                 android:id="@+id/stamptap_pop_theme"

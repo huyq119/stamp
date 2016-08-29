@@ -8,451 +8,471 @@
         style="@style/myline"
         android:layout_marginTop="@dimen/distance" />
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="26dp"-->
-
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/name"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/stampnumber"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-    <!--</LinearLayout>-->
-
-    <!--<View style="@style/myline" />-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="26dp"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/shortName"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/stamptheme"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-    <!--</LinearLayout>-->
-
-    <!--<View style="@style/myline" />-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="26dp"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/Release_time"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/circulation"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-    <!--</LinearLayout>-->
-
-    <!--<View style="@style/myline" />-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="26dp"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/designer"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/author"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-    <!--</LinearLayout>-->
-
-    <!--<View style="@style/myline" />-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="26dp"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/edition"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/Issuing_agency"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-    <!--</LinearLayout>-->
-
-    <!--<View style="@style/myline" />-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="26dp"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/category"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/sculptor"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-    <!--</LinearLayout>-->
-
-    <!--<View style="@style/myline" />-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="26dp"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/Full_numbers"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/page_number"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-    <!--</LinearLayout>-->
-
-    <!--<View style="@style/myline" />-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="26dp"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/Printing_mechanism"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/Perforation"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-    <!--</LinearLayout>-->
-
-    <!--<View style="@style/myline" />-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="26dp"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:text="@string/gum"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@color/greybulkbg"-->
-            <!--android:gravity="right|center_vertical"-->
-            <!--android:paddingRight="@dimen/distance"-->
-            <!--android:textColor="#666"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1.2"-->
-            <!--android:gravity="left|center_vertical"-->
-            <!--android:paddingLeft="@dimen/distance"-->
-            <!--android:textColor="#000"-->
-            <!--android:textSize="@dimen/fount_size" />-->
-    <!--</LinearLayout>-->
-
-    <!--<View style="@style/myline" />-->
-
-    <!--<View-->
-        <!--style="@style/myline"-->
-        <!--android:layout_marginTop="@dimen/distance" />-->
-
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="155dp" />-->
-
-    <WebView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/StampInfo_wb"
-        android:layout_height="match_parent"/>
+        android:layout_height="26dp"
+
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/name"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="庚申年"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/stampnumber"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="T.46"
+            android:textSize="@dimen/fount_size" />
+    </LinearLayout>
+
+    <View style="@style/myline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/shortName"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="猴票"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/stamptheme"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="生肖"
+            android:textSize="@dimen/fount_size" />
+    </LinearLayout>
+
+    <View style="@style/myline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/Release_time"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="1980-02-15"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/circulation"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="500.00万"
+            android:textSize="@dimen/fount_size" />
+    </LinearLayout>
+
+    <View style="@style/myline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/designer"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="邵柏林"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/author"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="黄永玉"
+            android:textSize="@dimen/fount_size" />
+    </LinearLayout>
+
+    <View style="@style/myline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/edition"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="影雕套印"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/Issuing_agency"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="影电部"
+            android:textSize="@dimen/fount_size" />
+    </LinearLayout>
+
+    <View style="@style/myline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/category"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="T字头特种邮票"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/sculptor"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="姜伟杰"
+            android:textSize="@dimen/fount_size" />
+    </LinearLayout>
+
+    <View style="@style/myline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/Full_numbers"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="1"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/page_number"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="80（8*10）"
+            android:textSize="@dimen/fount_size" />
+    </LinearLayout>
+
+    <View style="@style/myline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/Printing_mechanism"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="北京邮票厂"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/Perforation"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="P11.5"
+            android:textSize="@dimen/fount_size" />
+    </LinearLayout>
+
+    <View style="@style/myline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:text="@string/gum"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:text="有背胶"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/greybulkbg"
+            android:gravity="right|center_vertical"
+            android:paddingRight="@dimen/distance"
+            android:textColor="#666"
+            android:textSize="@dimen/fount_size" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/distance"
+            android:textColor="#000"
+            android:textSize="@dimen/fount_size" />
+    </LinearLayout>
+
+    <View style="@style/myline" />
+
     <View
         style="@style/myline"
-        android:layout_marginBottom="@dimen/distance" />
+        android:layout_marginTop="@dimen/distance" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="155dp"
+        android:src="@mipmap/title_icon"
+        android:layout_margin="10dp"
+        />
+
+    <!-- <WebView
+         android:layout_width="match_parent"
+         android:id="@+id/StampInfo_wb"
+         android:layout_height="match_parent"/>
+     <View
+         style="@style/myline"
+         android:layout_marginBottom="@dimen/distance" />-->
 </LinearLayout>
