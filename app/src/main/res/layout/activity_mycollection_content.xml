@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--收藏夹页面-->
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
+    >
     <View
+        android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#dddfe3"/>
-
     <LinearLayout
         android:id="@+id/record_radioGroup"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="44dp"
         android:orientation="horizontal">
-
         <Button
             android:id="@+id/collection_all"
             android:layout_width="0dp"
@@ -88,15 +86,61 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/view"
+        android:layout_below="@+id/record_radioGroup"
         style="@style/myline"/>
 
     <ListView
+        android:layout_below="@+id/view"
         android:id="@+id/collection_listView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:listSelector="@android:color/transparent"
         android:overScrollMode="never"
-        android:scrollbars="none"/>
+        android:scrollbars="none"
+        android:layout_above="@+id/collection_edit" />
+    <View
+        android:id="@+id/view1"
+        android:layout_below="@+id/collection_listView"
+        style="@style/myline"/>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/collection_edit"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        >
+        <CheckBox
+            android:id="@+id/checkbox_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/select_bg"
+            android:background="@null"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:paddingLeft="20px"
+            android:text="全部"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#e20000"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
+    </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

@@ -21,7 +21,7 @@ public class CollectionBean extends BaseBean {
         public String goods_price;//商品价格
         public String goods_type;//商品类型：SC商城，YS邮市，JP竞拍
         public String goods_status;//商品状态：WH无货；YH有货；JPZ竞拍中；WKS未开始；YJS已结束
-
+        public  boolean isChoosed;
         public Collection(String goods_name, String goods_status, String goods_type, String goods_price, String goods_sn, String goods_img) {
             this.goods_name = goods_name;
             this.goods_status = goods_status;
@@ -29,6 +29,13 @@ public class CollectionBean extends BaseBean {
             this.goods_price = goods_price;
             this.goods_sn = goods_sn;
             this.goods_img = goods_img;
+        }
+        public boolean isChoosed() {
+            return isChoosed;
+        }
+
+        public void setChoosed(boolean choosed) {
+            isChoosed = choosed;
         }
 
         public String getGoods_name() {

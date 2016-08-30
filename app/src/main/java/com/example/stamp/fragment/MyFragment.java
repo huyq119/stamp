@@ -1,6 +1,7 @@
 package com.example.stamp.fragment;
 
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -29,7 +30,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
     private View myContentView;//内容页面
     private LinearLayout mLogin, mNoLogin, mQuite, mPressWord, mUsMe, mStamp, mRecord, mCollection, mAddress,mOrderBack;//登录成功页面,没有登录页面,退出登录,密码管理,关于我们,我的邮集,竞拍记录,我的收藏.收获地址,回购订单
-    private TextView mWithdraw;//提现
+    private TextView mWithdraw,mPayment,mReceive,mComplete,mRefused;//提现
+    private LinearLayout mOrderGoods;
 
     @Override
     public View CreateTitle() {
@@ -61,6 +63,11 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         mCollection = (LinearLayout) myContentView.findViewById(R.id.my_collection);
         mAddress = (LinearLayout) myContentView.findViewById(R.id.my_Address);
         mOrderBack = (LinearLayout) myContentView.findViewById(R.id.my_order_buy_back);
+        mOrderGoods = (LinearLayout) myContentView.findViewById(R.id.my_orders_goods);
+        mPayment = (TextView)myContentView.findViewById(R.id.text_payment);
+        mReceive =(TextView)myContentView.findViewById(R.id.receive);
+        mComplete =(TextView)myContentView.findViewById(R.id.complete);
+        mRefused = (TextView)myContentView.findViewById(R.id.refuse);
     }
 
     /**
@@ -89,6 +96,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         mCollection.setOnClickListener(this);
         mAddress.setOnClickListener(this);
         mOrderBack.setOnClickListener(this);
+        mOrderGoods.setOnClickListener(this);
+        mPayment.setOnClickListener(this);
+        mReceive.setOnClickListener(this);
+        mComplete.setOnClickListener(this);
+        mRefused.setOnClickListener(this);
+
     }
 
     @Override
@@ -134,6 +147,39 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.my_order_buy_back://回购订单
                 openActivityWitchAnimation(OrderActivity.class);
+                break;
+            /*case R.id.my_orders_goods:
+                openActivityWitchAnimation(OrdersForGoodsDetialsActivity.class);
+                break;
+            case R.id.text_payment:
+                Intent intent = new Intent(getActivity(),
+                        OrdersForGoodsDetialsActivity.class);
+                intent.putExtra("tag", "payment");
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                break;
+            case R.id.receive:
+                Intent receive = new Intent(getActivity(),
+                        OrdersForGoodsDetialsActivity.class);
+                receive.putExtra("tag", "receive");
+                startActivity(receive);
+                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                break;
+            case R.id.complete:
+                Intent complete = new Intent(getActivity(),
+                        OrdersForGoodsDetialsActivity.class);
+                complete.putExtra("tag", "complete");
+                startActivity(complete);
+                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                break;
+            case R.id.refuse:
+                Intent refuse = new Intent(getActivity(),
+                        OrdersForGoodsDetialsActivity.class);
+                refuse.putExtra("tag", "refuse");
+                startActivity(refuse);
+                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                break;*/
+            default:
                 break;
         }
     }

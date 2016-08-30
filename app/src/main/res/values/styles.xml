@@ -105,5 +105,12 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">#dddfe3</item>
     </style>
-
+    <style name="exitdialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/quite_dialog_bg</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
 </resources>

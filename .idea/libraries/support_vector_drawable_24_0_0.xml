@@ -6,6 +6,7 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+      <root url="jar://D:/Android Develop Tools/software2/android-sdk-windows/extras/android/m2repository/com/android/support/support-vector-drawable/24.0.0/support-vector-drawable-24.0.0-sources.jar!/" />
       <root url="jar://D:/studay/tool/Android-Sdk/NEWSDK/extras/android/m2repository/com/android/support/support-vector-drawable/24.0.0/support-vector-drawable-24.0.0-sources.jar!/" />
       <root url="jar://D:/Develop/sdk/extras/android/m2repository/com/android/support/support-vector-drawable/24.0.0/support-vector-drawable-24.0.0-sources.jar!/" />
     </SOURCES>
