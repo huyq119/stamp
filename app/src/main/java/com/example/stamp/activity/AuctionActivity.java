@@ -54,7 +54,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private int mCount;
     private int currentTop;
     private int mLastFirstTop;
-    private int touchSlop=10;
+    private int touchSlop=20;
     private AuctionListViewAdapter mListAdapter;
 
 
