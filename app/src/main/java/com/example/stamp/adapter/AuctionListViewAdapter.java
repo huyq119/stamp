@@ -9,12 +9,14 @@ import android.widget.TextView;
 
 import com.example.stamp.R;
 import com.example.stamp.bean.StampBean;
+import com.example.stamp.view.TimeTextView;
 import com.lidroid.xutils.BitmapUtils;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
- * 搜索历史适配器
+ * 竞拍ListView适配器
  * Created by Administrator on 2016/8/4.
  */
 public class AuctionListViewAdapter extends BaseAdapter {
@@ -52,7 +54,8 @@ public class AuctionListViewAdapter extends BaseAdapter {
             view = View.inflate(context, R.layout.stamp_listview_item, null);
             holder.mIcon = (ImageView) view.findViewById(R.id.stamp_icon);
             holder.mTitle = (TextView) view.findViewById(R.id.stamp_title);
-            holder.mTime = (TextView) view.findViewById(R.id.stamp_time);
+            holder.mTimeTv = (TextView) view.findViewById(R.id.stamp_time_tv);
+            holder.mTime = (TimeTextView) view.findViewById(R.id.stamp_time);
             holder.mStatue = (TextView) view.findViewById(R.id.stamp_status);
             holder.mPrice = (TextView) view.findViewById(R.id.stamp_starting_price);
             view.setTag(holder);
@@ -61,9 +64,25 @@ public class AuctionListViewAdapter extends BaseAdapter {
         }
 
         holder.mTitle.setText(mList.get(i).getTitle());
+        holder.mTimeTv.setText("距离开拍");
         holder.mTime.setText(mList.get(i).getTime());
         holder.mStatue.setText(mList.get(i).getStatus());
         holder.mPrice.setText(mList.get(i).getPrice());
+
+//        Calendar c = Calendar.getInstance();
+//        int year = c.get(Calendar.YEAR);
+//        int month = c.get(Calendar.MONTH);
+//        int date = c.get(Calendar.DATE);
+//        int hour = c.get(Calendar.HOUR_OF_DAY);
+//        int minute = c.get(Calendar.MINUTE);
+//        int second = c.get(Calendar.SECOND);
+////		int[] time = { date, hour, minute, second };
+        int[] time = {00, 01, 05};
+
+        holder.mTime.setTimes(time);
+        if (!holder.mTime.isRun()) {
+            holder.mTime.run();
+        }
 
         bitmapUtils.display(holder.mIcon, mList.get(i).getIconUrl());
         return view;
@@ -71,6 +90,7 @@ public class AuctionListViewAdapter extends BaseAdapter {
 
     public class ViewHolder {
         public ImageView mIcon;
-        public TextView mTitle, mTime, mStatue, mPrice;
+        public TimeTextView mTime;
+        public TextView mTitle, mStatue, mPrice,mTimeTv;
     }
 }
