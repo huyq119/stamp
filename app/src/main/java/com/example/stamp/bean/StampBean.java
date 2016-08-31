@@ -12,11 +12,10 @@ public class StampBean {
     public String Status;
     public String price;
 
-    public StampBean(String title, String status, String price, String time, String iconUrl) {
+    public StampBean(String title, String status, String price, String iconUrl) {
         Title = title;
         Status = status;
         this.price = price;
-        Time = time;
         IconUrl = iconUrl;
     }
 

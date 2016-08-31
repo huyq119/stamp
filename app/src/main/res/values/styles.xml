@@ -105,6 +105,7 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">#dddfe3</item>
     </style>
+
     <style name="exitdialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>

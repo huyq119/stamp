@@ -51,6 +51,7 @@ public class SharedActivity extends Activity implements View.OnClickListener {
                 MyToast.showShort(this, "点击了朋友圈按钮");
                 break;
             case R.id.shared_cancel://取消按钮
+                finish();
             case R.id.shared_finish://屏幕其他位置关闭页面
                 finish();
                 break;

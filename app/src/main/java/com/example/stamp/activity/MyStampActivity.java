@@ -27,7 +27,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     private ArrayList<MyStampGridViewBean.StampList> mList;
     private View MorePopView;
     private PopupWindow mMorePop;
-    private TextView mEdit,mShared;
+    private TextView mEdit,mShared;// 编辑，分享
 
     // popup的背景
     private ColorDrawable mColorBg = new ColorDrawable(00000000);
@@ -104,6 +104,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
 
         mEdit = (TextView) MorePopView.findViewById(R.id.mystamp_edit);
         mShared = (TextView) MorePopView.findViewById(R.id.mystamp_shared);
+      // 编辑
         mEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +112,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                 mMorePop.dismiss();
             }
         });
+        // 分享
         mShared.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
