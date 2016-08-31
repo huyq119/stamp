@@ -29,14 +29,24 @@ public class AuctionRecordBean extends BaseBean{
         public String goods_name;//商品名称
         public String goods_price;//商品价格
         public String create_time;//竞拍出价时间
+        public String goods_imag;
 
-        public Auction(String auction_status, String auction_sn, String goods_price, String create_time, String goods_name, String auction_end_time) {
+        public Auction(String auction_status, String auction_sn, String goods_price, String create_time, String goods_name, String auction_end_time,String goods_imag) {
             this.auction_status = auction_status;
             this.auction_sn = auction_sn;
             this.goods_price = goods_price;
             this.create_time = create_time;
             this.goods_name = goods_name;
             this.auction_end_time = auction_end_time;
+            this.goods_imag =goods_imag;
+        }
+
+        public String getGoods_imag() {
+            return goods_imag;
+        }
+
+        public void setGoods_imag(String goods_imag) {
+            this.goods_imag = goods_imag;
         }
 
         public String getAuction_status() {

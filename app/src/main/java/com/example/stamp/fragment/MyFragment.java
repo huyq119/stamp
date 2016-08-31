@@ -15,6 +15,7 @@ import com.example.stamp.activity.ManagerAddressActivity;
 import com.example.stamp.activity.MyCollectionActivity;
 import com.example.stamp.activity.MyStampActivity;
 import com.example.stamp.activity.OrderActivity;
+import com.example.stamp.activity.OrdersForGoodsDetialsActivity;
 import com.example.stamp.activity.PressWordManagerActivity;
 import com.example.stamp.activity.UsMeActivity;
 import com.example.stamp.activity.WithdrawActivity;
@@ -148,37 +149,37 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
             case R.id.my_order_buy_back://回购订单
                 openActivityWitchAnimation(OrderActivity.class);
                 break;
-            /*case R.id.my_orders_goods:
+            case R.id.my_orders_goods:
                 openActivityWitchAnimation(OrdersForGoodsDetialsActivity.class);
                 break;
             case R.id.text_payment:
                 Intent intent = new Intent(getActivity(),
                         OrdersForGoodsDetialsActivity.class);
-                intent.putExtra("tag", "payment");
+                intent.putExtra("tag",1);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 break;
             case R.id.receive:
                 Intent receive = new Intent(getActivity(),
                         OrdersForGoodsDetialsActivity.class);
-                receive.putExtra("tag", "receive");
+                receive.putExtra("tag", 2);
                 startActivity(receive);
                 getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 break;
             case R.id.complete:
                 Intent complete = new Intent(getActivity(),
                         OrdersForGoodsDetialsActivity.class);
-                complete.putExtra("tag", "complete");
+                complete.putExtra("tag", 3);
                 startActivity(complete);
                 getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 break;
             case R.id.refuse:
                 Intent refuse = new Intent(getActivity(),
                         OrdersForGoodsDetialsActivity.class);
-                refuse.putExtra("tag", "refuse");
+                refuse.putExtra("tag", 4);
                 startActivity(refuse);
                 getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-                break;*/
+                break;
             default:
                 break;
         }

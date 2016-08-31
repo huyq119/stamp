@@ -56,17 +56,16 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
         mList = new ArrayList<>();
 
         AuctionRecordBean.Auction auction ;
-        auction = new AuctionRecordBean.Auction("竞拍中","10920","12093.90","19:23:20","庚申年","20:02:23");
+        auction = new AuctionRecordBean.Auction("竞拍中","10920","12093.90","19:23:20","庚申年","20:02:23","http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(auction);
-        auction = new AuctionRecordBean.Auction("已出局","10920","12093.90","19:23:20","庚申年","20:02:23");
+        auction = new AuctionRecordBean.Auction("已出局","10920","12093.90","19:23:20","庚申年","20:02:23","http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(auction);
-        auction = new AuctionRecordBean.Auction("竞拍成功","10920","12093.90","19:23:20","庚申年","20:02:23");
+        auction = new AuctionRecordBean.Auction("竞拍成功","10920","12093.90","19:23:20","庚申年","20:02:23","http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(auction);
-        auction = new AuctionRecordBean.Auction("竞拍成功","10920","12093.90","19:23:20","庚申年","20:02:23");
+        auction = new AuctionRecordBean.Auction("竞拍成功","10920","12093.90","19:23:20","庚申年","20:02:23","http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(auction);
-        auction = new AuctionRecordBean.Auction("竞拍成功","10920","12093.90","19:23:20","庚申年","20:02:23");
+        auction = new AuctionRecordBean.Auction("竞拍成功","10920","12093.90","19:23:20","庚申年","20:02:23","http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(auction);
-
         mAdapter = new AuctionRecordListViewAdapter(this, mBitmap, mList);
         mRecordListView.setAdapter(mAdapter);//竞拍记录竞拍中适配器
 

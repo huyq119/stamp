@@ -94,6 +94,10 @@ public class AuctionRecordListViewAdapter extends BaseAdapter {
 
         holder.GoodsName.setText(auction.getGoods_name());
         holder.GoodsPrice.setText(auction.getGoods_price());
+        bitmapUtils.display(holder.GoodsImageUrl, mList.get(i).getGoods_imag());
+
+
+
         return view;
     }
 

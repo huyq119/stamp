@@ -32,9 +32,7 @@ import java.util.List;
  * 竞拍详情页面
  */
 public class AuctionDetailActivity extends BaseActivity implements View.OnClickListener,View.OnTouchListener{
-
     private View mAuctionDetailTitle,mAuctionDetailContent;
-
     private String[] arr = {"邮票信息", "鉴定信息"};
     private List<Fragment> mList;
     private ImageView mBack,mShared,mCollect;
