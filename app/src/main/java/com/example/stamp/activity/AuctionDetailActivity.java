@@ -66,8 +66,9 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
             }
         }
     };
-    private int intCount = 0;
-    private String count;
+    private int intCount = 1 ;// 每次出价加减的值
+    private String count;// 获取出价的值
+    private int goods_storage = 1; //出价最低价
 
     @Override
     public View CreateTitle() {
@@ -106,7 +107,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
        mCollect =(ImageView) mAuctionDetailContent.findViewById(R.id.auction_collect);
         mSubtract =(TextView) mAuctionDetailContent.findViewById(R.id.auction_subtract);
         mCount=(TextView) mAuctionDetailContent.findViewById(R.id.auction_count);
-        mCount.setText("0");
+        mCount.setText("0"); // 初始化值为0
         mAdd =(TextView) mAuctionDetailContent.findViewById(R.id.auction_add);
         mBid =(TextView) mAuctionDetailContent.findViewById(R.id.auction_bid);
 
@@ -162,6 +163,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
+        GetStringText();
         switch (view.getId()){
             case R.id.base_title_back:// 返回
                 finishWitchAnimation();
@@ -183,19 +185,18 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
                 break;
             case R.id.auction_subtract:// 出价减
-                MyToast.showShort(this,"点击了减");
-//                GetStringText();
-//                if (count > 1) {
-//                    count--; mBid.setText(count + "");
-//                }
+
+                if (intCount > 1) {
+                    intCount--;
+                    mCount.setText(String.valueOf(intCount));
+                }else{
+                    mCount.setEnabled(false);// 不可点击
+                }
+
                 break;
             case R.id.auction_add:// 出价增加
-                MyToast.showShort(this,"点击了增加");
-//                GetStringText();
-//                if (count.equals("0")){
-//                    intCount++;
-//                    mCount.setText(intCount);
-//                }
+                intCount++;
+                mCount.setText(String.valueOf(intCount));
                 break;
             case R.id.auction_bid:// 出价
                 MyToast.showShort(this,"点击了出价");
