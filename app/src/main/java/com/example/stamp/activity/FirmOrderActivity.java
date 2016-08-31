@@ -87,7 +87,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private void setFalseData() {
         ArrayList<ShopNameBean.GoodsBean> mGoodsBean = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            ShopNameBean.GoodsBean goodsBean = new ShopNameBean.GoodsBean("http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg", "38596", "庚申年" + i, "1500", "1");
+            ShopNameBean.GoodsBean goodsBean = new ShopNameBean.GoodsBean("http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg", "38596", "庚申年" + i, 1500, 1);
             mGoodsBean.add(goodsBean);
         }
 

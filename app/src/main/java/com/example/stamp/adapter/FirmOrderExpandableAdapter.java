@@ -108,9 +108,9 @@ public class FirmOrderExpandableAdapter extends BaseExpandableListAdapter {
 
         ArrayList<ShopNameBean.GoodsBean> goods_list = shopNameBean.getSeller_list().get(i).getGoods_list();
 
-        itemHolder.mCount.setText(goods_list.get(i1).getGoods_count());
+        itemHolder.mCount.setText(goods_list.get(i1).getGoods_count()+"");
         itemHolder.mName.setText(goods_list.get(i1).getGoods_name());
-        itemHolder.mPrice.setText(goods_list.get(i1).getGoods_price());
+        itemHolder.mPrice.setText(goods_list.get(i1).getGoods_price()+"");
 
         bitmap.display(itemHolder.mImg, goods_list.get(i1).getGoods_img());
         return view;
@@ -134,6 +134,7 @@ public class FirmOrderExpandableAdapter extends BaseExpandableListAdapter {
     public class ItemHolder {
         public TextView mName, mPrice, mCount;//名称,单价,数量
         public ImageView mImg;//图片
+
 
     }
 }

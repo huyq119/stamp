@@ -13,18 +13,20 @@
     <View style="@style/myline" />
 
     <LinearLayout
+        android:id="@+id/linear_shop_layout"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:visibility="visible"
         android:orientation="horizontal">
 
         <CheckBox
             android:id="@+id/all_checkbox"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/distance"
             android:layout_marginRight="4dp"
             android:layout_weight="1"
-            android:button="@drawable/circle_select_bg"
+            android:button="@drawable/select_bg"
             android:gravity="center"
             android:minHeight="44dp"
             android:text="全选" />
@@ -37,6 +39,8 @@
             android:layout_weight="4">
 
             <LinearLayout
+                android:id="@+id/shop_linear"
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginRight="20dp"
@@ -52,6 +56,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/total_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"

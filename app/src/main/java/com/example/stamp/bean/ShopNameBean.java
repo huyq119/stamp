@@ -15,7 +15,6 @@ public class ShopNameBean extends BaseBean {
         this.seller_list = seller_list;
         this.goods_total_amount = goods_total_amount;
     }
-
     public ArrayList<SellerBean> getSeller_list() {
         return seller_list;
     }
@@ -35,14 +34,11 @@ public class ShopNameBean extends BaseBean {
     /**
      * 卖家列表数据
      */
-    public static class SellerBean {
-
-
+    public static class SellerBean extends BaseInfo {
         public String seller_name;//卖家名称
         public String seller_type;//卖家类型
         public String seller_no;//卖家账号
         public ArrayList<GoodsBean> goods_list;//商品列表
-
 
         public SellerBean(String seller_name, String seller_type, String seller_no, ArrayList<GoodsBean> goods_list) {
             this.seller_name = seller_name;
@@ -50,6 +46,7 @@ public class ShopNameBean extends BaseBean {
             this.seller_no = seller_no;
             this.goods_list = goods_list;
         }
+
 
         public ArrayList<GoodsBean> getGoods_list() {
             return goods_list;
@@ -87,21 +84,27 @@ public class ShopNameBean extends BaseBean {
     /**
      * 商品信息对象
      */
-    public static class GoodsBean {
+    public static class GoodsBean extends BaseInfo {
         public String goods_img;//商品图片
         public String goods_name;//商品名称
         public String goods_sn;//商品编号
-        public String goods_price;//商品单价
-        public String goods_count;//商品数量
+        public double goods_price;//商品单价
+        public int goods_count;//商品数量
 
 
-        public GoodsBean(String goods_img, String goods_name, String goods_sn, String goods_price, String goods_count) {
+
+
+
+
+        public GoodsBean( String goods_img, String goods_name, String goods_sn, double goods_price, int goods_count) {
             this.goods_img = goods_img;
             this.goods_name = goods_name;
             this.goods_sn = goods_sn;
             this.goods_price = goods_price;
             this.goods_count = goods_count;
         }
+
+
 
         public String getGoods_img() {
             return goods_img;
@@ -111,11 +114,11 @@ public class ShopNameBean extends BaseBean {
             this.goods_img = goods_img;
         }
 
-        public String getGoods_price() {
+        public double getGoods_price() {
             return goods_price;
         }
 
-        public void setGoods_price(String goods_price) {
+        public void setGoods_price(double goods_price) {
             this.goods_price = goods_price;
         }
 
@@ -135,12 +138,14 @@ public class ShopNameBean extends BaseBean {
             this.goods_name = goods_name;
         }
 
-        public String getGoods_count() {
+        public int getGoods_count() {
             return goods_count;
         }
 
-        public void setGoods_count(String goods_count) {
+        public void setGoods_count(int goods_count) {
             this.goods_count = goods_count;
         }
+
+
     }
 }
