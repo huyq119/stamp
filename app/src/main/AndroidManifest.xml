@@ -104,8 +104,7 @@
         <activity
             android:name=".activity.DesignerStoryDetailActivity">
         </activity>
-        <!--<activity android:name=".activity.CreatNewAddressActivity">
-        </activity>-->
+
         <activity android:name=".activity.OrderAuditingActivity">
         </activity>
         <activity android:name=".activity.OrderActivity">
@@ -124,7 +123,14 @@
         </activity>
         <activity android:name=".activity.HomeImageH5Activity">
         </activity>
+        <activity android:name=".activity.OrdersForGoodsDetialsActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults"/><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
+        <activity android:name=".activity.OrderSweepActivity"/>
     </application>
 
 </manifest>
