@@ -64,10 +64,20 @@ public class AuctionListViewAdapter extends BaseAdapter {
         }
 
         holder.mTitle.setText(mList.get(i).getTitle());
-        holder.mTimeTv.setText("距离开拍");
         holder.mTime.setText(mList.get(i).getTime());
         holder.mStatue.setText(mList.get(i).getStatus());
         holder.mPrice.setText(mList.get(i).getPrice());
+        String mStatueTv= holder.mStatue.getText().toString().trim();
+        if (mStatueTv.equals("未开始")){
+            holder.mTimeTv.setText("距离开拍:");
+        }else if(mStatueTv.equals("即将结束")){
+            holder.mTimeTv.setText("距离结束:");
+        }else if (mStatueTv.equals("等待开拍")){
+            holder.mTimeTv.setText("距离开拍:");
+        }
+
+
+
 
 //        Calendar c = Calendar.getInstance();
 //        int year = c.get(Calendar.YEAR);

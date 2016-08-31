@@ -78,7 +78,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private void initView() {
         mList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i, "距离开拍:10小时10分18秒", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
+            mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i,  "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
 
         mBack = (ImageView) mAuctionTitle.findViewById(R.id.base_title_back);
@@ -129,7 +129,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
 //        RequestNet(StaticField.ZH, num, StaticField.A);
         for (int i = 0; i < 20; i++) {
-            mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i, "距离开拍:10小时10分18秒", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
+            mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i,  "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
     }
 
@@ -231,7 +231,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("戊戌年", "未开始", "￥200.0" + i, "距离开拍:3小时04分12秒", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
+                        mList.add(new StampBean("戊戌年", "未开始", "￥200.0" + i,  "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
                     }
                     mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);
@@ -244,7 +244,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("庚申年", "未开始", "￥1000.0" + i, "距离开拍:10小时01分41秒", "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
+                        mList.add(new StampBean("庚申年", "未开始", "￥1000.0" + i,  "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
                     }
                     AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);
@@ -264,7 +264,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("戊戌年", "即将结束", "￥200.0" + i, "距离结束:1小时10分18秒", "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
+                        mList.add(new StampBean("戊戌年", "即将结束", "￥200.0" + i,  "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
                     }
                     AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);
@@ -278,7 +278,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("庚申年", "即将结束", "￥100.0" + i, "距离结束:10小时10分18秒", "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
+                        mList.add(new StampBean("庚申年", "即将结束", "￥100.0" + i,  "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
                     }
                     AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);
@@ -299,7 +299,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("庚申年", "等待开拍", "￥800.0" + i, "距离开拍:6小时19分15秒", "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
+                        mList.add(new StampBean("庚申年", "等待开拍", "￥800.0" + i,  "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
                     }
                     AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);
@@ -312,7 +312,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("戊戌年", "等待开拍", "￥400.0" + i, "距离开拍:20小时29分11秒", "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
+                        mList.add(new StampBean("戊戌年", "等待开拍", "￥400.0" + i,  "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
                     }
                     AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);

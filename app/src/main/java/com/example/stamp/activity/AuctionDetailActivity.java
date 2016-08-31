@@ -17,6 +17,7 @@ import com.example.stamp.StaticField;
 import com.example.stamp.adapter.HomeViewPagerAdapter;
 import com.example.stamp.adapter.StampDetailPagerAdapter;
 import com.example.stamp.base.BaseActivity;
+import com.example.stamp.dialog.AuctionRegulationsAgreementDialog;
 import com.example.stamp.fragment.stampdetailfragment.StampDetailInfoFragment;
 import com.example.stamp.utils.MyToast;
 import com.example.stamp.utils.ScreenUtils;
@@ -64,10 +65,13 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
             }
         }
     };
-    private int intCount = 1 ;// 每次出价加减的值
+    private int intCount = 0 ;// 每次出价加减的值
     private String count;// 获取出价的值
     private int goods_storage = 1; //出价最低价
-
+    private AuctionRegulationsAgreementDialog auctiondialog; // 协议dialog
+    private Button mKonwBtn;
+    private boolean bidFlag = false;// 出价标识
+    private boolean addFlag = false;// 加价标识
     @Override
     public View CreateTitle() {
         mAuctionDetailTitle = View.inflate(this, R.layout.base_detail_title, null);
@@ -193,11 +197,32 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
                 break;
             case R.id.auction_add:// 出价增加
-                intCount++;
-                mCount.setText(String.valueOf(intCount));
+                // 是否是第一次加价
+                if(addFlag){
+                    intCount++;
+                    mCount.setText(String.valueOf(intCount));
+                }else{
+                    DialogAgreement();// 出价协议Dialog
+                    addFlag = true;
+                }
+
+
                 break;
             case R.id.auction_bid:// 出价
-                MyToast.showShort(this,"点击了出价");
+                if (count.equals("0")){
+                    MyToast.showShort(this,"请先加价");
+                }else {
+                    // 是否是第一次出价
+                    if (bidFlag) {
+                        mBid.setEnabled(false);
+
+//                        MyToast.showShort(this, "出价成功");
+                    } else {
+                        DialogAgreement();// 出价协议Dialog
+                        bidFlag = true;
+
+                    }
+                }
                 break;
         }
     }
@@ -246,4 +271,29 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         }
 
     }
+
+    /**
+     * 出价协议Dialog
+     */
+    private void DialogAgreement(){
+        auctiondialog = new AuctionRegulationsAgreementDialog(this);
+        auctiondialog.show();
+       mKonwBtn =(Button) auctiondialog.findViewById(R.id.iKonw_btn);
+        mKonwBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (bidFlag){
+                    auctiondialog.dismiss();
+                    MyToast.showShort(AuctionDetailActivity.this, "出价成功");
+                }else{
+                    bidFlag = false;
+                    auctiondialog.dismiss();
+                }
+
+
+            }
+        });
+    }
+
+
 }
