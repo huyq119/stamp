@@ -126,12 +126,15 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
                 mOrder.setTextColor(Color.RED);
                 startActivity(new Intent(OrderActivity.this,OrderSweepActivity.class));
                 overridePendingTransition(0,0);
+                finish();
+
                 break;
             case R.id.btn_order:
                 mOrderSweep.setTextColor(Color.GRAY);
                 mOrder.setTextColor(Color.RED);
                 startActivity(new Intent(OrderActivity.this,OrderSweepActivity.class));
                 overridePendingTransition(0,0);
+                finish();
                 break;
 
             case R.id.base_title_back:
