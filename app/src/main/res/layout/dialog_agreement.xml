@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--竞拍出价协议Dialog-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="325dp"
     android:layout_height="wrap_content"

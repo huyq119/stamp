@@ -12,4 +12,6 @@
     <color name="province_line_border">#C7C7C7</color>
     <color name="grey">#747272</color>
     <color name="page_backgroup">#f2f2f2</color>
+    <color name="geay_font">#333</color>
+    <color name="bule_font">#00c06d</color>
 </resources>
