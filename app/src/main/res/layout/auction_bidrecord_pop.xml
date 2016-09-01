@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?><!--点击查看出价记录弹出的页面-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="12dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|left"
+            android:drawableLeft="@mipmap/bid_record"
+            android:drawablePadding="9dp"
+            android:text="@string/bid_record"
+            android:textColor="#666"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center|right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yet_record"
+                android:textColor="#999"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/bid_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#e20000"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/count_no"
+                android:textColor="#999"
+                android:layout_marginRight="12dp"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View style="@style/myline" />
+    <ListView
+        android:id="@+id/bidRecord_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#dddfe3"
+        android:dividerHeight="1px"
+        android:fadingEdge="none"
+        android:cacheColorHint="@android:color/transparent"
+        android:listSelector="#fff"
+        android:scrollbars="none" />
+
+
+</LinearLayout>

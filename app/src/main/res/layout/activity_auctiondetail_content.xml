@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--竞拍详情页-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -247,6 +246,45 @@
                 <View style="@style/myline" />
 
 
+                <LinearLayout
+                    android:id="@+id/bid_record_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/arrows_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:background="@mipmap/arrows_up"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:id="@+id/bid_record_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="@string/bid_record_up"
+                        android:textColor="#666"
+                        android:textSize="14sp"
+
+                        />
+
+                </LinearLayout>
+
+                <View style="@style/myline" />
+                <!--出价记录-->
+                <FrameLayout
+                    android:id="@+id/auction_bidrecord_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <include layout="@layout/auction_bidrecord_pop" />
+                </FrameLayout>
+
                 <!--<TextView
                     android:layout_width="match_parent"
                     android:layout_height="27dp"
@@ -339,7 +377,7 @@
     </LinearLayout>
 
     <!--置顶按钮-->
-    <include layout="@layout/top_btn"/>
+    <include layout="@layout/top_btn" />
 
 
 </RelativeLayout>

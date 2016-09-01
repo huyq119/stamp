@@ -1,27 +1,36 @@
 package com.example.stamp.activity;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.stamp.R;
 import com.example.stamp.StaticField;
+import com.example.stamp.adapter.BidRecordListViewAdapter;
 import com.example.stamp.adapter.HomeViewPagerAdapter;
 import com.example.stamp.adapter.StampDetailPagerAdapter;
 import com.example.stamp.base.BaseActivity;
+import com.example.stamp.bean.StampDetailBean;
 import com.example.stamp.dialog.AuctionRegulationsAgreementDialog;
 import com.example.stamp.fragment.stampdetailfragment.StampDetailInfoFragment;
+import com.example.stamp.utils.ListViewHeight;
 import com.example.stamp.utils.MyToast;
 import com.example.stamp.utils.ScreenUtils;
 import com.example.stamp.view.CustomViewPager;
+import com.example.stamp.view.FlowLayout;
 import com.example.stamp.view.VerticalScrollView;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
@@ -32,26 +41,25 @@ import java.util.List;
 /**
  * 竞拍详情页面
  */
-public class AuctionDetailActivity extends BaseActivity implements View.OnClickListener,View.OnTouchListener{
-    private View mAuctionDetailTitle,mAuctionDetailContent;
+public class AuctionDetailActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener {
+    private View mAuctionDetailTitle, mAuctionDetailContent,contentView;
     private String[] arr = {"邮票信息", "鉴定信息"};
     private List<Fragment> mList;
-    private ImageView mBack,mShared,mCollect;
-    private TextView mTitle,mNumber,mSubtract,mCount,mAdd,mBid;
+    private ImageView mBack, mShared, mCollect, mArrows;
+    private TextView mTitle, mNumber, mSubtract, mCount, mAdd, mBid, mRecordTv, mBidCount;
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
     private String[] arrImage = {"http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg",
             "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg",
             "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"};
-    private Button mTopBtn;
+    private Button mTopBtn,mKonwBtn;
     private VerticalScrollView home_SV;
-    private View contentView;
     private int lastY = 0;
     private int scrollY; // 标记上次滑动位置
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case StaticField.TOUCH_EVENT_ID:// SrcollView滑动监听
                     View scroller = (View) msg.obj;
                     if (lastY == scroller.getScrollY()) {
@@ -65,13 +73,17 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
             }
         }
     };
-    private int intCount = 0 ;// 每次出价加减的值
+    private int intCount = 0;// 每次出价加减的值
     private String count;// 获取出价的值
     private int goods_storage = 1; //出价最低价
     private AuctionRegulationsAgreementDialog auctiondialog; // 协议dialog
-    private Button mKonwBtn;
-    private boolean bidFlag = false;// 出价标识
-    private boolean addFlag = false;// 加价标识
+    private boolean bidFlag = false,addFlag;// 出价标识,加价标识
+    private LinearLayout mRecordLl;
+    private ListView mBidRecordLV;
+    private boolean bidRecordFlag = false;// 出价记录标识
+    private FrameLayout mBidRecordFl;
+    private ArrayList<StampDetailBean.StampDetail> mBidList;
+
     @Override
     public View CreateTitle() {
         mAuctionDetailTitle = View.inflate(this, R.layout.base_detail_title, null);
@@ -94,6 +106,12 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         mList.add(mStampDetailInfoFragment);
         mList.add(mStampDetailInfoFragment);
 
+        mBidList = new ArrayList<>();
+        String mphone = SetMobile("13699253527");// 设置电话号码
+        for (int i = 0; i < 4; i++){
+            mBidList.add(new StampDetailBean.StampDetail("2016/6/23 14:23:53",mphone,"￥9999.99"));
+        }
+
         //初始化控件
         mBack = (ImageView) mAuctionDetailTitle.findViewById(R.id.base_title_back);
         mTitle = (TextView) mAuctionDetailTitle.findViewById(R.id.base_title);
@@ -106,23 +124,30 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
         mTopBtn = (Button) mAuctionDetailContent.findViewById(R.id.base_top_btn);
         home_SV = (VerticalScrollView) mAuctionDetailContent.findViewById(R.id.home_SV);
-       mCollect =(ImageView) mAuctionDetailContent.findViewById(R.id.auction_collect);
-        mSubtract =(TextView) mAuctionDetailContent.findViewById(R.id.auction_subtract);
-        mCount=(TextView) mAuctionDetailContent.findViewById(R.id.auction_count);
+        mRecordLl = (LinearLayout) mAuctionDetailContent.findViewById(R.id.bid_record_ll);
+        mArrows = (ImageView) mAuctionDetailContent.findViewById(R.id.arrows_img);
+        mRecordTv = (TextView) mAuctionDetailContent.findViewById(R.id.bid_record_tv);
+        mBidRecordFl = (FrameLayout) mAuctionDetailContent.findViewById(R.id.auction_bidrecord_frame);
+        mBidCount = (TextView) mAuctionDetailContent.findViewById(R.id.bid_count);// 出价次数
+        mBidCount.setText("25");
+        // 出价记录ListView
+        mBidRecordLV = (ListView) mAuctionDetailContent.findViewById(R.id.bidRecord_listview);
+
+
+
+        mCollect = (ImageView) mAuctionDetailContent.findViewById(R.id.auction_collect);
+        mSubtract = (TextView) mAuctionDetailContent.findViewById(R.id.auction_subtract);
+        mCount = (TextView) mAuctionDetailContent.findViewById(R.id.auction_count);
         mCount.setText("0"); // 初始化值为0
-        mAdd =(TextView) mAuctionDetailContent.findViewById(R.id.auction_add);
-        mBid =(TextView) mAuctionDetailContent.findViewById(R.id.auction_bid);
-
-
+        mAdd = (TextView) mAuctionDetailContent.findViewById(R.id.auction_add);
+        mBid = (TextView) mAuctionDetailContent.findViewById(R.id.auction_bid);
 
 
         // 商家账号
-        mNumber =(TextView) mAuctionDetailContent.findViewById(R.id.auction_detail_number);
+        mNumber = (TextView) mAuctionDetailContent.findViewById(R.id.auction_detail_number);
         String mBer = "13599258378";
-        String mPhone = mBer.substring(0,3) + "****" + mBer.substring(7, mBer.length());
-        mNumber.setText(mPhone);
-
-
+        String mTel = SetMobile(mBer);
+        mNumber.setText(mTel);
 
 
         StampDetailPagerAdapter adapter = new StampDetailPagerAdapter(getSupportFragmentManager(), mList, arr);
@@ -133,18 +158,25 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
     }
 
-    private void initAdapter(){
+    private void initAdapter() {
         //顶部导航的View
         HomeViewPagerAdapter mViewPagerAdapter = new HomeViewPagerAdapter(mBitmap, arrImage, this);
         mTopVP.setAdapter(mViewPagerAdapter);
         mTopVPI.setVisibility(View.VISIBLE);
         mTopVPI.setViewPager(mTopVP);
+
+       // 出价记录ListView
+        BidRecordListViewAdapter mBidRecordAdapter = new BidRecordListViewAdapter(this,mBidList);
+        mBidRecordLV.setAdapter(mBidRecordAdapter);
+        mBidRecordLV.setEnabled(false);
+        ListViewHeight.setListViewHeight(mBidRecordLV);
     }
 
     @Override
     public void AgainRequest() {
 
     }
+
     private void initListener() {
         mShared.setOnClickListener(this);
         mBack.setOnClickListener(this);
@@ -154,19 +186,21 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         mSubtract.setOnClickListener(this);
         mAdd.setOnClickListener(this);
         mBid.setOnClickListener(this);
+        mRecordLl.setOnClickListener(this);
+
     }
 
     /**
      * 获取控件值
      */
-    private void GetStringText(){
+    private void GetStringText() {
         count = mCount.getText().toString().trim();
     }
 
     @Override
     public void onClick(View view) {
         GetStringText();
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.base_title_back:// 返回
                 finishWitchAnimation();
                 break;
@@ -182,8 +216,30 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 });
                 mTopBtn.setVisibility(View.GONE);
                 break;
+            case R.id.bid_record_ll:// 查看出价记录
+
+                if (bidRecordFlag) {
+                    mBidRecordFl.setVisibility(View.GONE);
+                    mArrows.setBackgroundResource(R.mipmap.arrows_up);
+                    mRecordTv.setText("点击查看出价记录");
+                    bidRecordFlag = false;
+                } else {
+                    mBidRecordFl.setVisibility(View.VISIBLE);
+                    mArrows.setBackgroundResource(R.mipmap.arrows_donw);
+                    mRecordTv.setText("点击收起出价记录");
+                    home_SV.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            home_SV.fullScroll(ScrollView.FOCUS_DOWN); // 滚动到底部
+                        }
+                    });
+                    bidRecordFlag = true;
+                }
+
+
+                break;
             case R.id.auction_collect:// 收藏
-                MyToast.showShort(this,"点击了收藏");
+                MyToast.showShort(this, "点击了收藏");
 
                 break;
             case R.id.auction_subtract:// 出价减
@@ -191,27 +247,29 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 if (intCount > 1) {
                     intCount--;
                     mCount.setText(String.valueOf(intCount));
-                }else{
+                } else {
                     mCount.setEnabled(false);// 不可点击
                 }
 
                 break;
             case R.id.auction_add:// 出价增加
                 // 是否是第一次加价
-                if(addFlag){
+                if (addFlag) {
                     intCount++;
                     mCount.setText(String.valueOf(intCount));
-                }else{
+                } else {
                     DialogAgreement();// 出价协议Dialog
                     addFlag = true;
                 }
 
 
+
+
                 break;
             case R.id.auction_bid:// 出价
-                if (count.equals("0")){
-                    MyToast.showShort(this,"请先加价");
-                }else {
+                if (count.equals("0")) {
+                    MyToast.showShort(this, "请先加价");
+                } else {
                     // 是否是第一次出价
                     if (bidFlag) {
                         mBid.setEnabled(false);
@@ -228,7 +286,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     /**
-     *  ScrollView 滑动的监听事件
+     * ScrollView 滑动的监听事件
      */
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -252,7 +310,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 显示置顶按钮的方法
-     *
+     * <p/>
      * 其中getChildAt表示得到ScrollView的child View， 因为ScrollView只允许一个child
      * view，所以contentView.getMeasuredHeight()表示得到子View的高度,
      * getScrollY()表示得到y轴的滚动距离，getHeight()为scrollView的高度。
@@ -262,11 +320,11 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         // 滑动到底部底部
         if (contentView != null && contentView.getMeasuredHeight() <= home_SV.getScrollY() + home_SV.getHeight()) {
             mTopBtn.setVisibility(View.VISIBLE);
-        } else if (home_SV.getScrollY() <  ScreenUtils
-                .getScreenHeight(AuctionDetailActivity.this)/3) { // 下滑 ScrollView滑动的距离小于当前手机屏幕高度的1/3就隐藏
+        } else if (home_SV.getScrollY() < ScreenUtils
+                .getScreenHeight(AuctionDetailActivity.this) / 3) { // 下滑 ScrollView滑动的距离小于当前手机屏幕高度的1/3就隐藏
             mTopBtn.setVisibility(View.GONE);
         } else if (home_SV.getScrollY() > ScreenUtils
-                .getScreenHeight(AuctionDetailActivity.this)/2) {// 上滑 ScrollView滑动的距离大于当前手机屏幕高度的1/2就显示
+                .getScreenHeight(AuctionDetailActivity.this) / 2) {// 上滑 ScrollView滑动的距离大于当前手机屏幕高度的1/2就显示
             mTopBtn.setVisibility(View.VISIBLE);
         }
 
@@ -275,17 +333,19 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     /**
      * 出价协议Dialog
      */
-    private void DialogAgreement(){
+    private void DialogAgreement() {
         auctiondialog = new AuctionRegulationsAgreementDialog(this);
         auctiondialog.show();
-       mKonwBtn =(Button) auctiondialog.findViewById(R.id.iKonw_btn);
+        mKonwBtn = (Button) auctiondialog.findViewById(R.id.iKonw_btn);
         mKonwBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (bidFlag){
+                if (bidFlag) {
                     auctiondialog.dismiss();
                     MyToast.showShort(AuctionDetailActivity.this, "出价成功");
-                }else{
+                    mSubtract.setEnabled(false);
+                    mAdd.setEnabled(false);
+                } else {
                     bidFlag = false;
                     auctiondialog.dismiss();
                 }
@@ -293,6 +353,16 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
             }
         });
+    }
+
+    /**
+     * 隐藏手机号中间4位的方法
+     * @param mobile // 手机号
+     * @return
+     */
+    private String SetMobile(String mobile){
+        String mMobile = mobile.substring(0, 3) + "****" + mobile.substring(7, mobile.length());
+        return mMobile;
     }
 
 
