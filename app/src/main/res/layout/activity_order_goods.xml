@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View style="@style/myline" />
+
+    <com.viewpagerindicator.TabPageIndicator
+        android:id="@+id/order_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:overScrollMode="never"
+        android:visibility="gone"
+        />
+
+    <com.example.stamp.view.CustomViewPager
+        android:id="@+id/order_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+
+    <!--<View style="@style/myline" />-->
+</LinearLayout>

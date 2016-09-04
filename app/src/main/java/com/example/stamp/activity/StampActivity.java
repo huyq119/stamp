@@ -133,7 +133,9 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
 //                params.put(StaticField.SIGN, md5code);
 //
 //                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+//
 //                Log.e("有数据吗~~~>",result);
+//
 //                MyLog.e(result);
 //            }
 //        });

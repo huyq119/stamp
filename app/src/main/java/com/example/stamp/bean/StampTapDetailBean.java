@@ -7,14 +7,55 @@ import java.util.ArrayList;
  * Created by Administrator on 2016/8/11.
  */
 public class StampTapDetailBean extends BaseBean {
-    public  ArrayList<StampTapDetail> stamp_info_list;
 
-    public ArrayList<StampTapDetail> getStamp_info_list() {
-        return stamp_info_list;
+    public ArrayList<StampTapDetail> stamp_info_list;
+
+    public String timestamp;
+
+    public String rsp_code;
+
+    public String rsp_msg;
+
+    public String sign;
+
+    public void setStamp_info_list(ArrayList<StampTapDetail> stamp_info_list) {
+        this.stamp_info_list = stamp_info_list;
     }
 
-    public void setStamp_info_list( ArrayList<StampTapDetail> stamp_info_list) {
-        this.stamp_info_list = stamp_info_list;
+    public ArrayList<StampTapDetail> getStamp_info_list() {
+        return this.stamp_info_list;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getTimestamp() {
+        return this.timestamp;
+    }
+
+    public void setRsp_code(String rsp_code) {
+        this.rsp_code = rsp_code;
+    }
+
+    public String getRsp_code() {
+        return this.rsp_code;
+    }
+
+    public void setRsp_msg(String rsp_msg) {
+        this.rsp_msg = rsp_msg;
+    }
+
+    public String getRsp_msg() {
+        return this.rsp_msg;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    public String getSign() {
+        return this.sign;
     }
 
     public class StampTapDetail {
@@ -23,7 +64,8 @@ public class StampTapDetailBean extends BaseBean {
         public String stamp_sn;
         public String stamp_detail;
         public String current_price;
-        public ArrayList<PriceHistory> price_history_list;
+//        public ArrayList<PriceHistory> price_history_list;
+        public String price_history_list;
         public String stamp_story;
 
         public String getStamp_image() {
@@ -74,34 +116,23 @@ public class StampTapDetailBean extends BaseBean {
             this.stamp_detail = stamp_detail;
         }
 
-        public ArrayList<PriceHistory> getPrice_history_list() {
+//        public ArrayList<PriceHistory> getPrice_history_list() {
+//            return price_history_list;
+//        }
+//
+//        public void setPrice_history_list(ArrayList<PriceHistory> price_history_list) {
+//            this.price_history_list = price_history_list;
+//        }
+
+
+        public String getPrice_history_list() {
             return price_history_list;
         }
 
-        public void setPrice_history_list(ArrayList<PriceHistory> price_history_list) {
+        public void setPrice_history_list(String price_history_list) {
             this.price_history_list = price_history_list;
         }
-
     }
 
-    public class PriceHistory {
-        public String time;
-        public String price;
 
-        public String getTime() {
-            return time;
-        }
-
-        public void setTime(String time) {
-            this.time = time;
-        }
-
-        public String getPrice() {
-            return price;
-        }
-
-        public void setPrice(String price) {
-            this.price = price;
-        }
-    }
 }

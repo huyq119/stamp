@@ -74,7 +74,8 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
                 case StaticField.SUCCESS://请求数据成功
                     Gson gson = new Gson();
                     stampTapDetailBean = gson.fromJson((String) msg.obj, StampTapDetailBean.class);
-                    initAdapter(stampTapDetailBean);
+//                    stampTapDetailBean.getStamp_info_list().get(i).getStamp_image()
+
                     break;
                 case StaticField.TOUCH_EVENT_ID:// SrcollView滑动监听
                     View scroller = (View) msg.obj;
@@ -100,7 +101,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     public View CreateSuccess() {
         mStampTapDetailContent = View.inflate(this, R.layout.activity_stamptapdetail_content, null);
         initView();
-        initAdapter(null);
+        initAdapter();
 //        initData();
         initListener();
         return mStampTapDetailContent;
@@ -169,7 +170,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         });
     }
 
-    private void initAdapter(StampTapDetailBean stampTapDetailBean) {
+    private void initAdapter() {
         mList = new ArrayList<>();
         stampInfoFragment = new StampInfoFragment();
         mList.add(stampInfoFragment);
@@ -188,6 +189,8 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         mViewPager.setAdapter(adapter);
         mIndicator.setVisibility(View.VISIBLE);
         mIndicator.setViewPager(mViewPager);
+
+
     }
 
     private void initListener() {

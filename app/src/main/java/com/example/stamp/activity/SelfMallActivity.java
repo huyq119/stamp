@@ -24,9 +24,15 @@ import com.example.stamp.dialog.PanStampFilterDialog;
 import com.example.stamp.dialog.StampTapFilterDialog;
 import com.example.stamp.fragment.popfragment.SelfMallFilterFragment;
 import com.example.stamp.fragment.popfragment.SelfMallFragment;
+import com.example.stamp.http.HttpUtils;
+import com.example.stamp.utils.Encrypt;
+import com.example.stamp.utils.MyLog;
 import com.example.stamp.utils.ScreenUtils;
+import com.example.stamp.utils.SortUtils;
+import com.example.stamp.utils.ThreadManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -120,6 +126,25 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initData() {
+        // 以下注释的网络请求别删数据正确后要用
+//        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                HashMap<String, String> params = new HashMap<>();
+//                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
+//                params.put(StaticField.OP_TYPE, "SC_ZY");
+//                String mapSort = SortUtils.MapSort(params);
+//                String md5code = Encrypt.MD5(mapSort);
+//                params.put(StaticField.SIGN, md5code);
+//
+//                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+//                Log.e("有数据吗~~~>",result);
+//
+//            }
+//        });
+
+
+
         if (mList != null) {
             mList = new ArrayList<>();
         }

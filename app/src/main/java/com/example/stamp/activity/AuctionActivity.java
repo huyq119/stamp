@@ -14,14 +14,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.stamp.R;
+import com.example.stamp.StaticField;
 import com.example.stamp.adapter.StampHorizontalListViewAdapter;
 import com.example.stamp.adapter.AuctionListViewAdapter;
 import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.StampBean;
+import com.example.stamp.http.HttpUtils;
+import com.example.stamp.utils.Encrypt;
+import com.example.stamp.utils.MyLog;
+import com.example.stamp.utils.SortUtils;
+import com.example.stamp.utils.ThreadManager;
 import com.example.stamp.view.HorizontalListView;
 import com.example.stamp.view.VerticalScrollView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 竞拍页面
@@ -122,6 +129,26 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
      * 初始化第一个按钮
      */
     private void initData() {
+        // 以下注释的网络请求别删数据正确后要用
+//        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                HashMap<String, String> params = new HashMap<>();
+//                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
+//                params.put(StaticField.OP_TYPE, "JP");
+//                String mapSort = SortUtils.MapSort(params);
+//                String md5code = Encrypt.MD5(mapSort);
+//                params.put(StaticField.SIGN, md5code);
+//
+//                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+//
+//
+//                MyLog.e(result);
+//            }
+//        });
+
+
+
         if (mList != null) {
             mList = new ArrayList<>();
         }
