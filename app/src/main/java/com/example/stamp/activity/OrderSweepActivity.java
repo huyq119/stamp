@@ -2,8 +2,6 @@ package com.example.stamp.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -15,7 +13,6 @@ import com.example.stamp.R;
 import com.example.stamp.adapter.OrderAdapter;
 import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.OrderBean;
-import com.example.stamp.bean.OrderSweepBean;
 
 import java.util.ArrayList;
 
@@ -106,7 +103,7 @@ public class OrderSweepActivity extends BaseActivity implements View.OnClickList
             case R.id.record_sweep:
                 mOrderSweep.setTextColor(Color.GRAY);
                 mOrder.setTextColor(Color.RED);
-                startActivity(new Intent(OrderSweepActivity.this,OrderActivity.class));
+                startActivity(new Intent(OrderSweepActivity.this,OrderBuyBackActivity.class));
                 overridePendingTransition(0,0);
                 finish();
                 break;

@@ -24,7 +24,7 @@ import java.util.Random;
 /**
  * 回购订单页面
  */
-public class OrderActivity extends BaseActivity implements View.OnClickListener {
+public class OrderBuyBackActivity extends BaseActivity implements View.OnClickListener {
 
     private View mOrderTitle;
     private View mOrderContent;
@@ -124,7 +124,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
             case R.id.record_sweep:
                 mOrderSweep.setTextColor(Color.GRAY);
                 mOrder.setTextColor(Color.RED);
-                startActivity(new Intent(OrderActivity.this,OrderSweepActivity.class));
+                startActivity(new Intent(OrderBuyBackActivity.this,OrderSweepActivity.class));
                 overridePendingTransition(0,0);
                 finish();
 
@@ -132,7 +132,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
             case R.id.btn_order:
                 mOrderSweep.setTextColor(Color.GRAY);
                 mOrder.setTextColor(Color.RED);
-                startActivity(new Intent(OrderActivity.this,OrderSweepActivity.class));
+                startActivity(new Intent(OrderBuyBackActivity.this,OrderSweepActivity.class));
                 overridePendingTransition(0,0);
                 finish();
                 break;

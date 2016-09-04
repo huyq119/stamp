@@ -107,7 +107,7 @@
 
         <activity android:name=".activity.OrderAuditingActivity">
         </activity>
-        <activity android:name=".activity.OrderActivity">
+        <activity android:name=".activity.OrderBuyBackActivity">
         </activity>
         <activity android:name=".activity.OrderCloseActivity">
         </activity>
@@ -123,7 +123,7 @@
         </activity>
         <activity android:name=".activity.HomeImageH5Activity">
         </activity>
-        <activity android:name=".activity.OrdersForGoodsDetialsActivity"
+        <activity android:name=".activity.OrdersGoodsActivity"
             android:theme="@style/Theme.PageIndicatorDefaults"/>
         <meta-data
             android:name="com.google.android.gms.version"

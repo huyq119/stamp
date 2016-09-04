@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2016/8/12.
+ * 回购订单适配器Adapter
  */
 public class OrderAdapter extends BaseAdapter {
     private Context context;
