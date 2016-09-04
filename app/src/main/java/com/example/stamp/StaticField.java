@@ -96,4 +96,7 @@ public class StaticField {
     public static final String YS = "YS";//YS邮市
     public static final String JP = "JP";//JP竞拍
 
+    // 我的页面，商品订单跳转的标识键
+    public static final String ORDERS = "orders";
+
 }

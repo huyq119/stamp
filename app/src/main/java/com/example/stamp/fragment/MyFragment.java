@@ -2,6 +2,7 @@ package com.example.stamp.fragment;
 
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,7 +15,8 @@ import com.example.stamp.activity.LoginActivity;
 import com.example.stamp.activity.ManagerAddressActivity;
 import com.example.stamp.activity.MyCollectionActivity;
 import com.example.stamp.activity.MyStampActivity;
-import com.example.stamp.activity.OrderActivity;
+import com.example.stamp.activity.OrderBuyBackActivity;
+import com.example.stamp.activity.OrdersGoodsActivity;
 import com.example.stamp.activity.PressWordManagerActivity;
 import com.example.stamp.activity.UsMeActivity;
 import com.example.stamp.activity.WithdrawActivity;
@@ -146,38 +148,32 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 openActivityWitchAnimation(ManagerAddressActivity.class);
                 break;
             case R.id.my_order_buy_back://回购订单
-                openActivityWitchAnimation(OrderActivity.class);
+                openActivityWitchAnimation(OrderBuyBackActivity.class);
                 break;
-            case R.id.my_orders_goods:
-//                openActivityWitchAnimation(OrdersForGoodsDetialsActivity.class);
+            case R.id.my_orders_goods:// 商品订单
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.ORDERS, "all");
+                openActivityWitchAnimation(OrdersGoodsActivity.class,bundle);
                 break;
-            case R.id.text_payment:
-//                Intent intent = new Intent(getActivity(),
-//                        OrdersForGoodsDetialsActivity.class);
-//                intent.putExtra("tag",1);
-//                startActivity(intent);
-//                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            case R.id.text_payment: // 待付款
+                Bundle bundle1 = new Bundle();
+                bundle1.putString(StaticField.ORDERS, "payment");
+                openActivityWitchAnimation(OrdersGoodsActivity.class,bundle1);
                 break;
-            case R.id.receive:
-//                Intent receive = new Intent(getActivity(),
-//                      OrdersForGoodsDetialsActivity.class);
-//                receive.putExtra("tag", 2);
-//                startActivity(receive);
-//                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            case R.id.receive:  // 待收货
+                Bundle bundle2 = new Bundle();
+                bundle2.putString(StaticField.ORDERS, "receiving");
+                openActivityWitchAnimation(OrdersGoodsActivity.class,bundle2);
                 break;
-            case R.id.complete:
-//                Intent complete = new Intent(getActivity(),
-//                        OrdersForGoodsDetialsActivity.class);
-//                complete.putExtra("tag", 3);
-//                startActivity(complete);
-//                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            case R.id.complete: // 已完成
+                Bundle bundle3 = new Bundle();
+                bundle3.putString(StaticField.ORDERS, "completed");
+                openActivityWitchAnimation(OrdersGoodsActivity.class,bundle3);
                 break;
-            case R.id.refuse:
-//                Intent refuse = new Intent(getActivity(),
-//                        OrdersForGoodsDetialsActivity.class);
-//                refuse.putExtra("tag", 4);
-//                startActivity(refuse);
-//                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            case R.id.refuse: // 退款/退货
+                Bundle bundle4 = new Bundle();
+                bundle4.putString(StaticField.ORDERS, "refused");
+                openActivityWitchAnimation(OrdersGoodsActivity.class,bundle4);
                 break;
             default:
                 break;
