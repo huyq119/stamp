@@ -34,8 +34,6 @@
             android:textColor="#fff"
             android:textSize="9sp"/>
 
-
-
     </com.example.stamp.view.SquareView>
 
 
