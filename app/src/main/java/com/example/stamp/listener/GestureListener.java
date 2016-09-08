@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.stamp.utils.MyLog;
 
@@ -16,6 +15,7 @@ public class GestureListener implements GestureDetector.OnGestureListener {
 
     private LinearLayout ll;
     private int mHeight;
+    private boolean flag = true;
 
     public GestureListener(LinearLayout heartll, int height) {
         ll = heartll;
@@ -28,7 +28,7 @@ public class GestureListener implements GestureDetector.OnGestureListener {
 
     @Override
     public boolean onDown(MotionEvent e) {
-        MyLog.e( "down~~001" + e);
+        MyLog.e("down~~001" + e);
         return false;
     }
 
@@ -46,7 +46,7 @@ public class GestureListener implements GestureDetector.OnGestureListener {
      */
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        MyLog.e( "down~~002" + e);
+        MyLog.e("down~~002" + e);
         return false;
     }
 
@@ -55,33 +55,49 @@ public class GestureListener implements GestureDetector.OnGestureListener {
      */
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        float startY = e1.getY();
+        float endY = e2.getY();
+        ValueAnimator animator;
+
+        MyLog.e(startY + "-" + endY);
+
         final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) ll.getLayoutParams();
-        MyLog.e(mHeight + "");
-        int startHeight = 0;
-        int targetHeight = 0;
-        if (distanceY >= 0) {//说明向上滑动
-            startHeight = ll.getHeight();
-            targetHeight = 0;
-        } else if (distanceY < 0) {
-            startHeight = 0;
-            targetHeight = mHeight;
-//            MyLog.e(targetHeight + "");
-        }
+        if ((Math.abs(startY) - Math.abs(endY)) > 100) {//说明向上滑动
+            animator = ValueAnimator.ofInt(ll.getHeight(), 0);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
-        ValueAnimator animator = ValueAnimator.ofInt(startHeight, targetHeight);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int value = (Integer) animation.getAnimatedValue();
-                layoutParams.height = value;
-                ll.setLayoutParams(layoutParams);
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int value = (Integer) animation.getAnimatedValue();
+                    layoutParams.height = value;
+                    ll.setLayoutParams(layoutParams);
 //                Log.e("视图高度layoutParams", layoutParams.height + "_" + value);
 //                    mScrollView.scrollTo(0, 0);// 让scrollView 移动到最下面
-            }
-        });
-        animator.setDuration(200);//设置动画持续时间
-        animator.start();
+                }
+            });
+            animator.setDuration(200);//设置动画持续时间
+            animator.start();
+
+            flag = true;
+        } else if ((Math.abs(endY) - Math.abs(startY)) > 100 && flag) {
+            animator = ValueAnimator.ofInt(0, mHeight);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int value = (Integer) animation.getAnimatedValue();
+                    layoutParams.height = value;
+                    ll.setLayoutParams(layoutParams);
+//                Log.e("视图高度layoutParams", layoutParams.height + "_" + value);
+//                    mScrollView.scrollTo(0, 0);// 让scrollView 移动到最下面
+                }
+            });
+            animator.setDuration(200);//设置动画持续时间
+            animator.start();
+
+            flag = false;
+        }
+
 
         return true;
     }
