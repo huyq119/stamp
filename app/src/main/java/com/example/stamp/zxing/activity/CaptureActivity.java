@@ -35,6 +35,9 @@ import com.google.zxing.Result;
 import java.io.IOException;
 import java.util.Vector;
 
+/**
+ * 立即扫码页面
+ */
 public class CaptureActivity extends Activity implements Callback {
     public static final String QR_RESULT = "RESULT";
 

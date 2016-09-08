@@ -99,7 +99,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.search_title_back://返回按钮
-                finish();
+                finishWitchAnimation();
                 break;
             case R.id.search_clean://清除搜索记录
                 //隐藏搜索历史,这里要把数据清空

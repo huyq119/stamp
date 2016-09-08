@@ -11,7 +11,7 @@ import com.example.stamp.fragment.stampfragment.StampPriceFragment;
 import java.util.List;
 
 /**
- * 邮票目录的适配器
+ * 邮票目录详情Fragment的适配器
  * Created by Administrator on 2016/8/4.
  */
 public class StampTapDetailAdapter extends FragmentPagerAdapter {

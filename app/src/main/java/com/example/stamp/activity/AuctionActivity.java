@@ -3,6 +3,7 @@ package com.example.stamp.activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
@@ -14,21 +15,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.stamp.R;
-import com.example.stamp.StaticField;
-import com.example.stamp.adapter.StampHorizontalListViewAdapter;
 import com.example.stamp.adapter.AuctionListViewAdapter;
+import com.example.stamp.adapter.StampHorizontalListViewAdapter;
 import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.StampBean;
-import com.example.stamp.http.HttpUtils;
-import com.example.stamp.utils.Encrypt;
+import com.example.stamp.listener.GestureListener;
 import com.example.stamp.utils.MyLog;
-import com.example.stamp.utils.SortUtils;
-import com.example.stamp.utils.ThreadManager;
+import com.example.stamp.utils.ScreenUtils;
 import com.example.stamp.view.HorizontalListView;
-import com.example.stamp.view.VerticalScrollView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * 竞拍页面
@@ -46,8 +42,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private String[] mArr = {"全部", "编年邮票", "新JT邮票", "编号邮票", "文革邮票", "老纪特邮票", "普通邮票"};
     private TextView mTitle;
     // 新中国邮票, 民国邮票, 解放区邮票, 清代邮票
-    private LinearLayout mNewChinese, mRepublicChina, mLiberatedArea, mQingDynasty,
-            mTitleStamp;
+    private LinearLayout mNewChinese, mRepublicChina, mLiberatedArea, mQingDynasty;
 
     private int mColorGray = Color.parseColor("#dddfe3");// 横线灰色
     private int mColorRed = Color.parseColor("#e20000");// 横线红色
@@ -61,8 +56,11 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private int mCount;
     private int currentTop;
     private int mLastFirstTop;
-    private int touchSlop=10;
+    private int touchSlop = 10;
     private AuctionListViewAdapter mListAdapter;
+
+    private LinearLayout mHeartll;//头部的布局
+    private GestureDetector mGestureDetector;
 
 
     @Override
@@ -85,7 +83,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private void initView() {
         mList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i,  "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
+            mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
 
         mBack = (ImageView) mAuctionTitle.findViewById(R.id.base_title_back);
@@ -94,8 +92,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mTitle.setText("竞拍");
 
         mTopBtn = (Button) mAuctionContent.findViewById(R.id.auction_top_btn);// 置顶
-
-        mTitleStamp = (LinearLayout) mAuctionContent.findViewById(R.id.auction_titleStamp_ll);
         hListView = (HorizontalListView) mAuctionContent.findViewById(R.id.stamp_hl);//横向ListView
         mBlankView = mAuctionContent.findViewById(R.id.auction_blank_view);
 
@@ -112,7 +108,17 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mOver = (Button) mAuctionContent.findViewById(R.id.auction_over);
         mCamera = (Button) mAuctionContent.findViewById(R.id.auction_camera);
 
+        mHeartll = (LinearLayout) mAuctionContent.findViewById(R.id.auction_heart);
+        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        mHeartll.measure(w, h);
+        int height = mHeartll.getMeasuredHeight();
+        MyLog.e(height + "");
+        GestureListener gestureListener = new GestureListener(mHeartll, height);
+        mGestureDetector = new GestureDetector(this, gestureListener);
+
     }
+
 
     private void initAdapter() {
         //竖向ListView设置适配器
@@ -148,7 +154,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 //        });
 
 
-
         if (mList != null) {
             mList = new ArrayList<>();
         }
@@ -156,7 +161,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
 //        RequestNet(StaticField.ZH, num, StaticField.A);
         for (int i = 0; i < 20; i++) {
-            mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i,  "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
+            mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
     }
 
@@ -171,7 +176,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mSynthesize.setOnClickListener(this);
         mOver.setOnClickListener(this);
         mCamera.setOnClickListener(this);
-        mListView.setOnScrollListener(this);
+//        mListView.setOnScrollListener(this);
 
         //横向ListView的点击事件
         hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -182,22 +187,19 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 hListViewAdapter.notifyDataSetChanged();
             }
         });
-
-        mListView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                // 通知横向hListView父窗口放行onTouch点击事件
-                hListView.requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
-        });
         // mListView的条目监听
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //去往竞拍详情页
-
                 openActivityWitchAnimation(AuctionDetailActivity.class);
+            }
+        });
+        mListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mGestureDetector.onTouchEvent(motionEvent);
+                return false;
             }
         });
 
@@ -243,9 +245,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.auction_top_btn://置顶
                 setListViewPos(0);
-                mTitleStamp.setVisibility(View.VISIBLE);
-                hListView.setVisibility(View.VISIBLE);
-                mBlankView.setVisibility(View.VISIBLE);
                 mTopBtn.setVisibility(View.GONE);// 回到顶部后置顶按钮隐藏
                 break;
             case R.id.auction_synthesize://综合
@@ -258,7 +257,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("戊戌年", "未开始", "￥200.0" + i,  "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
+                        mList.add(new StampBean("戊戌年", "未开始", "￥200.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
                     }
                     mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);
@@ -271,7 +270,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("庚申年", "未开始", "￥1000.0" + i,  "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
+                        mList.add(new StampBean("庚申年", "未开始", "￥1000.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
                     }
                     AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);
@@ -291,7 +290,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("戊戌年", "即将结束", "￥200.0" + i,  "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
+                        mList.add(new StampBean("戊戌年", "即将结束", "￥200.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
                     }
                     AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);
@@ -305,7 +304,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("庚申年", "即将结束", "￥100.0" + i,  "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
+                        mList.add(new StampBean("庚申年", "即将结束", "￥100.0" + i, "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
                     }
                     AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);
@@ -326,7 +325,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("庚申年", "等待开拍", "￥800.0" + i,  "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
+                        mList.add(new StampBean("庚申年", "等待开拍", "￥800.0" + i, "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
                     }
                     AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);
@@ -339,7 +338,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                     mList = new ArrayList<>();
                     for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("戊戌年", "等待开拍", "￥400.0" + i,  "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
+                        mList.add(new StampBean("戊戌年", "等待开拍", "￥400.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
                     }
                     AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
                     mListView.setAdapter(mListAdapter);
@@ -393,45 +392,18 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         // 当开始滑动且ListView底部的Y轴点超出屏幕最大范围时，显示或隐藏顶部按钮
         mCount = totalItemCount;
-        View firstChildView = absListView.getChildAt(0);
-        if (firstChildView != null) {
-            currentTop = absListView.getChildAt(0).getTop();
-        } else {
-            //ListView初始化的时候会回调onScroll方法，此时getChildAt(0)仍是为空的
-            return;
-        }
-        //判断上次可见的第一个位置和这次可见的第一个位置
-        if (firstVisibleItem != lastVisibleItemPosition) {
-            //不是同一个位置
+        if (scrollFlag
+                && ScreenUtils.getScreenViewBottomHeight(mListView) >= ScreenUtils
+                .getScreenHeight(this)) {
             if (firstVisibleItem > lastVisibleItemPosition) {// 上滑
-                mTitleStamp.setVisibility(View.GONE);
-                hListView.setVisibility(View.GONE);
-                mBlankView.setVisibility(View.GONE);
-            } else {// 下滑
-                mTitleStamp.setVisibility(View.VISIBLE);
-                hListView.setVisibility(View.VISIBLE);
-                mBlankView.setVisibility(View.VISIBLE);
+                mTopBtn.setVisibility(View.VISIBLE);
+            } else if (firstVisibleItem < lastVisibleItemPosition) {// 下滑
+                mTopBtn.setVisibility(View.GONE);
+            } else {
+                return;
             }
-            mLastFirstTop = currentTop;
-        } else {
-            //是同一个位置
-            if (Math.abs(currentTop - mLastFirstTop) > touchSlop) {
-                //避免动作执行太频繁或误触，加入touchSlop判断，具体值可进行调整
-                if (currentTop > mLastFirstTop) { // 下滑
-                    mTitleStamp.setVisibility(View.VISIBLE);
-                    hListView.setVisibility(View.VISIBLE);
-                    mBlankView.setVisibility(View.VISIBLE);
-//                    Log.i("cs", "equals--->up");
-                } else if (currentTop < mLastFirstTop) { // 上滑
-                    mTitleStamp.setVisibility(View.GONE);
-                    hListView.setVisibility(View.GONE);
-                    mBlankView.setVisibility(View.GONE);
-//                    Log.i("cs", "equals--->down");
-                }
-                mLastFirstTop = currentTop;
-            }
+            lastVisibleItemPosition = firstVisibleItem;
         }
-        lastVisibleItemPosition = firstVisibleItem;
     }
 
 

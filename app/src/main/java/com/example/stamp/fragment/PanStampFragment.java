@@ -5,15 +5,18 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import com.example.stamp.R;
 import com.example.stamp.StaticField;
+import com.example.stamp.activity.SearchActivity;
 import com.example.stamp.adapter.PanStampGridViewAdapter;
 import com.example.stamp.adapter.StampMarketGridViewAdapter;
 import com.example.stamp.base.BaseFragment;
 import com.example.stamp.bean.StampTapBean;
 import com.example.stamp.dialog.PanStampFilterDialog;
 import com.example.stamp.fragment.popfragment.SelfMallFragment;
+import com.example.stamp.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
     private GridView mPanStampGV;//本页的GridView
 
     private ArrayList<StampTapBean.StampList> mList;//存放数据的集合
+    private ImageView mScan,mSearch;// 扫码，搜索
 
     @Override
     public View CreateTitle() {
@@ -51,6 +55,9 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
 
 
     private void initView() {
+        mScan = (ImageView) mPanStampTitle.findViewById(R.id.panstamp_title_scan);
+        mSearch = (ImageView) mPanStampTitle.findViewById(R.id.panstamp_search);
+
         mFilter = (Button) mPanStampContent.findViewById(R.id.panStamp_filter);
         mPanStampGV = (GridView) mPanStampContent.findViewById(R.id.panstamp_gl);
     }
@@ -58,7 +65,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
 
     private void initAdapter() {
         mList = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 22; i++) {
             mList.add(new StampTapBean.StampList( "庚申年" ,"10000.0"+ i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
 
@@ -67,6 +74,8 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void initListener() {
+        mScan.setOnClickListener(this);
+        mSearch.setOnClickListener(this);
         mFilter.setOnClickListener(this);
     }
 
@@ -78,7 +87,13 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.panStamp_filter://筛选按钮
+            case R.id.panstamp_title_scan://扫码
+                openActivityWitchAnimation(CaptureActivity.class);
+                break;
+            case R.id.panstamp_search://搜索
+                openActivityWitchAnimation(SearchActivity.class);
+                break;
+            case R.id.panStamp_filter://筛选
                 setPopupWindowListData();
                 PanStampFilterDialog filterDialogFragment = new PanStampFilterDialog(mPopupList, arr);
                 filterDialogFragment.show(getChildFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);

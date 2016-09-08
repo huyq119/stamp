@@ -61,8 +61,7 @@ public class StampMarketGridViewAdapter extends BaseAdapter {
 
         //设置数据
         StampTapBean.StampList mStampList = list.get(i);
-//        viewHolder.mName.setText(mStampList.getStamp_name());
-        viewHolder.mName.setText("康熙年");
+        viewHolder.mName.setText(mStampList.getStamp_name());
 
         viewHolder.mPrice.setText(mStampList.getCurrent_price());
         //设置图片

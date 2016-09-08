@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?><!--竞拍页面-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/background">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <View style="@style/myline"/>
+        <View style="@style/myline" />
 
         <LinearLayout
             android:id="@+id/auction_heart"
@@ -42,7 +42,7 @@
                             android:layout_width="43dp"
                             android:layout_height="43dp"
                             android:background="#d3d3d3"
-                            android:src="@mipmap/weixin_pay"/>
+                            android:src="@mipmap/weixin_pay" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -50,13 +50,13 @@
                             android:paddingTop="5dp"
                             android:text="新中国邮票"
                             android:textColor="#666"
-                            android:textSize="13sp"/>
+                            android:textSize="13sp" />
 
                     </LinearLayout>
 
                     <View
                         android:id="@+id/newChinese_view"
-                        style="@style/auction_color_line"/>
+                        style="@style/auction_color_line" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -78,7 +78,7 @@
                             android:layout_width="43dp"
                             android:layout_height="43dp"
                             android:background="#d3d3d3"
-                            android:src="@mipmap/zhifubao"/>
+                            android:src="@mipmap/zhifubao" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -86,12 +86,12 @@
                             android:paddingTop="5dp"
                             android:text="民国邮票"
                             android:textColor="#666"
-                            android:textSize="13sp"/>
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <View
                         android:id="@+id/republicChina_view"
-                        style="@style/auction_color_line"/>
+                        style="@style/auction_color_line" />
 
                 </LinearLayout>
 
@@ -114,7 +114,7 @@
                             android:layout_width="43dp"
                             android:layout_height="43dp"
                             android:background="#d3d3d3"
-                            android:src="@mipmap/weixin_pay"/>
+                            android:src="@mipmap/weixin_pay" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -122,12 +122,12 @@
                             android:paddingTop="5dp"
                             android:text="解放区邮票"
                             android:textColor="#666"
-                            android:textSize="13sp"/>
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <View
                         android:id="@+id/liberatedArea_view"
-                        style="@style/auction_color_line"/>
+                        style="@style/auction_color_line" />
 
                 </LinearLayout>
 
@@ -149,7 +149,7 @@
                             android:layout_width="43dp"
                             android:layout_height="43dp"
                             android:background="#d3d3d3"
-                            android:src="@mipmap/zhifubao"/>
+                            android:src="@mipmap/zhifubao" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -157,12 +157,12 @@
                             android:paddingTop="5dp"
                             android:text="清代邮票"
                             android:textColor="#666"
-                            android:textSize="13sp"/>
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <View
                         android:id="@+id/qingDynasty_view"
-                        style="@style/auction_color_line"/>
+                        style="@style/auction_color_line" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -170,15 +170,16 @@
             <com.example.stamp.view.HorizontalListView
                 android:id="@+id/stamp_hl"
                 android:layout_width="match_parent"
-                android:layout_height="31dp"/>
+                android:layout_height="31dp" />
 
             <View
                 android:id="@+id/auction_blank_view"
                 android:layout_width="match_parent"
                 android:layout_height="12dp"
-                android:background="@color/background"/>
+                android:background="@color/background" />
         </LinearLayout>
-        <View style="@style/myline"/>
+
+        <View style="@style/myline" />
 
         <LinearLayout
 
@@ -201,14 +202,14 @@
                 android:paddingRight="10dp"
                 android:text="@string/synthesize"
                 android:textColor="#666"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"
-                android:background="#dedfe3"/>
+                android:background="#dedfe3" />
 
             <Button
                 android:id="@+id/auction_over"
@@ -224,14 +225,14 @@
                 android:paddingRight="10dp"
                 android:text="@string/comingOver"
                 android:textColor="#666666"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"
-                android:background="#dedfe3"/>
+                android:background="#dedfe3" />
 
             <Button
                 android:id="@+id/auction_camera"
@@ -247,11 +248,11 @@
                 android:paddingRight="10dp"
                 android:text="@string/WaitingShooting"
                 android:textColor="#666666"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
         </LinearLayout>
 
-        <View style="@style/myline"/>
+        <View style="@style/myline" />
 
         <ListView
             android:id="@+id/auction_lv"
@@ -261,7 +262,7 @@
             android:dividerHeight="1px"
             android:listSelector="@android:color/transparent"
             android:overScrollMode="never"
-            android:scrollbars="none"/>
+            android:scrollbars="none" />
     </LinearLayout>
 
     <!--置顶按钮-->
@@ -275,6 +276,6 @@
         android:layout_marginRight="10dp"
         android:background="@mipmap/top"
         android:gravity="center"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

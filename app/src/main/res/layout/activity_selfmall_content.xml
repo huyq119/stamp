@@ -19,7 +19,7 @@
         <LinearLayout
             android:id="@+id/market_radioGroup"
             android:layout_width="match_parent"
-            android:layout_height="28dp"
+            android:layout_height="36dp"
             android:orientation="horizontal">
 
             <Button
@@ -29,14 +29,14 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:button="@null"
-                android:drawablePadding="5dp"
+                android:drawablePadding="3dp"
                 android:drawableRight="@mipmap/top_arrow"
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/synthesize"
                 android:textColor="#666"
-                android:textSize="9sp" />
+                android:textSize="12sp" />
 
             <View
                 android:layout_width="1dp"
@@ -58,8 +58,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/sales"
-                android:textColor="#666666"
-                android:textSize="9sp" />
+                android:textColor="#666"
+                android:textSize="12sp" />
 
             <View
                 android:layout_width="1dp"
@@ -81,8 +81,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/price"
-                android:textColor="#666666"
-                android:textSize="9sp" />
+                android:textColor="#666"
+                android:textSize="12sp" />
 
             <View
                 android:layout_width="1dp"
@@ -104,8 +104,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/filter"
-                android:textColor="#666666"
-                android:textSize="9sp" />
+                android:textColor="#666"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <View

@@ -176,6 +176,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
         mGrid.setOnScrollListener(this);
         mFilter.setOnClickListener(this);
         mScan.setOnClickListener(this);
+        mSearch.setOnClickListener(this);
         mSynthesize.setOnClickListener(this);
         mRelease.setOnClickListener(this);
         mPrice.setOnClickListener(this);

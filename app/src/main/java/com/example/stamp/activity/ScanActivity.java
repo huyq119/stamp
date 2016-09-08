@@ -2,6 +2,7 @@ package com.example.stamp.activity;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.stamp.R;
 import com.example.stamp.base.BaseActivity;
@@ -12,9 +13,9 @@ import com.example.stamp.zxing.activity.CaptureActivity;
  */
 public class ScanActivity extends BaseActivity implements View.OnClickListener {
 
-    private View mScanContent;
-    private View mScanTitle;
+    private View mScanContent,mScanTitle;
     private Button mScan;//扫码回购
+    private ImageView mBack;
 
 
     @Override
@@ -33,10 +34,12 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
 
 
     private void initView() {
+        mBack = (ImageView) mScanTitle.findViewById(R.id.search_title_back);
         mScan = (Button) mScanContent.findViewById(R.id.scan_back_buy_now);
     }
 
     private void initListener() {
+        mBack.setOnClickListener(this);
         mScan.setOnClickListener(this);
     }
 
@@ -48,7 +51,10 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.scan_back_buy_now://立即扫码回购按钮
+            case R.id.search_title_back://返回
+                finishWitchAnimation();
+                break;
+            case R.id.scan_back_buy_now://立即扫码回购
                 openActivityWitchAnimation(CaptureActivity.class);
                 break;
         }
