@@ -57,12 +57,10 @@ public class StampTapBean extends BaseBean {
         public String stamp_name;// 邮票名称
         public String current_price;// 当前价格
 
-        public StampList(String stamp_name,String current_price,String stamp_img) {
-            super();
-
-            this.stamp_sn = stamp_name;
-            this.current_price = current_price;
+        public StampList( String stamp_name, String current_price, String stamp_img) {
             this.stamp_img = stamp_img;
+            this.stamp_name = stamp_name;
+            this.current_price = current_price;
         }
 
         public String getStamp_sn() {
@@ -71,6 +69,14 @@ public class StampTapBean extends BaseBean {
 
         public void setStamp_sn(String stamp_sn) {
             this.stamp_sn = stamp_sn;
+        }
+
+        public String getStamp_img() {
+            return stamp_img;
+        }
+
+        public void setStamp_img(String stamp_img) {
+            this.stamp_img = stamp_img;
         }
 
         public String getCurrent_price() {
@@ -87,14 +93,6 @@ public class StampTapBean extends BaseBean {
 
         public void setStamp_name(String stamp_name) {
             this.stamp_name = stamp_name;
-        }
-
-        public String getStamp_img() {
-            return stamp_img;
-        }
-
-        public void setStamp_img(String stamp_img) {
-            this.stamp_img = stamp_img;
         }
     }
 

@@ -32,7 +32,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
     private String[] arr = {"自营商城", "第三方商家", "邮市", "竞拍"};
     private GridView mPanStampGV;//本页的GridView
 
-    private ArrayList<StampTapBean> mList;//存放数据的集合
+    private ArrayList<StampTapBean.StampList> mList;//存放数据的集合
 
     @Override
     public View CreateTitle() {
@@ -58,9 +58,9 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
 
     private void initAdapter() {
         mList = new ArrayList<>();
-//        for (int i = 0; i < 30; i++) {
-//            mList.add(new StampTapBean("10000.00", "庚申年" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-//        }
+        for (int i = 0; i < 30; i++) {
+            mList.add(new StampTapBean.StampList( "庚申年" ,"10000.0"+ i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
+        }
 
         PanStampGridViewAdapter mPanStampAdapter = new PanStampGridViewAdapter(getActivity(), mList, mBitmap);
         mPanStampGV.setAdapter(mPanStampAdapter);
