@@ -78,7 +78,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     private void initView() {
 
         mList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             mList.add(new StampTapBean.StampList("庚申年", "￥1000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
         mBack = (ImageView) mSelfMallTitle.findViewById(R.id.base_title_back);
@@ -91,7 +91,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
         mPrice = (Button) mSelfMallContent.findViewById(R.id.self_price);
         mFilter = (Button) mSelfMallContent.findViewById(R.id.self_filter);
         mGridView = (GridView) mSelfMallContent.findViewById(R.id.selfMall_gl);
-        mTopBtn = (Button) mSelfMallContent.findViewById(R.id.selsf_top_btn);
+        mTopBtn = (Button) mSelfMallContent.findViewById(R.id.base_top_btn);
 
     }
 
@@ -151,7 +151,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
 
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
 //        RequestNet(StaticField.ZH, num, StaticField.A);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             mList.add(new StampTapBean.StampList("庚申年", "￥1000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
     }
@@ -171,7 +171,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
             case R.id.base_search://搜索按钮
                 openActivityWitchAnimation(SearchActivity.class);
                 break;
-            case R.id.selsf_top_btn://置顶
+            case R.id.base_top_btn://置顶
                 setListViewPos(0);
                 mTopBtn.setVisibility(View.GONE);// 回到顶部后置顶按钮隐藏
                 break;

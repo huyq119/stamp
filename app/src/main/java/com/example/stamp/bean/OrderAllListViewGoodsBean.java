@@ -71,14 +71,6 @@ public class OrderAllListViewGoodsBean {
         this.stamp_status = stamp_status;
     }
 
-    public String getStamp_allPrice() {
-        return stamp_allPrice;
-    }
-
-    public void setStamp_allPrice(String stamp_allPrice) {
-        this.stamp_allPrice = stamp_allPrice;
-    }
-
     public String getStamp_allCount() {
         return stamp_allCount;
     }
@@ -87,4 +79,11 @@ public class OrderAllListViewGoodsBean {
         this.stamp_allCount = stamp_allCount;
     }
 
+    public String getStamp_allPrice() {
+        return stamp_allPrice;
+    }
+
+    public void setStamp_allPrice(String stamp_allPrice) {
+        this.stamp_allPrice = stamp_allPrice;
+    }
 }

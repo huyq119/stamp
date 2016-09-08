@@ -97,7 +97,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         //打开套有 ListVew的 ScrollView的页面布局 默认起始位置在最顶部
         home_SV.smoothScrollTo(0, 0);
         // 置顶
-        mTopBtn = (Button) mDesignerDetailContent.findViewById(R.id.designerdetail_top_btn);
+        mTopBtn = (Button) mDesignerDetailContent.findViewById(R.id.base_top_btn);
 
         //获取设计家传过来的内容(中英文名)
         Bundle bundle = getIntent().getExtras();
@@ -175,7 +175,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
      * @param view
      */
     private void handleStop(Object view) {
-//        Log.i("哈哈~~~>", "停止了");
         ScrollView scroller = (ScrollView) view;
         scrollY = scroller.getScrollY();
         doOnBorderListener(); // 显示置顶按钮的方法
@@ -218,12 +217,11 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
             case R.id.base_title_back://返回
                 finishWitchAnimation();
                 break;
-            case R.id.designerdetail_top_btn://置顶
+            case R.id.base_top_btn://置顶
                 home_SV.post(new Runnable() {
                     @Override
                     public void run() {
-                        // 滚动到顶部
-                        home_SV.fullScroll(ScrollView.FOCUS_UP);
+                        home_SV.fullScroll(ScrollView.FOCUS_UP);// 滚动到顶部
                     }
                 });
                 mTopBtn.setVisibility(View.GONE);

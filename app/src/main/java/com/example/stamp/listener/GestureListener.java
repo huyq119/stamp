@@ -1,12 +1,16 @@
 package com.example.stamp.listener;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.stamp.utils.MyLog;
+import com.example.stamp.utils.ScreenUtils;
 
 /**
  * Created by Angle on 2016/9/8.
@@ -62,7 +66,7 @@ public class GestureListener implements GestureDetector.OnGestureListener {
         MyLog.e(startY + "-" + endY);
 
         final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) ll.getLayoutParams();
-        if ((Math.abs(startY) - Math.abs(endY)) > 100) {//说明向上滑动
+        if ((Math.abs(startY) - Math.abs(endY)) > 100) {//向上滑动
             animator = ValueAnimator.ofInt(ll.getHeight(), 0);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
@@ -75,11 +79,13 @@ public class GestureListener implements GestureDetector.OnGestureListener {
 //                    mScrollView.scrollTo(0, 0);// 让scrollView 移动到最下面
                 }
             });
-            animator.setDuration(200);//设置动画持续时间
+            animator.setDuration(300);//设置动画持续时间
             animator.start();
 
             flag = true;
-        } else if ((Math.abs(endY) - Math.abs(startY)) > 100 && flag) {
+
+
+        } else if ((Math.abs(endY) - Math.abs(startY)) > 100 && flag) {//向下滑动
             animator = ValueAnimator.ofInt(0, mHeight);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
@@ -97,8 +103,6 @@ public class GestureListener implements GestureDetector.OnGestureListener {
 
             flag = false;
         }
-
-
         return true;
     }
 
@@ -117,25 +121,6 @@ public class GestureListener implements GestureDetector.OnGestureListener {
      */
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        // &#x53c2;&#x6570;&#x89e3;&#x91ca;&#xff1a;
-        // e1：第1个ACTION_DOWN MotionEvent
-        // e2：最后一个ACTION_MOVE MotionEvent
-        // velocityX：X轴上的移动速度，像素/秒
-        // velocityY：Y轴上的移动速度，像素/秒
-
-        // 触发条件 ：
-        // X轴的坐标位移大于FLING_MIN_DISTANCE，且移动速度大于FLING_MIN_VELOCITY个像素/秒
-
-        final int FLING_MIN_DISTANCE = 100, FLING_MIN_VELOCITY = 200;
-        if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-            // Fling left
-            Log.i("MyGesture", "Fling left");
-//            Toast.makeText(this, "Fling Left", Toast.LENGTH_SHORT).show();
-        } else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-            // Fling right
-            Log.i("MyGesture", "Fling right");
-//            Toast.makeText(this, "Fling Right", Toast.LENGTH_SHORT).show();
-        }
 
 
         return false;

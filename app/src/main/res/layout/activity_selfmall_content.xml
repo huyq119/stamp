@@ -128,15 +128,5 @@
     </LinearLayout>
 
     <!--置顶按钮-->
-    <Button
-        android:id="@+id/selsf_top_btn"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="63dp"
-        android:layout_marginRight="10dp"
-        android:background="@mipmap/top"
-        android:gravity="center"
-        android:visibility="gone" />
+    <include layout="@layout/top_btn"/>
 </RelativeLayout>

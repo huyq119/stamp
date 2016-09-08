@@ -82,7 +82,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
     private void initView() {
         mList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
 
@@ -90,24 +90,26 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mSearch = (ImageView) mAuctionTitle.findViewById(R.id.base_search);
         mTitle = (TextView) mAuctionTitle.findViewById(R.id.base_title);
         mTitle.setText("竞拍");
-
-        mTopBtn = (Button) mAuctionContent.findViewById(R.id.auction_top_btn);// 置顶
+        mTopBtn = (Button) mAuctionContent.findViewById(R.id.base_top_btn);// 置顶
         hListView = (HorizontalListView) mAuctionContent.findViewById(R.id.stamp_hl);//横向ListView
-        mBlankView = mAuctionContent.findViewById(R.id.auction_blank_view);
-
         mListView = (ListView) mAuctionContent.findViewById(R.id.auction_lv);// 竖向ListView
-
-
         mNewChinese = (LinearLayout) mAuctionContent.findViewById(R.id.auction_newchinese_ll);
         mAuctionContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorRed);// 初始化新中国邮票
         mRepublicChina = (LinearLayout) mAuctionContent.findViewById(R.id.auction_republicChina_ll);
         mLiberatedArea = (LinearLayout) mAuctionContent.findViewById(R.id.auction_liberatedArea_ll);
         mQingDynasty = (LinearLayout) mAuctionContent.findViewById(R.id.auction_qingDynasty_ll);
-
         mSynthesize = (Button) mAuctionContent.findViewById(R.id.auction_synthesize);
         mOver = (Button) mAuctionContent.findViewById(R.id.auction_over);
         mCamera = (Button) mAuctionContent.findViewById(R.id.auction_camera);
 
+        initGestureListener();
+
+    }
+
+    /**
+     *滑动lsitview隐藏导航栏的方法
+     */
+    private void initGestureListener(){
         mHeartll = (LinearLayout) mAuctionContent.findViewById(R.id.auction_heart);
         int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
@@ -116,7 +118,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         MyLog.e(height + "");
         GestureListener gestureListener = new GestureListener(mHeartll, height);
         mGestureDetector = new GestureDetector(this, gestureListener);
-
     }
 
 
@@ -160,11 +161,14 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
 //        RequestNet(StaticField.ZH, num, StaticField.A);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
     }
 
+    /**
+     * 设置监听
+     */
     private void initListener() {
         mTopBtn.setOnClickListener(this);
         mBack.setOnClickListener(this);
@@ -176,7 +180,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mSynthesize.setOnClickListener(this);
         mOver.setOnClickListener(this);
         mCamera.setOnClickListener(this);
-//        mListView.setOnScrollListener(this);
+        mListView.setOnScrollListener(this);
 
         //横向ListView的点击事件
         hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -243,7 +247,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 mAuctionContent.findViewById(R.id.liberatedArea_view).setBackgroundColor(mColorGray);
                 mAuctionContent.findViewById(R.id.qingDynasty_view).setBackgroundColor(mColorRed);
                 break;
-            case R.id.auction_top_btn://置顶
+            case R.id.base_top_btn://置顶
                 setListViewPos(0);
                 mTopBtn.setVisibility(View.GONE);// 回到顶部后置顶按钮隐藏
                 break;
@@ -356,13 +360,14 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onScrollStateChanged(AbsListView absListView, int i) {
+        MyLog.e("滑动了几条啊~~~>",mListView.getLastVisiblePosition()+"-->"+mListView.getFirstVisiblePosition());
         switch (i) {
             // 当不滚动时
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:// 是当屏幕停止滚动时
                 scrollFlag = false;
                 // 判断滚动到底部
                 if (mListView.getLastVisiblePosition() == (mListView
-                        .getCount() - 1)) {
+                        .getCount()-1)) {
                     mTopBtn.setVisibility(View.VISIBLE);
                 }
                 // 判断滚动到顶部
@@ -390,8 +395,8 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
      */
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        // 当开始滑动且ListView底部的Y轴点超出屏幕最大范围时，显示或隐藏顶部按钮
         mCount = totalItemCount;
+
         if (scrollFlag
                 && ScreenUtils.getScreenViewBottomHeight(mListView) >= ScreenUtils
                 .getScreenHeight(this)) {

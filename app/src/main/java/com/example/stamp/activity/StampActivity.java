@@ -3,6 +3,7 @@ package com.example.stamp.activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
@@ -22,8 +23,10 @@ import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.StampBean;
 import com.example.stamp.bean.StampTapBean;
 import com.example.stamp.http.HttpUtils;
+import com.example.stamp.listener.GestureListener;
 import com.example.stamp.utils.Encrypt;
 import com.example.stamp.utils.MyLog;
+import com.example.stamp.utils.ScreenUtils;
 import com.example.stamp.utils.SortUtils;
 import com.example.stamp.utils.ThreadManager;
 import com.example.stamp.view.HorizontalListView;
@@ -34,7 +37,7 @@ import java.util.HashMap;
 /**
  * 邮市页面
  */
-public class StampActivity extends BaseActivity implements View.OnClickListener ,AbsListView.OnScrollListener{
+public class StampActivity extends BaseActivity implements View.OnClickListener, AbsListView.OnScrollListener {
 
     private View mStampTitle, mStampContent, mBlankView;
     private HorizontalListView hListView;//横向滑动的listView
@@ -51,7 +54,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
 
     private int mColorGray = Color.parseColor("#dddfe3");// 横线灰色
     private int mColorRed = Color.parseColor("#e20000");// 横线红色
-    private Button mTopBtn, mSynthesize, mSales, mPrice ;// 置顶，综合，销量，价格，筛选
+    private Button mTopBtn, mSynthesize, mSales, mPrice;// 置顶，综合，销量，价格，筛选
     private boolean Synthesizeflag;// 综合的标记->升序还是降序false升序,true是降序
     private boolean Salesflag;// 销量的标记->升序还是降序false升序,true是降序
     private boolean Priceflag;// 价格的标记->升序还是降序false升序,true是降序
@@ -63,6 +66,8 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
     private int mLastFirstTop;
     private int touchSlop = 10;
     private StampMarketGridViewAdapter mStampMarAdapter;
+    private LinearLayout mHeartll;//头部的布局
+    private GestureDetector mGestureDetector;
 
     @Override
     public View CreateTitle() {
@@ -83,7 +88,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
 
     private void initView() {
         mList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             mList.add(new StampTapBean.StampList("庚申年", "￥1000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
         mBack = (ImageView) mStampTitle.findViewById(R.id.base_title_back);
@@ -91,11 +96,9 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
         hListView = (HorizontalListView) mStampContent.findViewById(R.id.stamp_hl);
         mGridView = (GridView) mStampContent.findViewById(R.id.stamp_gl);
 
-        mTopBtn = (Button) mStampContent.findViewById(R.id.stamp_top_btn);// 置顶
+        mTopBtn = (Button) mStampContent.findViewById(R.id.base_top_btn);// 置顶
 
-        mTitleStamp = (LinearLayout) mStampContent.findViewById(R.id.stamp_titleStamp_ll);
         hListView = (HorizontalListView) mStampContent.findViewById(R.id.stamp_hl);//横向ListView
-        mBlankView = mStampContent.findViewById(R.id.stamp_blank_view);
 
         mNewChinese = (LinearLayout) mStampContent.findViewById(R.id.stamp_newchinese_ll);
         mStampContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorRed);// 初始化新中国邮票
@@ -106,8 +109,22 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
         mSynthesize = (Button) mStampContent.findViewById(R.id.stamp_synthesize);
         mSales = (Button) mStampContent.findViewById(R.id.stamp_sales);
         mPrice = (Button) mStampContent.findViewById(R.id.stamp_price);
+        initGestureListener();
     }
 
+    /**
+     * 滑动lsitview隐藏导航栏的方法
+     */
+    private void initGestureListener() {
+        mHeartll = (LinearLayout) mStampContent.findViewById(R.id.stamp_heart);
+        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        mHeartll.measure(w, h);
+        int height = mHeartll.getMeasuredHeight();
+        MyLog.e(height + "");
+        GestureListener gestureListener = new GestureListener(mHeartll, height);
+        mGestureDetector = new GestureDetector(this, gestureListener);
+    }
 
     private void initAdapter() {
         //内容GridView设置适配器
@@ -146,7 +163,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
 
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
 //        RequestNet(StaticField.ZH, num, StaticField.A);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             mList.add(new StampTapBean.StampList("庚申年", "￥1000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
     }
@@ -184,8 +201,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
         mGridView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                // 通知横向hListView父窗口放行onTouch点击事件
-                hListView.requestDisallowInterceptTouchEvent(true);
+                mGestureDetector.onTouchEvent(motionEvent);
                 return false;
             }
         });
@@ -231,11 +247,8 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
                 mStampContent.findViewById(R.id.liberatedArea_view).setBackgroundColor(mColorGray);
                 mStampContent.findViewById(R.id.qingDynasty_view).setBackgroundColor(mColorRed);
                 break;
-            case R.id.stamp_top_btn://置顶
+            case R.id.base_top_btn://置顶
                 setListViewPos(0);
-                mTitleStamp.setVisibility(View.VISIBLE);
-                hListView.setVisibility(View.VISIBLE);
-                mBlankView.setVisibility(View.VISIBLE);
                 mTopBtn.setVisibility(View.GONE);// 回到顶部后置顶按钮隐藏
                 break;
             case R.id.stamp_synthesize://综合
@@ -327,7 +340,9 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
                         mList.add(new StampTapBean.StampList("康熙年", "￥2120000.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
                     }
                     initAdapter();
-                    mStampMarAdapter.notifyDataSetChanged();http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg
+                    mStampMarAdapter.notifyDataSetChanged();
+                    http:
+//pic29.nipic.com/20130602/7447430_191109497000_2.jpg
                     Priceflag = true;
                 }
                 break;
@@ -378,45 +393,21 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         // 当开始滑动且GridView底部的Y轴点超出屏幕最大范围时，显示或隐藏顶部按钮
         mCount = totalItemCount;
-        View firstChildView = absListView.getChildAt(0);
-        if (firstChildView != null) {
-            currentTop = absListView.getChildAt(0).getTop();
-        } else {
-            //GridView初始化的时候会回调onScroll方法，此时getChildAt(0)仍是为空的
-            return;
-        }
-        //判断上次可见的第一个位置和这次可见的第一个位置
-        if (firstVisibleItem != lastVisibleItemPosition) {
-            //不是同一个位置
+
+        if (scrollFlag
+                && ScreenUtils.getScreenViewBottomHeight(mGridView) >= ScreenUtils
+                .getScreenHeight(this)) {
             if (firstVisibleItem > lastVisibleItemPosition) {// 上滑
-                mTitleStamp.setVisibility(View.GONE);
-                hListView.setVisibility(View.GONE);
-                mBlankView.setVisibility(View.GONE);
-            } else {// 下滑
-                mTitleStamp.setVisibility(View.VISIBLE);
-                hListView.setVisibility(View.VISIBLE);
-                mBlankView.setVisibility(View.VISIBLE);
+                mTopBtn.setVisibility(View.VISIBLE);
+            } else if (firstVisibleItem < lastVisibleItemPosition) {// 下滑
+                mTopBtn.setVisibility(View.GONE);
+            } else {
+                return;
             }
-            mLastFirstTop = currentTop;
-        } else {
-            //是同一个位置
-            if (Math.abs(currentTop - mLastFirstTop) > touchSlop) {
-                //避免动作执行太频繁或误触，加入touchSlop判断，具体值可进行调整
-                if (currentTop > mLastFirstTop) { // 下滑
-                    mTitleStamp.setVisibility(View.VISIBLE);
-                    hListView.setVisibility(View.VISIBLE);
-                    mBlankView.setVisibility(View.VISIBLE);
-//                    Log.i("cs", "equals--->up");
-                } else if (currentTop < mLastFirstTop) { // 上滑
-                    mTitleStamp.setVisibility(View.GONE);
-                    hListView.setVisibility(View.GONE);
-                    mBlankView.setVisibility(View.GONE);
-//                    Log.i("cs", "equals--->down");
-                }
-                mLastFirstTop = currentTop;
-            }
+
+
+            lastVisibleItemPosition = firstVisibleItem;
         }
-        lastVisibleItemPosition = firstVisibleItem;
     }
 
 
@@ -425,6 +416,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
      *
      * @param pos
      */
+
     private void setListViewPos(int pos) {
         if (android.os.Build.VERSION.SDK_INT >= mCount) {
             mGridView.smoothScrollToPosition(pos);
@@ -453,7 +445,6 @@ public class StampActivity extends BaseActivity implements View.OnClickListener 
         button.setCompoundDrawables(null, null, drawable, null);
         button.setTextColor(color);
     }
-
 
 
 }

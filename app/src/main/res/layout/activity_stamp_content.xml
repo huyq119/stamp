@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    >
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,169 +12,176 @@
         <View style="@style/myline" />
 
         <LinearLayout
-            android:id="@+id/stamp_titleStamp_ll"
+            android:id="@+id/stamp_heart"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:orientation="horizontal">
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/stamp_newchinese_ll"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="89dp"
-                    android:gravity="center"
+                    android:id="@+id/stamp_newchinese_ll"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/stamp_newChinese_iv"
-                        android:layout_width="43dp"
-                        android:layout_height="43dp"
-                        android:background="#d3d3d3"
-                        android:src="@mipmap/zhifubao" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="5dp"
-                        android:text="新中国邮票"
-                        android:textColor="#666"
-                        android:textSize="13sp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="89dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
+                        <ImageView
+                            android:id="@+id/stamp_newChinese_iv"
+                            android:layout_width="43dp"
+                            android:layout_height="43dp"
+                            android:background="#d3d3d3"
+                            android:src="@mipmap/zhifubao" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:text="新中国邮票"
+                            android:textColor="#666"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/newChinese_view"
+                        style="@style/auction_color_line" />
                 </LinearLayout>
-
-                <View
-                    android:id="@+id/newChinese_view"
-                    style="@style/auction_color_line" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/stamp_republicChina_ll"
-                android:layout_width="0dp"
-                android:layout_height="90dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
 
                 <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="89dp"
-                    android:gravity="center"
+                    android:id="@+id/stamp_republicChina_ll"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/stamp_republicChina_iv"
-                        android:layout_width="43dp"
-                        android:layout_height="43dp"
-                        android:background="#d3d3d3"
-                        android:src="@mipmap/weixin_pay" />
+                    <LinearLayout
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="5dp"
-                        android:text="民国邮票"
-                        android:textColor="#666"
-                        android:textSize="13sp" />
+                        android:layout_width="match_parent"
+                        android:layout_height="89dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/stamp_republicChina_iv"
+                            android:layout_width="43dp"
+                            android:layout_height="43dp"
+                            android:background="#d3d3d3"
+                            android:src="@mipmap/weixin_pay" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:text="民国邮票"
+                            android:textColor="#666"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/republicChina_view"
+                        style="@style/auction_color_line" />
+
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/republicChina_view"
-                    style="@style/auction_color_line" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/stamp_liberatedArea_ll"
-                android:layout_width="0dp"
-                android:layout_height="90dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="89dp"
-                    android:gravity="center"
+                    android:id="@+id/stamp_liberatedArea_ll"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/stamp_liberatedArea_iv"
-                        android:layout_width="43dp"
-                        android:layout_height="43dp"
-                        android:background="#d3d3d3"
-                        android:src="@mipmap/zhifubao" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="89dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="5dp"
-                        android:text="解放区邮票"
-                        android:textColor="#666"
-                        android:textSize="13sp" />
+                        <ImageView
+                            android:id="@+id/stamp_liberatedArea_iv"
+                            android:layout_width="43dp"
+                            android:layout_height="43dp"
+                            android:background="#d3d3d3"
+                            android:src="@mipmap/zhifubao" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:text="解放区邮票"
+                            android:textColor="#666"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/liberatedArea_view"
+                        style="@style/auction_color_line" />
+
                 </LinearLayout>
-
-                <View
-                    android:id="@+id/liberatedArea_view"
-                    style="@style/auction_color_line" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/stamp_qingDynasty_ll"
-                android:layout_width="0dp"
-                android:layout_height="90dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="89dp"
-                    android:gravity="center"
+                    android:id="@+id/stamp_qingDynasty_ll"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/auction_qingDynasty_lv"
-                        android:layout_width="43dp"
-                        android:layout_height="43dp"
-                        android:background="#d3d3d3"
-                        android:src="@mipmap/weixin_pay" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="89dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="5dp"
-                        android:text="清代邮票"
-                        android:textColor="#666"
-                        android:textSize="13sp" />
+                        <ImageView
+                            android:id="@+id/auction_qingDynasty_lv"
+                            android:layout_width="43dp"
+                            android:layout_height="43dp"
+                            android:background="#d3d3d3"
+                            android:src="@mipmap/weixin_pay" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:text="清代邮票"
+                            android:textColor="#666"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/qingDynasty_view"
+                        style="@style/auction_color_line" />
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/qingDynasty_view"
-                    style="@style/auction_color_line" />
             </LinearLayout>
 
+            <com.example.stamp.view.HorizontalListView
+                android:id="@+id/stamp_hl"
+                android:layout_width="match_parent"
+                android:layout_height="31dp" />
+
+
+            <View
+                android:id="@+id/stamp_blank_view"
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:background="@color/background" />
         </LinearLayout>
 
-        <com.example.stamp.view.HorizontalListView
-            android:id="@+id/stamp_hl"
-            android:layout_width="match_parent"
-            android:layout_height="31dp" />
-
-
-        <View
-            android:id="@+id/stamp_blank_view"
-            android:layout_width="match_parent"
-            android:layout_height="12dp"
-            android:background="@color/background"  />
-
         <View style="@style/myline" />
+
         <LinearLayout
 
             android:id="@+id/market_radioGroup"
@@ -286,16 +292,6 @@
     </LinearLayout>
 
     <!--置顶按钮-->
-    <Button
-        android:id="@+id/stamp_top_btn"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="63dp"
-        android:layout_marginRight="10dp"
-        android:background="@mipmap/top"
-        android:gravity="center"
-        android:visibility="gone" />
+    <include layout="@layout/top_btn"/>
 
 </RelativeLayout>

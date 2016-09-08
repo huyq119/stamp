@@ -1,7 +1,6 @@
 package com.example.stamp;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.RadioGroup;
@@ -29,7 +28,7 @@ public class MainActivity extends FragmentActivity implements LazyViewPager.OnPa
     private List<Fragment> mList;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
