@@ -6,20 +6,132 @@
 
     <View style="@style/myline" />
 
-    <com.viewpagerindicator.TabPageIndicator
-        android:id="@+id/order_indicator"
+    <RadioGroup
+        android:id="@+id/RG_choose"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:overScrollMode="never"
-        android:visibility="gone"
-        />
+        android:layout_height="41dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <com.example.stamp.view.CustomViewPager
+        <RadioButton
+            android:id="@+id/RBtn_All"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="1dp"
+            android:text="全部"
+            android:textColor="@drawable/orders_goods_line_bg"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/RBtn_Payment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="1dp"
+            android:text="待付款"
+            android:textColor="@drawable/orders_goods_line_bg"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/RBtn_Receiving"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="1dp"
+            android:text="待收货"
+            android:textColor="@drawable/orders_goods_line_bg"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/RBtn_Complete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="1dp"
+            android:text="已完成"
+            android:textColor="@drawable/orders_goods_line_bg"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/RBtn_Refuse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="1dp"
+            android:text="退款/退货"
+            android:textColor="@drawable/orders_goods_line_bg"
+            android:textSize="12sp" />
+    </RadioGroup>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:gravity="center">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dadada" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <com.example.stamp.view.OrderGoodsViewPager
         android:id="@+id/order_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        android:scrollbars="none" />
+        android:scrollbars="none"
+        />
 
-    <!--<View style="@style/myline" />-->
 </LinearLayout>

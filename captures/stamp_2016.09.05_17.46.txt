@@ -1,0 +1,541 @@
+ACTIVITY MANAGER PENDING INTENTS (dumpsys activity intents)
+  * PendingIntentRecord{4190d048 com.kingroot.master startService}
+  * PendingIntentRecord{42248570 com.android.phone broadcastIntent}
+  * PendingIntentRecord{41c8fb08 com.cleanmaster.security_cn startService}
+  * PendingIntentRecord{42066c28 com.google.android.gsf broadcastIntent}
+  * PendingIntentRecord{41c81c28 com.huawei.android.totemweather startActivity}
+  * PendingIntentRecord{41cd6320 android startActivity}
+  * PendingIntentRecord{419e2408 android broadcastIntent}
+  * PendingIntentRecord{41b97138 com.sohu.newsclient broadcastIntent}
+  * PendingIntentRecord{41c1b738 android broadcastIntent}
+  * PendingIntentRecord{41dcb298 com.huawei.android.hwouc startActivity}
+  * PendingIntentRecord{41c4e968 com.android.mediacenter startService}
+  * PendingIntentRecord{420433b8 com.wandoujia.phoenix2 broadcastIntent}
+  * PendingIntentRecord{41b3baa8 android broadcastIntent}
+  * PendingIntentRecord{41c83be0 com.huawei.android.totemweather startActivity}
+  * PendingIntentRecord{41c5ca68 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41af6228 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{4225b9f0 com.google.android.gsf broadcastIntent}
+  * PendingIntentRecord{41c54ed8 com.huawei.android.pushagent broadcastIntent}
+  * PendingIntentRecord{41a11948 com.huawei.android.gpms broadcastIntent}
+  * PendingIntentRecord{41f948d8 com.cleanmaster.mguard_cn startActivity}
+  * PendingIntentRecord{42049988 com.wandoujia.phoenix2 broadcastIntent}
+  * PendingIntentRecord{41af3bf0 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41c04168 com.huawei.android.pushagent broadcastIntent}
+  * PendingIntentRecord{41dcf240 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41ac1710 com.kingroot.master broadcastIntent}
+  * PendingIntentRecord{41c044c8 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41ae0388 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41b5bac0 android broadcastIntent}
+  * PendingIntentRecord{41a96ca0 com.kingroot.kinguser broadcastIntent}
+  * PendingIntentRecord{41908ec8 android broadcastIntent}
+  * PendingIntentRecord{41c481a8 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41a7ac58 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{418fd158 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41e3af10 com.google.android.gsf broadcastIntent}
+  * PendingIntentRecord{41fe35d0 com.android.contacts broadcastIntent}
+  * PendingIntentRecord{41c56058 com.wandoujia.phoenix2 startService}
+  * PendingIntentRecord{420e9668 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41973bc0 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41b6b7d0 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41bf7810 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41fe3af0 com.android.contacts broadcastIntent}
+  * PendingIntentRecord{41a96b30 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{4191fe40 android startActivity}
+  * PendingIntentRecord{42003b68 android startActivity}
+  * PendingIntentRecord{41bf6860 com.kingroot.master broadcastIntent}
+  * PendingIntentRecord{41b03e68 android broadcastIntent}
+  * PendingIntentRecord{41f35b88 com.cleanmaster.mguard_cn broadcastIntent}
+  * PendingIntentRecord{41b5bc20 android broadcastIntent}
+  * PendingIntentRecord{419219d8 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41afd890 com.cleanmaster.mguard_cn startService}
+  * PendingIntentRecord{419a8718 android broadcastIntent}
+  * PendingIntentRecord{42099a40 com.cleanmaster.mguard_cn broadcastIntent}
+  * PendingIntentRecord{41ab1a70 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41abb848 com.cleanmaster.mguard_cn broadcastIntent}
+  * PendingIntentRecord{419a4cf0 com.kingroot.kinguser broadcastIntent}
+  * PendingIntentRecord{42069838 com.kingroot.master broadcastIntent}
+  * PendingIntentRecord{41a16850 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41f1c550 com.cleanmaster.security_cn startActivity}
+  * PendingIntentRecord{41c46718 com.cleanmaster.security_cn startService}
+  * PendingIntentRecord{41c664e8 com.cleanmaster.mguard_cn broadcastIntent}
+  * PendingIntentRecord{41c4f5c0 com.android.mediacenter startService}
+  * PendingIntentRecord{41b789a8 com.cleanmaster.mguard_cn startService}
+  * PendingIntentRecord{418646e0 com.cleanmaster.mguard_cn broadcastIntent}
+  * PendingIntentRecord{4194f0f8 android startActivity}
+  * PendingIntentRecord{41cb3928 com.huawei.android.pushagent broadcastIntent}
+  * PendingIntentRecord{41756e08 com.cleanmaster.mguard_cn broadcastIntent}
+  * PendingIntentRecord{41b668b8 com.android.systemui startActivity}
+  * PendingIntentRecord{41c806a0 com.huawei.android.totemweather startActivity}
+  * PendingIntentRecord{41e32600 com.cleanmaster.mguard_cn startService}
+  * PendingIntentRecord{4208dd30 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41ff3048 com.wandoujia.phoenix2 startService}
+  * PendingIntentRecord{41fb6dc0 com.android.calendar broadcastIntent}
+  * PendingIntentRecord{41c5d010 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41c4dea8 com.android.mediacenter startActivity}
+  * PendingIntentRecord{41adfde0 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{4176c6c8 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41bf6a08 com.cleanmaster.security_cn startService}
+  * PendingIntentRecord{41b6b250 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41c4ee60 com.android.mediacenter startService}
+  * PendingIntentRecord{41c9cc98 android broadcastIntent}
+  * PendingIntentRecord{41bf2dc8 com.huawei.android.pushagent broadcastIntent}
+  * PendingIntentRecord{41e77a90 com.wandoujia.phoenix2 broadcastIntent}
+  * PendingIntentRecord{41ca24f0 com.huawei.android.pushagent broadcastIntent}
+  * PendingIntentRecord{41824b50 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41b6bd28 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41c7b528 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41be1880 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41b55b98 com.cleanmaster.mguard_cn broadcastIntent}
+  * PendingIntentRecord{41b66798 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41a9f008 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41fd0cb0 com.android.providers.calendar broadcastIntent}
+  * PendingIntentRecord{41b3ff80 android broadcastIntent}
+  * PendingIntentRecord{41b68560 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41cc3380 android broadcastIntent}
+  * PendingIntentRecord{41909088 android broadcastIntent}
+  * PendingIntentRecord{41b0ba98 android broadcastIntent}
+  * PendingIntentRecord{41e3a2c8 com.wandoujia.phoenix2 startService}
+  * PendingIntentRecord{41fadde0 com.android.systemui broadcastIntent}
+  * PendingIntentRecord{41bdd9a8 com.wandoujia.phoenix2 startService}
+  * PendingIntentRecord{41b3b948 android broadcastIntent}
+  * PendingIntentRecord{41cdc058 com.kingroot.kinguser startService}
+  * PendingIntentRecord{41c1b8a8 android broadcastIntent}
+  * PendingIntentRecord{41f367e0 com.cleanmaster.mguard_cn broadcastIntent}
+  * PendingIntentRecord{4291ae00 com.android.gallery3d broadcastIntent}
+  * PendingIntentRecord{41fe3848 com.android.contacts broadcastIntent}
+  * PendingIntentRecord{41fa5858 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41bf2a10 com.huawei.android.pushagent broadcastIntent}
+  * PendingIntentRecord{4227de08 com.kingroot.master broadcastIntent}
+  * PendingIntentRecord{41ae1ce8 android broadcastIntent}
+  * PendingIntentRecord{41ac4188 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41a9a658 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41fe3358 com.android.contacts broadcastIntent}
+  * PendingIntentRecord{41a16dc8 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41858180 android broadcastIntent}
+  * PendingIntentRecord{41e1c730 com.huawei.android.hwouc broadcastIntent}
+  * PendingIntentRecord{41c832c8 com.huawei.android.totemweather startService}
+  * PendingIntentRecord{41ad8e60 com.cleanmaster.mguard_cn startService}
+  * PendingIntentRecord{4194b0c0 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{4177c220 com.kingroot.kinguser broadcastIntent}
+  * PendingIntentRecord{41c6fed0 com.huawei.android.totemweather broadcastIntent}
+  * PendingIntentRecord{4175c6e0 com.cleanmaster.security_cn broadcastIntent}
+  * PendingIntentRecord{41e3cb40 com.wandoujia.phoenix2 broadcastIntent}
+  * PendingIntentRecord{41c9f7b0 com.cleanmaster.security_cn broadcastIntent}
+ 
+ACTIVITY MANAGER BROADCAST STATE (dumpsys activity broadcasts)
+  Historical broadcasts:
+  #0: BroadcastRecord{420893e0 com.cleanmaster.security_cn.ACTION_AUTO_UPDATE_NOTIFICATION_MEMORY}
+  #1: BroadcastRecord{41c40300 android.intent.action.BATTERY_CHANGED}
+  #2: BroadcastRecord{4259dc20 com.android.internal.telephony.gprs-data-stall}
+  #3: BroadcastRecord{41e708d0 com.kingroot.master.action.NOTIFY_STATISTIC}
+  #4: BroadcastRecord{41e665f8 com.charingsaver.state.action}
+  #5: BroadcastRecord{41beae48 com.charingsaver.state.action}
+  #6: BroadcastRecord{41c9de80 com.charingsaver.state.action}
+  #7: BroadcastRecord{41be1b10 com.kingroot.kinguser.gamebox.ACTION_GAME_REPLACE}
+  #8: BroadcastRecord{419a8920 com.charingsaver.state.action}
+  #9: BroadcastRecord{420506a0 android.ActivityState.CHANGE}
+  #10: BroadcastRecord{41a0aa28 com.charingsaver.state.action}
+  #11: BroadcastRecord{41bec340 com.kingroot.common.ACTION_TOP_ACTIVITY_CHANGED}
+  #12: BroadcastRecord{41c37278 android.ActivityState.CHANGE}
+  #13: BroadcastRecord{41b97b98 com.charingsaver.state.action}
+  #14: BroadcastRecord{41bcc798 android.ActivityState.CHANGE}
+  #15: BroadcastRecord{42136f50 com.kingroot.kinguser.gamebox.ACTION_GAME_ADDED}
+  #16: BroadcastRecord{41b1e4a8 com.kingroot.common.ACTION_NEW_APP_STARTED}
+  #17: BroadcastRecord{41bfa6b8 com.ijinshan.action.topapp.change}
+  #18: BroadcastRecord{41b9ad28 com.kingroot.common.ACTION_TOP_APP_CHANGED}
+  #19: BroadcastRecord{41ae3590 com.kingroot.common.ACTION_SWITCH_OUT_DESKTOP}
+  #20: BroadcastRecord{41f8dca8 com.kingroot.common.ACTION_TOP_ACTIVITY_CHANGED}
+  #21: BroadcastRecord{41ac91d8 com.kingroot.master.action.NOTIFY_STATISTIC}
+  #22: BroadcastRecord{41abdf48 android.ActivityState.CHANGE}
+  #23: BroadcastRecord{4205efc8 com.cleanmaster.mguard_cn.ACTION_BATTERY_CHANGED}
+  #24: BroadcastRecord{4259f390 com.kingroot.kinguser.gamebox.ACTION_GAME_DELETED}
+
+  Sticky broadcasts:
+  * Sticky action android.media.SCO_AUDIO_STATE_CHANGED
+  * Sticky action android.media.ACTION_SCO_AUDIO_STATE_UPDATED
+  * Sticky action android.net.thrott.THROTTLE_ACTION
+  * Sticky action android.hardware.usb.action.USB_STATE
+  * Sticky action android.net.conn.CONNECTIVITY_CHANGE_IMMEDIATE
+  * Sticky action android.net.conn.CONNECTIVITY_CHANGE
+  * Sticky action android.net.wifi.supplicant.STATE_CHANGE
+  * Sticky action android.net.conn.TETHER_STATE_CHANGED
+  * Sticky action android.intent.action.BATTERY_CHANGED
+  * Sticky action android.net.wifi.WIFI_STATE_CHANGED
+  * Sticky action android.net.thrott.POLL_ACTION
+  * Sticky action com.ijinshan.action.root.success
+  * Sticky action android.intent.action.SIM_STATE_CHANGED
+  * Sticky action android.intent.action.SIG_STR
+  * Sticky action android.intent.action.SERVICE_STATE
+  * Sticky action android.net.wifi.STATE_CHANGE
+  * Sticky action android.media.RINGER_MODE_CHANGED
+  * Sticky action android.intent.action.HDMI_PLUGGED
+  * Sticky action android.intent.action.ANY_DATA_STATE
+  * Sticky action android.net.wifi.p2p.STATE_CHANGED
+ 
+ACTIVITY MANAGER CONTENT PROVIDERS (dumpsys activity providers)
+  Published content providers (by class):
+  * ShareConfigProviderProxy (com.cleanmaster.security_cn/ks.cm.antivirus.module.locker.provider.ShareConfigProviderProxy)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * VoicemailContentProvider (com.android.providers.contacts/.VoicemailContentProvider)
+      ProcessRecord{418aba58 21870:android.process.acore/10002}
+  * ConfigProvider (com.cleanmaster.security_cn/com.cmcm.locker.sdk.config.ConfigProvider)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * SubscribedFeedsProvider (com.google.android.gsf/.subscribedfeeds.SubscribedFeedsProvider)
+      ProcessRecord{41b994e8 18900:com.google.process.gapps/10020}
+  * AppLockActiveProvider (com.cleanmaster.security_cn/ks.cm.antivirus.applock.sdkrule.AppLockActiveProvider)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * SettingsProvider (com.svox.pico/.providers.SettingsProvider)
+      ProcessRecord{4205ea70 2451:com.svox.pico/10055}
+  * GoogleSuggestionProvider (com.android.quicksearchbox/.google.GoogleSuggestionProvider)
+      ProcessRecord{41f21d48 3578:com.android.quicksearchbox/10061}
+  * WeatherProvider (com.huawei.android.totemweather/.provider.WeatherProvider)
+      ProcessRecord{41c2a5f0 17948:com.huawei.android.totemweather/10064}
+  * KPasswordProviderProxy (com.cleanmaster.security_cn/ks.cm.antivirus.module.locker.provider.KPasswordProviderProxy)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * RcmdConfigProvider (com.cleanmaster.mguard_cn/com.ijinshan.krcmd.sharedprefs.RcmdConfigProvider)
+      ProcessRecord{4204eee0 17806:com.cleanmaster.mguard_cn:service/10091}
+  * ThemeContentProvider (com.cleanmaster.security_cn/ks.cm.antivirus.applock.theme.ThemeContentProvider)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * PowerDatabaseProviderProxy (com.cleanmaster.security_cn/ks.cm.antivirus.module.locker.provider.PowerDatabaseProviderProxy)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * SyncIPCProviderProxy (com.cleanmaster.security_cn/ks.cm.antivirus.module.locker.provider.SyncIPCProviderProxy)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * TelephonyProvider (com.android.providers.telephony/.TelephonyProvider)
+      ProcessRecord{41b705c8 16053:com.android.phone/1001}
+  * GoogleSettingsProvider (com.google.android.gsf/.settings.GoogleSettingsProvider)
+      ProcessRecord{41b994e8 18900:com.google.process.gapps/10020}
+  * CardsContentProvider (com.cleanmaster.security_cn/ks.cm.antivirus.scan.result.timeline.data.CardsContentProvider)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+      Clients:
+        - ProcessRecord{418e2070 3067:com.cleanmaster.security_cn:ScanService/10090}
+  * BlockerSpProviderProxy (com.cleanmaster.security_cn/com.cms.plugin.antiharass.coordinator.provider.BlockerSpProviderProxy)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * DownloadProvider_cn (com.cleanmaster.mguard_cn/com.cleanmaster.ui.app.provider.download.DownloadProvider_cn)
+      ProcessRecord{41f8d5e8 26168:com.cleanmaster.mguard_cn/10091}
+  * DubaConfigProvider (com.cleanmaster.security_cn/ks.cm.antivirus.provider.DubaConfigProvider)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+      Clients:
+        - ProcessRecord{41bff8c0 26812:com.cleanmaster.security_cn/10090}
+        - ProcessRecord{41c2ad88 3332:com.cleanmaster.security_cn:worker/10090}
+        - ProcessRecord{418e2070 3067:com.cleanmaster.security_cn:ScanService/10090}
+  * HWPhoneProvider (com.android.phone/.HWPhoneProvider)
+      ProcessRecord{41b705c8 16053:com.android.phone/1001}
+  * IccProvider (com.android.phone/.IccProvider)
+      ProcessRecord{41b705c8 16053:com.android.phone/1001}
+  * NotificationConfigProvider (com.cleanmaster.security_cn/ks.cm.antivirus.notification.intercept.pref.NotificationConfigProvider)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+      Clients:
+        - ProcessRecord{41bff8c0 26812:com.cleanmaster.security_cn/10090}
+  * UserDictionaryProvider (com.android.providers.userdictionary/.UserDictionaryProvider)
+      ProcessRecord{418aba58 21870:android.process.acore/10002}
+  * CloudConfigDataProvider (com.cleanmaster.security_cn/ks.cm.antivirus.provider.CloudConfigDataProvider)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+      Clients:
+        - ProcessRecord{41c2ad88 3332:com.cleanmaster.security_cn:worker/10090}
+  * GservicesProvider (com.google.android.gsf/.gservices.GservicesProvider)
+      ProcessRecord{41b994e8 18900:com.google.process.gapps/10020}
+  * HwIMEContentProvider (com.huawei.inputmethod.hwpal/.HwIMEContentProvider)
+      ProcessRecord{419a8288 16027:com.huawei.inputmethod.hwpal/10035}
+  * TempFileProvider (com.android.mms/.TempFileProvider)
+      ProcessRecord{41b16510 17388:com.android.mms/10047}
+  * ApplockThemeContentProvider (com.cleanmaster.security_cn/ks.cm.antivirus.applock.theme.db.ApplockThemeContentProvider)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * SuggestionsProvider (com.android.mms/.SuggestionsProvider)
+      ProcessRecord{41b16510 17388:com.android.mms/10047}
+  * LauncherProvider (com.huawei.android.launcher/.LauncherProvider)
+      ProcessRecord{4198c100 16103:com.huawei.android.launcher/10036}
+  * BookmarkProvider (com.cleanmaster.security_cn/ks.cm.antivirus.applock.protect.bookmark.BookmarkProvider)
+      ProcessRecord{41bff8c0 26812:com.cleanmaster.security_cn/10090}
+  * SocialProvider (com.android.providers.contacts/.SocialProvider)
+      ProcessRecord{418aba58 21870:android.process.acore/10002}
+  * LockerThemeContentProvider (com.cleanmaster.security_cn/ks.cm.antivirus.applock.lockertheme.LockerThemeContentProvider)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * ApplicationsProvider (com.android.providers.applications/.ApplicationsProvider)
+      ProcessRecord{418aba58 21870:android.process.acore/10002}
+  * FirewallProviderProxy (com.cleanmaster.security_cn/com.cms.plugin.antiharass.coordinator.provider.FirewallProviderProxy)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * ConfigProvider_cn (com.cleanmaster.mguard_cn/com.cleanmaster.provider.ConfigProvider_cn)
+      ProcessRecord{4204eee0 17806:com.cleanmaster.mguard_cn:service/10091}
+  * CallLogItemProviderProxy (com.cleanmaster.security_cn/com.cms.plugin.antiharass.coordinator.provider.CallLogItemProviderProxy)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * MmsProvider (com.android.providers.telephony/.MmsProvider)
+      ProcessRecord{41b705c8 16053:com.android.phone/1001}
+  * SmsProvider (com.android.providers.telephony/.SmsProvider)
+      ProcessRecord{41b705c8 16053:com.android.phone/1001}
+  * GalleryProvider (com.android.gallery3d/.provider.GalleryProvider)
+      ProcessRecord{420d40a0 26066:com.android.gallery3d/10019}
+  * PushStatusProvider (com.huawei.android.pushagent/.PushStatusProvider)
+      ProcessRecord{41c88008 18944:com.huawei.android.pushagent/10060}
+  * KuMpStorageProvider (com.kingroot.kinguser/.filesystem.storage.KuMpStorageProvider)
+      ProcessRecord{4195ff00 15990:com.kingroot.kinguser:service/10023}
+  * ShortcutsProvider (com.android.quicksearchbox/.ShortcutsProvider)
+      ProcessRecord{41f21d48 3578:com.android.quicksearchbox/10061}
+  * RcmdConfigProviderEn (com.cleanmaster.security_cn/com.ijinshan.krcmd.sharedprefs.RcmdConfigProviderEn)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * TalkProvider (com.google.android.gsf/.talk.TalkProvider)
+      ProcessRecord{41b994e8 18900:com.google.process.gapps/10020}
+  * SyncIPCPrvidor_cn (com.cleanmaster.mguard_cn/com.cleanmaster.synipc.SyncIPCPrvidor_cn)
+      ProcessRecord{4204eee0 17806:com.cleanmaster.mguard_cn:service/10091}
+  * DatebaseProvider_cn (com.cleanmaster.mguard_cn/com.cleanmaster.provider.DatebaseProvider_cn)
+      ProcessRecord{4204eee0 17806:com.cleanmaster.mguard_cn:service/10091}
+  * VaultContentProvider (com.cleanmaster.security_cn/ks.cm.antivirus.vault.util.VaultContentProvider)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * MpStorageProvider (com.kingroot.master/com.kingroot.common.filesystem.storage.MpStorageProvider)
+      ProcessRecord{41b64c00 16172:com.kingroot.master:service/10100}
+  * ContactsProvider2 (com.android.providers.contacts/.ContactsProvider2)
+      ProcessRecord{418aba58 21870:android.process.acore/10002}
+  * LockerActiveProvider (com.cleanmaster.security_cn/com.cmcm.locker.sdk.config.LockerActiveProvider)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * MmsSmsProvider (com.android.providers.telephony/.MmsSmsProvider)
+      ProcessRecord{41b705c8 16053:com.android.phone/1001}
+  * LockerActiveProviderProxy (com.cleanmaster.security_cn/ks.cm.antivirus.module.locker.provider.LockerActiveProviderProxy)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * DatabaseProviderProxy (com.cleanmaster.security_cn/ks.cm.antivirus.module.locker.provider.DatabaseProviderProxy)
+      ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+  * SettingsProvider (com.android.providers.settings/.SettingsProvider)
+      ProcessRecord{41816878 15853:system/1000}
+      Clients:
+        - ProcessRecord{41f8d5e8 26168:com.cleanmaster.mguard_cn/10091}
+        - ProcessRecord{41c2a5f0 17948:com.huawei.android.totemweather/10064}
+        - ProcessRecord{41c88008 18944:com.huawei.android.pushagent/10060}
+        - ProcessRecord{4198c100 16103:com.huawei.android.launcher/10036}
+        - ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+        - ProcessRecord{418aba58 21870:android.process.acore/10002}
+        - ProcessRecord{41c55bf8 19019:com.wandoujia.phoenix2/10086}
+        - ProcessRecord{41c2ad88 3332:com.cleanmaster.security_cn:worker/10090}
+        - ProcessRecord{41b64c00 16172:com.kingroot.master:service/10100}
+        - ProcessRecord{41cad448 16088:com.broadcom.bt.app.system/1002}
+        - ProcessRecord{4204eee0 17806:com.cleanmaster.mguard_cn:service/10091}
+        - ProcessRecord{419a8288 16027:com.huawei.inputmethod.hwpal/10035}
+        - ProcessRecord{41bff8c0 26812:com.cleanmaster.security_cn/10090}
+        - ProcessRecord{41caf3c8 15934:com.android.systemui/1000}
+        - ProcessRecord{418e2070 3067:com.cleanmaster.security_cn:ScanService/10090}
+        - ProcessRecord{41b705c8 16053:com.android.phone/1001}
+        - ProcessRecord{41edb518 25849:com.android.defcontainer/10011}
+  * WeatherProviderProxy (com.cleanmaster.security_cn/com.cms.plugin.screensaver.coordinator.WeatherProviderProxy)
+      ProcessRecord{41bff8c0 26812:com.cleanmaster.security_cn/10090}
+  * CallLogProvider (com.android.providers.contacts/.CallLogProvider)
+      ProcessRecord{418aba58 21870:android.process.acore/10002}
+ 
+ACTIVITY MANAGER SERVICES (dumpsys activity services)
+  Active services:
+  * ServiceRecord{41c2f1f0 com.wandoujia.phoenix2/com.wandoujia.jupiter.update.UpdateService}
+    app=ProcessRecord{41c55bf8 19019:com.wandoujia.phoenix2/10086}
+    created=-2h41m49s954ms started=true connections=0
+  * ServiceRecord{41c3e3b0 com.cleanmaster.mguard_cn/com.xiaomi.push.service.XMPushService}
+    app=ProcessRecord{4204eee0 17806:com.cleanmaster.mguard_cn:service/10091}
+    created=-2h41m51s245ms started=true connections=0
+  * ServiceRecord{41b68ee0 com.android.smspush/.WapPushManager}
+    app=ProcessRecord{419ab770 16151:com.android.smspush/10067}
+    created=-2h42m36s38ms started=false connections=1
+    Connections:
+      act=com.android.internal.telephony.IWapPushManager -> 16053:com.android.phone/1001
+  * ServiceRecord{42151f78 com.wandoujia.phoenix2/com.fast_clean.FastCleanService}
+    app=ProcessRecord{41c55bf8 19019:com.wandoujia.phoenix2/10086}
+    created=-2h40m49s467ms started=true connections=0
+  * ServiceRecord{41c5f9d8 com.wandoujia.phoenix2/com.wandoujia.push2.PushService}
+    app=ProcessRecord{41c55bf8 19019:com.wandoujia.phoenix2/10086}
+    created=-2h41m49s645ms started=true connections=0
+  * ServiceRecord{41c986d8 com.cleanmaster.security_cn/com.ijinshan.ShouJiKong.AndroidDaemon.AppDaemonService}
+    app=ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+    created=-2h42m28s834ms started=true connections=1
+    Connections:
+       -> 26812:com.cleanmaster.security_cn/10090
+  * ServiceRecord{4207cd88 com.cleanmaster.mguard_cn/com.cleanmaster.service.PermanentService}
+    app=ProcessRecord{4204eee0 17806:com.cleanmaster.mguard_cn:service/10091}
+    created=-2h42m16s577ms started=true connections=2
+    Connections:
+       -> 26168:com.cleanmaster.mguard_cn/10091
+       -> 17806:com.cleanmaster.mguard_cn:service/10091
+  * ServiceRecord{41c10ab8 com.cleanmaster.security_cn/ks.cm.antivirus.defend.DefendService}
+    app=ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+    created=-2h42m27s826ms started=true connections=2
+    Connections:
+      act=ks.cm.antivirus.remotedata.IRemoteDataBinder.SECURITY pkg=com.cleanmaster.security_cn -> 3067:com.cleanmaster.security_cn:ScanService/10090
+      act=ks.cm.antivirus.remotedata.IRemoteDataBinder.SECURITY pkg=com.cleanmaster.security_cn -> 26812:com.cleanmaster.security_cn/10090
+  * ServiceRecord{41af0450 com.huawei.inputmethod.hwpal/.BaiduEngineService}
+    app=ProcessRecord{419a8288 16027:com.huawei.inputmethod.hwpal/10035}
+    created=-2h42m36s153ms started=false connections=2
+    Connections:
+       -> 16027:com.huawei.inputmethod.hwpal/10035
+       -> 16027:com.huawei.inputmethod.hwpal/10035
+  * ServiceRecord{41bc3000 com.huawei.android.wfdft/.ftc.service.FTCService}
+    app=ProcessRecord{4259b1d0 27197:com.huawei.android.wfdft:FTCserv/10040}
+    created=-2h41m17s724ms started=true connections=0
+  * ServiceRecord{41c42c50 com.kingroot.kinguser/com.kingroot.common.framework.service.KSysService}
+    app=ProcessRecord{4195ff00 15990:com.kingroot.kinguser:service/10023}
+    created=-2h42m36s97ms started=true connections=1
+    Connections:
+       -> 15990:com.kingroot.kinguser:service/10023
+  * ServiceRecord{41bc66c0 com.huawei.android.pushagent/.SafePushChannelService}
+    app=ProcessRecord{41c88008 18944:com.huawei.android.pushagent/10060}
+    created=-2h41m12s943ms started=true connections=0
+  * ServiceRecord{41bf3da8 com.huawei.android.ds/.hisync.services.HiSyncService}
+    app=ProcessRecord{41e602f0 27982:com.huawei.android.ds/10034}
+    created=-2h42m22s929ms started=true connections=0
+  * ServiceRecord{41caea28 com.android.systemui/.SystemUIService}
+    app=ProcessRecord{41caf3c8 15934:com.android.systemui/1000}
+    created=-2h42m37s352ms started=true connections=0
+  * ServiceRecord{41da9448 com.huawei.android.wfdft/.fts.service.FTSService}
+    app=ProcessRecord{42223638 26720:com.huawei.android.wfdft:FTSserv/10040}
+    created=-2h41m17s755ms started=true connections=0
+  * ServiceRecord{4206e9d8 com.huawei.powersavingmode/.PowerSavingService}
+    app=ProcessRecord{42563dc0 27598:com.huawei.powersavingmode/1000}
+    created=-2h42m21s884ms started=true connections=0
+  * ServiceRecord{41e87da8 com.wandoujia.phoenix2/com.wandoujia.jupiter.service.SpeedUpService}
+    app=ProcessRecord{41c55bf8 19019:com.wandoujia.phoenix2/10086}
+    created=-2h41m47s626ms started=true connections=0
+  * ServiceRecord{41e32e20 com.wandoujia.phoenix2/com.wandoujia.update.RemoteUpdateService}
+    app=ProcessRecord{41e33400 19109:com.wandoujia.phoenix2:update_service/10086}
+    created=-2h41m48s558ms started=true connections=1
+    Connections:
+       -> 19019:com.wandoujia.phoenix2/10086
+  * ServiceRecord{42923940 com.cleanmaster.security_cn/ks.cm.antivirus.neweng.service.ScanService}
+    app=ProcessRecord{418e2070 3067:com.cleanmaster.security_cn:ScanService/10090}
+    created=-19s671ms started=true connections=1
+    Connections:
+      act=ks.cm.antivirus.watcher.ACTION_EXAM.SECURITY pkg=com.cleanmaster.security_cn -> 16580:com.cleanmaster.security_cn:DefendService/10090
+  * ServiceRecord{41cef3b8 com.android.mediacenter/.MediaPlaybackService}
+    app=null
+    created=-2h42m36s740ms started=false connections=0
+  * ServiceRecord{41c7d450 com.huawei.android.totemweather/.widget.WeatherWidgetServer}
+    app=ProcessRecord{41c2a5f0 17948:com.huawei.android.totemweather/10064}
+    created=-2h42m14s681ms started=true connections=0
+  * ServiceRecord{41c439f0 com.huawei.pmqos/.PmqosService}
+    app=ProcessRecord{41c958a0 16075:com.huawei.pmqos/1000}
+    created=-2h42m32s706ms started=true connections=0
+  * ServiceRecord{41c32518 com.wandoujia.phoenix2.usbproxy/com.wandoujia.phoenix2.services.ConnectionService}
+    app=ProcessRecord{41c32f50 19068:com.wandoujia.phoenix2.usbproxy/10085}
+    created=-2h41m49s853ms started=false connections=1
+    Connections:
+       -> 19019:com.wandoujia.phoenix2/10086
+  * ServiceRecord{41cae6d0 com.huawei.inputmethod.hwpal/.HandWritingService}
+    app=ProcessRecord{419a8288 16027:com.huawei.inputmethod.hwpal/10035}
+    created=-2h42m35s305ms started=false connections=1
+    Connections:
+       -> 16027:com.huawei.inputmethod.hwpal/10035
+  * ServiceRecord{417c2a38 com.kingroot.master/com.kingroot.common.framework.service.KSysService}
+    app=ProcessRecord{41b64c00 16172:com.kingroot.master:service/10100}
+    created=-2h42m34s491ms started=true connections=1
+    Connections:
+       -> 16172:com.kingroot.master:service/10100
+  * ServiceRecord{41b0f1e0 com.android.stk/.StkAppService}
+    app=ProcessRecord{41b705c8 16053:com.android.phone/1001}
+    created=-2h42m32s850ms started=true connections=0
+  * ServiceRecord{41b7a750 com.huawei.inputmethod.hwpal/.PinyinIME}
+    app=ProcessRecord{419a8288 16027:com.huawei.inputmethod.hwpal/10035}
+    created=-2h42m36s546ms started=false connections=1
+    Connections:
+      act=android.view.InputMethod -> 15853:system/1000
+  * ServiceRecord{41cc7050 com.cleanmaster.security_cn/com.cmlocker.core.service.PermanentService}
+    app=ProcessRecord{41c93a40 16580:com.cleanmaster.security_cn:DefendService/10090}
+    created=-2h42m29s711ms started=false connections=2
+    Connections:
+       -> 16580:com.cleanmaster.security_cn:DefendService/10090
+       -> 26812:com.cleanmaster.security_cn/10090
+  * ServiceRecord{41ce7698 com.android.phone/.BluetoothHeadsetService}
+    app=ProcessRecord{41b705c8 16053:com.android.phone/1001}
+    created=-2h42m35s705ms started=true connections=1
+    Connections:
+      act=android.bluetooth.IBluetoothHeadset -> 15853:system/1000
+  * ServiceRecord{41c12a48 com.android.wallpaper.holospiral/.HoloSpiralWallpaper}
+    app=ProcessRecord{41972ea0 16009:com.android.wallpaper.holospiral/10024}
+    created=-2h42m36s578ms started=false connections=1
+    Connections:
+      act=android.service.wallpaper.WallpaperService -> 15853:system/1000
+  * ServiceRecord{41b1c4b0 com.google.android.gsf/.gtalkservice.service.GTalkService}
+    app=ProcessRecord{41b994e8 18900:com.google.process.gapps/10020}
+    created=-2h41m51s67ms started=true connections=0
+ 
+ACTIVITY MANAGER ACTIVITIES (dumpsys activity activities)
+  Main stack:
+    TaskRecord{41cf6598 #27 A com.example.stamp}
+    Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.example.stamp/.activity.SplashActivity }
+      Hist #2: ActivityRecord{42073e38 com.example.stamp/.MainActivity}
+        Intent { cmp=com.example.stamp/.MainActivity }
+        ProcessRecord{41b984e8 3243:com.example.stamp/10084}
+    TaskRecord{41b7d598 #2 A com.huawei.android.launcher}
+    Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10600000 cmp=com.huawei.android.launcher/.Launcher }
+      Hist #1: ActivityRecord{4178c228 com.huawei.android.launcher/.Launcher}
+        Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000000 cmp=com.huawei.android.launcher/.Launcher }
+        ProcessRecord{4198c100 16103:com.huawei.android.launcher/10036}
+    TaskRecord{41b98b98 #10 I com.android.settings/.Settings$DevelopmentSettingsActivity}
+    Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 cmp=com.android.settings/.Settings$DevelopmentSettingsActivity }
+      Hist #0: ActivityRecord{41b988d0 com.android.settings/.UsbSettings}
+        Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 cmp=com.android.settings/.UsbSettings }
+ 
+  Running activities (most recent first):
+    TaskRecord{41cf6598 #27 A com.example.stamp}
+      Run #1: ActivityRecord{42073e38 com.example.stamp/.MainActivity}
+    TaskRecord{41b7d598 #2 A com.huawei.android.launcher}
+      Run #0: ActivityRecord{4178c228 com.huawei.android.launcher/.Launcher}
+ 
+  mResumedActivity: ActivityRecord{42073e38 com.example.stamp/.MainActivity}
+  mFocusedActivity: ActivityRecord{42073e38 com.example.stamp/.MainActivity}
+
+  Recent tasks:
+  * Recent #0: TaskRecord{41cf6598 #27 A com.example.stamp}
+  * Recent #1: TaskRecord{41b7d598 #2 A com.huawei.android.launcher}
+  * Recent #2: TaskRecord{41f53288 #22 A com.zy.tbshoppingcart}
+  * Recent #3: TaskRecord{41dc3770 #21 A com.kingroot.kinguser}
+  * Recent #4: TaskRecord{41dbf158 #17 A com.whyp.ycuservice}
+  * Recent #5: TaskRecord{41ff4e18 #15 A com.example.viewpageindicator}
+  * Recent #6: TaskRecord{41b53568 #14 A com.jock.tbshopcar}
+  * Recent #7: TaskRecord{41b98b98 #10 I com.android.settings/.Settings$DevelopmentSettingsActivity}
+  * Recent #8: TaskRecord{41a01e48 #9 A com.alibaba.livecloud}
+  * Recent #9: TaskRecord{41aebd88 #5 A com.google.android.gsf}
+ 
+ACTIVITY MANAGER RUNNING PROCESSES (dumpsys activity processes)
+  Process LRU list (sorted by oom_adj):
+    PERS # 5: adj=sys  /F  trm= 0 15853:system/1000 (fixed)
+    PERS #37: adj=pers /F  trm= 0 16088:com.broadcom.bt.app.system/1002 (fixed)
+    PERS #35: adj=pers /F  trm= 0 15934:com.android.systemui/1000 (fixed)
+    PERS #12: adj=pers /F  trm= 0 16075:com.huawei.pmqos/1000 (fixed)
+    PERS # 3: adj=pers /F  trm= 0 16053:com.android.phone/1001 (fixed)
+    Proc #36: adj=fore /F  trm= 0 17388:com.android.mms/10047 (mms)
+    Proc #33: adj=fore /F  trm= 0 16985:com.android.contacts/10002 (contacts)
+    Proc # 0: adj=fore /FA trm= 0 3243:com.example.stamp/10084 (top-activity)
+    Proc #28: adj=vis  /FA trm= 0 16103:com.huawei.android.launcher/10036 (visible)
+    Proc # 4: adj=vis  /F  trm= 0 16009:com.android.wallpaper.holospiral/10024 (service)
+        com.android.wallpaper.holospiral/.HoloSpiralWallpaper<=Proc{15853:system/1000}
+    Proc # 2: adj=vis  /F  trm= 0 16151:com.android.smspush/10067 (service)
+        com.android.smspush/.WapPushManager<=Proc{16053:com.android.phone/1001}
+    Proc #11: adj=prcp /FS trm= 0 17806:com.cleanmaster.mguard_cn:service/10091 (foreground-service)
+    Proc #10: adj=prcp /FS trm= 0 15990:com.kingroot.kinguser:service/10023 (foreground-service)
+    Proc # 8: adj=prcp /FS trm= 0 16580:com.cleanmaster.security_cn:DefendService/10090 (foreground-service)
+    Proc # 7: adj=prcp /F  trm= 0 3067:com.cleanmaster.security_cn:ScanService/10090 (service)
+        com.cleanmaster.security_cn/ks.cm.antivirus.neweng.service.ScanService<=Proc{16580:com.cleanmaster.security_cn:DefendService/10090}
+    Proc # 6: adj=prcp /FS trm= 0 16172:com.kingroot.master:service/10100 (foreground-service)
+    Proc # 1: adj=prcp /F  trm= 0 16027:com.huawei.inputmethod.hwpal/10035 (service)
+        com.huawei.inputmethod.hwpal/.PinyinIME<=Proc{15853:system/1000}
+    Proc #29: adj=svc  /B  trm= 0 27598:com.huawei.powersavingmode/1000 (started-services)
+    Proc #27: adj=svc  /B  trm= 0 27982:com.huawei.android.ds/10034 (started-services)
+    Proc #24: adj=svc  /B  trm= 0 18900:com.google.process.gapps/10020 (started-services)
+    Proc #34: adj=svcb /B  trm= 0 17948:com.huawei.android.totemweather/10064 (started-services)
+    Proc #32: adj=svcb /B  trm= 0 18944:com.huawei.android.pushagent/10060 (started-services)
+    Proc #31: adj=svcb /B  trm= 0 26720:com.huawei.android.wfdft:FTSserv/10040 (started-services)
+    Proc #30: adj=svcb /B  trm= 0 27197:com.huawei.android.wfdft:FTCserv/10040 (started-services)
+    Proc #16: adj=bak  /B  trm= 0 19109:com.wandoujia.phoenix2:update_service/10086 (service)
+        com.wandoujia.phoenix2/com.wandoujia.update.RemoteUpdateService<=Proc{19019:com.wandoujia.phoenix2/10086}
+    Proc #15: adj=bak  /B  trm= 0 19068:com.wandoujia.phoenix2.usbproxy/10085 (bg-empty)
+    Proc #14: adj=bak  /B  trm= 0 3578:com.android.quicksearchbox/10061 (bg-empty)
+    Proc #13: adj=bak  /B  trm= 0 26812:com.cleanmaster.security_cn/10090 (bg-empty)
+    Proc # 9: adj=bak  /B  trm= 0 3332:com.cleanmaster.security_cn:worker/10090 (bg-empty)
+    Proc #20: adj=bak+1/B  trm= 0 25849:com.android.defcontainer/10011 (bg-empty)
+    Proc #19: adj=bak+1/B  trm= 0 21870:android.process.acore/10002 (bg-empty)
+    Proc #18: adj=bak+1/B  trm= 0 26110:com.huawei.ttgame/10080 (bg-empty)
+    Proc #17: adj=bak+1/B  trm= 0 19019:com.wandoujia.phoenix2/10086 (started-bg-services)
+    Proc #25: adj=bak+2/B  trm= 0 26066:com.android.gallery3d/10019 (bg-empty)
+    Proc #23: adj=bak+2/B  trm= 0 2451:com.svox.pico/10055 (bg-empty)
+    Proc #22: adj=bak+2/B  trm= 0 26168:com.cleanmaster.mguard_cn/10091 (bg-empty)
+    Proc #21: adj=bak+2/B  trm= 0 2541:com.whyp.ycuservice/10101 (bg-empty)
+    Proc #26: adj=bak+3/B  trm= 0 26098:com.android.voicedialer/10066 (bg-empty)
+ 
+  Time since processes crashed:
+    Process com.alibaba.livecloud uid 10108: last crashed 9527354 ms ago
+
+  mHomeProcess: ProcessRecord{4198c100 16103:com.huawei.android.launcher/10036}
+  mPreviousProcess: null
+  mConfiguration: {1.0 0mcc0mnc zh_CN layoutdir=0 sw360dp w360dp h615dp nrml long port finger -keyb/v/h -nav/h s.3}
+  mSleeping=false mShuttingDown=false

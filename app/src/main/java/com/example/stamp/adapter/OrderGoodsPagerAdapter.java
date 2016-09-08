@@ -1,14 +1,8 @@
 package com.example.stamp.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-
-import com.example.stamp.fragment.ordersgoodsfragment.AllFragment;
-import com.example.stamp.fragment.ordersgoodsfragment.CompleteFragment;
-import com.example.stamp.fragment.ordersgoodsfragment.PaymentFragent;
-import com.example.stamp.fragment.ordersgoodsfragment.ReceivingFragment;
-import com.example.stamp.fragment.ordersgoodsfragment.RefuseFragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import java.util.List;
 
@@ -18,42 +12,31 @@ import java.util.List;
  *
  * @author Administrator
  */
-public class OrderGoodsPagerAdapter extends FragmentPagerAdapter {
+public class OrderGoodsPagerAdapter extends PagerAdapter {
 
-    private List<Fragment> mList;//内容Fragment集合
-    private String[] arr;//标题数组
-
-    public OrderGoodsPagerAdapter(FragmentManager fragmentManager, List<Fragment> list, String[] arr) {
-        super(fragmentManager);
-        mList = list;
-        this.arr = arr;
+    private List<View> list;
+    public OrderGoodsPagerAdapter(List<View> list){
+        this.list=list;
     }
     @Override
     public int getCount() {
-        return mList.size();
+        return list.size();
     }
 
     @Override
-    public Fragment getItem(int position) {
-        if (position == 0) {
-            return new AllFragment();// 全部
-        } else if (position == 1) {
-            return new PaymentFragent(); // 待付款
-        } else if (position == 2) {
-            return new ReceivingFragment(); // 待收货
-        } else if (position == 3) {
-            return new CompleteFragment(); // 已完成
-        } else if (position == 4) {
-            return new RefuseFragment();// 退款/退货
-        }
-        return null;
-
+    public boolean isViewFromObject(View arg0, Object arg1) {
+        return (arg0==arg1);
     }
-
     @Override
-    public CharSequence getPageTitle(int position) {
-        return arr[position];
+    public void destroyItem(View container, int position, Object object) {
+        ((ViewPager)container).removeView(list.get(position));
     }
+    @Override
+    public Object instantiateItem(View container, int position) {
+        ((ViewPager) container).addView(list.get(position));
+        return list.get(position);
+    }
+
 
 
 }

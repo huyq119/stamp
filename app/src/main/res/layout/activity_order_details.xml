@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--订单详情页面-->
+<!--商品订单详情页面-->
 <LinearLayout
     android:id="@+id/order_details"
     xmlns:android="http://schemas.android.com/apk/res/android"

@@ -2,6 +2,7 @@ package com.example.stamp.activity;
 
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -33,6 +34,7 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
     private LinearLayout mDistribution;//快递
     private SelectPayPopupWindow mPayPopupWindow;//付款的PopupWindow
     private SelectDistributionPopupWindow mDistributionPopupWindow;//快递弹出的PopupWindow
+    private ImageView mBack;
 
     @Override
     public View CreateTitle() {
@@ -51,6 +53,14 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
 
 
     private void initView() {
+        mBack = (ImageView)mOrderDetailsTitle.findViewById(R.id.base_title_back);
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finishWitchAnimation();
+            }
+        });
+
         mLogistics = (LinearLayout) mOrderDetailsContent.findViewById(R.id.orderDetails_Address);
         mPay = (LinearLayout) mOrderDetailsContent.findViewById(R.id.orderDetails_pay);
         mDistribution = (LinearLayout) mOrderDetailsContent.findViewById(R.id.orderDetails_distribution);
