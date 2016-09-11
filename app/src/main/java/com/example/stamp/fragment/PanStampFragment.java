@@ -63,8 +63,8 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
         mSearch = (ImageView) mPanStampTitle.findViewById(R.id.panstamp_search);
 
         mFilter = (Button) mPanStampContent.findViewById(R.id.panStamp_filter);
-        mTopBtn = (Button) mPanStampContent.findViewById(R.id.base_top_btn);
         mPanStampGV = (GridView) mPanStampContent.findViewById(R.id.panstamp_gl);
+        mTopBtn = (Button) mPanStampContent.findViewById(R.id.stamp_top_btn);
     }
 
 
@@ -105,7 +105,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                 PanStampFilterDialog filterDialogFragment = new PanStampFilterDialog(mPopupList, arr);
                 filterDialogFragment.show(getChildFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
                 break;
-            case R.id.base_top_btn://筛选
+            case R.id.stamp_top_btn://置顶
                 setListViewPos(0);
                 mTopBtn.setVisibility(View.GONE);// 置顶后隐藏按钮
                 break;

@@ -110,7 +110,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
         mSynthesize = (Button) mStampTapContent.findViewById(R.id.stampTap_synthesize);
         mRelease = (Button) mStampTapContent.findViewById(R.id.stampTap_sales);
         mPrice = (Button) mStampTapContent.findViewById(R.id.stampTap_price);
-        mTop = (Button) mStampTapContent.findViewById(R.id.stamap_tap_top_btn);// 置顶
+        mTop = (Button) mStampTapContent.findViewById(R.id.stamp_top_btn);// 置顶
 
     }
 
@@ -248,7 +248,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                     Priceflag = true;
                 }
                 break;
-            case R.id.stamap_tap_top_btn://置顶
+            case R.id.stamp_top_btn://置顶
                 setListViewPos(0);
                 mTop.setVisibility(View.GONE);// 回到顶部后置顶按钮消失
                 break;

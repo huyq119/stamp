@@ -287,15 +287,14 @@ public class OrdersGoodsActivity extends BaseActivity {
                 return false;
             }
         });
+
         refuse_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-
                 openActivityWitchAnimation(OrderDetailsActivity.class);
                 return false;
             }
         });
-
 
     }
 

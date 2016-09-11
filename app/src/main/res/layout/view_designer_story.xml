@@ -5,11 +5,12 @@
     android:orientation="vertical">
 
     <ListView
-        android:id="@+id/designer_works_lv"
+        android:id="@+id/designer_story_lv"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="match_parent"
         android:divider="#dadada"
         android:scrollbars="none"
-        android:dividerHeight="1px"
-        />
+        android:overScrollMode="never"
+        android:dividerHeight="1px" />
+
 </LinearLayout>

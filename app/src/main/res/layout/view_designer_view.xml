@@ -7,9 +7,10 @@
     <ListView
         android:id="@+id/designer_view_lv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:divider="#dadada"
         android:scrollbars="none"
+        android:overScrollMode="never"
         android:dividerHeight="1px"
         />
 </LinearLayout>
