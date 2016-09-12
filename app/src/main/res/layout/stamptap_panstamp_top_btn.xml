@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><!--置顶按钮-->
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/stamp_top_btn"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+    android:layout_marginBottom="14dp"
+    android:layout_marginRight="10dp"
+    android:background="@mipmap/top"
+    android:gravity="center"
+    android:visibility="gone"
+    />
