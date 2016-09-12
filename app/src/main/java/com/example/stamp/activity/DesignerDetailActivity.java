@@ -2,8 +2,11 @@ package com.example.stamp.activity;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,7 +25,9 @@ import com.example.stamp.adapter.DesignerDetailsStoryAdapter;
 import com.example.stamp.adapter.HomeViewPagerAdapter;
 import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.DesignerDetailsBean;
+import com.example.stamp.listener.GestureListener;
 import com.example.stamp.utils.MyLog;
+import com.example.stamp.utils.ScreenUtils;
 import com.example.stamp.view.OrderGoodsViewPager;
 import com.example.stamp.view.VerticalScrollView;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -45,7 +50,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     private LinearLayout mHearl;
     private String[] arr = {"个人简历", "设计故事", "艺术作品", "名家访谈"};
     private String[] arrImage = {"http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg",
-             "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg",
+            "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg",
             "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"};
     private VerticalScrollView home_SV;
     private Button mTopBtn;// 置顶按钮
@@ -55,9 +60,16 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     public ArrayList<DesignerDetailsBean.DesignerView> mListView = new ArrayList<>();
     private ArrayList<View> vList;
     private RadioGroup mDesigner_RG;
-    private RadioButton mResumeBtn,mStoryBtn,mWorksBtn,mViewBtn;
+    private RadioButton mResumeBtn, mStoryBtn, mWorksBtn, mViewBtn;
     private int position = 0;
-    private View view1,view2,view3,view4;
+    private View view1, view2, view3, view4;
+    private LinearLayout mHeartll; //头部的布局(viewPager,view)
+    private GestureDetector mGestureDetector;
+    private VerticalScrollView mDetailSV;
+    private boolean scrollFlag = false; // 标记是否滑动
+    private int lastVisibleItemPosition = 0;// 标记上次滑动位置
+    private int mCount;
+    private int mPosition;
 
     @Override
     public View CreateTitle() {
@@ -88,7 +100,10 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         mTopBtn = (Button) mDesignerDetailContent.findViewById(R.id.base_top_btn);// 置顶
         mTopVP = (ViewPager) mDesignerDetailContent.findViewById(R.id.base_viewpager);  //轮播条的View
         mTopVPI = (CirclePageIndicator) mDesignerDetailContent.findViewById(R.id.base_viewpagerIndicator);
+
         mHearl = (LinearLayout) mDesignerDetailContent.findViewById(R.id.Desiger_hearl);
+//        mDetailSV= (VerticalScrollView) mDesignerDetailContent.findViewById(R.id.Designer_Detail_SV);
+
         // viewPager页面
         mViewPager = (OrderGoodsViewPager) mDesignerDetailContent.findViewById(R.id.designerdetail_viewpager);
         //初始化控件
@@ -118,6 +133,21 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         mStoryList = (ListView) vStory.findViewById(R.id.designer_story_lv);
         mWorksList = (ListView) vWorks.findViewById(R.id.designer_works_lv);
         mViewList = (ListView) vView.findViewById(R.id.designer_view_lv);
+        initGestureListener(); // 滑动lsitview隐藏头布局(viewPager,view)的方法
+    }
+
+    /**
+     * 滑动lsitview隐藏头布局(viewPager,view)的方法
+     */
+    private void initGestureListener() {
+        mHeartll = (LinearLayout) mDesignerDetailContent.findViewById(R.id.Desiger_hearl);
+        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        mHeartll.measure(w, h);
+        int height = mHeartll.getMeasuredHeight();
+        MyLog.e(height + "");
+        GestureListener gestureListener = new GestureListener(mHeartll, height);
+        mGestureDetector = new GestureDetector(this, gestureListener);
     }
 
     /**
@@ -160,12 +190,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         DesignerDetailViewAdapter mViewAdapter = new DesignerDetailViewAdapter(this, mListView, mBitmap);
         mViewList.setAdapter(mViewAdapter);
 
-        mStoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                openActivityWitchAnimation(DesignerStoryDetailActivity.class);// 跳转设计故事详情页
-            }
-        });
+
     }
 
 
@@ -176,9 +201,45 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         mShared.setOnClickListener(this);
         mBack.setOnClickListener(this);
         mTopBtn.setOnClickListener(this);
+//        mStoryList.setOnScrollListener(this);
+//        mWorksList.setOnScrollListener(this);
+//        mViewList.setOnScrollListener(this);
         mViewPager.setOnPageChangeListener(new DesignerViewPager());
         mDesigner_RG.setOnCheckedChangeListener(new MyGroupListener());
+        mStoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                openActivityWitchAnimation(DesignerStoryDetailActivity.class);// 跳转设计故事详情页
+            }
+        });
+        mStoryList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mGestureDetector.onTouchEvent(motionEvent);
+                return false;
+            }
+        });
+        mWorksList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mGestureDetector.onTouchEvent(motionEvent);
+                return false;
+            }
+        });
+        mViewList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mGestureDetector.onTouchEvent(motionEvent);
+                return false;
+            }
+        });
+        StoryListViewListener();// 设计故事StoryListView滑动监听事件
+        WorksListViewListener();// 艺术作品StoryListView滑动监听事件
+        ViewListViewListener();// 名家访谈ViewListView滑动监听事件
+
     }
+
+
 
 
     @Override
@@ -197,10 +258,21 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.base_top_btn://置顶
 
+                if (mPosition == 0){
+
+                }else if (mPosition == 1){
+                    StoryListView(0);
+                }else if (mPosition == 2){
+                    WorksListView(0);
+                }else {
+                    ViewListView(0);
+                }
+                mTopBtn.setVisibility(View.GONE);// 回到顶部后置顶按钮隐藏
                 break;
 
         }
     }
+
 
     /**
      * 滑动ViewPager监听方法
@@ -212,15 +284,15 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
 
         @Override
         public void onPageScrollStateChanged(int state) {
-
         }
 
         @Override
         public void onPageSelected(int position) {
-            MyLog.e("哈哈~~~>", "--->" + position);
+            mPosition = position;
+            MyLog.e("哈哈~~~>", "--->" + mPosition);
             switch (position) {
                 case 0:
-                    mHearl.setVisibility(View.VISIBLE);
+//                    mHearl.setVisibility(View.VISIBLE);
                     mResumeBtn.setTextColor(getResources().getColor(R.color.red_font));
                     mStoryBtn.setTextColor(getResources().getColor(R.color.black));
                     mWorksBtn.setTextColor(getResources().getColor(R.color.black));
@@ -229,9 +301,10 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     view2.setBackgroundResource(R.color.line_bg);
                     view3.setBackgroundResource(R.color.line_bg);
                     view4.setBackgroundResource(R.color.line_bg);
+
                     break;
                 case 1:
-                    mHearl.setVisibility(View.GONE);
+//                    mHearl.setVisibility(View.GONE);
                     mResumeBtn.setTextColor(getResources().getColor(R.color.black));
                     mStoryBtn.setTextColor(getResources().getColor(R.color.red_font));
                     mWorksBtn.setTextColor(getResources().getColor(R.color.black));
@@ -240,9 +313,10 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     view2.setBackgroundResource(R.color.red_font);
                     view3.setBackgroundResource(R.color.line_bg);
                     view4.setBackgroundResource(R.color.line_bg);
+                    StoryListViewListener();// 设计故事StoryListView滑动监听事件
                     break;
                 case 2:
-                    mHearl.setVisibility(View.GONE);
+//                    mHearl.setVisibility(View.GONE);
                     mResumeBtn.setTextColor(getResources().getColor(R.color.black));
                     mStoryBtn.setTextColor(getResources().getColor(R.color.black));
                     mWorksBtn.setTextColor(getResources().getColor(R.color.red_font));
@@ -251,9 +325,10 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     view2.setBackgroundResource(R.color.line_bg);
                     view3.setBackgroundResource(R.color.red_font);
                     view4.setBackgroundResource(R.color.line_bg);
+                    WorksListViewListener();// 艺术作品StoryListView滑动监听事件
                     break;
                 case 3:
-                    mHearl.setVisibility(View.GONE);
+//                    mHearl.setVisibility(View.GONE);
                     mResumeBtn.setTextColor(getResources().getColor(R.color.black));
                     mStoryBtn.setTextColor(getResources().getColor(R.color.black));
                     mWorksBtn.setTextColor(getResources().getColor(R.color.black));
@@ -262,6 +337,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     view2.setBackgroundResource(R.color.line_bg);
                     view3.setBackgroundResource(R.color.line_bg);
                     view4.setBackgroundResource(R.color.red_font);
+                    ViewListViewListener();// 名家访谈ViewListView滑动监听事件
                     break;
             }
         }
@@ -287,6 +363,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     view3.setBackgroundResource(R.color.line_bg);
                     view4.setBackgroundResource(R.color.line_bg);
                     mViewPager.setCurrentItem(1);
+                    StoryListViewListener();// 设计故事StoryListView滑动监听事件
                     break;
                 case R.id.Desiger_Works_Btn:
                     position = 2;
@@ -295,6 +372,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     view3.setBackgroundResource(R.color.red_font);
                     view4.setBackgroundResource(R.color.line_bg);
                     mViewPager.setCurrentItem(2);
+                    WorksListViewListener();// 艺术作品StoryListView滑动监听事件
                     break;
                 case R.id.Desiger_View_Btn:
                     position = 3;
@@ -303,6 +381,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     view3.setBackgroundResource(R.color.line_bg);
                     view4.setBackgroundResource(R.color.red_font);
                     mViewPager.setCurrentItem(3);
+                    ViewListViewListener();// 名家访谈ViewListView滑动监听事件
                     break;
 
                 default:
@@ -311,5 +390,181 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
 
         }
 
+    }
+
+    /**
+     * 设计故事StoryListView滑动监听事件
+     */
+    private void StoryListViewListener(){
+        mStoryList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+                switch (i) {
+                    // 当不滚动时
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:// 是当屏幕停止滚动时
+                        scrollFlag = false;
+                        // 判断滚动到底部
+                        if (mStoryList.getLastVisiblePosition() == (mStoryList.getCount() - 1)) {
+                            mTopBtn.setVisibility(View.VISIBLE);
+                        }
+                        if (mStoryList.getFirstVisiblePosition() == 0) {
+                            mTopBtn.setVisibility(View.GONE);
+                        }
+                        break;
+                    case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:// 滚动时
+                        scrollFlag = true;
+                        break;
+                    case AbsListView.OnScrollListener.SCROLL_STATE_FLING:// 是当用户由于之前划动屏幕并抬起手指，屏幕产生惯性滑动时
+                        scrollFlag = false;
+                        break;
+                }
+            }
+
+            // firstVisibleItem 当前能看见的第一个列表项ID（从0开始）
+            // visibleItemCount 当前能看见的列表项个数（小半个也算）
+            // totalItemCount   totalItemCount：列表项共数
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                // 当开始滑动且ListView底部的Y轴点超出屏幕最大范围时，显示或隐藏顶部按钮
+                if (scrollFlag && ScreenUtils.getScreenViewBottomHeight(mStoryList) >= ScreenUtils.getScreenHeight(DesignerDetailActivity.this)) {
+                    if (firstVisibleItem > lastVisibleItemPosition) {// 上滑
+                        mTopBtn.setVisibility(View.VISIBLE);
+                    } else if (firstVisibleItem < lastVisibleItemPosition) {// 下滑
+                        mTopBtn.setVisibility(View.GONE);
+                    } else {
+                        return;
+                    }
+                    lastVisibleItemPosition = firstVisibleItem;
+                }
+            }
+        });
+    }
+
+    /**
+     * 艺术作品StoryListView滑动监听事件
+     */
+    private void WorksListViewListener() {
+        mWorksList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+                switch (i) {
+                    // 当不滚动时
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:// 是当屏幕停止滚动时
+                        scrollFlag = false;
+                        // 判断滚动到底部
+                        if (mWorksList.getLastVisiblePosition() == (mWorksList.getCount() - 1)) {
+                            mTopBtn.setVisibility(View.VISIBLE);
+                        }
+                        if (mWorksList.getFirstVisiblePosition() == 0) {
+                            mTopBtn.setVisibility(View.GONE);
+                        }
+                        break;
+                    case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:// 滚动时
+                        scrollFlag = true;
+                        break;
+                    case AbsListView.OnScrollListener.SCROLL_STATE_FLING:// 是当用户由于之前划动屏幕并抬起手指，屏幕产生惯性滑动时
+                        scrollFlag = false;
+                        break;
+                }
+            }
+
+            // firstVisibleItem 当前能看见的第一个列表项ID（从0开始）
+            // visibleItemCount 当前能看见的列表项个数（小半个也算）
+            // totalItemCount   totalItemCount：列表项共数
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                // 当开始滑动且ListView底部的Y轴点超出屏幕最大范围时，显示或隐藏顶部按钮
+                if (scrollFlag && ScreenUtils.getScreenViewBottomHeight(mWorksList) >= ScreenUtils.getScreenHeight(DesignerDetailActivity.this)) {
+                    if (firstVisibleItem > lastVisibleItemPosition) {// 上滑
+                        mTopBtn.setVisibility(View.VISIBLE);
+                    } else if (firstVisibleItem < lastVisibleItemPosition) {// 下滑
+                        mTopBtn.setVisibility(View.GONE);
+                    } else {
+                        return;
+                    }
+                    lastVisibleItemPosition = firstVisibleItem;
+                }
+            }
+        });
+
+    }
+    /**
+     * 名家访谈ViewListView滑动监听事件
+     */
+    private void ViewListViewListener() {
+        mViewList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+                switch (i) {
+                    // 当不滚动时
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:// 是当屏幕停止滚动时
+                        scrollFlag = false;
+                        // 判断滚动到底部
+                        if (mViewList.getLastVisiblePosition() == (mViewList.getCount() - 1)) {
+                            mTopBtn.setVisibility(View.VISIBLE);
+                        }
+                        if (mViewList.getFirstVisiblePosition() == 0) {
+                            mTopBtn.setVisibility(View.GONE);
+                        }
+                        break;
+                    case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:// 滚动时
+                        scrollFlag = true;
+                        break;
+                    case AbsListView.OnScrollListener.SCROLL_STATE_FLING:// 是当用户由于之前划动屏幕并抬起手指，屏幕产生惯性滑动时
+                        scrollFlag = false;
+                        break;
+                }
+            }
+
+            // firstVisibleItem 当前能看见的第一个列表项ID（从0开始）
+            // visibleItemCount 当前能看见的列表项个数（小半个也算）
+            // totalItemCount   totalItemCount：列表项共数
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                // 当开始滑动且ListView底部的Y轴点超出屏幕最大范围时，显示或隐藏顶部按钮
+                if (scrollFlag && ScreenUtils.getScreenViewBottomHeight(mViewList) >= ScreenUtils.getScreenHeight(DesignerDetailActivity.this)) {
+                    if (firstVisibleItem > lastVisibleItemPosition) {// 上滑
+                        mTopBtn.setVisibility(View.VISIBLE);
+                    } else if (firstVisibleItem < lastVisibleItemPosition) {// 下滑
+                        mTopBtn.setVisibility(View.GONE);
+                    } else {
+                        return;
+                    }
+                    lastVisibleItemPosition = firstVisibleItem;
+                }
+            }
+        });
+    }
+
+    /**
+     * 滚动StoryListView到指定位置
+     */
+    private void StoryListView(int pos) {
+        if (android.os.Build.VERSION.SDK_INT >= mCount) {
+            mStoryList.smoothScrollToPosition(pos);
+        } else {
+            mStoryList.setSelection(pos);
+        }
+    }
+    /**
+     * 滚动WorksListView到指定位置
+     */
+    private void WorksListView(int pos) {
+        if (android.os.Build.VERSION.SDK_INT >= mCount) {
+            mWorksList.smoothScrollToPosition(pos);
+        } else {
+            mWorksList.setSelection(pos);
+        }
+    }
+    /**
+     * 滚动ViewListView到指定位置
+     */
+
+    private void ViewListView(int pos) {
+        if (android.os.Build.VERSION.SDK_INT >= mCount) {
+            mViewList.smoothScrollToPosition(pos);
+        } else {
+            mViewList.setSelection(pos);
+        }
     }
 }

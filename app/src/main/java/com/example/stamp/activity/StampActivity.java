@@ -62,9 +62,6 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     private boolean scrollFlag = false; // 标记是否滑动
     private int lastVisibleItemPosition = 0;// 标记上次滑动位置
     private int mCount;
-    private int currentTop;
-    private int mLastFirstTop;
-    private int touchSlop = 10;
     private StampMarketGridViewAdapter mStampMarAdapter;
     private LinearLayout mHeartll;//头部的布局
     private GestureDetector mGestureDetector;
@@ -109,7 +106,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         mSynthesize = (Button) mStampContent.findViewById(R.id.stamp_synthesize);
         mSales = (Button) mStampContent.findViewById(R.id.stamp_sales);
         mPrice = (Button) mStampContent.findViewById(R.id.stamp_price);
-        initGestureListener();
+        initGestureListener(); // 滑动lsitview隐藏导航栏的方法
     }
 
     /**

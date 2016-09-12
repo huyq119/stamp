@@ -54,9 +54,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private boolean scrollFlag = false; // 标记是否滑动
     private int lastVisibleItemPosition = 0;// 标记上次滑动位置
     private int mCount;
-    private int currentTop;
-    private int mLastFirstTop;
-    private int touchSlop = 10;
     private AuctionListViewAdapter mListAdapter;
 
     private LinearLayout mHeartll;//头部的布局
@@ -360,7 +357,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onScrollStateChanged(AbsListView absListView, int i) {
-        MyLog.e("滑动了几条啊~~~>",mListView.getLastVisiblePosition()+"-->"+mListView.getFirstVisiblePosition());
+//        MyLog.e("滑动了几条啊~~~>",mListView.getLastVisiblePosition()+"-->"+mListView.getFirstVisiblePosition());
         switch (i) {
             // 当不滚动时
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:// 是当屏幕停止滚动时

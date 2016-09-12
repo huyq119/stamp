@@ -16,7 +16,6 @@
             android:layout_height="match_parent"
             android:layout_weight="9">
 
-
             <com.example.stamp.view.VerticalScrollView
                 android:id="@+id/home_SV"
                 android:layout_width="match_parent"
