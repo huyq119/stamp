@@ -19,9 +19,9 @@ import java.util.Map;
 
 /**
  * Created by Administrator on 2016/9/5.
- * 商品订单（全部）页面的ExpandableListView适配器
+ * 商品订单(待付款，待收货，已完成)页面的ExpandableListView适配器
  */
-public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter{
+public class OrderPaymentReceivingCompleteLsitViewAdapter extends BaseExpandableListAdapter{
 
     private Context context;
     private List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList> groups ;
@@ -35,7 +35,7 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter{
      * @param context  上下文
      */
 
-    public OrderAllLsitViewAdapter(Context context,BitmapUtils bitmapUtils,List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList> groups, Map<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>> goods) {
+    public OrderPaymentReceivingCompleteLsitViewAdapter(Context context, BitmapUtils bitmapUtils, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList> groups, Map<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>> goods) {
         this.context = context;
         this.groups = groups;
         this.goods = goods;
@@ -93,7 +93,6 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter{
             gholder = (GroupViewHolder) view.getTag();
         }
         final OrderAllListViewGoodsBean.OrdersDataList.SellerDataList group = (OrderAllListViewGoodsBean.OrdersDataList.SellerDataList)getGroup(i);
-
 //        String mName = group.getSeller_name();
 //        String mType = group.getSeller_type();
 
@@ -140,56 +139,21 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter{
         final OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList goodsBean = (OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList) getChild(i, i1);
 
 //        bitmapUtils.display(goodsholder.img, goodsBean.getGoods_img());
-        if (i==0){
-            goodsholder.mNames.setText(goodsBean.getGoods_name());
-            goodsholder.mPrice.setText(goodsBean.getGoods_price());
-            goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mStatus.setText(goodsBean.getStatus());
-            goodsholder.mAllCount.setText("1");
-            goodsholder.mAllPrice.setText("￥"+1000000.00);
-            goodsholder.mBtnLl.setVisibility(View.GONE);
-        }else if (i==1){
-            goodsholder.mNames.setText(goodsBean.getGoods_name());
-            goodsholder.mPrice.setText(goodsBean.getGoods_price());
-            goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mStatus.setText("待付款");
-            goodsholder.mAllCount.setText("1");
-            goodsholder.mAllPrice.setText("￥"+1000000.00);
-            goodsholder.mBtnLl.setVisibility(View.VISIBLE);
-            goodsholder.mPayment.setVisibility(View.VISIBLE);
-            goodsholder.mLogistics.setVisibility(View.GONE);
-        }else if (i==2){
-            goodsholder.mNames.setText(goodsBean.getGoods_name());
-            goodsholder.mPrice.setText(goodsBean.getGoods_price());
-            goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mStatus.setText("待收货");
-            goodsholder.mAllCount.setText("1");
-            goodsholder.mAllPrice.setText("￥"+1000000.00);
-            goodsholder.mBtnLl.setVisibility(View.VISIBLE);
-            goodsholder.mLogistics.setVisibility(View.VISIBLE);
-            goodsholder.mPayment.setVisibility(View.GONE);
-        }else if (i==3){
-            goodsholder.mNames.setText(goodsBean.getGoods_name());
-            goodsholder.mPrice.setText(goodsBean.getGoods_price());
-            goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mStatus.setText("已完成");
-            goodsholder.mAllCount.setText("1");
-            goodsholder.mAllPrice.setText("￥"+1000000.00);
-            goodsholder.mBtnLl.setVisibility(View.VISIBLE);
-            goodsholder.mLogistics.setVisibility(View.VISIBLE);
-            goodsholder.mPayment.setVisibility(View.GONE);
-        }
+        goodsholder.mNames.setText(goodsBean.getGoods_name());
+        goodsholder.mPrice.setText(goodsBean.getGoods_price());
+        goodsholder.mCount.setText(goodsBean.getGoods_count());
+        goodsholder.mStatus.setText("待付款");
+        goodsholder.mAllCount.setText("1");
+        goodsholder.mAllPrice.setText("￥"+1000000.00);
+        goodsholder.mBtnLl.setVisibility(View.VISIBLE);
+        goodsholder.mPayment.setVisibility(View.VISIBLE);
+        goodsholder.mLogistics.setVisibility(View.GONE);
+
 
         goodsholder.mPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MyToast.showShort(context,"付款...");
-            }
-        });
-        goodsholder.mLogistics.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyToast.showShort(context,"查看了物流...");
             }
         });
 

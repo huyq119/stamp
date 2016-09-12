@@ -16,6 +16,8 @@ import com.example.stamp.R;
 import com.example.stamp.StaticField;
 import com.example.stamp.adapter.OrderAllLsitViewAdapter;
 import com.example.stamp.adapter.OrderGoodsPagerAdapter;
+import com.example.stamp.adapter.OrderPaymentReceivingCompleteLsitViewAdapter;
+import com.example.stamp.adapter.OrderRefuseLsitViewAdapter;
 import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.OrderAllListViewGoodsBean;
 import com.example.stamp.bean.OrderAllListViewGroupBean;
@@ -43,9 +45,10 @@ public class OrdersGoodsActivity extends BaseActivity {
     private View view1, view2, view3, view4, view5;
     private ExpandableListView all_edListview, payment_edListview, receiving_edListview, complete_edListview, refuse_edListview;
     private int position = 0;
+    private int mPosition;
     private OrderAllLsitViewAdapter allLsitViewAdapter;
-    private List<OrderAllListViewGroupBean> groups = new ArrayList<OrderAllListViewGroupBean>();// 组元素数据列表
-    private Map<String, List<OrderAllListViewGoodsBean>> goods = new HashMap<String, List<OrderAllListViewGoodsBean>>();// 子元素数据列表
+    private List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList> groups = new ArrayList<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList>();// 组元素数据列表
+    private Map<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>> goods = new HashMap<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>>();// 子元素数据列表
 
     private List<HashMap<String, String>> lists;
 
@@ -184,15 +187,16 @@ public class OrdersGoodsActivity extends BaseActivity {
         refuse_edListview = (ExpandableListView) v5.findViewById(R.id.all_expand_ListView);
 
 
-
         OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap, groups, goods);
+        OrderPaymentReceivingCompleteLsitViewAdapter PayRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(this, mBitmap, groups, goods);
+        OrderRefuseLsitViewAdapter RefuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(this, mBitmap, groups, goods);
 
         all_edListview.setAdapter(allLsitViewAdapter);
-        payment_edListview.setAdapter(allLsitViewAdapter);
-        receiving_edListview.setAdapter(allLsitViewAdapter);
-        complete_edListview.setAdapter(allLsitViewAdapter);
+        payment_edListview.setAdapter(PayRecComLsitViewAdapter);
+        receiving_edListview.setAdapter(PayRecComLsitViewAdapter);
+        complete_edListview.setAdapter(PayRecComLsitViewAdapter);
         refuse_edListview.setAdapter(allLsitViewAdapter);
-                for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
+        for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
             all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
             payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
             receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
@@ -240,16 +244,17 @@ public class OrdersGoodsActivity extends BaseActivity {
     private void initDatas() {
         groups = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            groups.add(new OrderAllListViewGroupBean());
-
-            List<OrderAllListViewGoodsBean> products = new ArrayList<OrderAllListViewGoodsBean>();
+            groups.add(new OrderAllListViewGoodsBean.OrdersDataList.SellerDataList());
+            List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList> products = new ArrayList<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>();
             for (int j = 0; j < 2; j++) {
-                products.add(new OrderAllListViewGoodsBean("http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg", "庚申年", "100000.00", "1", "交易关闭", "1", "￥1000000.00"));
+                products.add(new OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList("http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg", "庚申年", "100000.00", "1", "交易关闭"));
             }
-            goods.put(groups.get(i).getGoods_name(), products);// 将组元素的一个唯一值，这里取Id，作为子元素List的Key
+            goods.put(groups.get(i).getSeller_name(), products);// 将组元素的一个唯一值，这里取Id，作为子元素List的Key
+
         }
 
     }
+
 
     public void initListener() {
         mRadioGroup.setOnCheckedChangeListener(new MyGroupListener());
@@ -305,14 +310,19 @@ public class OrdersGoodsActivity extends BaseActivity {
 
 
     public class MyPagerChangeListener implements ViewPager.OnPageChangeListener {
+
+
         @Override
         public void onPageScrollStateChanged(int arg0) {
         }
+
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
         }
+
         @Override
         public void onPageSelected(int position) {
+            mPosition = position;
             switch (position) {
                 case 0:
                     mAllBtn.setTextColor(getResources().getColor(R.color.red_font));

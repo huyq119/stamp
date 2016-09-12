@@ -15,4 +15,5 @@
     <color name="geay_font">#333</color>
     <color name="bule_font">#00c06d</color>
     <color name="line_bg">#dddfe3</color>
+    <color name="refuse">#ff9900</color>
 </resources>

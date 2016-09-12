@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.stamp.R;
 import com.example.stamp.bean.OrderAllListViewGoodsBean;
-import com.example.stamp.bean.OrderAllListViewGroupBean;
 import com.example.stamp.utils.MyToast;
 import com.lidroid.xutils.BitmapUtils;
 
@@ -19,9 +18,9 @@ import java.util.Map;
 
 /**
  * Created by Administrator on 2016/9/5.
- * 商品订单（全部）页面的ExpandableListView适配器
+ * 商品订单（退款/退货）页面的ExpandableListView适配器
  */
-public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter{
+public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter{
 
     private Context context;
     private List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList> groups ;
@@ -35,7 +34,7 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter{
      * @param context  上下文
      */
 
-    public OrderAllLsitViewAdapter(Context context,BitmapUtils bitmapUtils,List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList> groups, Map<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>> goods) {
+    public OrderRefuseLsitViewAdapter(Context context, BitmapUtils bitmapUtils, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList> groups, Map<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>> goods) {
         this.context = context;
         this.groups = groups;
         this.goods = goods;
@@ -119,7 +118,7 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter{
         final GoodsViewHolder goodsholder;
         if (view == null) {
             goodsholder = new GoodsViewHolder();
-            view = View.inflate(context, R.layout.view_ordersgoods_all_goods_item, null);
+            view = View.inflate(context, R.layout.view_ordersgoods_refuse_goods_item, null);
             goodsholder.img = (ImageView) view.findViewById(R.id.item_stamp_img);
             goodsholder.mNames = (TextView) view.findViewById(R.id.item_stamp_name);
             goodsholder.mPrice = (TextView) view.findViewById(R.id.item_stamp_price);
