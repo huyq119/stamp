@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.stamp.R;
+import com.example.stamp.bean.GoodsStampBean;
 import com.example.stamp.bean.StampTapBean;
 import com.example.stamp.view.RotateTextView;
 import com.lidroid.xutils.BitmapUtils;
@@ -20,11 +21,11 @@ import java.util.ArrayList;
  */
 public class PanStampGridViewAdapter extends BaseAdapter {
 
-    private ArrayList<StampTapBean.StampList> list;//填入的集合
+    private ArrayList<GoodsStampBean.GoodsList> list;//填入的集合
     private Context context;
     private BitmapUtils bitmap;
 
-    public PanStampGridViewAdapter(Context context, ArrayList<StampTapBean.StampList> list, BitmapUtils bitmap) {
+    public PanStampGridViewAdapter(Context context, ArrayList<GoodsStampBean.GoodsList> list, BitmapUtils bitmap) {
         this.list = list;
         this.context = context;
         this.bitmap = bitmap;
@@ -60,32 +61,21 @@ public class PanStampGridViewAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-
-
         //设置数据
-        StampTapBean.StampList stampTapBean = list.get(i);
+        GoodsStampBean.GoodsList mGoodsList = list.get(i);
         //设置图片
-        bitmap.display(viewHolder.mIcon, stampTapBean.getStamp_img());
-        if(i==0||i==1){
-            viewHolder.mSource.setText("邮市");
-            viewHolder.mName.setText("庚申年");
-        }else if(i==2||i==3){
-            viewHolder.mSource.setText("商城");
-            viewHolder.mName.setText("戊戌年");
-        }else if(i==4||i==5){
-            viewHolder.mSource.setText("竞拍");
-            viewHolder.mName.setText("康熙年");
-        }
-        viewHolder.mMoney.setText("￥"+stampTapBean.getCurrent_price());
+        viewHolder.mName.setText(mGoodsList.getGoods_name());
+        viewHolder.mMoney.setText("￥"+mGoodsList.getCurrent_price());
+        bitmap.display(viewHolder.mIcon, mGoodsList.getGoods_img());
+        viewHolder.mSource.setText(mGoodsList.getGoods_source());
+
+    return view;
+}
 
 
-        return view;
-    }
-
-
-    public class ViewHolder {
-        public ImageView mIcon;//图片
-        public TextView mName, mMoney; //名称,钱数,
-        public RotateTextView mSource;// 商品类型
-    }
+public class ViewHolder {
+    public ImageView mIcon;//图片
+    public TextView mName, mMoney; //名称,钱数,
+    public RotateTextView mSource;// 商品类型
+}
 }

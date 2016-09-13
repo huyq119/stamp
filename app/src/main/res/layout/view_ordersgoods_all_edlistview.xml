@@ -12,7 +12,7 @@
         android:childDivider="@color/line_bg"
         android:childIndicator="@null"
         android:divider="@color/line_bg"
-        android:dividerHeight="0.5dp"
+        android:dividerHeight="1px"
         android:fadingEdge="none"
         android:groupIndicator="@null"
         android:listSelector="#00000000"

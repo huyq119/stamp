@@ -135,19 +135,19 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void run() {
                 HashMap<String, String> params = new HashMap<>();
-                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPTAP);
-                params.put(StaticField.CURRENT_INDEX, String.valueOf(index));
-                params.put(StaticField.ORDER_BY, Order_By);
-                params.put(StaticField.SORT_TYPE, Sort);
-                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM));
+                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPTAP);// 接口名称
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
+                params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；SJ时间；JG价格)
+                params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
+                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目)
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 MyLog.e(md5code);
-                params.put(StaticField.SIGN, md5code);
+                params.put(StaticField.SIGN, md5code); // 签名
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.e(result);
+                MyLog.e("邮票目录~~~>"+result);
 
                 if (result.equals("-1")) {
                     return;

@@ -21,14 +21,15 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginLeft="6dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/item_stamp_name"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:gravity="center|left"
                 android:text="庚申年"
@@ -37,11 +38,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginBottom="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -84,96 +84,65 @@
                         android:textSize="13sp" />
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
 
-    <View style="@style/myline" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#fff"
-        android:orientation="horizontal">
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center|right"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/item_refuse_reject_ll"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="退款审核中"
                 android:layout_marginRight="12dp"
-                android:textColor="@color/refuse"
-                android:textSize="13sp" />
+                android:layout_weight="1"
+                android:gravity="bottom|right"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <View style="@style/myline" />
-
-    <LinearLayout
-        android:id="@+id/item_stamp_btn_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:background="#fff"
-            android:orientation="horizontal">
-
+                <TextView
+                    android:id="@+id/item_refuse_reject_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="退款驳回（卖家）"
+                    android:textColor="#ff9900"
+                    android:textSize="11sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|right"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="1"
+                android:gravity="bottom|right"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/check_logistics_btn"
+                    android:id="@+id/check_refuse_intervene"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@mipmap/refuse_btn_bg"
                     android:gravity="center"
-                    android:text="查看物流"
-                    android:textColor="#333"
-                    android:textSize="12sp"
+                    android:text="退货/退款"
+                    android:textColor="#666"
+                    android:textSize="13sp"
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/payment_btn"
+                    android:id="@+id/item_refuse_audit_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@mipmap/payment_btn_bg"
-                    android:gravity="center"
-                    android:text="付款"
-                    android:textColor="@color/red_font"
+                    android:text="退款审核中"
+                    android:textColor="#ff9900"
                     android:textSize="13sp"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
 
+                <TextView
+                    android:id="@+id/item_refuse_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="退款关闭"
+                    android:textColor="#666"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
-
-        <View style="@style/myline" />
     </LinearLayout>
-
-    <View
-        android:id="@+id/blank_view"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/distance"
-        android:background="@color/background" />
-
 
 </LinearLayout>

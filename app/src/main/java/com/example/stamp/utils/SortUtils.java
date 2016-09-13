@@ -33,12 +33,12 @@ public class SortUtils {
 	 */
 	public static String MapSort(HashMap<String, String> map) {
 		// 添加都有的字段
-		map.put(StaticField.APP_KEY, StaticField.APP_KEY_CODE);
-		map.put(StaticField.VERSION, StaticField.VERSION_CODE);
+		map.put(StaticField.APP_KEY, StaticField.APP_KEY_CODE); //服务器端分配统一编号
+		map.put(StaticField.VERSION, StaticField.VERSION_CODE); //版本号
 		// 获取手机信息
 		String phone_info = PhoneUtile.getPhone_info();
-		map.put(StaticField.PHONE_INFO, phone_info);
-		map.put(StaticField.IMEI, IMEI.getIMEI());
+		map.put(StaticField.PHONE_INFO, phone_info); //手机信息
+		map.put(StaticField.IMEI, IMEI.getIMEI());//手机IMEI码
 		// 下面是排序
 		Object[] key_arr = map.keySet().toArray();
 		Arrays.sort(key_arr);

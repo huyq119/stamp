@@ -82,6 +82,7 @@ public class StaticField {
     //淘邮票
     public static final String GOODSLIST = "cn.com.chinau.goodslist.query";
     public static final String GOODS_SOURCE = "goods_source";
+    public static final String GOODSSOURCE = "SC_ZY,SC_DSF,YS,JP";
 
     //省市区县查询
     public static final String NATION = "cn.com.chinau.nation.query";

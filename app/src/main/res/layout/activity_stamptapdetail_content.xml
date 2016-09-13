@@ -18,13 +18,16 @@
             android:background="#f8f8f8"
             android:orientation="vertical">
 
-            <include layout="@layout/base_viewpager" />
+            <include layout="@layout/base_viewpager"
+                />
 
-            <View style="@style/myline" />
+            <View style="@style/myline"
+                android:layout_marginTop="10dp"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="46dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -33,6 +36,7 @@
                     android:layout_marginLeft="@dimen/left_distance"
                     android:gravity="center_vertical"
                     android:text="@string/market_price"
+                    android:textSize="18sp"
                     android:textColor="#666" />
 
                 <TextView
@@ -43,6 +47,7 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="10000"
+                    android:textSize="18sp"
                     android:textColor="#e20000" />
 
                 <TextView

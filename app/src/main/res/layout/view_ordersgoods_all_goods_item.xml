@@ -195,15 +195,8 @@
 
             </LinearLayout>
         </LinearLayout>
-
-        <View style="@style/myline" />
     </LinearLayout>
 
-    <View
-        android:id="@+id/blank_view"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/distance"
-        android:background="@color/background" />
 
 
 </LinearLayout>
