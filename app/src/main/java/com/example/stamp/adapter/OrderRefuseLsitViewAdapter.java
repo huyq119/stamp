@@ -84,6 +84,7 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter{
         if (view == null) {
             gholder = new GroupViewHolder();
             view = View.inflate(context, R.layout.view_ordersgoods_all_group_item, null);
+            gholder.mView = (LinearLayout)view.findViewById(R.id.blank_view_ll);
             gholder.mName = (TextView) view.findViewById(R.id.item_goods_name);
             gholder.mEntry = (TextView) view.findViewById(R.id.item_goods_order_entry);
 
@@ -99,13 +100,20 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter{
         if (i==0){
             gholder.mName.setText("邮票商城");
             gholder.mEntry.setText("竞拍");
+            gholder.mView.setVisibility(View.GONE);
         }else if (i==1){
             gholder.mName.setText("邮票加盟商城");
             gholder.mEntry.setText("自营");
+            gholder.mView.setVisibility(View.VISIBLE);
         }
         else if (i==2){
             gholder.mName.setText("我爱集邮商城");
             gholder.mEntry.setText("邮市");
+            gholder.mView.setVisibility(View.VISIBLE);
+        }else if (i==3){
+            gholder.mName.setText("邮票收藏商城");
+            gholder.mEntry.setText("第三方");
+            gholder.mView.setVisibility(View.VISIBLE);
         }
 
         return view;
@@ -123,13 +131,11 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter{
             goodsholder.mNames = (TextView) view.findViewById(R.id.item_stamp_name);
             goodsholder.mPrice = (TextView) view.findViewById(R.id.item_stamp_price);
             goodsholder.mCount = (TextView) view.findViewById(R.id.item_stamp_count);
-            goodsholder.mStatus= (TextView) view.findViewById(R.id.item_stamp_status);
-            goodsholder.mAllCount= (TextView) view.findViewById(R.id.item_stamp_allCount);
-            goodsholder.mAllPrice= (TextView) view.findViewById(R.id.item_stamp_allPrice);
-            goodsholder.mBtnLl= (LinearLayout) view.findViewById(R.id.item_stamp_btn_ll);
-            goodsholder.mLogistics = (TextView) view.findViewById(R.id.check_logistics_btn);
-            goodsholder.mPayment = (TextView) view.findViewById(R.id.payment_btn);
-
+            goodsholder.mRejectLl= (LinearLayout) view.findViewById(R.id.item_refuse_reject_ll);
+            goodsholder.mReject = (TextView) view.findViewById(R.id.item_refuse_reject_tv);
+            goodsholder.mRefuse_Intervene= (TextView) view.findViewById(R.id.check_refuse_intervene);
+            goodsholder.mAudit= (TextView) view.findViewById(R.id.item_refuse_audit_tv);
+            goodsholder.mClose= (TextView) view.findViewById(R.id.item_refuse_close);
             view.setTag(goodsholder);
         } else {
             goodsholder = (GoodsViewHolder) view.getTag();
@@ -143,52 +149,53 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter{
             goodsholder.mNames.setText(goodsBean.getGoods_name());
             goodsholder.mPrice.setText(goodsBean.getGoods_price());
             goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mStatus.setText(goodsBean.getStatus());
-            goodsholder.mAllCount.setText("1");
-            goodsholder.mAllPrice.setText("￥"+1000000.00);
-            goodsholder.mBtnLl.setVisibility(View.GONE);
+            goodsholder.mRejectLl.setVisibility(View.GONE);
+            goodsholder.mRefuse_Intervene.setVisibility(View.VISIBLE);
+            goodsholder.mRefuse_Intervene.setText("退货/退款");
+            goodsholder.mAudit.setVisibility(View.GONE);
+            goodsholder.mClose.setVisibility(View.GONE);
+
         }else if (i==1){
             goodsholder.mNames.setText(goodsBean.getGoods_name());
             goodsholder.mPrice.setText(goodsBean.getGoods_price());
             goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mStatus.setText("待付款");
-            goodsholder.mAllCount.setText("1");
-            goodsholder.mAllPrice.setText("￥"+1000000.00);
-            goodsholder.mBtnLl.setVisibility(View.VISIBLE);
-            goodsholder.mPayment.setVisibility(View.VISIBLE);
-            goodsholder.mLogistics.setVisibility(View.GONE);
+            goodsholder.mRejectLl.setVisibility(View.GONE);
+            goodsholder.mRefuse_Intervene.setVisibility(View.GONE);
+            goodsholder.mAudit.setVisibility(View.VISIBLE);
+            goodsholder.mAudit.setText("退款审核中");
+            goodsholder.mClose.setVisibility(View.GONE);
         }else if (i==2){
             goodsholder.mNames.setText(goodsBean.getGoods_name());
             goodsholder.mPrice.setText(goodsBean.getGoods_price());
             goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mStatus.setText("待收货");
-            goodsholder.mAllCount.setText("1");
-            goodsholder.mAllPrice.setText("￥"+1000000.00);
-            goodsholder.mBtnLl.setVisibility(View.VISIBLE);
-            goodsholder.mLogistics.setVisibility(View.VISIBLE);
-            goodsholder.mPayment.setVisibility(View.GONE);
+            goodsholder.mRejectLl.setVisibility(View.GONE);
+            goodsholder.mRefuse_Intervene.setVisibility(View.GONE);
+            goodsholder.mAudit.setVisibility(View.GONE);
+            goodsholder.mClose.setVisibility(View.VISIBLE);
+            goodsholder.mClose.setText("退款关闭");
         }else if (i==3){
             goodsholder.mNames.setText(goodsBean.getGoods_name());
             goodsholder.mPrice.setText(goodsBean.getGoods_price());
             goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mStatus.setText("已完成");
-            goodsholder.mAllCount.setText("1");
-            goodsholder.mAllPrice.setText("￥"+1000000.00);
-            goodsholder.mBtnLl.setVisibility(View.VISIBLE);
-            goodsholder.mLogistics.setVisibility(View.VISIBLE);
-            goodsholder.mPayment.setVisibility(View.GONE);
+            goodsholder.mRejectLl.setVisibility(View.VISIBLE);
+            goodsholder.mReject.setText("退款驳回（卖家）");
+            goodsholder.mRefuse_Intervene.setVisibility(View.VISIBLE);
+            goodsholder.mRefuse_Intervene.setText("申请平台介入");
+            goodsholder.mAudit.setVisibility(View.GONE);
+            goodsholder.mClose.setVisibility(View.GONE);
         }
 
-        goodsholder.mPayment.setOnClickListener(new View.OnClickListener() {
+        goodsholder.mRefuse_Intervene.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyToast.showShort(context,"付款...");
-            }
-        });
-        goodsholder.mLogistics.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyToast.showShort(context,"查看了物流...");
+               String mText =  goodsholder.mRefuse_Intervene.getText().toString().trim();
+                if (mText.equals("退货/退款")){
+
+                    MyToast.showShort(context,"退货/退款...");
+                }else{
+                    MyToast.showShort(context,"申请平台介入");
+
+                }
             }
         });
 
@@ -207,14 +214,16 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter{
      */
     private class GroupViewHolder {
         private TextView mName,mEntry; // 商城，购买类型
+        private LinearLayout mView; //分割项
     }
     /**
      * 子元素绑定器
      */
     private class GoodsViewHolder {
-        private ImageView img;
-        private LinearLayout mBtnLl;
-        private TextView mNames,mPrice,mCount,mStatus,mAllCount,mAllPrice,mLogistics,mPayment; // 名称，价格
+        private ImageView img;// 图片
+        private LinearLayout mRejectLl; //驳回LL
+        private TextView mNames,mPrice,mCount,mReject,mRefuse_Intervene,mAudit,mClose; // 名称，价格,数量，驳回，退货/退款，退款审核中，退款关闭
+        private View mView; //分割项
     }
 
 }

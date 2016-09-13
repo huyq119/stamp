@@ -187,15 +187,16 @@ public class OrdersGoodsActivity extends BaseActivity {
         refuse_edListview = (ExpandableListView) v5.findViewById(R.id.all_expand_ListView);
 
 
-        OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap, groups, goods);
+        OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap, groups, goods);// 全部适配器
+        // （待付款，待收货，已完成）适配器
         OrderPaymentReceivingCompleteLsitViewAdapter PayRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(this, mBitmap, groups, goods);
-        OrderRefuseLsitViewAdapter RefuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(this, mBitmap, groups, goods);
+        OrderRefuseLsitViewAdapter RefuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(this, mBitmap, groups, goods);// 退货/ 退款适配器
 
         all_edListview.setAdapter(allLsitViewAdapter);
         payment_edListview.setAdapter(PayRecComLsitViewAdapter);
         receiving_edListview.setAdapter(PayRecComLsitViewAdapter);
         complete_edListview.setAdapter(PayRecComLsitViewAdapter);
-        refuse_edListview.setAdapter(allLsitViewAdapter);
+        refuse_edListview.setAdapter(RefuseLsitViewAdapter);
         for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
             all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
             payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
@@ -243,7 +244,7 @@ public class OrdersGoodsActivity extends BaseActivity {
 
     private void initDatas() {
         groups = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 8; i++) {
             groups.add(new OrderAllListViewGoodsBean.OrdersDataList.SellerDataList());
             List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList> products = new ArrayList<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>();
             for (int j = 0; j < 2; j++) {

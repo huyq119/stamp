@@ -85,6 +85,7 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter{
         if (view == null) {
             gholder = new GroupViewHolder();
             view = View.inflate(context, R.layout.view_ordersgoods_all_group_item, null);
+            gholder.mView = (LinearLayout)view.findViewById(R.id.blank_view_ll);
             gholder.mName = (TextView) view.findViewById(R.id.item_goods_name);
             gholder.mEntry = (TextView) view.findViewById(R.id.item_goods_order_entry);
 
@@ -100,13 +101,20 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter{
         if (i==0){
             gholder.mName.setText("邮票商城");
             gholder.mEntry.setText("竞拍");
+            gholder.mView.setVisibility(View.GONE);
         }else if (i==1){
             gholder.mName.setText("邮票加盟商城");
             gholder.mEntry.setText("自营");
+            gholder.mView.setVisibility(View.VISIBLE);
         }
         else if (i==2){
             gholder.mName.setText("我爱集邮商城");
             gholder.mEntry.setText("邮市");
+            gholder.mView.setVisibility(View.VISIBLE);
+        }else if (i==3){
+            gholder.mName.setText("邮票收藏商城");
+            gholder.mEntry.setText("第三方");
+            gholder.mView.setVisibility(View.VISIBLE);
         }
 
         return view;
@@ -208,6 +216,7 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter{
      */
     private class GroupViewHolder {
         private TextView mName,mEntry; // 商城，购买类型
+        private LinearLayout mView; //分割项
     }
     /**
      * 子元素绑定器
