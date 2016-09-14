@@ -11,7 +11,6 @@ import com.example.stamp.adapter.ExpandableAdapter;
 import com.example.stamp.base.BaseFragment;
 import com.example.stamp.bean.ShopNameBean;
 import com.example.stamp.listener.ShopListenerFace;
-import com.example.stamp.utils.MyLog;
 import com.example.stamp.utils.ShoppingCartBiz;
 
 import java.util.ArrayList;
@@ -61,7 +60,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
     private void initListener() {
         mGoToPay.setOnClickListener(this);
-        mEdit.setOnClickListener(this);
+        mEdit.setOnClickListener(expandableAdapter.getAdapterListener());
         mAll.setOnClickListener(expandableAdapter.getAdapterListener());
         mContentListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -86,7 +85,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             mSellerBean.add(sellerBean);
         }
         shopNameBean = new ShopNameBean(mSellerBean, "35000");
-        expandableAdapter = new ExpandableAdapter(getActivity(), mBitmap, shopNameBean, mEditFlag);
+        expandableAdapter = new ExpandableAdapter(getActivity(), mBitmap, shopNameBean);
         mContentListView.setAdapter(expandableAdapter);
         //让子控件全部展开
         for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
@@ -122,24 +121,24 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             case R.id.Shop_pay://结算按钮
                 openActivityWitchAnimation(FirmOrderActivity.class);
                 break;
-            case R.id.base_search://编辑按钮
-                if (mEditFlag) {
-                    mEdit.setText("完成");
-                    mEditFlag = false;
-                } else {
-                    mEdit.setText("编辑");
-                    mEditFlag = true;
-                }
-                MyLog.e(mEditFlag + "");
-                expandableAdapter = new ExpandableAdapter(getActivity(), mBitmap, shopNameBean, mEditFlag);
-                mContentListView.setAdapter(expandableAdapter);
-                //让子控件全部展开
-                for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
-                    mContentListView.expandGroup(i);
-                }
-                //去掉自带按钮
-                mContentListView.setGroupIndicator(null);
-                break;
+//            case R.id.base_search://编辑按钮
+//                if (mEditFlag) {
+//                    mEdit.setText("完成");
+//                    mEditFlag = false;
+//                } else {
+//                    mEdit.setText("编辑");
+//                    mEditFlag = true;
+//                }
+//                MyLog.e(mEditFlag + "");
+//                expandableAdapter = new ExpandableAdapter(getActivity(), mBitmap, shopNameBean, mEditFlag);
+//                mContentListView.setAdapter(expandableAdapter);
+//                //让子控件全部展开
+//                for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
+//                    mContentListView.expandGroup(i);
+//                }
+//                //去掉自带按钮
+//                mContentListView.setGroupIndicator(null);
+//                break;
             default:
                 break;
         }

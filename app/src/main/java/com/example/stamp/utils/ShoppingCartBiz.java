@@ -117,7 +117,6 @@ public class ShoppingCartBiz {
         boolean isSelectAll;
         //子View的状态取反
         boolean isSelectedOne = !(list.get(groupPosition).getGoods_list().get(childPosition).isChildSelected());
-        MyLog.e("" + isSelectedOne);
         //处理单个View的状态
         list.get(groupPosition).getGoods_list().get(childPosition).setChildSelected(isSelectedOne);
         //组内View是否全选的标识
