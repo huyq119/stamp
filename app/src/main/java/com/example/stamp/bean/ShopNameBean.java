@@ -11,10 +11,12 @@ public class ShopNameBean extends BaseBean {
     public ArrayList<SellerBean> seller_list;//卖家列表
     public String goods_total_amount;//商品总金额
 
+
     public ShopNameBean(ArrayList<SellerBean> seller_list, String goods_total_amount) {
         this.seller_list = seller_list;
         this.goods_total_amount = goods_total_amount;
     }
+
     public ArrayList<SellerBean> getSeller_list() {
         return seller_list;
     }
@@ -31,14 +33,33 @@ public class ShopNameBean extends BaseBean {
         this.goods_total_amount = goods_total_amount;
     }
 
+    @Override
+    public String toString() {
+        return "ShopNameBean{" +
+                "seller_list=" + seller_list +
+                ", goods_total_amount='" + goods_total_amount + '\'' +
+                '}';
+    }
+
     /**
      * 卖家列表数据
      */
-    public static class SellerBean extends BaseInfo {
+    public static class SellerBean {
         public String seller_name;//卖家名称
         public String seller_type;//卖家类型
         public String seller_no;//卖家账号
         public ArrayList<GoodsBean> goods_list;//商品列表
+
+        public boolean isGroupSelected;//默认父View是否被选中
+
+
+        public boolean isGroupSelected() {
+            return isGroupSelected;
+        }
+
+        public void setGroupSelected(boolean groupSelected) {
+            isGroupSelected = groupSelected;
+        }
 
         public SellerBean(String seller_name, String seller_type, String seller_no, ArrayList<GoodsBean> goods_list) {
             this.seller_name = seller_name;
@@ -79,31 +100,45 @@ public class ShopNameBean extends BaseBean {
         public void setSeller_name(String seller_name) {
             this.seller_name = seller_name;
         }
+
+        @Override
+        public String toString() {
+            return "SellerBean{" +
+                    "seller_name='" + seller_name + '\'' +
+                    ", seller_type='" + seller_type + '\'' +
+                    ", seller_no='" + seller_no + '\'' +
+                    ", goods_list=" + goods_list +
+                    ", isGroupSelected=" + isGroupSelected +
+                    '}';
+        }
     }
 
     /**
      * 商品信息对象
      */
-    public static class GoodsBean extends BaseInfo {
+    public static class GoodsBean {
         public String goods_img;//商品图片
         public String goods_name;//商品名称
         public String goods_sn;//商品编号
-        public double goods_price;//商品单价
-        public int goods_count;//商品数量
+        public String goods_price;//商品单价
+        public String goods_count;//商品数量
+        public boolean isChildSelected;//子View是否显示
 
+        public boolean isChildSelected() {
+            return isChildSelected;
+        }
 
+        public void setChildSelected(boolean childSelected) {
+            isChildSelected = childSelected;
+        }
 
-
-
-
-        public GoodsBean( String goods_img, String goods_name, String goods_sn, double goods_price, int goods_count) {
+        public GoodsBean(String goods_img, String goods_name, String goods_sn, String goods_price, String goods_count) {
             this.goods_img = goods_img;
             this.goods_name = goods_name;
             this.goods_sn = goods_sn;
             this.goods_price = goods_price;
             this.goods_count = goods_count;
         }
-
 
 
         public String getGoods_img() {
@@ -114,11 +149,11 @@ public class ShopNameBean extends BaseBean {
             this.goods_img = goods_img;
         }
 
-        public double getGoods_price() {
+        public String getGoods_price() {
             return goods_price;
         }
 
-        public void setGoods_price(double goods_price) {
+        public void setGoods_price(String goods_price) {
             this.goods_price = goods_price;
         }
 
@@ -138,14 +173,25 @@ public class ShopNameBean extends BaseBean {
             this.goods_name = goods_name;
         }
 
-        public int getGoods_count() {
+        public String getGoods_count() {
             return goods_count;
         }
 
-        public void setGoods_count(int goods_count) {
+        public void setGoods_count(String goods_count) {
             this.goods_count = goods_count;
         }
 
 
+        @Override
+        public String toString() {
+            return "GoodsBean{" +
+                    "goods_img='" + goods_img + '\'' +
+                    ", goods_name='" + goods_name + '\'' +
+                    ", goods_sn='" + goods_sn + '\'' +
+                    ", goods_price='" + goods_price + '\'' +
+                    ", goods_count=" + goods_count +
+                    ", isChildSelected=" + isChildSelected +
+                    '}';
+        }
     }
 }

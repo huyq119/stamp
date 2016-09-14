@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?><!--购物车父条目-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:id="@+id/order_liner"
-    android:layout_height="wrap_content"
-    android:minHeight="44dp"
-    android:background="#ffffff"
-    android:orientation="horizontal">
+              android:id="@+id/order_liner"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="#ffffff"
+              android:minHeight="44dp"
+              android:orientation="horizontal">
 
-    <CheckBox
-        android:id="@+id/checkbox"
+    <ImageView
+        android:id="@+id/image_selected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="15dp"
-        android:background="@null"
-        android:button="@drawable/select_bg"
-        android:visibility="visible" />
+        android:src="@drawable/select_bg"/>
 
 
     <TextView
@@ -24,12 +22,12 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/distance"
         android:layout_weight="1"
+        android:drawableLeft="@mipmap/shop_icon"
+        android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:text="邮来邮网自营商店"
         android:textColor="#333"
-        android:drawableLeft="@mipmap/shop_icon"
-        android:drawablePadding="10dp"
-        android:textSize="11sp" />
+        android:textSize="11sp"/>
 
     <TextView
         android:id="@+id/group_type"
@@ -39,5 +37,5 @@
         android:gravity="center_vertical"
         android:text="自营"
         android:textColor="#e20000"
-        android:textSize="11sp" />
+        android:textSize="11sp"/>
 </LinearLayout>
