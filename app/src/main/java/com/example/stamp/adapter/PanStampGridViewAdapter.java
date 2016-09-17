@@ -65,17 +65,31 @@ public class PanStampGridViewAdapter extends BaseAdapter {
         GoodsStampBean.GoodsList mGoodsList = list.get(i);
         //设置图片
         viewHolder.mName.setText(mGoodsList.getGoods_name());
-        viewHolder.mMoney.setText("￥"+mGoodsList.getCurrent_price());
+        viewHolder.mMoney.setText("￥" + mGoodsList.getCurrent_price());
         bitmap.display(viewHolder.mIcon, mGoodsList.getGoods_img());
-        viewHolder.mSource.setText(mGoodsList.getGoods_source());
+        String mGoods_source = mGoodsList.getGoods_source();
 
-    return view;
-}
+        if (!mGoods_source.equals("")) {
+            if (mGoods_source.equals("SC_ZY")) {
+                viewHolder.mSource.setText("自营");
+            }else if(mGoods_source.equals("YS")){
+                viewHolder.mSource.setText("邮市");
+
+            }else if(mGoods_source.equals("SC_DSF")){
+                viewHolder.mSource.setText("第三方");
+
+            }else if(mGoods_source.equals("JP")){
+                viewHolder.mSource.setText("竞拍");
+            }
+        }
+
+        return view;
+    }
 
 
-public class ViewHolder {
-    public ImageView mIcon;//图片
-    public TextView mName, mMoney; //名称,钱数,
-    public RotateTextView mSource;// 商品类型
-}
+    public class ViewHolder {
+        public ImageView mIcon;//图片
+        public TextView mName, mMoney; //名称,钱数,
+        public RotateTextView mSource;// 商品类型
+    }
 }

@@ -22,7 +22,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/market_rb_synthesize"
+            android:id="@+id/panStamp_synthesize"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -45,7 +45,7 @@
             android:background="#dedfe3" />
 
         <Button
-            android:id="@+id/market_rb_sales"
+            android:id="@+id/panStamp_sales"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -68,7 +68,7 @@
             android:background="#dedfe3" />
 
         <Button
-            android:id="@+id/market_rb_value"
+            android:id="@+id/panStamp_value"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

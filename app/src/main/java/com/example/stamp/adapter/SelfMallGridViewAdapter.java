@@ -1,7 +1,6 @@
 package com.example.stamp.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -16,16 +15,16 @@ import com.lidroid.xutils.BitmapUtils;
 import java.util.ArrayList;
 
 /**
- * 邮市GridView的适配器
+ * 商城GridView的适配器
  * Created by Administrator on 2016/8/4.
  */
-public class StampMarketGridViewAdapter extends BaseAdapter {
+public class SelfMallGridViewAdapter extends BaseAdapter {
 
-    private ArrayList<GoodsStampBean.GoodsList> list;//填入的集合
+    private ArrayList<StampTapBean.StampList> list;//填入的集合
     private Context context;
     private BitmapUtils bitmap;
 
-    public StampMarketGridViewAdapter(Context context, ArrayList<GoodsStampBean.GoodsList> list, BitmapUtils bitmap) {
+    public SelfMallGridViewAdapter(Context context, ArrayList<StampTapBean.StampList> list, BitmapUtils bitmap) {
         this.list = list;
         this.context = context;
         this.bitmap = bitmap;
@@ -61,11 +60,11 @@ public class StampMarketGridViewAdapter extends BaseAdapter {
         }
 
         //设置数据
-        GoodsStampBean.GoodsList mGoodsList = list.get(i);
-        viewHolder.mName.setText(mGoodsList.getGoods_name());
-        viewHolder.mPrice.setText(mGoodsList.getCurrent_price());
-        bitmap.display(viewHolder.mImg, mGoodsList.getGoods_img());
+        StampTapBean.StampList mStampList = list.get(i);
+        viewHolder.mName.setText(mStampList.getStamp_name());
+        viewHolder.mPrice.setText(mStampList.getCurrent_price());
         //设置图片
+        bitmap.display(viewHolder.mImg, mStampList.getStamp_img());
 
 
         return view;

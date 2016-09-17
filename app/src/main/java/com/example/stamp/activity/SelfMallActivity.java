@@ -3,6 +3,8 @@ package com.example.stamp.activity;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
@@ -16,9 +18,11 @@ import android.widget.TextView;
 
 import com.example.stamp.R;
 import com.example.stamp.StaticField;
+import com.example.stamp.adapter.SelfMallGridViewAdapter;
 import com.example.stamp.adapter.StampMarketGridViewAdapter;
 import com.example.stamp.adapter.StampTapGridViewAdapter;
 import com.example.stamp.base.BaseActivity;
+import com.example.stamp.bean.GoodsStampBean;
 import com.example.stamp.bean.StampTapBean;
 import com.example.stamp.dialog.PanStampFilterDialog;
 import com.example.stamp.dialog.StampTapFilterDialog;
@@ -30,6 +34,7 @@ import com.example.stamp.utils.MyLog;
 import com.example.stamp.utils.ScreenUtils;
 import com.example.stamp.utils.SortUtils;
 import com.example.stamp.utils.ThreadManager;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +52,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     private Button mSynthesize, mSales, mPrice, mFilter, mTopBtn;// 综合，销量，价格，筛选,置顶
     private GridView mGridView;
     private StampMarketGridViewAdapter mStampMarAdapter;
-    private ArrayList<StampTapBean.StampList> mList;
+    private ArrayList<GoodsStampBean.GoodsList> mList;
     private List<Fragment> mPopupList;//展示PopupWindow页面的Fragment的集合
     private String[] arr = {"自营商城", "第三方商家"};
     private int mCount;
@@ -58,6 +63,23 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     private String[] arrYear = {"2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005"};
     private String[] arrPopson= {"任平", "于平", "甲钴胺", "邮票","任平", "于平", "甲钴胺", "邮票","任平", "于平", "甲钴胺", "邮票"};
     private TextView mTitle;
+    private int num = 0;//初始索引
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case StaticField.SUCCESS://商城Lsit
+                    Gson gson = new Gson();
+                    GoodsStampBean mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
+                    mList = mGoodsStampBean.getGoods_list();
+                    initAdapter();
+                    break;
+            }
+        }
+    };
+
 
     @Override
     public View CreateTitle() {
@@ -70,17 +92,12 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
         mSelfMallContent = View.inflate(this, R.layout.activity_selfmall_content, null);
         initView();
         initData();
-        initAdapter();
         initListener();
         return mSelfMallContent;
     }
 
     private void initView() {
 
-        mList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mList.add(new StampTapBean.StampList("庚申年", "￥1000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-        }
         mBack = (ImageView) mSelfMallTitle.findViewById(R.id.base_title_back);
         mTitle = (TextView) mSelfMallTitle.findViewById(R.id.base_title);
         mTitle.setText("商城");
@@ -115,10 +132,10 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initAdapter() {
-//        if (gvAdapter == null) {
+        if (mStampMarAdapter == null) {
         //为GridView设置适配器
         mStampMarAdapter = new StampMarketGridViewAdapter(this, mList, mBitmap);
-//        }
+        }
         //内容GridView设置适配器
         mGridView.setAdapter(mStampMarAdapter);
         mStampMarAdapter.notifyDataSetChanged();
@@ -150,16 +167,48 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
         }
 
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-//        RequestNet(StaticField.ZH, num, StaticField.A);
-        for (int i = 0; i < 10; i++) {
-            mList.add(new StampTapBean.StampList("庚申年", "￥1000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-        }
+        RequestNet(StaticField.ZH, num, StaticField.A);
     }
 
 
     @Override
     public void AgainRequest() {
 
+    }
+    /**
+     *  商城list网络请求
+     * @param Order_By 类别
+     * @param index 角标
+     * @param Sort 排序
+     */
+    private void RequestNet(final String Order_By, final int index, final String Sort) {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.GOODSLIST);// 接口名称
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
+                params.put(StaticField.GOODS_SOURCE,StaticField.GOODSMALL); // 商品类型
+                params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；XL销量；JG价格)
+                params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
+                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                MyLog.e(md5code);
+                params.put(StaticField.SIGN, md5code); // 签名
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                Log.e("result+邮市~~~~>", result);
+                if (result.equals("-1")) {
+                    return;
+                }
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        });
     }
 
     @Override
@@ -188,24 +237,11 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 // true代表降序,false代表升序
                 if (Synthesizeflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-//                    RequestNet(StaticField.ZH, num, StaticField.D);
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("庚申年", "￥1000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-                    }
-                    initAdapter();
-
+                    RequestNet(StaticField.ZH, num, StaticField.D);
                     Synthesizeflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSynthesize, Color.parseColor("#ff0000"));
-//                    RequestNet(StaticField.ZH, num, StaticField.A);
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("戊戌年", "￥200000.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
-                    }
-                    initAdapter();
+                    RequestNet(StaticField.ZH, num, StaticField.A);
                     Synthesizeflag = true;
                 }
                 break;
@@ -216,25 +252,11 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
 
                 if (Salesflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSales, Color.parseColor("#ff0000"));
-//                    RequestNet(StaticField.SJ, num, StaticField.D);
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("戊戌年", "￥30000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-                    }
-                    initAdapter();
-
+                    RequestNet(StaticField.XL, num, StaticField.D);
                     Salesflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSales, Color.parseColor("#ff0000"));
-//                    RequestNet(StaticField.SJ, num, StaticField.A);
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("乾隆年", "￥10120000.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
-                    }
-                    initAdapter();
-
+                    RequestNet(StaticField.XL, num, StaticField.A);
                     Salesflag = true;
                 }
                 break;
@@ -245,26 +267,12 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
 
                 if (Priceflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mPrice, Color.parseColor("#ff0000"));
-//                    RequestNet(StaticField.JG, num, StaticField.D);
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("康熙年", "￥1000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-                    }
-                    initAdapter();
-
+                    RequestNet(StaticField.JG, num, StaticField.D);
                     Priceflag = false;
                 } else {
                     Log.e("flag", "false");
                     setDrawable(R.mipmap.top_arrow_top, mPrice, Color.parseColor("#ff0000"));
-//                    RequestNet(StaticField.JG, num, StaticField.A);
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("乾隆年", "￥41111000.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
-                    }
-                    initAdapter();
-
+                    RequestNet(StaticField.JG, num, StaticField.A);
                     Priceflag = true;
                 }
                 break;

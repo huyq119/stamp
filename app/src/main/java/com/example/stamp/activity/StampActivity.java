@@ -2,6 +2,8 @@ package com.example.stamp.activity;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -20,6 +22,7 @@ import com.example.stamp.adapter.AuctionListViewAdapter;
 import com.example.stamp.adapter.StampMarketGridViewAdapter;
 import com.example.stamp.adapter.StampHorizontalListViewAdapter;
 import com.example.stamp.base.BaseActivity;
+import com.example.stamp.bean.GoodsStampBean;
 import com.example.stamp.bean.StampBean;
 import com.example.stamp.bean.StampTapBean;
 import com.example.stamp.http.HttpUtils;
@@ -30,6 +33,7 @@ import com.example.stamp.utils.ScreenUtils;
 import com.example.stamp.utils.SortUtils;
 import com.example.stamp.utils.ThreadManager;
 import com.example.stamp.view.HorizontalListView;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +46,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     private View mStampTitle, mStampContent, mBlankView;
     private HorizontalListView hListView;//横向滑动的listView
     private StampHorizontalListViewAdapter hListViewAdapter;//横向花的listView的适配器
-    private ArrayList<StampTapBean.StampList> mList;
+    private ArrayList<GoodsStampBean.GoodsList> mList;
     private GridView mGridView;
     private ImageView mBack, mSearch;//返回按钮,搜索
     private String[] mArrTitle = {"新中国邮票", "民国邮票", "解放区邮票", "清代邮票"};
@@ -65,7 +69,22 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     private StampMarketGridViewAdapter mStampMarAdapter;
     private LinearLayout mHeartll;//头部的布局
     private GestureDetector mGestureDetector;
+    private int num = 0;//初始索引
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
 
+            switch (msg.what) {
+                case StaticField.SUCCESS://套邮票Lsit
+                    Gson gson = new Gson();
+                    GoodsStampBean mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
+                    mList = mGoodsStampBean.getGoods_list();
+                    initAdapter();
+                    break;
+            }
+        }
+    };
     @Override
     public View CreateTitle() {
         mStampTitle = View.inflate(this, R.layout.base_search_title, null);
@@ -77,17 +96,12 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         mStampContent = View.inflate(this, R.layout.activity_stamp_content, null);
         initView();
         initData();
-        initAdapter();
         initListener();
         return mStampContent;
     }
 
 
     private void initView() {
-        mList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mList.add(new StampTapBean.StampList("庚申年", "￥1000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-        }
         mBack = (ImageView) mStampTitle.findViewById(R.id.base_title_back);
         mSearch = (ImageView) mStampTitle.findViewById(R.id.base_search);
         hListView = (HorizontalListView) mStampContent.findViewById(R.id.stamp_hl);
@@ -106,6 +120,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         mSynthesize = (Button) mStampContent.findViewById(R.id.stamp_synthesize);
         mSales = (Button) mStampContent.findViewById(R.id.stamp_sales);
         mPrice = (Button) mStampContent.findViewById(R.id.stamp_price);
+
         initGestureListener(); // 滑动lsitview隐藏导航栏的方法
     }
 
@@ -127,6 +142,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         //内容GridView设置适配器
         mStampMarAdapter = new StampMarketGridViewAdapter(this, mList, mBitmap);
         mGridView.setAdapter(mStampMarAdapter);
+        mStampMarAdapter.notifyDataSetChanged();
 
         //横向的listView设置适配器
         hListViewAdapter = new StampHorizontalListViewAdapter(this, mArr);
@@ -159,11 +175,11 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         }
 
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-//        RequestNet(StaticField.ZH, num, StaticField.A);
-        for (int i = 0; i < 10; i++) {
-            mList.add(new StampTapBean.StampList("庚申年", "￥1000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-        }
+        RequestNet(StaticField.ZH, num, StaticField.A);
     }
+
+
+
 
     private void initListener() {
         mTopBtn.setOnClickListener(this);
@@ -173,9 +189,11 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         mRepublicChina.setOnClickListener(this);
         mLiberatedArea.setOnClickListener(this);
         mQingDynasty.setOnClickListener(this);
+
         mSynthesize.setOnClickListener(this);
         mSales.setOnClickListener(this);
         mPrice.setOnClickListener(this);
+
         mGridView.setOnScrollListener(this);
         //横向ListView的点击事件
         hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -210,6 +228,41 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
 
     }
 
+    /**
+     *  邮市list网络请求
+     * @param Order_By 类别
+     * @param index 角标
+     * @param Sort 排序
+     */
+    private void RequestNet(final String Order_By, final int index, final String Sort) {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.GOODSLIST);// 接口名称
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
+                params.put(StaticField.GOODS_SOURCE,StaticField.YS ); // 商品类型(SC_ZY,SC_DSF,YS,JP)
+                params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；XL销量；JG价格)
+                params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
+                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                MyLog.e(md5code);
+                params.put(StaticField.SIGN, md5code); // 签名
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                Log.e("result+邮市~~~~>", result);
+                if (result.equals("-1")) {
+                    return;
+                }
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        });
+    }
 
     @Override
     public void onClick(View view) {
@@ -255,91 +308,42 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 // true代表降序,false代表升序
                 if (Synthesizeflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("庚申年", "￥20000.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-                    }
-                    initAdapter();
-                    mStampMarAdapter.notifyDataSetChanged();
-
-//                    RequestNet(StaticField.ZH, num, StaticField.D);
+                    RequestNet(StaticField.ZH, num, StaticField.D);
                     Synthesizeflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSynthesize, Color.parseColor("#ff0000"));
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("戊戌年", "￥100000.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
-                    }
-                    initAdapter();
-                    mStampMarAdapter.notifyDataSetChanged();
-//                    RequestNet(StaticField.ZH, num, StaticField.D);
-
+                    RequestNet(StaticField.ZH, num, StaticField.D);
                     Synthesizeflag = true;
                 }
                 break;
-            case R.id.stamp_sales://价格
+            case R.id.stamp_sales://销量
                 setOtherButton(mSynthesize, mPrice);// (综合，价格)
                 Synthesizeflag = true;
                 Priceflag = true;
 
                 if (Salesflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSales, Color.parseColor("#ff0000"));
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("戊戌年", "￥1000.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
-                    }
-                    initAdapter();
-                    mStampMarAdapter.notifyDataSetChanged();
-
-//                    RequestNet(StaticField.SJ, num, StaticField.D);
+                    RequestNet(StaticField.XL, num, StaticField.D);
                     Salesflag = false;
                 } else {
                     Log.e("flag", "false");
                     setDrawable(R.mipmap.top_arrow_top, mSales, Color.parseColor("#ff0000"));
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("庚申年", "￥2000000.0" + i, "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
-                    }
-                    initAdapter();
-                    mStampMarAdapter.notifyDataSetChanged();
-
-//                    RequestNet(StaticField.SJ, num, StaticField.A);
+                    RequestNet(StaticField.XL, num, StaticField.A);
                     Salesflag = true;
                 }
                 break;
-            case R.id.stamp_price://等待开拍
+            case R.id.stamp_price://价格
                 setOtherButton(mSynthesize, mSales);// (综合，销量)
                 Synthesizeflag = true;
                 Salesflag = true;
 
                 if (Priceflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mPrice, Color.parseColor("#ff0000"));
-//                    RequestNet(StaticField.JG, num, StaticField.D);
-
-                    mList = new ArrayList<>();
-
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("乾隆年", "￥100.0" + i, "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
-                    }
-                    initAdapter();
-                    mStampMarAdapter.notifyDataSetChanged();
-
+                    RequestNet(StaticField.JG, num, StaticField.D);
                     Priceflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mPrice, Color.parseColor("#ff0000"));
-//                    RequestNet(StaticField.JG, num, StaticField.A);
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampTapBean.StampList("康熙年", "￥2120000.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
-                    }
-                    initAdapter();
-                    mStampMarAdapter.notifyDataSetChanged();
-                    http:
-//pic29.nipic.com/20130602/7447430_191109497000_2.jpg
+                    RequestNet(StaticField.JG, num, StaticField.A);
                     Priceflag = true;
                 }
                 break;

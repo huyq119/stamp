@@ -58,8 +58,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
 
     private List<Fragment> mList;
     private String[] arr = {"邮票信息", "价格行情", "邮票故事"};
-    private String[] mImages = {"http://test.chinau.com.cn:8081/chinau-imgserver/attachment///stamp/20160808/2016080809110059084_t7.jpg",
-            "http://test.chinau.com.cn:8081/chinau-imgserver/attachment///stamp/20160808/2016080809110059084_t4.jpg"};
+    private String [] mImages;
     private StampInfoFragment stampInfoFragment;
     //    private StampTapDetailBean stampTapDetailBean;
     private TextView mPrice, mAddAlbum, mTitle;
@@ -80,7 +79,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
                     ArrayList<StampTapDetailBean.StampTapDetail> mStampTapDetail = fromJson.getStamp_info_list();
                     String mImage = mStampTapDetail.get(0).getStamp_image();
                     // 获取的字符串转成数组,以逗号隔开
-                    String[] mImages = mImage.split(",");
+                    mImages =   mImage.split(",");
                     Log.e("mImages+图片~~~~>", mImage);
 
                     String mName = mStampTapDetail.get(0).getName();
@@ -120,7 +119,6 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         mStampTapDetailContent = View.inflate(this, R.layout.activity_stamptapdetail_content, null);
         initView();
         initData();
-        initAdapter();
         initListener();
         return mStampTapDetailContent;
     }

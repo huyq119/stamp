@@ -262,7 +262,19 @@
             android:dividerHeight="1px"
             android:listSelector="@android:color/transparent"
             android:overScrollMode="never"
-            android:scrollbars="none" />
+            android:scrollbars="none"
+            />
+        <TextView
+            android:id="@+id/auction_no_lv_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:text="还未有邮票进行拍卖"
+            android:textColor="#666"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
     <!--置顶按钮-->
