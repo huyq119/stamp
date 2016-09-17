@@ -69,8 +69,6 @@ public class SelfMallGridViewAdapter extends BaseAdapter {
 
         return view;
     }
-
-
     public class ViewHolder {
         public ImageView mImg ;//图片
         public TextView mName,mPrice;//名称,价格

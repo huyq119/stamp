@@ -57,9 +57,10 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     private OrderGoodsViewPager mViewPager;
     private LinearLayout mHearl;
     private String[] arr = {"个人简历", "设计故事", "艺术作品", "名家访谈"};
-    private String[] arrImage = {"http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg",
-            "http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg",
-            "http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg"};
+//    private String[] arrImage = {"http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg",
+//            "http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg",
+//            "http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg"};
+    private String[] arrImage;
     private VerticalScrollView home_SV;
     private Button mTopBtn;// 置顶按钮
     private ListView mStoryList, mWorksList, mViewList;// 设计故事list, 艺术作品list, 名家访谈list
@@ -92,7 +93,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     Gson gson = new Gson();
                     mDetailsBean = gson.fromJson((String) msg.obj, DesignerDetailsBean.class);
                     String mImages = mDetailsBean.getDesigner_images();
-
+                    arrImage = mImages.split(",");
                     String mCHName = mDetailsBean.getChinese_name();
                     String mENName = mDetailsBean.getEnglish_name();
 
@@ -122,6 +123,8 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                         mViewList.setAdapter(mViewAdapter);
 
                     }
+
+                    initAdapter();
                     break;
             }
         }
@@ -140,16 +143,16 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         mDesignerDetailContent = View.inflate(this, R.layout.activity_designer_detail, null);
         initView();
         initData();
-        initAdapter();
+        //底部导航的ViewPager
+        DesignerDetailTapViewPagerAdapter adapter = new DesignerDetailTapViewPagerAdapter(vList, arr);
+        mViewPager.setAdapter(adapter);
         initListener();
         return mDesignerDetailContent;
     }
 
     private void initView() {
-        //获取设计家传过来的内容(中英文名)
+        //获取设计家传过来的内容(设计家编号)
         Bundle bundle = getIntent().getExtras();
-        String mDesignerChinese_name = bundle.getString(StaticField.DESIGNERDETAIL_CHINESE);
-        String mDesignerEnglish_name = bundle.getString(StaticField.DESIGNERDETAIL_ENGLISH);
         mDesigner_sn = bundle.getString(StaticField.DESIGNERSN);
 
         mBack = (ImageView) mDesignerDetailTitle.findViewById(R.id.base_title_back);
@@ -249,11 +252,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         mTopVP.setAdapter(mViewPagerAdapter);
         mTopVPI.setVisibility(View.VISIBLE);
         mTopVPI.setViewPager(mTopVP);
-
-        //底部导航的ViewPager
-        DesignerDetailTapViewPagerAdapter adapter = new DesignerDetailTapViewPagerAdapter(vList, arr);
-        mViewPager.setAdapter(adapter);
-
     }
 
 

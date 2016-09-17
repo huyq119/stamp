@@ -100,7 +100,6 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
         mBack.setOnClickListener(this);
 
     }
-
     /**
      * WEB页面赋值方法
      *
