@@ -1,11 +1,14 @@
 package com.example.stamp.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -25,16 +28,21 @@ import com.example.stamp.adapter.DesignerDetailsStoryAdapter;
 import com.example.stamp.adapter.HomeViewPagerAdapter;
 import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.DesignerDetailsBean;
+import com.example.stamp.http.HttpUtils;
 import com.example.stamp.listener.GestureListener;
+import com.example.stamp.utils.Encrypt;
 import com.example.stamp.utils.MyLog;
 import com.example.stamp.utils.ScreenUtils;
+import com.example.stamp.utils.SortUtils;
+import com.example.stamp.utils.ThreadManager;
 import com.example.stamp.view.OrderGoodsViewPager;
 import com.example.stamp.view.VerticalScrollView;
+import com.google.gson.Gson;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * 设计家详情页面
@@ -49,9 +57,9 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     private OrderGoodsViewPager mViewPager;
     private LinearLayout mHearl;
     private String[] arr = {"个人简历", "设计故事", "艺术作品", "名家访谈"};
-    private String[] arrImage = {"http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg",
-            "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg",
-            "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"};
+    private String[] arrImage = {"http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg",
+            "http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg",
+            "http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg"};
     private VerticalScrollView home_SV;
     private Button mTopBtn;// 置顶按钮
     private ListView mStoryList, mWorksList, mViewList;// 设计故事list, 艺术作品list, 名家访谈list
@@ -70,6 +78,56 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     private int lastVisibleItemPosition = 0;// 标记上次滑动位置
     private int mCount;
     private int mPosition;
+    private String mDesigner_sn,mResume;// 设计家编号，简历
+    private TextView mTitle;
+    private DesignerDetailsBean mDetailsBean;
+    private WebView mResumeWeb;
+    private Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case StaticField.SUCCESS:
+                    Gson gson = new Gson();
+                    mDetailsBean = gson.fromJson((String) msg.obj, DesignerDetailsBean.class);
+                    String mImages = mDetailsBean.getDesigner_images();
+
+                    String mCHName = mDetailsBean.getChinese_name();
+                    String mENName = mDetailsBean.getEnglish_name();
+
+                    mTitle.setText(mCHName + mENName);//赋值中英文名
+                    mResume = mDetailsBean.getResume();// 简历H5地址
+                    if (mResume!=null){
+                        mResumeWeb.loadUrl(mResume);
+                    }
+                    String mShareUrl = mDetailsBean.getShare_url();// 分享url
+                    mListStory = mDetailsBean.getDesign_story_list();// 设计故事
+                    mListWorks = mDetailsBean.getWorks_list();// 艺术作品
+                    mListView = mDetailsBean.getView_list(); // 名家访谈
+
+                    if (mListStory != null && mListStory.size() != 0) {
+                        //设计故事适配器
+                        DesignerDetailsStoryAdapter mPanStampAdapter = new DesignerDetailsStoryAdapter(DesignerDetailActivity.this, mListStory, mBitmap);
+                        mStoryList.setAdapter(mPanStampAdapter);
+                    }
+                    if(mListWorks != null && mListWorks.size() != 0){
+                        // 艺术作品适配器
+                        DesignerDetailWorksAdapter mWorksAdapter = new DesignerDetailWorksAdapter(DesignerDetailActivity.this, mListWorks, mBitmap);
+                        mWorksList.setAdapter(mWorksAdapter);
+                    }
+                    if(mListView != null && mListView.size() != 0){
+                        // 名家访谈适配器
+                        DesignerDetailViewAdapter mViewAdapter = new DesignerDetailViewAdapter(DesignerDetailActivity.this, mListView, mBitmap);
+                        mViewList.setAdapter(mViewAdapter);
+
+                    }
+                    break;
+            }
+        }
+    };
+
+
 
     @Override
     public View CreateTitle() {
@@ -92,11 +150,11 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         Bundle bundle = getIntent().getExtras();
         String mDesignerChinese_name = bundle.getString(StaticField.DESIGNERDETAIL_CHINESE);
         String mDesignerEnglish_name = bundle.getString(StaticField.DESIGNERDETAIL_ENGLISH);
+        mDesigner_sn = bundle.getString(StaticField.DESIGNERSN);
 
         mBack = (ImageView) mDesignerDetailTitle.findViewById(R.id.base_title_back);
         mShared = (ImageView) mDesignerDetailTitle.findViewById(R.id.base_shared);
-        TextView mTitle = (TextView) mDesignerDetailTitle.findViewById(R.id.base_title);
-        mTitle.setText(mDesignerChinese_name + mDesignerEnglish_name);//赋值中英文名
+        mTitle = (TextView) mDesignerDetailTitle.findViewById(R.id.base_title);
         mTopBtn = (Button) mDesignerDetailContent.findViewById(R.id.base_top_btn);// 置顶
         mTopVP = (ViewPager) mDesignerDetailContent.findViewById(R.id.base_viewpager);  //轮播条的View
         mTopVPI = (CirclePageIndicator) mDesignerDetailContent.findViewById(R.id.base_viewpagerIndicator);
@@ -134,6 +192,9 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         mWorksList = (ListView) vWorks.findViewById(R.id.designer_works_lv);
         mViewList = (ListView) vView.findViewById(R.id.designer_view_lv);
         initGestureListener(); // 滑动lsitview隐藏头布局(viewPager,view)的方法
+
+        mResumeWeb = (WebView) vResume.findViewById(R.id.designer_resume_web);
+
     }
 
     /**
@@ -151,21 +212,34 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     }
 
     /**
-     * 添加数据
+     *  设计家详情网络请求
      */
     private void initData() {
-        mListStory = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mListStory.add(new DesignerDetailsBean.DesignerStory("http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg", "陈绍华:《葵已年，未采用稿》", "陈绍华" + i));
-        }
-        mListWorks = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mListWorks.add(new DesignerDetailsBean.DesignerWorks("http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg", "庚申年（金猴）" + i, "T.4" + i, "编年邮票", "1980-02-15", "1枚/套", "￥1000000.00"));
-        }
-        mListView = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mListView.add(new DesignerDetailsBean.DesignerView("http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg", "邮来邮网专访《豫园》特种邮票设计师张安朴" + i, "1980-02-1" + i));
-        }
+
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.DESIGNERDETAIL);// url
+                params.put(StaticField.DESIGNERSN, mDesigner_sn);// 编号
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                if (result.equals("-1")) {
+                    return;
+                }
+
+                MyLog.e("设计家详情~~~>" + result);
+
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        });
+
 
     }
 
@@ -179,17 +253,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         //底部导航的ViewPager
         DesignerDetailTapViewPagerAdapter adapter = new DesignerDetailTapViewPagerAdapter(vList, arr);
         mViewPager.setAdapter(adapter);
-
-        //设计故事适配器
-        DesignerDetailsStoryAdapter mPanStampAdapter = new DesignerDetailsStoryAdapter(this, mListStory, mBitmap);
-        mStoryList.setAdapter(mPanStampAdapter);
-        // 艺术作品适配器
-        DesignerDetailWorksAdapter mWorksAdapter = new DesignerDetailWorksAdapter(this, mListWorks, mBitmap);
-        mWorksList.setAdapter(mWorksAdapter);
-        // 名家访谈适配器
-        DesignerDetailViewAdapter mViewAdapter = new DesignerDetailViewAdapter(this, mListView, mBitmap);
-        mViewList.setAdapter(mViewAdapter);
-
 
     }
 
@@ -209,9 +272,45 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         mStoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                openActivityWitchAnimation(DesignerStoryDetailActivity.class);// 跳转设计故事详情页
+                String mStory_sn = mDetailsBean.getDesign_story_list().get(i).getStory_sn();
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.DTEAIL, "GS");
+                bundle.putString(StaticField.DESIGNER_STORY_SN, mStory_sn);
+                openActivityWitchAnimation(DesignerH5DetailActivity.class,bundle);// 跳转详情页
             }
         });
+        mWorksList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String mWorks_sn = mDetailsBean.getWorks_list().get(i).getWorks_sn();
+                String mCategory= mDetailsBean.getWorks_list().get(i).getCategory();
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.DTEAIL, "ZP");
+                bundle.putString(StaticField.DESIGNER_WORKS_SN, mWorks_sn);
+                bundle.putString(StaticField.DESIGNER_ZP_CATEGORY, mCategory);
+                openActivityWitchAnimation(DesignerH5DetailActivity.class,bundle);// 跳转详情页
+            }
+        });
+        mViewList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String mView_sn = mDetailsBean.getView_list().get(i).getView_sn();
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.DTEAIL, "FT");
+                bundle.putString(StaticField.DESIGNER_VIEW_SN, mView_sn);
+                openActivityWitchAnimation(DesignerH5DetailActivity.class,bundle);// 跳转详情页
+            }
+        });
+
+
+        mResumeWeb.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mGestureDetector.onTouchEvent(motionEvent);
+                return false;
+            }
+        });
+
         mStoryList.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -239,13 +338,11 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
 
     }
 
-
-
-
     @Override
     public void AgainRequest() {
 
     }
+
 
     @Override
     public void onClick(View view) {
@@ -258,13 +355,13 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.base_top_btn://置顶
 
-                if (mPosition == 0){
+                if (mPosition == 0) {
 
-                }else if (mPosition == 1){
+                } else if (mPosition == 1) {
                     StoryListView(0);
-                }else if (mPosition == 2){
+                } else if (mPosition == 2) {
                     WorksListView(0);
-                }else {
+                } else {
                     ViewListView(0);
                 }
                 mTopBtn.setVisibility(View.GONE);// 回到顶部后置顶按钮隐藏
@@ -395,7 +492,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     /**
      * 设计故事StoryListView滑动监听事件
      */
-    private void StoryListViewListener(){
+    private void StoryListViewListener() {
         mStoryList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -488,6 +585,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         });
 
     }
+
     /**
      * 名家访谈ViewListView滑动监听事件
      */
@@ -546,6 +644,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
             mStoryList.setSelection(pos);
         }
     }
+
     /**
      * 滚动WorksListView到指定位置
      */
@@ -556,6 +655,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
             mWorksList.setSelection(pos);
         }
     }
+
     /**
      * 滚动ViewListView到指定位置
      */

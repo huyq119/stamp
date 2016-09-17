@@ -100,9 +100,9 @@
             android:name=".activity.DesignerDetailActivity"
             android:theme="@style/Theme.PageIndicatorDefaults">
         </activity>
-        <!--设计家故事详情页面-->
+        <!--设计家H5详情页面-->
         <activity
-            android:name=".activity.DesignerStoryDetailActivity">
+            android:name=".activity.DesignerH5DetailActivity">
         </activity>
 
         <activity android:name=".activity.OrderAuditingActivity">

@@ -4,14 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <WebView
+        android:id="@+id/designer_resume_web"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="这是H5页面"
-        android:textColor="#000"
-        android:gravity="center_horizontal"
-        android:textSize="20sp"
-        />
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+    </WebView>
 
 
 </LinearLayout>

@@ -3,44 +3,10 @@ package com.example.stamp.bean;
 import java.util.ArrayList;
 
 /**
- * 设计家
+ * 设计家List
  * Created by Administrator on 2016/8/9.
  */
 public class DesignerBean extends BaseBean {
-
-//    public String IconUrl;
-//    public String Title;
-//    public String Detail;
-//
-//    public DesignerBean(String iconUrl, String detail, String title) {
-//        IconUrl = iconUrl;
-//        Detail = detail;
-//        Title = title;
-//    }
-//
-//    public String getTitle() {
-//        return Title;
-//    }
-//
-//    public void setTitle(String title) {
-//        Title = title;
-//    }
-//
-//    public String getDetail() {
-//        return Detail;
-//    }
-//
-//    public void setDetail(String detail) {
-//        Detail = detail;
-//    }
-//
-//    public String getIconUrl() {
-//        return IconUrl;
-//    }
-//
-//    public void setIconUrl(String iconUrl) {
-//        IconUrl = iconUrl;
-//    }
 
     public ArrayList<Designer> designer_list;
 

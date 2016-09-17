@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -22,17 +21,18 @@
             android:layout_centerInParent="true"
             android:layout_margin="10dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@mipmap/ic_launcher" />
 
         <com.example.stamp.view.RotateTextView
+            android:id="@+id/works_category_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@mipmap/tag"
-            android:paddingRight="7dp"
-            android:paddingTop="9dp"
+            android:paddingRight="9dp"
+            android:paddingTop="7dp"
             android:text="邮票目录"
             android:textColor="#fff"
-            android:textSize="9sp"/>
+            android:textSize="9sp" />
 
     </com.example.stamp.view.SquareView>
 
@@ -51,9 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="7dp"
-            android:text="庚申年(金猴)"
             android:textColor="#333"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -65,16 +64,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/stampnumber"
                 android:textColor="#333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/works_serial_no_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="7dp"
-                android:text="T.46"
                 android:textColor="#333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -87,16 +85,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/category"
                 android:textColor="#333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
+
             <TextView
-                android:id="@+id/works_category_tv"
+                android:id="@+id/works_class_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="7dp"
-                android:text="编年邮票"
                 android:textColor="#333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -107,24 +106,39 @@
                 android:layout_height="wrap_content"
                 android:text="@string/Release_time"
                 android:textColor="#333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
+
             <TextView
                 android:id="@+id/works_publish_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="7dp"
-                android:text="1980-02-15"
                 android:textColor="#333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
         </LinearLayout>
-        <TextView
-            android:id="@+id/works_suit_count_tv"
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="7dp"
-            android:text="1枚/套"
-            android:textColor="#333"
-            android:textSize="14sp"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/works_suit_count_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="7dp"
+                android:textColor="#333"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/suit_count"
+                android:textColor="#333"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -133,19 +147,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/market_price"
+                android:text="@string/order_current_price"
                 android:textColor="#333"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
+
             <TextView
                 android:id="@+id/works_current_price_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="￥1000000.00"
                 android:textColor="#e20000"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
         </LinearLayout>
 
     </LinearLayout>
-
-
 </LinearLayout>

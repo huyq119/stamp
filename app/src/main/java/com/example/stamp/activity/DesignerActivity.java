@@ -37,8 +37,6 @@ public class DesignerActivity extends BaseActivity {
     private ImageView mBack;//返回按钮
 
     private int num = 0;
-
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -53,8 +51,6 @@ public class DesignerActivity extends BaseActivity {
             }
         }
     };
-
-
     @Override
     public View CreateTitle() {
         mDesignerTitle = View.inflate(this, R.layout.base_back_title, null);
@@ -96,7 +92,7 @@ public class DesignerActivity extends BaseActivity {
                     return;
                 }
 
-                MyLog.e("设计家内容" + result);
+                MyLog.e("设计家List~~>" + result);
 
                 Message msg = mHandler.obtainMessage();
                 msg.what = StaticField.SUCCESS;
@@ -128,9 +124,11 @@ public class DesignerActivity extends BaseActivity {
                 // 跳转设计家详情页面
                 String Chinese_name = mList.get(i).getChinese_name();// 获取中文名
                 String English_name = mList.get(i).getEnglish_name();// 获取英文名
+                String Designer_sn = mList.get(i).getDesigner_sn();// 设计家编号
                 Bundle bundle = new Bundle();
                 bundle.putString(StaticField.DESIGNERDETAIL_CHINESE, Chinese_name);
                 bundle.putString(StaticField.DESIGNERDETAIL_ENGLISH, English_name);
+                bundle.putString(StaticField.DESIGNERSN, Designer_sn);
                 openActivityWitchAnimation(DesignerDetailActivity.class, bundle);
             }
         });

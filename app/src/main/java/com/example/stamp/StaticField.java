@@ -74,15 +74,33 @@ public class StaticField {
 
     //设计家列表查询
     public static final String DESIGNERLIST = "cn.com.chinau.designerlist.query";
+    // 设计家详情查询
+    public static final String DESIGNERDETAIL = "cn.com.chinau.designer.query";
+    // 设计故事+艺术作品+名家访谈详情查询(不登录，H5链接地址)
+    public static final String DESIGNER_DETAIL_QUERY = "cn.com.chinau.designer.detail.query";
     //设计家传值中文名的键
     public static final String DESIGNERDETAIL_CHINESE = "designerDetail_chinese";
     //设计家传值英文名的键
     public static final String DESIGNERDETAIL_ENGLISH = "designerDetail_english";
+    public static final String DESIGNERSN = "designer_sn";// 设计家编号
+    public static final String DESIGNER_RESUME = "resume";// 列表详情H5
+    public static final String DESIGNER_STORY_SN = "Story_sn";//设计故事编号
+    public static final String DESIGNER_WORKS_SN = "Works_sn";//艺术作品编号
+    public static final String DESIGNER_VIEW_SN = "View_sn";//名家访谈编号
+    public static final String GS = "GS";//设计故事
+    public static final String ZP = "ZP";//艺术作品
+    public static final String FT = "FT";//名家访谈
+    public static final String DESIGNER_SN = "sn";// 编号
+    public static final String DESIGNER_OP_TYPE = "op_type";// 操作类型
+    public static final String DESIGNER_ZP_CATEGORY = "zp_category";// 操作类型
+    public static final String DTEAIL = "detail";// 跳转至（设计故事，艺术作品，名家访谈详情页面）的标识键
+
 
     //淘邮票
     public static final String GOODSLIST = "cn.com.chinau.goodslist.query";
     public static final String GOODS_SOURCE = "goods_source";
     public static final String GOODSSOURCE = "SC_ZY,SC_DSF,YS,JP";
+    public static final String XL = "XL";
 
     //省市区县查询
     public static final String NATION = "cn.com.chinau.nation.query";
@@ -99,5 +117,11 @@ public class StaticField {
 
     // 我的页面，商品订单跳转的标识键
     public static final String ORDERS = "orders";
+
+    // 商城
+    public static final String GOODSMALL = "SC_ZY,SC_DSF";
+    //竞拍
+    public static final String JS = "JS";//即将结束
+    public static final String KP = "KP";//等待开拍
 
 }

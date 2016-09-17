@@ -8,17 +8,63 @@ import java.util.ArrayList;
  */
 public class DesignerDetailsBean extends BaseBean{
 
+    public String designer_images;// 多个设计家图片
+    public String chinese_name;// 中文名
+    public String english_name;// 英文名
+    public String resume;// 个人简历，H5请求地址
+    public String share_url;// 分享链接地址
+
+    public String getDesigner_images() {
+        return designer_images;
+    }
+
+    public void setDesigner_images(String designer_images) {
+        this.designer_images = designer_images;
+    }
+
+    public String getChinese_name() {
+        return chinese_name;
+    }
+
+    public void setChinese_name(String chinese_name) {
+        this.chinese_name = chinese_name;
+    }
+
+    public String getEnglish_name() {
+        return english_name;
+    }
+
+    public void setEnglish_name(String english_name) {
+        this.english_name = english_name;
+    }
+
+    public String getResume() {
+        return resume;
+    }
+
+    public void setResume(String resume) {
+        this.resume = resume;
+    }
+
+    public String getShare_url() {
+        return share_url;
+    }
+
+    public void setShare_url(String share_url) {
+        this.share_url = share_url;
+    }
+
     /**
      * 设计故事list
      */
-    public ArrayList<DesignerStory> designer_list;
+    public ArrayList<DesignerStory> design_story_list;
 
-    public ArrayList<DesignerStory> getDesigner_list() {
-        return designer_list;
+    public ArrayList<DesignerStory> getDesign_story_list() {
+        return design_story_list;
     }
 
-    public void setDesigner_list(ArrayList<DesignerStory> designer_list) {
-        this.designer_list = designer_list;
+    public void setDesign_story_list(ArrayList<DesignerStory> design_story_list) {
+        this.design_story_list = design_story_list;
     }
 
     public static class DesignerStory{
@@ -91,6 +137,7 @@ public class DesignerDetailsBean extends BaseBean{
         public String publish_date;// 发行日期
         public String suit_count; // 全套枚数
         public String current_price;// 当前价格
+        public String market_price;// 市场价
 
         public DesignerWorks(String works_img,
                              String works_name,
@@ -183,6 +230,14 @@ public class DesignerDetailsBean extends BaseBean{
         public void setCurrent_price(String current_price) {
             this.current_price = current_price;
         }
+
+        public String getMarket_price() {
+            return market_price;
+        }
+
+        public void setMarket_price(String market_price) {
+            this.market_price = market_price;
+        }
     }
 
     /**
@@ -246,4 +301,6 @@ public class DesignerDetailsBean extends BaseBean{
             this.view_title = view_title;
         }
     }
+
+
 }

@@ -52,6 +52,7 @@ public class DesignerDetailWorksAdapter extends BaseAdapter{
             viewHolder.mImg = (ImageView) view.findViewById(R.id.works_works_img);
             viewHolder.mName = (TextView) view.findViewById(R.id.works_name_tv);
             viewHolder.mSerialNo = (TextView) view.findViewById(R.id.works_serial_no_tv);
+            viewHolder.mClass = (TextView) view.findViewById(R.id.works_class_tv);
             viewHolder.mCategory = (TextView) view.findViewById(R.id.works_category_tv);
             viewHolder.mPublishDate = (TextView) view.findViewById(R.id.works_publish_date_tv);
             viewHolder.mSuitCount = (TextView) view.findViewById(R.id.works_suit_count_tv);
@@ -65,7 +66,15 @@ public class DesignerDetailWorksAdapter extends BaseAdapter{
         DesignerDetailsBean.DesignerWorks mDesignerWorks = list.get(i);
         viewHolder.mName.setText(mDesignerWorks.getWorks_name());
         viewHolder.mSerialNo.setText(mDesignerWorks.getSerial_no());
-        viewHolder.mCategory.setText(mDesignerWorks.getCategory());
+        String mCategory = mDesignerWorks.getCategory();
+        if (mCategory.equals("ML")){
+            viewHolder.mCategory.setText("邮票目录");
+        }else if(mCategory.equals("SC")){
+            viewHolder.mCategory.setText("签名邮品");
+        }else if(mCategory.equals("YS")){
+            viewHolder.mCategory.setText("邮市");
+        }
+        viewHolder.mClass.setText(mDesignerWorks.getCategory());
         viewHolder.mPublishDate.setText(mDesignerWorks.getPublish_date());
         viewHolder.mSuitCount.setText(mDesignerWorks.getSuit_count());
         viewHolder.mCurrentPrice.setText(mDesignerWorks.getCurrent_price());
@@ -78,7 +87,7 @@ public class DesignerDetailWorksAdapter extends BaseAdapter{
 
     public class ViewHolder {
         public ImageView mImg;//图片
-        public TextView mName, mSerialNo,mCategory,mPublishDate,mSuitCount,mCurrentPrice;//名称，作者
+        public TextView mName, mSerialNo,mCategory,mPublishDate,mSuitCount,mCurrentPrice,mClass;//名称，作者
     }
 
 }
