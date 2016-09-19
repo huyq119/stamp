@@ -72,8 +72,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private GoodsStampBean mGoodsStampBean;
     private Handler mHandler = new Handler() {
 
-
-
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -134,12 +132,12 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mOver = (Button) mAuctionContent.findViewById(R.id.auction_over);
         mCamera = (Button) mAuctionContent.findViewById(R.id.auction_camera);
 
-        initGestureListener();
+        initGestureListener();// 滑动lsitview隐藏导航栏的方法
 
     }
 
     /**
-     *滑动lsitview隐藏导航栏的方法
+     * 滑动lsitview隐藏导航栏的方法
      */
     private void initGestureListener(){
         mHeartll = (LinearLayout) mAuctionContent.findViewById(R.id.auction_heart);

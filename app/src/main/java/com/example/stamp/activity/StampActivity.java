@@ -162,14 +162,22 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             public void run() {
                 HashMap<String, String> params = new HashMap<>();
                 params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
-                params.put(StaticField.OP_TYPE, "JP");
+                params.put(StaticField.OP_TYPE, "YS");
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                Log.e("邮市类别~~~>",result);
+                Log.e("邮市类别查询~~~>",result);
+                if (result.equals("-1")) {
+                    return;
+                }
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = StaticField.SUCCESS;
+//                msg.obj = result;
+//                mHandler.sendMessage(msg);
+
             }
         });
 
