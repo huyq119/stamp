@@ -60,15 +60,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#fff"
-                android:textSize="9sp" />
+                android:text="￥1234.00"
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
+                android:layout_marginTop="5dp"
                 android:text="@string/balance"
                 android:textColor="#fff"
-                android:textSize="8sp" />
+                android:textSize="11sp" />
         </LinearLayout>
 
         <View
@@ -90,15 +91,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#fff"
-                android:textSize="9sp" />
+                android:text="￥123456.00"
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
+                android:layout_marginTop="5dp"
                 android:text="@string/non_balance"
                 android:textColor="#fff"
-                android:textSize="8sp" />
+                android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
 

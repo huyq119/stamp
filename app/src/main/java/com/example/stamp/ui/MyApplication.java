@@ -7,7 +7,9 @@ package com.example.stamp.ui;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.util.Log;
 
 /**
  * 全局上下文
@@ -33,8 +35,11 @@ public class MyApplication extends Application {
         application = this;
         MainID = android.os.Process.myTid();
         handler = new Handler();
-    }
 
+        Log.e("什么时候执行-------------->>", "执行了");
+        SharedPreferences sp = getSharedPreferences("stamp", MODE_PRIVATE);
+        sp.edit().putBoolean("isSetup", true).commit();
+    }
     public static Context getApplication() {
         return application;
     }
@@ -47,5 +52,11 @@ public class MyApplication extends Application {
         return handler;
     }
 
-
+    @Override
+    public void onTerminate() {
+        Log.e("什么时候执行---------->", "执行了");
+        super.onTerminate();
+        SharedPreferences sp = getSharedPreferences("stamp", MODE_PRIVATE);
+        sp.edit().putBoolean("isSetup", true).commit();
+    }
 }

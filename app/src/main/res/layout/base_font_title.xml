@@ -24,12 +24,10 @@
 
     <TextView
         android:id="@+id/base_edit"
-        android:layout_width="wrap_content"
+        android:layout_width="44dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:gravity="center"
-        android:layout_gravity="center_vertical"
-        android:padding="9dp"
         android:textColor="@color/white"
         android:textSize="15sp"/>
 </RelativeLayout>

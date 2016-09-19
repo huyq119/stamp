@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.handmark.pulltorefresh.library.PullToRefreshScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.handmark.pulltorefresh.library.PullToRefreshScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ptr="http://schemas.android.com/apk/res-auto"
     android:id="@+id/home_SV"
     android:layout_width="wrap_content"
@@ -22,16 +21,18 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/home_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"/>
+
+                android:layout_height="120dp" />
 
             <com.viewpagerindicator.CirclePageIndicator
                 android:id="@+id/home_viewpagerIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="8dp" />
         </RelativeLayout>
 
-        <View style="@style/myline"/>
+        <View style="@style/myline" />
 
         <LinearLayout
             android:id="@+id/Main_RadioGroup"
@@ -52,7 +53,7 @@
                 android:paddingTop="17dp"
                 android:text="@string/stampshop"
                 android:textColor="@color/font"
-                android:textSize="9sp"/>
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/home_auction"
@@ -67,7 +68,7 @@
                 android:paddingTop="17dp"
                 android:text="@string/auction"
                 android:textColor="@color/font"
-                android:textSize="9sp"/>
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/home_mall"
@@ -82,7 +83,7 @@
                 android:paddingTop="17dp"
                 android:text="@string/mall"
                 android:textColor="@color/font"
-                android:textSize="9sp"/>
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/home_scan"
@@ -97,7 +98,7 @@
                 android:paddingTop="17dp"
                 android:text="@string/scan"
                 android:textColor="@color/font"
-                android:textSize="9sp"/>
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/home_designer"
@@ -112,19 +113,19 @@
                 android:paddingTop="17dp"
                 android:text="@string/design"
                 android:textColor="@color/font"
-                android:textSize="9sp"/>
+                android:textSize="12sp" />
         </LinearLayout>
 
-        <View style="@style/myline"/>
+        <View style="@style/myline" />
 
         <!--十二生肖的布局-->
-        <include layout="@layout/home_chinese_zodiac"/>
+        <include layout="@layout/home_chinese_zodiac" />
 
         <!--古典文学的布局-->
-        <include layout="@layout/home_classical_literture"/>
+        <include layout="@layout/home_classical_literture" />
 
         <!--民间艺术的布局-->
-        <include layout="@layout/home_folk_art"/>
+        <include layout="@layout/home_folk_art" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -141,7 +142,7 @@
                 android:gravity="center"
                 android:text="@string/Exclusive_recommendation"
                 android:textColor="@color/white"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
         </RelativeLayout>
 
         <com.example.stamp.view.WrapGridView
@@ -155,7 +156,7 @@
             android:overScrollMode="never"
             android:scrollbars="none"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp"/>
+            android:verticalSpacing="10dp" />
     </LinearLayout>
 
 

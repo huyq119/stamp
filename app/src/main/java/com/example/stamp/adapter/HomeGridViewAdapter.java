@@ -61,7 +61,7 @@ public class HomeGridViewAdapter extends BaseAdapter {
         //设置数据
         HomeBean.Good good = list.get(i);
         viewHolder.mTitle.setText(good.getGoods_name());
-        viewHolder.mMoney.setText(good.getCurrent_price());
+        viewHolder.mMoney.setText("￥"+good.getCurrent_price());
         //设置图片
         bitmap.display(viewHolder.mIcon, good.getGoods_img());
         return view;

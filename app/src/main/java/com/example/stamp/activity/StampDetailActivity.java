@@ -66,9 +66,6 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private int scrollY; // 标记上次滑动位置
     private String mGoods_sn,mGoodsDetail,mVerifyInfo;
     private Handler mHandler = new Handler() {
-
-
-
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {

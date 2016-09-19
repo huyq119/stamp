@@ -1,5 +1,6 @@
 package com.example.stamp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -36,6 +37,7 @@ public class MainActivity extends FragmentActivity implements LazyViewPager.OnPa
         initData();
         initAdapter();
         initListener();
+        setCurrent();// 设置开始显示的页面
     }
 
 
@@ -84,6 +86,25 @@ public class MainActivity extends FragmentActivity implements LazyViewPager.OnPa
         mViewPager.setOnPageChangeListener(this);
         mRadioGroup.setOnCheckedChangeListener(this);
         mViewPager.setOffscreenPageLimit(0);
+    }
+
+    /**
+     * 设置显示的页面
+     */
+    private void setCurrent() {
+        Intent intent = getIntent();
+        String Login = intent.getStringExtra("Login");
+        if (Login != null) {
+            if (Login.equals("login")) {
+                mViewPager.setCurrentItem(4);
+                mRadioGroup.check(R.id.Radio_my);
+            }
+//            else if (Login.equals("Order")) {
+//                Log.e("订单页面", "是否执行");
+//                mViewPager.setCurrentItem(2);
+//                mRadioGroup.check(R.id.Radio_order);
+//            }
+        }
     }
 
 

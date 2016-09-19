@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="234dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/quite_dialog_bg"
+    android:minHeight="99dp"
+    android:minWidth="234dp"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="22dp"
+        android:src="@mipmap/success" />
+
+    <TextView
+        android:id="@+id/sussess_context"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="22dp"
+        android:layout_marginTop="17dp"
+        android:gravity="center_horizontal"
+        android:text="发送成功,请注意查收短信"
+        android:textColor="#333"
+        android:textSize="15sp" />
+
+</LinearLayout>

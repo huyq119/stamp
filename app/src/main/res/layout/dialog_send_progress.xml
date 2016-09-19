@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="234dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/quite_dialog_bg"
+    android:minHeight="99dp"
+    android:orientation="vertical" >
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="22dp"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateDrawable="@drawable/progress_drawable_large"
+        android:indeterminateDuration="500" />
+
+    <TextView
+        android:id="@+id/sussess_context"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="22dp"
+        android:layout_marginTop="17dp"
+        android:gravity="center_horizontal"
+        android:text="正在努力加载"
+        android:textColor="#333"
+        android:textSize="15sp" />
+
+</LinearLayout>

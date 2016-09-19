@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 首页的状态选择器 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@mipmap/login_normal" android:state_pressed="true"/>
+    <item android:drawable="@mipmap/login_press"></item>
+
+</selector>

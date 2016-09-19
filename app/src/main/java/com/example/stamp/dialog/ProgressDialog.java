@@ -15,12 +15,6 @@ import com.example.stamp.R;
 
 
 /**
- * @author  heqian
- * @mail    1564537102@qq.com
- * @since   2016年8月21日 9:38
- * @name    com.example.stamp.dialog.ProgressDialog.java
- * @version 1.0
- * 
  *
  */
 

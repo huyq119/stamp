@@ -7,6 +7,19 @@ import com.example.stamp.utils.Version;
  * Created by Administrator on 2016/8/3.
  */
 public class StaticField {
+    // 短信验证码发送(登录)
+    public static final String SMS_SEND= "cn.com.chinau.sms.send";
+    public static final String MOBILE = "mobile";// 手机号
+    // 短信类型（DL登录，ZC注册，TX提现，BK绑定银行卡，JB解绑银行卡，XG修改银行卡，XGDL修改登录密码，XGTX修改提现密码，WJMM忘记密码，）
+    public static final String SMS_TYPE = "sms_type";
+    public static final int CODE_SUCCESS = 10;
+
+    // 注册 cn.com.chinau.user.login.register
+    public static final String LOGIN_REGISTER= "cn.com.chinau.user.login.register";
+    public static final String SMS_CODE= "sms_code";// 验证码
+
+
+
     // 后期更改的值
     public static final String PHONE_INFO = "phone_info";
     public static final String APP_KEY_CODE = "1001001";

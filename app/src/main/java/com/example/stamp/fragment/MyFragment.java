@@ -49,7 +49,6 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         return myContentView;
     }
 
-
     /**
      * 初始化布局
      */
@@ -76,16 +75,16 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
      * 初始化数据
      */
     private void initData() {
-        //判断是否登录,看显示的内容
-        if (!isLogin()) {//登录
-            mLogin.setVisibility(View.VISIBLE);
-            mNoLogin.setVisibility(View.GONE);
-            mQuite.setVisibility(View.VISIBLE);
-        } else {//没有登录
-            mLogin.setVisibility(View.GONE);
-            mNoLogin.setVisibility(View.VISIBLE);
-            mQuite.setVisibility(View.INVISIBLE);
-        }
+//        //判断是否登录,看显示的内容
+//        if (!isLogin()) {//登录
+//            mLogin.setVisibility(View.VISIBLE);
+//            mNoLogin.setVisibility(View.GONE);
+//            mQuite.setVisibility(View.VISIBLE);
+//        } else {//没有登录
+//            mLogin.setVisibility(View.GONE);
+//            mNoLogin.setVisibility(View.VISIBLE);
+//            mQuite.setVisibility(View.INVISIBLE);
+//        }
     }
 
     private void initListener() {
