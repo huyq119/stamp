@@ -35,8 +35,6 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
     private WebView mWB;
     private String mDetail, mStory_sn, mWorks_sn, mView_sn, mDetailH5, mCategory;
     private Handler mHandler = new Handler() {
-
-
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

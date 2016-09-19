@@ -14,7 +14,6 @@ import com.lidroid.xutils.BitmapUtils;
  * ViewPager的适配器
  * 
  * @author Administrator
- *
  */
 public class HomeViewPagerAdapter extends PagerAdapter {
 

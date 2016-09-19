@@ -143,7 +143,6 @@ public class DesignerActivity extends BaseActivity {
         }
     };
 
-
     @Override
     public void AgainRequest() {
         initData();

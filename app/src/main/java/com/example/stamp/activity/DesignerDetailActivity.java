@@ -57,9 +57,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     private OrderGoodsViewPager mViewPager;
     private LinearLayout mHearl;
     private String[] arr = {"个人简历", "设计故事", "艺术作品", "名家访谈"};
-//    private String[] arrImage = {"http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg",
-//            "http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg",
-//            "http://test.chinau.com.cn:8081/chinau-imgserver/attachment//201305/27/1369638159_QpZWy1.jpg"};
     private String[] arrImage;
     private VerticalScrollView home_SV;
     private Button mTopBtn;// 置顶按钮
@@ -121,9 +118,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                         // 名家访谈适配器
                         DesignerDetailViewAdapter mViewAdapter = new DesignerDetailViewAdapter(DesignerDetailActivity.this, mListView, mBitmap);
                         mViewList.setAdapter(mViewAdapter);
-
                     }
-
                     initAdapter();
                     break;
             }
@@ -143,9 +138,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         mDesignerDetailContent = View.inflate(this, R.layout.activity_designer_detail, null);
         initView();
         initData();
-        //底部导航的ViewPager
-        DesignerDetailTapViewPagerAdapter adapter = new DesignerDetailTapViewPagerAdapter(vList, arr);
-        mViewPager.setAdapter(adapter);
         initListener();
         return mDesignerDetailContent;
     }
@@ -194,8 +186,11 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         mStoryList = (ListView) vStory.findViewById(R.id.designer_story_lv);
         mWorksList = (ListView) vWorks.findViewById(R.id.designer_works_lv);
         mViewList = (ListView) vView.findViewById(R.id.designer_view_lv);
-        initGestureListener(); // 滑动lsitview隐藏头布局(viewPager,view)的方法
+        //底部导航的ViewPager
+        DesignerDetailTapViewPagerAdapter adapter = new DesignerDetailTapViewPagerAdapter(vList, arr);
+        mViewPager.setAdapter(adapter);
 
+        initGestureListener(); // 滑动lsitview隐藏头布局(viewPager,view)的方法
         mResumeWeb = (WebView) vResume.findViewById(R.id.designer_resume_web);
 
     }
@@ -262,9 +257,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
         mShared.setOnClickListener(this);
         mBack.setOnClickListener(this);
         mTopBtn.setOnClickListener(this);
-//        mStoryList.setOnScrollListener(this);
-//        mWorksList.setOnScrollListener(this);
-//        mViewList.setOnScrollListener(this);
         mViewPager.setOnPageChangeListener(new DesignerViewPager());
         mDesigner_RG.setOnCheckedChangeListener(new MyGroupListener());
         mStoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -387,7 +379,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
             MyLog.e("哈哈~~~>", "--->" + mPosition);
             switch (position) {
                 case 0:
-//                    mHearl.setVisibility(View.VISIBLE);
                     mResumeBtn.setTextColor(getResources().getColor(R.color.red_font));
                     mStoryBtn.setTextColor(getResources().getColor(R.color.black));
                     mWorksBtn.setTextColor(getResources().getColor(R.color.black));
@@ -399,7 +390,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
 
                     break;
                 case 1:
-//                    mHearl.setVisibility(View.GONE);
                     mResumeBtn.setTextColor(getResources().getColor(R.color.black));
                     mStoryBtn.setTextColor(getResources().getColor(R.color.red_font));
                     mWorksBtn.setTextColor(getResources().getColor(R.color.black));
@@ -411,7 +401,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     StoryListViewListener();// 设计故事StoryListView滑动监听事件
                     break;
                 case 2:
-//                    mHearl.setVisibility(View.GONE);
                     mResumeBtn.setTextColor(getResources().getColor(R.color.black));
                     mStoryBtn.setTextColor(getResources().getColor(R.color.black));
                     mWorksBtn.setTextColor(getResources().getColor(R.color.red_font));
@@ -423,7 +412,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     WorksListViewListener();// 艺术作品StoryListView滑动监听事件
                     break;
                 case 3:
-//                    mHearl.setVisibility(View.GONE);
                     mResumeBtn.setTextColor(getResources().getColor(R.color.black));
                     mStoryBtn.setTextColor(getResources().getColor(R.color.black));
                     mWorksBtn.setTextColor(getResources().getColor(R.color.black));

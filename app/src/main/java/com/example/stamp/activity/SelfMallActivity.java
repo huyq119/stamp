@@ -3,6 +3,7 @@ package com.example.stamp.activity;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -64,7 +65,11 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     private String[] arrPopson= {"任平", "于平", "甲钴胺", "邮票","任平", "于平", "甲钴胺", "邮票","任平", "于平", "甲钴胺", "邮票"};
     private TextView mTitle;
     private int num = 0;//初始索引
+    private GoodsStampBean mGoodsStampBean;
     private Handler mHandler = new Handler() {
+
+
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -72,7 +77,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
             switch (msg.what) {
                 case StaticField.SUCCESS://商城Lsit
                     Gson gson = new Gson();
-                    GoodsStampBean mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
+                     mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
                     mList = mGoodsStampBean.getGoods_list();
                     initAdapter();
                     break;
@@ -126,7 +131,10 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                openActivityWitchAnimation(SelfMallDetailActivity.class);
+                String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
+                openActivityWitchAnimation(SelfMallDetailActivity.class,bundle);
             }
         });
     }

@@ -170,7 +170,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                Log.e("result+这是啥~~~~>", result);
+                Log.e("result+邮票目录详情---->", result);
                 if (result.equals("-1")) {
                     return;
                 }

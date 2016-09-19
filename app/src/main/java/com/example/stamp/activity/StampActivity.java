@@ -2,6 +2,7 @@ package com.example.stamp.activity;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -70,7 +71,11 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     private LinearLayout mHeartll;//头部的布局
     private GestureDetector mGestureDetector;
     private int num = 0;//初始索引
+    private GoodsStampBean mGoodsStampBean;
     private Handler mHandler = new Handler() {
+
+
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -78,7 +83,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             switch (msg.what) {
                 case StaticField.SUCCESS://套邮票Lsit
                     Gson gson = new Gson();
-                    GoodsStampBean mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
+                     mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
                     mList = mGoodsStampBean.getGoods_list();
                     initAdapter();
                     break;
@@ -151,24 +156,22 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void initData() {
-        // 别删数据正确后要用
-//        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                HashMap<String, String> params = new HashMap<>();
-//                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
-//                params.put(StaticField.OP_TYPE, "YS");
-//                String mapSort = SortUtils.MapSort(params);
-//                String md5code = Encrypt.MD5(mapSort);
-//                params.put(StaticField.SIGN, md5code);
-//
-//                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-//
-//                Log.e("有数据吗~~~>",result);
-//
-//                MyLog.e(result);
-//            }
-//        });
+        // 邮市类别查询网络请求
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
+                params.put(StaticField.OP_TYPE, "JP");
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                Log.e("邮市类别~~~>",result);
+            }
+        });
 
         if (mList != null) {
             mList = new ArrayList<>();
@@ -210,7 +213,10 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //去往邮市详情页
-                openActivityWitchAnimation(StampDetailActivity.class);
+                Bundle bundle = new Bundle();
+                String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
+                bundle.putString(StaticField.GOODS_SN, mGoods_sn);// 传入商品编号
+                openActivityWitchAnimation(StampDetailActivity.class,bundle);
             }
         });
         mGridView.setOnTouchListener(new View.OnTouchListener() {
@@ -252,7 +258,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                Log.e("result+邮市~~~~>", result);
+                Log.e("邮市List~~~~>", result);
                 if (result.equals("-1")) {
                     return;
                 }

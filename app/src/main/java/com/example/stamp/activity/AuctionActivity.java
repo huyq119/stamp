@@ -2,6 +2,7 @@ package com.example.stamp.activity;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -68,7 +69,11 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private LinearLayout mHeartll;//头部的布局
     private GestureDetector mGestureDetector;
     private int num = 0;//初始索引
+    private GoodsStampBean mGoodsStampBean;
     private Handler mHandler = new Handler() {
+
+
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -76,10 +81,13 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
             switch (msg.what) {
                 case StaticField.SUCCESS://商城Lsit
                     Gson gson = new Gson();
-                    GoodsStampBean mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
+                     mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
                     mList = mGoodsStampBean.getGoods_list();
                     if (mList!=null&&mList.size()!=0){
-                        initAdapter();
+                        //竖向ListView设置适配器
+                        AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, mList);
+                        mListView.setAdapter(mListAdapter);
+                        mListAdapter.notifyDataSetChanged();
                     }else{
                         mListView.setVisibility(View.GONE);
                         mNoListTV.setVisibility(View.VISIBLE);
@@ -102,6 +110,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mAuctionContent = View.inflate(this, R.layout.activity_auction_content, null);
         initView();
         initData();
+        initAdapter();
         initListener();
         return mAuctionContent;
     }
@@ -145,10 +154,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
 
     private void initAdapter() {
-        //竖向ListView设置适配器
-        AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
-        mListView.setAdapter(mListAdapter);
-        mListAdapter.notifyDataSetChanged();
 
         // 横向的listView设置适配器
         hListViewAdapter = new StampHorizontalListViewAdapter(this, mArr);
@@ -214,7 +219,10 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //去往竞拍详情页
-                openActivityWitchAnimation(AuctionDetailActivity.class);
+                Bundle bundle = new Bundle();
+                String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
+                bundle.putString(StaticField.GOODS_SN, mGoods_sn);// 传入商品编号
+                openActivityWitchAnimation(AuctionDetailActivity.class,bundle);
             }
         });
         mListView.setOnTouchListener(new View.OnTouchListener() {

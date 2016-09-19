@@ -12,7 +12,8 @@ public class StaticField {
     public static final String APP_KEY_CODE = "1001001";
     public static final String VERSION_CODE = Version.getVersion();
     public static final String ROOT = "http://test.chinau.com.cn:8090/app/gateway.do";
-
+    public final static String TOKEN = "token";// 用户登录之后的标识，如果用户已登录，需要传
+    public final static String USER_ID = "user_id";// 用户ID，如果用户已登录，需要传
     //常用的字段
     public static final int SUCCESS = 0;
     public static final int TOUCH_EVENT_ID = 2;// SrcollView滑动的ID
@@ -123,5 +124,9 @@ public class StaticField {
     //竞拍
     public static final String JS = "JS";//即将结束
     public static final String KP = "KP";//等待开拍
+
+    // 商品详情查询（不等录）
+    public static final String GOODSDETAIL = "cn.com.chinau.goods.query";
+    public static final String GOODS_SN = "goods_sn";
 
 }

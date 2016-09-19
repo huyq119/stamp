@@ -351,8 +351,9 @@
         android:src="@mipmap/title_icon" />
 
     <!--<WebView
-        android:layout_marginTop="@dimen/distance"
+        android:id="@+id/Web_View"
         android:layout_width="match_parent"
+        android:overScrollMode="never"
         android:layout_height="wrap_content" />-->
 
 
