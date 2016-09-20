@@ -1,6 +1,7 @@
 package com.example.stamp.activity;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +24,9 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
     private View mManagerAddressTitle;
     private ListView mAddressLV;//收货地址的ListView
     private TextView mAddNewAddress;//添加新地址
+    private ImageView mBack;
+    private TextView mTitle;
+    private String mAddress;
 
     @Override
     public View CreateTitle() {
@@ -41,6 +45,11 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
 
 
     private void initView() {
+
+        mBack = (ImageView) mManagerAddressTitle.findViewById(R.id.base_title_back);
+        mTitle = (TextView) mManagerAddressTitle.findViewById(R.id.base_title);
+        mTitle.setText("管理收货地址");
+
         mAddressLV = (ListView) mManagerAddressContent.findViewById(R.id.managerAddress_LV);
         mAddNewAddress = (TextView) mManagerAddressContent.findViewById(R.id.managerAddress_TV);
     }
@@ -49,10 +58,10 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
         List<AddressBean.Address> mList = new ArrayList<>();
         AddressBean.Address address;
         for (int i = 0; i < 5; i++) {
-            if (i == 1) {
-                address = new AddressBean.Address("13803641265", "大橘子", null, "1", "北京市海淀区");
+            if (i == 0) {
+                address = new AddressBean.Address("13803641265", "大橘子", "1", "北京市海淀区");
             } else {
-                address = new AddressBean.Address("13803641265", "大橙子", null, "0", "北京市海淀区");
+                address = new AddressBean.Address("13803641265", "大橙子", "0", "北京市海淀区");
             }
             mList.add(address);
         }
@@ -81,12 +90,16 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
 
 
     private void initListener() {
+        mBack.setOnClickListener(this);
         mAddNewAddress.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.base_title_back://返回
+                finishWitchAnimation();
+                break;
             case R.id.managerAddress_TV://添加收获地址
                 openActivityWitchAnimation(EditReceiptAddressActivity.class);
                 break;

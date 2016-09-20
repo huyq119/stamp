@@ -32,10 +32,9 @@ public class AddressBean extends BaseBean {
         public String detail;//详细地址
         public String is_default;//是否默认: 0:非默认；1默认
 
-        public Address(String mobile, String name, String address_id, String is_default, String detail) {
+        public Address(String mobile, String name, String is_default, String detail) {
             this.mobile = mobile;
             this.name = name;
-            this.address_id = address_id;
             this.is_default = is_default;
             this.detail = detail;
         }

@@ -58,7 +58,7 @@
                 android:layout_marginTop="13dp"
                 android:drawableLeft="@mipmap/location"
                 android:drawablePadding="10dp"
-                android:text="北京市海淀区请结合还贷疏导is回答说"
+                android:text="北京市海淀区上地三街时代小区六单元201"
                 android:textColor="#333"
                 android:textSize="13sp"/>
 

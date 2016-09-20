@@ -3,6 +3,7 @@ package com.example.stamp.activity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.stamp.R;
 import com.example.stamp.base.BaseActivity;
@@ -16,6 +17,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
     private View mScanContent,mScanTitle;
     private Button mScan;//扫码回购
     private ImageView mBack;
+    private TextView mTitle;
 
 
     @Override
@@ -35,6 +37,8 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
 
     private void initView() {
         mBack = (ImageView) mScanTitle.findViewById(R.id.search_title_back);
+        mTitle = (TextView) mScanTitle.findViewById(R.id.search_title);
+        mTitle.setText("扫码回购");
         mScan = (Button) mScanContent.findViewById(R.id.scan_back_buy_now);
     }
 

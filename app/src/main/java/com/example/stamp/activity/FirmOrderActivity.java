@@ -150,8 +150,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             case R.id.firmOrder_ok_pay://确认并付款
                 MyToast.showShort(this,"调取微信或者支付宝页面。。。");
                 break;
-            case R.id.FirmOrder_Address://收货地址选择
-                MyToast.showShort(this,"跳转至选择收货地址。。。");
+            case R.id.FirmOrder_Address: // 选择收货地址
+                openActivityWitchAnimation(ChooseReceiverAddress.class);
                 break;
         }
     }
