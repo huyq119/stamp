@@ -67,7 +67,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 
     private void initData() {
         //收货地址的显示
-        mAddress.setVisibility(isAddress() ? View.VISIBLE : View.GONE);
+//        mAddress.setVisibility(isAddress() ? View.VISIBLE : View.GONE);
 //        mNoAddress.setVisibility(isAddress() ? View.GONE : View.VISIBLE);
         setFalseData();
     }
