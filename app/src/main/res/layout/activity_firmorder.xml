@@ -10,7 +10,8 @@
     <!--收货地址-->
     <include layout="@layout/firmorder_location"/>
     <!--没有收获地址-->
-    <include layout="@layout/firmorder_nolocation"/>
+    <include layout="@layout/firmorder_nolocation"
+        />
 
 
     <View
@@ -166,6 +167,7 @@
             android:textSize="15sp"/>
 
         <TextView
+            android:id="@+id/firmOrder_ok_pay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

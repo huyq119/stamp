@@ -17,17 +17,15 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.stamp.MainActivity;
 import com.example.stamp.R;
 import com.example.stamp.StaticField;
 import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.BaseBean;
-import com.example.stamp.bean.RegisterBean;
+import com.example.stamp.bean.LoginRegisterBean;
 import com.example.stamp.dialog.CountRegisterDialog;
 import com.example.stamp.dialog.CountSureDialog;
-import com.example.stamp.dialog.ProgressDialog;
 import com.example.stamp.dialog.RegisterDialog;
 import com.example.stamp.dialog.SendProgressDialog;
 import com.example.stamp.dialog.SussessDialog;
@@ -80,7 +78,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public SharedPreferences sp;
     public static final String name = "stamp";
     private SussessDialog dialog;
-    private boolean isShowPassWord = true;// 是否显示密码
+    private boolean isShowPassWord = false;// 是否显示密码
     private RegisterDialog rDialog;
 
     private Handler mHandler = new Handler() {
@@ -121,6 +119,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     if (dialog != null) {
                         dialog.dismiss();
                     }
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("Login","login");
+//                    openActivityWitchAnimation(MainActivity.class,bundle);
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                     intent.putExtra("Login", "login");
                     startActivity(intent);
@@ -216,7 +217,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mCodeBtn.setOnClickListener(this);
         mShowIcon.setOnClickListener(this);
         mRegisterBtn.setOnClickListener(this);
-        mCheckBox.setOnClickListener(this);
         mService.setOnClickListener(this);
         mCheckBox.setOnCheckedChangeListener(this);
         mPhone.addTextChangedListener(this);
@@ -229,7 +229,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        GetTextString();// 获取组件的值
+//        GetTextString();// 获取组件的值
         switch (view.getId()) {
             case R.id.base_title_back://返回按钮
                 finishWitchAnimation();
@@ -268,7 +268,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 getRegisterCurrent(mMobile, mPrassword, mCode);
                 break;
             case R.id.register_service://查看邮来邮网协议
-                openActivityWitchAnimation(ServiceTermActivity.class);
+                openActivityWitchAnimation(ServiceProtocolActivity.class);
                 break;
             default:
                 break;
@@ -326,42 +326,42 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void run() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put(StaticField.MOBILE, phone);// 手机号
                 params.put(StaticField.SERVICE_TYPE, StaticField.LOGIN_REGISTER);// 接口名称
+                params.put(StaticField.MOBILE, phone);// 手机号
                 // 加密后的字节流
                 byte[] PWByte = Des3Encode.encryptMode(mPassWordRegister.getBytes());
                 String PWBase64 = new String(Base64.encode(PWByte, Base64.DEFAULT));
+                params.put(StaticField.PASSWORD, PWBase64);// 密码
                 params.put(StaticField.SMS_CODE, mCodeRegister);// 验证码
-                params.put(StaticField.SMS_TYPE, "ZC"); // 短信类型(注册)
+                params.put(StaticField.OP_TYPE, StaticField.ZC); // 操作类型(注册)
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code); // 签名
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                Log.e("获取短信~~~~>", result);
                 mHandler.sendEmptyMessage(DELPRESSAGE);
                 if (result.equals("-1")) {
                     mHandler.sendEmptyMessage(FAIL);
                     return;
                 }
-                Log.e("测试注册", result);
+                Log.e("测试注册--->", result);
                 Gson gson = new Gson();
-                RegisterBean mRegBean = gson.fromJson(result, RegisterBean.class);
+                BaseBean mBaseBean = gson.fromJson(result, BaseBean.class);
                 // 返回的获取信息
-                String rspMsgContext = mRegBean.getRsp_msg();
+                String rspMsgContext = mBaseBean.getRsp_msg();
                 if (rspMsgContext.equals("成功")) {
                     mHandler.sendEmptyMessage(SHOWTEXTDIALOG);
                     mHandler.sendEmptyMessageDelayed(REGISTERSUCCESS, 2000);
-//                    UsedPerson usedPerson = gson.fromJson(result, UsedPerson.class);
+                    LoginRegisterBean mLogRegBean = gson.fromJson(result, LoginRegisterBean.class);
                     sp.edit().putString("phone", phone).commit();
-                    sp.edit().putString("token", mRegBean.getToken()).commit();
-                    sp.edit().putString("userId", mRegBean.getUser_id()).commit();
+                    sp.edit().putString("token", mLogRegBean.getToken()).commit();
+                    sp.edit().putString("userId", mLogRegBean.getUserId()).commit();
                 } else if (rspMsgContext.equals("该手机号已注册邮来邮往请直接登录")) {
                     Message msg = mHandler.obtainMessage();
                     msg.obj = phone;
                     msg.what = SHOWLOGIN;
                     mHandler.sendMessage(msg);
                 } else {
-                    String rspMsg = mRegBean.getRsp_msg();
+                    String rspMsg = mBaseBean.getRsp_msg();
                     Message msg = mHandler.obtainMessage();
                     msg.what = FAILTEXTDIALOG;
                     msg.obj = rspMsg;

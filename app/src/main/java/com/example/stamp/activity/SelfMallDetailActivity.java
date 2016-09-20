@@ -1,6 +1,5 @@
 package com.example.stamp.activity;
 
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,17 +12,14 @@ import android.widget.TextView;
 import com.example.stamp.R;
 import com.example.stamp.StaticField;
 import com.example.stamp.adapter.HomeViewPagerAdapter;
-import com.example.stamp.adapter.StampDetailPagerAdapter;
 import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.StampDetailBean;
 import com.example.stamp.http.HttpUtils;
 import com.example.stamp.utils.Encrypt;
 import com.example.stamp.utils.SortUtils;
 import com.example.stamp.utils.ThreadManager;
-import com.example.stamp.view.CustomViewPager;
 import com.google.gson.Gson;
 import com.viewpagerindicator.CirclePageIndicator;
-import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.HashMap;
 
@@ -74,7 +70,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
     private void initView() {
         // 获取商城页面传过来的的值
         Bundle bundle = getIntent().getExtras();
-        mGoods_sn = bundle.getString(StaticField.GOODS_SN);
+//        mGoods_sn = bundle.getString(StaticField.GOODS_SN);
 
         mBack = (ImageView) mSelfMallDetailTitle.findViewById(R.id.base_title_back);
         mTitle = (TextView) mSelfMallDetailTitle.findViewById(R.id.base_title);

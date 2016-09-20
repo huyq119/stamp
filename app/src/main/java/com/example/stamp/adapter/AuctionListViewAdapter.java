@@ -8,12 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.stamp.R;
-import com.example.stamp.bean.GoodsStampBean;
 import com.example.stamp.bean.StampBean;
 import com.example.stamp.view.TimeTextView;
 import com.lidroid.xutils.BitmapUtils;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -22,11 +20,11 @@ import java.util.List;
  */
 public class AuctionListViewAdapter extends BaseAdapter {
 
-    private List<GoodsStampBean.GoodsList> mList;
+    private List<StampBean> mList;
     private Context context;
     private BitmapUtils bitmapUtils;
 
-    public AuctionListViewAdapter(Context context, BitmapUtils bitmapUtils, List<GoodsStampBean.GoodsList> mList) {
+    public AuctionListViewAdapter(Context context, BitmapUtils bitmapUtils, List<StampBean> mList) {
         this.mList = mList;
         this.context = context;
         this.bitmapUtils = bitmapUtils;
@@ -63,35 +61,45 @@ public class AuctionListViewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        final GoodsStampBean.GoodsList mGoodsList = mList.get(i);
-        holder.mTitle.setText(mGoodsList.getGoods_name());
-        holder.mTime.setText(mGoodsList.getLeft_time());
-        String mStatues = mGoodsList.getAuction_status();
-        holder.mStatue.setText(mStatues);
-        holder.mPrice.setText(mGoodsList.getCurrent_price());
-        String mStatueTv = holder.mStatue.getText().toString().trim();
-        if (mStatues.equals("未开始")) {
+
+        holder.mTitle.setText(mList.get(i).getTitle());
+        holder.mTime.setText(mList.get(i).getTime());
+        holder.mStatue.setText(mList.get(i).getStatus());
+        holder.mPrice.setText(mList.get(i).getPrice());
+        String mStatueTv= holder.mStatue.getText().toString().trim();
+        if (mStatueTv.equals("未开始")){
             holder.mTimeTv.setText("距离开拍:");
-        } else if (mStatues.equals("即将结束")) {
+        }else if(mStatueTv.equals("即将结束")){
             holder.mTimeTv.setText("距离结束:");
-        } else if (mStatues.equals("等待开拍")) {
+        }else if (mStatueTv.equals("等待开拍")){
             holder.mTimeTv.setText("距离开拍:");
         }
 
 
+
+
+//        Calendar c = Calendar.getInstance();
+//        int year = c.get(Calendar.YEAR);
+//        int month = c.get(Calendar.MONTH);
+//        int date = c.get(Calendar.DATE);
+//        int hour = c.get(Calendar.HOUR_OF_DAY);
+//        int minute = c.get(Calendar.MINUTE);
+//        int second = c.get(Calendar.SECOND);
+////		int[] time = { date, hour, minute, second };
         int[] time = {00, 01, 05};
 
         holder.mTime.setTimes(time);
         if (!holder.mTime.isRun()) {
             holder.mTime.run();
         }
-        bitmapUtils.display(holder.mIcon,mGoodsList.getGoods_img());
+
+        bitmapUtils.display(holder.mIcon, mList.get(i).getIconUrl());
         return view;
     }
 
     public class ViewHolder {
         public ImageView mIcon;
         public TimeTextView mTime;
-        public TextView mTitle, mStatue, mPrice, mTimeTv;
+        public TextView mTitle, mStatue, mPrice,mTimeTv;
     }
 }

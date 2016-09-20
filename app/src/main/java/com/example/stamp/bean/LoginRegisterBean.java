@@ -2,18 +2,18 @@ package com.example.stamp.bean;
 
 /**
  * Created by Administrator on 2016/9/19.
- * 注册
+ * 登录、注册
  */
-public class RegisterBean extends BaseBean{
-    public String user_id;// 用户id
+public class LoginRegisterBean extends BaseBean{
+    public String userId;// 用户id
     public String token;// 用户登录之后的标识
 
-    public String getUser_id() {
-        return user_id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getToken() {

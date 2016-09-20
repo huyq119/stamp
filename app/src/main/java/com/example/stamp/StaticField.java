@@ -14,9 +14,13 @@ public class StaticField {
     public static final String SMS_TYPE = "sms_type";
     public static final int CODE_SUCCESS = 10;
 
-    // 注册 cn.com.chinau.user.login.register
+    // 登录、注册
     public static final String LOGIN_REGISTER= "cn.com.chinau.user.login.register";
     public static final String SMS_CODE= "sms_code";// 验证码
+    public static final String IS_AGREE= "is_agree";// 是否勾选协议
+    public static final String PASSWORD= "password";// 密码
+    public static final String ZC= "ZC";// 注册
+    public static final String DL= "DL";// 登录
 
 
 
@@ -142,4 +146,6 @@ public class StaticField {
     public static final String GOODSDETAIL = "cn.com.chinau.goods.query";
     public static final String GOODS_SN = "goods_sn";
 
+    // 个人信息查询
+    public static final String PERSONQUERY = "cn.com.chinau.userinfo.query";
 }

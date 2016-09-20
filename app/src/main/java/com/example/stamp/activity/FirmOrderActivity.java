@@ -3,7 +3,9 @@ package com.example.stamp.activity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.stamp.R;
 import com.example.stamp.adapter.FirmOrderExpandableAdapter;
@@ -27,6 +29,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private SelectPayPopupWindow mPayPopupWindow;//支付的弹出框
     private SelectDistributionPopupWindow mDistributionPopupWindow;//配送方式的弹出框
     private ExpandableListView mListView;//底部列表展示
+    private ImageView mBack;
+    private TextView mTitle,mOkPay;
 
     @Override
     public View CreateTitle() {
@@ -48,11 +52,15 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 
 
     private void initView() {
+        mBack =(ImageView) mFirmOrderTitle.findViewById(R.id.base_title_back);
+        mTitle =(TextView) mFirmOrderTitle.findViewById(R.id.base_title);
+        mTitle.setText("确认订单");
         mAddress = (LinearLayout) mFirmOrderContent.findViewById(R.id.FirmOrder_Address);
         mNoAddress = (LinearLayout) mFirmOrderContent.findViewById(R.id.FirmOrder_NoAddress);
         mPay = (LinearLayout) mFirmOrderContent.findViewById(R.id.FirmOrder_pay);
         mDistribution = (LinearLayout) mFirmOrderContent.findViewById(R.id.FirmOrder_distribution);
         mListView = (ExpandableListView) mFirmOrderContent.findViewById(R.id.firmOrder_expandableLV);
+        mOkPay = (TextView) mFirmOrderContent.findViewById(R.id.firmOrder_ok_pay);
         //TODO	服务费，邮市、竞拍商品包含服务费，商城商品没有。
 
     }
@@ -60,7 +68,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private void initData() {
         //收货地址的显示
         mAddress.setVisibility(isAddress() ? View.VISIBLE : View.GONE);
-        mNoAddress.setVisibility(isAddress() ? View.GONE : View.VISIBLE);
+//        mNoAddress.setVisibility(isAddress() ? View.GONE : View.VISIBLE);
         setFalseData();
     }
 
@@ -75,6 +83,9 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         mPay.setOnClickListener(this);
         mDistribution.setOnClickListener(this);
         mNoAddress.setOnClickListener(this);
+        mBack.setOnClickListener(this);
+        mOkPay.setOnClickListener(this);
+        mAddress.setOnClickListener(this);
     }
 
     @Override
@@ -132,6 +143,15 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.FirmOrder_NoAddress://没有收获地址
 //                openActivityWitchAnimation(ManagerAddressActivity.class);
+                break;
+            case R.id.base_title_back://返回
+                finishWitchAnimation();
+                break;
+            case R.id.firmOrder_ok_pay://确认并付款
+                MyToast.showShort(this,"调取微信或者支付宝页面。。。");
+                break;
+            case R.id.FirmOrder_Address://收货地址选择
+                MyToast.showShort(this,"跳转至选择收货地址。。。");
                 break;
         }
     }
