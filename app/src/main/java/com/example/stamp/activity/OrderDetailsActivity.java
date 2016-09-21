@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.example.stamp.R;
 import com.example.stamp.adapter.FirmOrderExpandableAdapter;
@@ -34,6 +35,7 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
     private SelectPayPopupWindow mPayPopupWindow;//付款的PopupWindow
     private SelectDistributionPopupWindow mDistributionPopupWindow;//快递弹出的PopupWindow
     private ImageView mBack;
+    private TextView mTitle;
 
     @Override
     public View CreateTitle() {
@@ -53,13 +55,14 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
 
     private void initView() {
         mBack = (ImageView)mOrderDetailsTitle.findViewById(R.id.base_title_back);
+        mTitle = (TextView)mOrderDetailsTitle.findViewById(R.id.base_title);
+        mTitle.setText("订单详情");
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finishWitchAnimation();
             }
         });
-
         mLogistics = (LinearLayout) mOrderDetailsContent.findViewById(R.id.orderDetails_Address);
         mPay = (LinearLayout) mOrderDetailsContent.findViewById(R.id.orderDetails_pay);
         mDistribution = (LinearLayout) mOrderDetailsContent.findViewById(R.id.orderDetails_distribution);

@@ -130,6 +130,10 @@
             android:value="@integer/google_play_services_version" />
         <activity android:name=".activity.OrderSweepActivity"/>
         <activity android:name=".activity.ChooseReceiverAddress"/>
+
+        <activity android:name=".activity.ApplyForRefuseActivity"/>
+        <activity android:name=".activity.SuccessApplyForRefuseActivity"/>
+        <activity android:name=".activity.LookOrderDetailRefuseActivity"/>
     </application>
 
 </manifest>

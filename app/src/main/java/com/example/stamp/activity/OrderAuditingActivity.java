@@ -1,6 +1,8 @@
 package com.example.stamp.activity;
 
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.stamp.R;
 import com.example.stamp.base.BaseActivity;
@@ -12,6 +14,7 @@ public class OrderAuditingActivity extends BaseActivity {
 
     private View mOrderAuditingTitle;
     private View mOrderAuditingContent;
+    private ImageView mBack;
 
 
     @Override
@@ -27,12 +30,23 @@ public class OrderAuditingActivity extends BaseActivity {
         return mOrderAuditingContent;
     }
 
-    private void initView() {
-
-    }
 
     @Override
     public void AgainRequest() {
+
+    }
+
+    private void initView() {
+        mBack = (ImageView) mOrderAuditingTitle.findViewById(R.id.base_title_back);
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+
+            public void onClick(View view) {
+                finishWitchAnimation();
+            }
+        });
+        TextView mTitle = (TextView) mOrderAuditingTitle.findViewById(R.id.base_title);
+        mTitle.setText("订单详情");
 
     }
 }

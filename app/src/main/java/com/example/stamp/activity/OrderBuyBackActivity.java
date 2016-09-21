@@ -81,6 +81,7 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
                 } else if (ran == 3) {
 
                     openActivityWitchAnimation(OrderRejectActivity.class);
+
                 } else {
 
                     openActivityWitchAnimation(OrderWaitActivity.class);

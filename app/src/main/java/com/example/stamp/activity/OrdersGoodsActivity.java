@@ -5,7 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -20,7 +19,6 @@ import com.example.stamp.adapter.OrderPaymentReceivingCompleteLsitViewAdapter;
 import com.example.stamp.adapter.OrderRefuseLsitViewAdapter;
 import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.OrderAllListViewGoodsBean;
-import com.example.stamp.bean.OrderAllListViewGroupBean;
 import com.example.stamp.view.OrderGoodsViewPager;
 
 import java.util.ArrayList;
@@ -186,10 +184,11 @@ public class OrdersGoodsActivity extends BaseActivity {
         complete_edListview = (ExpandableListView) v4.findViewById(R.id.all_expand_ListView);
         refuse_edListview = (ExpandableListView) v5.findViewById(R.id.all_expand_ListView);
 
-
+        // (全部)适配器
         OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap, groups, goods);// 全部适配器
         // （待付款，待收货，已完成）适配器
         OrderPaymentReceivingCompleteLsitViewAdapter PayRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(this, mBitmap, groups, goods);
+        // （退款/退货）适配器
         OrderRefuseLsitViewAdapter RefuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(this, mBitmap, groups, goods);// 退货/ 退款适配器
 
         all_edListview.setAdapter(allLsitViewAdapter);
@@ -260,7 +259,7 @@ public class OrdersGoodsActivity extends BaseActivity {
     public void initListener() {
         mRadioGroup.setOnCheckedChangeListener(new MyGroupListener());
         mViewPager.setOnPageChangeListener(new MyPagerChangeListener());
-
+        //全部
         all_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
@@ -269,6 +268,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                 return false;
             }
         });
+        // 待付款
         payment_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
@@ -277,6 +277,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                 return false;
             }
         });
+        // 待收货
         receiving_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
@@ -285,6 +286,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                 return false;
             }
         });
+        // 已完成
         complete_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
@@ -293,7 +295,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                 return false;
             }
         });
-
+        //退款/退货
         refuse_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {

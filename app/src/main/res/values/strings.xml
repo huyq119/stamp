@@ -233,4 +233,6 @@
     <string name="bid_record">出价记录</string>
     <string name="yet_record">已出价</string>
     <string name="count_no">次</string>
+    <string name="text_apply_for">申请平台介入</string>
+    <string name="apply_for_reason">申请原因:</string>
 </resources>
