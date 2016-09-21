@@ -1,6 +1,7 @@
 package com.example.stamp.activity;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -9,10 +10,10 @@ import com.example.stamp.R;
 import com.example.stamp.adapter.ConfirmOrderListViewAdapter;
 import com.example.stamp.base.AddressBean;
 import com.example.stamp.base.BaseActivity;
+import com.example.stamp.dialog.ProgressDialog;
 import com.example.stamp.utils.MyToast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 管理收获地址页面
@@ -27,6 +28,11 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
     private ImageView mBack;
     private TextView mTitle;
     private String mAddress;
+    private ProgressDialog prodialog;
+    private TextView Title;
+    private Button dialog_button_cancel;
+    private Button dialog_button_ok;
+    private ArrayList<AddressBean.Address> mList;
 
     @Override
     public View CreateTitle() {
@@ -55,7 +61,7 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
     }
 
     private void initData() {
-        List<AddressBean.Address> mList = new ArrayList<>();
+         mList = new ArrayList<>();
         AddressBean.Address address;
         for (int i = 0; i < 5; i++) {
             if (i == 0) {
@@ -75,10 +81,12 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
                         break;
                     case R.id.Address_edit://编辑
                         openActivityWitchAnimation(EditReceiptAddressActivity.class);
-                        MyToast.showShort(ManagerAddressActivity.this, "点击了编辑按钮");
+//                        MyToast.showShort(ManagerAddressActivity.this, "点击了编辑按钮");
                         break;
                     case R.id.Address_delete://删除
-                        MyToast.showShort(ManagerAddressActivity.this, "点击了删除按钮");
+
+                        DeleteDialog(); // 删除弹出框
+//                        MyToast.showShort(ManagerAddressActivity.this, "点击了删除按钮");
                         break;
 
                 }
@@ -109,5 +117,45 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
     @Override
     public void AgainRequest() {
 
+    }
+
+
+    /**
+     * 删除弹出框
+     */
+    private void DeleteDialog() {
+        prodialog = new ProgressDialog(this);
+        prodialog.show();
+        Title = (TextView) prodialog.findViewById(R.id.title_tv);
+        Title.setText("确定要删除吗？");
+        // 取消
+        dialog_button_cancel = (Button) prodialog
+                .findViewById(R.id.dialog_button_cancel);
+        // 确定
+        dialog_button_ok = (Button) prodialog
+                .findViewById(R.id.dialog_button_ok);// 取消
+        // 取消
+        dialog_button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prodialog.dismiss();
+            }
+        });
+        dialog_button_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                ArrayList<CollectionBean.Collection> deleteList = new ArrayList<CollectionBean.Collection>();
+//                for (int i = 0; i < mList.size(); i++){
+//                    AddressBean.Address group = mList.get(i);
+//                    if (group.isChoosed()){
+//                        deleteList.add(group);
+//                    }
+//                    mList.removeAll(deleteList);
+//                    mListAdapter.notifyDataSetChanged();
+//                }
+//                MyToast.showShort(ManagerAddressActivity.this,"删除成功");
+                prodialog.dismiss();// 关闭Dialog
+            }
+        });
     }
 }

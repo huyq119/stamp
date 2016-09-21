@@ -2,7 +2,6 @@ package com.example.stamp.activity;
 
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -29,7 +28,6 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
     private ImageView Back;
     private TextView mEdit;
     private int checkNum; // 记录选中的条目数量
-    private CheckBox mSelect;
     private TextView mDelete;
     private CollectionListViewAdapter adapter;
     private LinearLayout cocollection_edit;
@@ -39,6 +37,8 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
     private Button dialog_button_cancel;
     private Button dialog_button_ok;
     private boolean isDel = true;
+    private ImageView mALLImg;
+
     @Override
     public View CreateTitle() {
         mCollectionTitle = View.inflate(this, R.layout.base_font_title, null);
@@ -60,7 +60,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
         mEdit = (TextView) mCollectionTitle.findViewById(R.id.base_edit);
         mEdit.setText("编辑");
         mCollection_lv = (ListView) mCollectionContent.findViewById(R.id.collection_listView);
-        mSelect = (CheckBox) mCollectionContent.findViewById(R.id.checkbox_select);
+        mALLImg = (ImageView) mCollectionContent.findViewById(R.id.choose_all_img);
 
         mDelete = (TextView)mCollectionContent.findViewById(R.id.delete);
         cocollection_edit = (LinearLayout)mCollectionContent.findViewById(R.id.collection_edit);
@@ -68,19 +68,19 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
     private void initData(){
         mList = new ArrayList<>();
         CollectionBean.Collection collection;
-        collection = new CollectionBean.Collection("庚申年", "YH", "YS", "123.45", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+        collection = new CollectionBean.Collection("庚申年", "YH", "YS", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年", "WH", "YS", "123.45", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+        collection = new CollectionBean.Collection("庚申年", "WH", "YS", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年", "JPZ", "JP", "123.45", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+        collection = new CollectionBean.Collection("庚申年", "JPZ", "JP", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年", "WKS", "JP", "123.45", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+        collection = new CollectionBean.Collection("庚申年", "WKS", "JP", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年", "YJS", "JP", "123.45", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+        collection = new CollectionBean.Collection("庚申年", "YJS", "JP", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年", "YH", "SC", "123.45", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+        collection = new CollectionBean.Collection("庚申年", "YH", "SC", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年", "WH", "SC", "123.45", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+        collection = new CollectionBean.Collection("庚申年1", "WH", "SC", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(collection);
     }
     private void initAdapter() {
@@ -91,7 +91,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
     private void initListener() {
         Back.setOnClickListener(this);
         mEdit.setOnClickListener(this);
-        mSelect.setOnClickListener(this);
+        mALLImg.setOnClickListener(this);
         mDelete.setOnClickListener(this);
     }
     @Override
@@ -109,6 +109,8 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                     mCollection_lv.setAdapter(mListAdapter);
                     mListAdapter.notifyDataSetChanged();
                     cocollection_edit.setVisibility(View.VISIBLE);
+
+
                 } else if (!isDel && mEdit != null) {
                     isDel = true;
                     mEdit.setText("编辑");
@@ -118,21 +120,22 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                     cocollection_edit.setVisibility(View.GONE);
                 }
                 break;
-            case R.id.checkbox_select:// 反选按钮的回调接口
-                if(mSelect.isClickable()==true){
-                    // 遍历list的长度，将已选的设为未选，未选的设为已选
-                    for (int i = 0; i < mList.size(); i++) {
-                        if (MyCollectionListViewEditerAdapter.getIsSelected().get(i)) {
-                            MyCollectionListViewEditerAdapter.getIsSelected().put(i, false);
-                            checkNum--;
-                        } else {
-                            MyCollectionListViewEditerAdapter.getIsSelected().put(i, true);
-                            checkNum++;
-                        }
-                    }
-                    // 刷新listview和TextView的显示
-                    dataChanged();
-                }
+            case R.id.choose_all_img:// 反选按钮的回调接口
+//                if(mSelect.isClickable()==true){
+//                    // 遍历list的长度，将已选的设为未选，未选的设为已选
+//                    for (int i = 0; i < mList.size(); i++) {
+//                        if (MyCollectionListViewEditerAdapter.getIsSelected().get(i)) {
+//                            MyCollectionListViewEditerAdapter.getIsSelected().put(i, false);
+//                            checkNum--;
+//                        } else {
+//                            MyCollectionListViewEditerAdapter.getIsSelected().put(i, true);
+//                            checkNum++;
+//                        }
+//                    }
+//                    // 刷新listview和TextView的显示
+//                    dataChanged();
+//                }
+                mALLImg.setImageResource(R.mipmap.select_red);
                 break;
             case R.id.delete:
                 DeleteDialog();//删除弹出框
@@ -141,6 +144,8 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                 break;
         }
     }
+
+
     /**
      * 删除弹出框
      */
@@ -155,11 +160,6 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
         // 确定
         dialog_button_ok = (Button) prodialog
                 .findViewById(R.id.dialog_button_ok);// 取消
-        dialog_button_cancel = (Button) prodialog
-                .findViewById(R.id.dialog_button_cancel);
-        // 确定
-        dialog_button_ok = (Button) prodialog
-                .findViewById(R.id.dialog_button_ok);
         // 取消
         dialog_button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -80,7 +80,6 @@ public class AuctionRecordListViewAdapter extends BaseAdapter {
         } else if (Status.equals("竞拍成功")) {
             holder.AuctionStatue.setText("竞拍成功");
             holder.AuctionStatue.setTextColor(Color.parseColor("#e20000"));
-            //TODO 这里看看之后给的字段应该不对,和服务器调一下
             //这里要根据返回的字段进行判断
 
         } else if (Status.equals("已出局")) {

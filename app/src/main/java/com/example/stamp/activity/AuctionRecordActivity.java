@@ -5,6 +5,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.stamp.R;
 import com.example.stamp.adapter.AuctionRecordListViewAdapter;
@@ -45,6 +46,8 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
 
     private void initView() {
         mRecordBack = (ImageView) mAuctionRecordTitle.findViewById(R.id.base_title_back);
+        TextView mTitle = (TextView) mAuctionRecordTitle.findViewById(R.id.base_title);
+        mTitle.setText("竞拍记录");
         mRecordListView = (ListView) mAuctionRecordContent.findViewById(R.id.record_auction_LV);
         mRecordAll = (Button) mAuctionRecordContent.findViewById(R.id.record_all);
         mRecording = (Button) mAuctionRecordContent.findViewById(R.id.btn_recording);

@@ -220,5 +220,6 @@ public class AddressPopupWindow extends PopupWindow implements OnWheelChangedLis
 
         mAreaView.setViewAdapter(new ArrayWheelAdapter<>(context, areas));
         mAreaView.setCurrentItem(0);
+        mCurrentArea = areas[0];
     }
 }

@@ -16,6 +16,7 @@ import com.example.stamp.dialog.AddressPopupWindow;
 import com.example.stamp.http.HttpUtils;
 import com.example.stamp.utils.Encrypt;
 import com.example.stamp.utils.MyLog;
+import com.example.stamp.utils.MyToast;
 import com.example.stamp.utils.SortUtils;
 import com.example.stamp.utils.ThreadManager;
 import com.google.gson.Gson;
@@ -138,7 +139,7 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                 }
                 break;
             case R.id.base_edit://保存按钮
-                //TODO 这走一个接口之后再写吧
+                MyToast.showShort(this,"保存成功");
                 break;
             case R.id.base_title_back://返回按钮
                 finishWitchAnimation();

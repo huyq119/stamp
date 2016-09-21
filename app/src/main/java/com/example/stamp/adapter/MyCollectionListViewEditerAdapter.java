@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,14 +68,14 @@ public class MyCollectionListViewEditerAdapter extends BaseAdapter {
             holder.goodsType = (TextView) view.findViewById(R.id.collection_flag);
             holder.goodsPrice = (TextView) view.findViewById(R.id.collection_price);
             holder.goodsStatus = (TextView) view.findViewById(R.id.collection_GoodsStatus);
-            holder.goodsCheckbox = (CheckBox)view.findViewById(R.id.check_box);
+            holder.goodsChooseImg= (ImageView)view.findViewById(R.id.item_choose_img);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
         CollectionBean.Collection collection = mList.get(i);
         holder.goodsName.setText(collection.getGoods_name());
-        holder.goodsPrice.setText(collection.getGoods_price());
+        holder.goodsPrice.setText("￥"+collection.getGoods_price());
         //SC商城，YS邮市，JP竞拍
         String goods_type = collection.getGoods_type();//商品类型
         if (goods_type.equals("SC")) {
@@ -107,9 +106,9 @@ public class MyCollectionListViewEditerAdapter extends BaseAdapter {
             holder.goodsStatus.setTextColor(Color.parseColor("#666666"));
             holder.goodsStatus.setVisibility(View.VISIBLE);
         }
-        holder.goodsCheckbox.setVisibility(View.VISIBLE);
+//        holder.goodsChooseImg.setVisibility(View.VISIBLE);
         // 根据isSelected来设置checkbox的选中状况
-        holder.goodsCheckbox.setChecked(getIsSelected().get(i));
+//        holder.goodsChooseImg.setChecked(getIsSelected().get(i));
         bitmapUtils.display(holder.goodsImg, collection.getGoods_img());
         return view;
     }
@@ -125,6 +124,6 @@ public class MyCollectionListViewEditerAdapter extends BaseAdapter {
         public TextView goodsType;//商品类型
         public TextView goodsPrice;//商品价格
         public TextView goodsStatus;//商品状态
-        public CheckBox goodsCheckbox;//是否选择
+        public ImageView goodsChooseImg;//是否选择
     }
 }
