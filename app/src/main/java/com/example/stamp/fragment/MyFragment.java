@@ -9,6 +9,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,12 +28,14 @@ import com.example.stamp.activity.WithdrawActivity;
 import com.example.stamp.base.BaseFragment;
 import com.example.stamp.bean.BaseBean;
 import com.example.stamp.bean.PersonBean;
+import com.example.stamp.dialog.ProgressDialog;
 import com.example.stamp.dialog.QuiteDialog;
 import com.example.stamp.dialog.SendProgressDialog;
 import com.example.stamp.dialog.SussessDialog;
 import com.example.stamp.http.HttpUtils;
 import com.example.stamp.utils.Encrypt;
 import com.example.stamp.utils.MyHandler;
+import com.example.stamp.utils.MyToast;
 import com.example.stamp.utils.SortUtils;
 import com.example.stamp.utils.ThreadManager;
 import com.google.gson.Gson;
@@ -56,7 +59,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
     private View myContentView;//内容页面
     private LinearLayout mLogin, mNoLogin, mQuite, mPressWord, mUsMe, mStamp, mRecord, mCollection, mAddress,mOrderBack;//登录成功页面,没有登录页面,退出登录,密码管理,关于我们,我的邮集,竞拍记录,我的收藏.收获地址,回购订单
-    private TextView mWithdraw,mPayment,mReceive,mComplete,mRefused,mPhone,mBalance,mNotBalance;//提现
+    private TextView mWithdraw,mPayment,mReceive,mComplete,mRefused,mPhone,mBalance,mNotBalance,Title;//提现
     private LinearLayout mOrderGoods;
     private String phone,mToken,mUser_id;// 手机号，标识，用户ID
     public SharedPreferences sp;
@@ -119,6 +122,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         }
 
     };
+    private LinearLayout mUpdate;
+    private ProgressDialog prodialog;
+    private Button dialog_button_cancel,dialog_button_ok;
 
     @Override
     public View CreateTitle() {
@@ -165,6 +171,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         mBalance = (TextView)myContentView.findViewById(R.id.my_balance);// 余额
         mNotBalance = (TextView)myContentView.findViewById(R.id.my_notbalance);// 不可用余额
 
+        mUpdate = (LinearLayout)myContentView.findViewById(R.id.my_update);// 版本更新
+
 
     }
 
@@ -205,6 +213,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         mComplete.setOnClickListener(this);
         mRefused.setOnClickListener(this);
         mQuite.setOnClickListener(this);
+        mUpdate.setOnClickListener(this);
 
     }
 
@@ -223,6 +232,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
             case R.id.my_usMe://关于我们
                 openActivityWitchAnimation(UsMeActivity.class);
                 break;
+            case R.id.my_update://版本更新
+                DeleteDialog(); // 非强制更新弹出框
+                break;
             case R.id.my_withdraw://提现
                 openActivityWitchAnimation(WithdrawActivity.class);
                 break;
@@ -235,7 +247,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
             case R.id.my_auctionRecord://竞拍记录
                 openActivityWitchAnimation(AuctionRecordActivity.class);
                 break;
-            case R.id.my_collection://我的收藏
+            case R.id.my_collection://收藏夹
                 openActivityWitchAnimation(MyCollectionActivity.class);
                 break;
             case R.id.my_Address://收获地址管理
@@ -269,7 +281,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 bundle4.putString(StaticField.ORDERS, "refused");
                 openActivityWitchAnimation(OrdersGoodsActivity.class,bundle4);
                 break;
-            case R.id.my_quit_login: // 退款/退货
+            case R.id.my_quit_login: // 退出登录
                 showDialog(getActivity());
                 break;
             default:
@@ -369,5 +381,48 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         sp.edit().putInt("isRemitPwd", Integer.valueOf(personBean.getHas_remit_pwd())).commit();// 设置提现密码
         mBalance.setText("￥" + personBean.getBalance());
         mNotBalance.setText("￥" + personBean.getUnusable_balance());
+    }
+
+    /**
+     * 非强制更新弹出框
+     */
+    private void DeleteDialog() {
+        prodialog = new ProgressDialog(getActivity());
+        prodialog.show();
+        Title = (TextView) prodialog.findViewById(R.id.title_tv);
+        Title.setText("发现新版本V1.0");
+        // 下次再说
+        dialog_button_cancel = (Button) prodialog
+                .findViewById(R.id.dialog_button_cancel);
+        dialog_button_cancel.setText("下次再说");
+        // 确定
+        dialog_button_ok = (Button) prodialog
+                .findViewById(R.id.dialog_button_ok);// 取消
+        dialog_button_ok.setText("立即更新");
+
+        // 取消
+        dialog_button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prodialog.dismiss();
+            }
+        });
+        dialog_button_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                ArrayList<CollectionBean.Collection> deleteList = new ArrayList<CollectionBean.Collection>();
+//                for (int i = 0; i < mList.size(); i++){
+//                    AddressBean.Address group = mList.get(i);
+//                    if (group.isChoosed()){
+//                        deleteList.add(group);
+//                    }
+//                    mList.removeAll(deleteList);
+//                    mListAdapter.notifyDataSetChanged();
+//                }
+//                MyToast.showShort(ManagerAddressActivity.this,"删除成功");
+                prodialog.dismiss();// 关闭Dialog
+                MyToast.showShort(getActivity(),"更新中...");
+            }
+        });
     }
 }

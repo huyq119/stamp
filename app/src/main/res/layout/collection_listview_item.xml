@@ -7,15 +7,13 @@
     android:orientation="horizontal">
 
 
-    <CheckBox
-        android:id="@+id/check_box"
+    <ImageView
+        android:id="@+id/item_choose_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="15dp"
-        android:background="@null"
-        android:button="@drawable/select_bg"
-        android:visibility="gone"
+        android:layout_marginLeft="12dp"
+        android:src="@drawable/select_bg"
         />
 
 
@@ -24,7 +22,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/distance"
+        android:layout_marginLeft="15dp"
         android:src="#ff00"/>
 
     <LinearLayout
@@ -38,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="庚申年"
+            android:text="庚申年11"
             android:textColor="#000"
             android:textSize="15sp"/>
 
@@ -75,7 +73,8 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
-                android:text="10000.0"/>
+                android:textColor="@color/red_font"
+                android:text="￥10000.0"/>
 
             <TextView
                 android:id="@+id/collection_flag"
