@@ -19,6 +19,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/stamptap_pop_years"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/stamptap_class"
@@ -29,7 +30,7 @@
             <View style="@style/myline" />
 
             <com.example.stamp.view.NoScrollGridView
-                android:id="@+id/s_pop_years"
+                android:id="@+id/selfmall_pop_years"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -46,6 +47,8 @@
             <View style="@style/myline" />
 
             <TextView
+                android:id="@+id/stamptap_pop_categorys"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -57,7 +60,7 @@
             <View style="@style/myline" />
 
             <com.example.stamp.view.NoScrollGridView
-                android:id="@+id/stamptap_pop_category"
+                android:id="@+id/selfmall_pop_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -85,7 +88,7 @@
             <View style="@style/myline" />
 
             <com.example.stamp.view.NoScrollGridView
-                android:id="@+id/stamptap_pop_theme"
+                android:id="@+id/selfmall_pop_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -104,11 +107,11 @@
 
     </ScrollView>
 
-    <View
-        style="@style/myline"
-        android:layout_above="@+id/stamptap_ll" />
+    <!--<View-->
+        <!--style="@style/myline"-->
+        <!--android:layout_above="@+id/stamptap_ll" />-->
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/stamptap_ll"
         android:layout_width="match_parent"
         android:layout_height="36dp"
@@ -135,5 +138,5 @@
             android:text="@string/ensure"
             android:textColor="#fff"
             android:textSize="12sp" />
-    </LinearLayout>
+    </LinearLayout>-->
 </RelativeLayout>

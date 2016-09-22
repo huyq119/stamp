@@ -9,6 +9,7 @@ import com.example.stamp.R;
 import com.example.stamp.adapter.LookOrderDetailRefuseAdapter;
 import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.LookOrderDetailRefuseBean;
+import com.example.stamp.dialog.PhoneDialog;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public class LookOrderDetailRefuseActivity extends BaseActivity{
 
     private View mRefuseTitle,mRefuseContent;
     private ImageView mBack;
-    private TextView mTitle;
+    private TextView mTitle,mServiceTel;
     private ListView mListView;
     private ArrayList<LookOrderDetailRefuseBean> mLsit;
 
@@ -38,8 +39,6 @@ public class LookOrderDetailRefuseActivity extends BaseActivity{
         return mRefuseContent;
     }
 
-
-
     @Override
     public void AgainRequest() {
 
@@ -56,6 +55,14 @@ public class LookOrderDetailRefuseActivity extends BaseActivity{
             }
         });
         mListView =(ListView) mRefuseContent.findViewById(R.id.look_order_detail_listview);
+        mServiceTel =(TextView) mRefuseContent.findViewById(R.id.Service_tel);
+        mServiceTel.setOnClickListener(new View.OnClickListener() {//客服电话
+            @Override
+            public void onClick(View view) {
+                PhoneDialog phoneDialog = new PhoneDialog(LookOrderDetailRefuseActivity.this,mServiceTel.getText().toString());
+                phoneDialog.show();
+            }
+        });
 
     }
     private void initAdapter(){

@@ -10,7 +10,8 @@ import android.widget.TextView;
 
 import com.example.stamp.R;
 import com.example.stamp.base.BaseActivity;
-import com.example.stamp.dialog.SelectDistributionPopupWindow;
+import com.example.stamp.dialog.ChooseExpressCompanyPopupWindow;
+import com.example.stamp.dialog.PhoneDialog;
 import com.example.stamp.utils.MyToast;
 
 /**
@@ -22,10 +23,11 @@ public class ApplyForRefuseActivity extends BaseActivity implements View.OnClick
 
     private View mRefuseTitle, mRefuseContent;
     private ImageView mBack,mNoRefuseImg,mYesRefuseImg;
-    private TextView mTitle,mSumbit,mNoRefuse,mYesRefuse;
+    private TextView mTitle,mSumbit,mNoRefuse,mYesRefuse,mServiceTel;
     private LinearLayout mNoRefuseLl,mYesRefuseLl,mCompanyLl;
     private EditText mEtCourierNo,mEtRefuseExplain;// 快递单号，退款说明
-    private SelectDistributionPopupWindow mDistributionPopupWindow;//配送方式的弹出框
+    private ChooseExpressCompanyPopupWindow mChooseExpressCompanyPopup;// 选择快递公司弹出框
+
     @Override
     public View CreateTitle() {
         mRefuseTitle = View.inflate(this, R.layout.base_back_title, null);
@@ -59,6 +61,7 @@ public class ApplyForRefuseActivity extends BaseActivity implements View.OnClick
         mSumbit =(TextView) mRefuseContent.findViewById(R.id.sumbit_apply_for);
         mNoRefuse =(TextView) mRefuseContent.findViewById(R.id.no_refuse);
         mYesRefuse =(TextView) mRefuseContent.findViewById(R.id.yes_refuse);
+        mServiceTel =(TextView) mRefuseContent.findViewById(R.id.Service_tel);
     }
 
     private void initListener() {
@@ -67,6 +70,7 @@ public class ApplyForRefuseActivity extends BaseActivity implements View.OnClick
         mYesRefuseLl.setOnClickListener(this);
         mCompanyLl.setOnClickListener(this);
         mSumbit.setOnClickListener(this);
+        mServiceTel.setOnClickListener(this);
     }
 
     @Override
@@ -88,8 +92,8 @@ public class ApplyForRefuseActivity extends BaseActivity implements View.OnClick
                 mYesRefuseImg.setVisibility(View.VISIBLE);
             break;
             case R.id.express_company_ll:// 选择快递公司
-                mDistributionPopupWindow = new SelectDistributionPopupWindow(this, mDistributionWindow);
-                mDistributionPopupWindow.showAtLocation(this.findViewById(R.id.FirmOrder), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                mChooseExpressCompanyPopup = new ChooseExpressCompanyPopupWindow(this, mDistributionWindow);
+                mChooseExpressCompanyPopup.showAtLocation(this.findViewById(R.id.refuse_intervene), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
             break;
             case R.id.sumbit_apply_for:// 提交申请
                 String mCourie = mEtCourierNo.getText().toString().trim();
@@ -102,7 +106,10 @@ public class ApplyForRefuseActivity extends BaseActivity implements View.OnClick
                     //跳转至提交申请成页面（退款/退货）
                     openActivityWitchAnimation(SuccessApplyForRefuseActivity.class);
                 }
-
+            break;
+            case R.id.Service_tel:// 客服电话
+                PhoneDialog phoneDialog = new PhoneDialog(this,mServiceTel.getText().toString());
+                phoneDialog.show();
             break;
             default:
                 break;
@@ -115,13 +122,15 @@ public class ApplyForRefuseActivity extends BaseActivity implements View.OnClick
     private View.OnClickListener mDistributionWindow = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mDistributionPopupWindow.dismiss();
+            mChooseExpressCompanyPopup.dismiss();
             switch (view.getId()) {
                 case R.id.EMS_click://Ems的点击按钮
-                    MyToast.showShort(ApplyForRefuseActivity.this, "点击了EMS按钮");
+                    MyToast.showShort(ApplyForRefuseActivity.this, "选择了EMS");
+
+
                     break;
                 case R.id.Wind_click://顺丰的点击按钮
-                    MyToast.showShort(ApplyForRefuseActivity.this, "点击了顺丰按钮");
+                    MyToast.showShort(ApplyForRefuseActivity.this, "选择了顺丰速递");
                     break;
             }
         }

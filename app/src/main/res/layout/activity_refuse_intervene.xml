@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/refuse_intervene"
     android:background="@color/background"
     android:orientation="vertical">
 
@@ -218,8 +219,9 @@
                 android:id="@+id/et_courier_no"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="24dp"
                 android:background="@null"
+                android:textSize="14sp"
                 android:inputType="number" />
 
         </LinearLayout>
