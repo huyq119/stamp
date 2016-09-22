@@ -17,16 +17,13 @@ import com.example.stamp.R;
 import com.example.stamp.StaticField;
 import com.example.stamp.activity.SearchActivity;
 import com.example.stamp.adapter.PanStampGridViewAdapter;
-import com.example.stamp.adapter.StampMarketGridViewAdapter;
 import com.example.stamp.base.BaseFragment;
 import com.example.stamp.bean.GoodsStampBean;
-import com.example.stamp.bean.StampTapBean;
-import com.example.stamp.dialog.PanStampFilterDialog;
+import com.example.stamp.dialog.SelfMallFilterDialog;
 import com.example.stamp.fragment.popfragment.SelfMallFragment;
 import com.example.stamp.http.HttpUtils;
 import com.example.stamp.utils.Encrypt;
 import com.example.stamp.utils.MyLog;
-import com.example.stamp.utils.MyToast;
 import com.example.stamp.utils.ScreenUtils;
 import com.example.stamp.utils.SortUtils;
 import com.example.stamp.utils.ThreadManager;
@@ -246,7 +243,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.panStamp_filter://筛选
                 setPopupWindowListData();
-                PanStampFilterDialog filterDialogFragment = new PanStampFilterDialog(mPopupList, arr);
+                SelfMallFilterDialog filterDialogFragment = new SelfMallFilterDialog(mPopupList, arr);
                 filterDialogFragment.show(getChildFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
                 break;
             case R.id.stamp_top_btn://置顶

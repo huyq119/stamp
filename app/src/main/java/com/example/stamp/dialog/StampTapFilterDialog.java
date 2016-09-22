@@ -23,7 +23,7 @@ import com.example.stamp.view.NoScrollGridView;
 import java.util.HashMap;
 
 /**
- * 筛选对话框
+ * 邮票目录筛选Dialog
  * Created by Administrator on 2016/8/2.
  */
 public class StampTapFilterDialog extends BaseDialogFragment {
@@ -54,12 +54,12 @@ public class StampTapFilterDialog extends BaseDialogFragment {
         //设置GridView的数据
         setPopupWindowData();
 
-        RequestNet();
+//        RequestNet();
         return mFilterView;
     }
 
     /**
-     * 请求网络
+     * 筛选页面数据请求网络
      */
     private void RequestNet() {
         //请求类别信息
@@ -127,7 +127,7 @@ public class StampTapFilterDialog extends BaseDialogFragment {
             @Override
             public void onClick(View view) {
                 //所有PopupWindow选择的内容
-                MyLog.e(mYearListener.getPosition() + "_" + mCategoryListener.getPosition() + "_" + mThemeListener.getPosition());
+                MyLog.e("所有PopupWindow选择的内容---->"+mYearListener.getPosition() + "_" + mCategoryListener.getPosition() + "_" + mThemeListener.getPosition());
                 StampTapFilterDialog.this.dismiss();
             }
         });

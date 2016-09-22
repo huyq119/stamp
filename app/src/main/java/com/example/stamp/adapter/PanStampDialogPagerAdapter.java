@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.stamp.fragment.popfragment.SelfMallFragment;
+import com.example.stamp.fragment.popfragment.SelfMallFilterFragment;
 
 import java.util.List;
 
@@ -28,20 +28,14 @@ public class PanStampDialogPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int arg0) {
 //        if (arg0 == 0) {// 我的页面
-//            return new HomeFragment();
+//            return new SelfMallFilterFragment(arrClass,arrYear,arrPopson);
 //        } else if (arg0 == 1) {// 行情
 //            return new StampTapFragment();
-//        } else if (arg0 == 2) {// 订单
-//            return new PanStampFragment();
-//        } else if (arg0 == 3) {// 订单
-//            return new ShopFragment();
-//        } else if (arg0 == 4) {// 我的
-//            return new MyFragment();
 //        }
 
 //        return null;
 
-        return new SelfMallFragment();
+       return new SelfMallFilterFragment();
     }
 
     @Override

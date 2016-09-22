@@ -1,5 +1,6 @@
 package com.example.stamp.dialog;
 
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,16 +18,16 @@ import com.viewpagerindicator.TabPageIndicator;
 import java.util.List;
 
 /**
- * 筛选对话框
+ * 商城筛选弹出框
  * Created by Administrator on 2016/8/2.
  */
-public class PanStampFilterDialog extends BaseDialogFragment {
+public class SelfMallFilterDialog extends BaseDialogFragment {
 
     private List<Fragment> mList;
     private String[] arr;
 
 
-    public PanStampFilterDialog(List<Fragment> mList, String[] arr) {
+    public SelfMallFilterDialog(List<Fragment> mList, String[] arr) {
         this.mList = mList;
         this.arr = arr;
     }
@@ -41,11 +42,11 @@ public class PanStampFilterDialog extends BaseDialogFragment {
         FragmentPagerAdapter adapter = new PanStampDialogPagerAdapter(getChildFragmentManager(), mList, arr);
         ViewPager pager = (ViewPager) mFilterView.findViewById(R.id.baseStamp_vp);
         pager.setAdapter(adapter);
+
         TabPageIndicator indicator = (TabPageIndicator) mFilterView.findViewById(R.id.baseStamp_indicator);
         indicator.setViewPager(pager);
 
         return mFilterView;
     }
-
 
 }

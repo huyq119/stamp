@@ -1,7 +1,7 @@
 package com.example.stamp.activity;
 
+
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,23 +12,17 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.stamp.R;
 import com.example.stamp.StaticField;
-import com.example.stamp.adapter.SelfMallGridViewAdapter;
 import com.example.stamp.adapter.StampMarketGridViewAdapter;
-import com.example.stamp.adapter.StampTapGridViewAdapter;
 import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.GoodsStampBean;
-import com.example.stamp.bean.StampTapBean;
-import com.example.stamp.dialog.PanStampFilterDialog;
-import com.example.stamp.dialog.StampTapFilterDialog;
+import com.example.stamp.dialog.SelfMallFilterDialog;
 import com.example.stamp.fragment.popfragment.SelfMallFilterFragment;
-import com.example.stamp.fragment.popfragment.SelfMallFragment;
 import com.example.stamp.http.HttpUtils;
 import com.example.stamp.utils.Encrypt;
 import com.example.stamp.utils.MyLog;
@@ -45,7 +39,6 @@ import java.util.List;
  * 商城页面
  */
 public class SelfMallActivity extends BaseActivity implements View.OnClickListener, AbsListView.OnScrollListener {
-
 
     private View mSelfMallTitle, mSelfMallContent;
     private TextView mMarketPrice;//市场价
@@ -235,7 +228,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
             case R.id.self_filter://筛选按钮
                 // 筛选有点问题
                 setPopupWindowListData();
-                PanStampFilterDialog filterDialogFragment = new PanStampFilterDialog(mPopupList, arr);
+                SelfMallFilterDialog filterDialogFragment = new SelfMallFilterDialog(mPopupList, arr);
                 filterDialogFragment.show(getSupportFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
                 break;
             case R.id.self_synthesize://综合
@@ -380,7 +373,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     private void setPopupWindowListData() {
         //初始化集合
         mPopupList = new ArrayList<>();
-        SelfMallFilterFragment mallFragment = new SelfMallFilterFragment(arrClass,arrYear,arrPopson);
+        SelfMallFilterFragment mallFragment = new SelfMallFilterFragment();
         mPopupList.add(mallFragment);
         mPopupList.add(mallFragment);
     }
