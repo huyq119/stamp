@@ -19,7 +19,6 @@ import com.example.stamp.activity.HomeImageH5Activity;
 import com.example.stamp.activity.ScanActivity;
 import com.example.stamp.activity.SearchActivity;
 import com.example.stamp.activity.SelfMallActivity;
-import com.example.stamp.activity.SelfMallDetailActivity;
 import com.example.stamp.activity.StampActivity;
 import com.example.stamp.adapter.HomeGridViewAdapter;
 import com.example.stamp.adapter.HomeViewPagerAdapter;
@@ -345,7 +344,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 HashMap<String, String> params = new HashMap<>();
                 params.put(StaticField.SERVICE_TYPE, StaticField.HOMEPAGE);
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(num));
-                MyLog.e(num+"");
+                MyLog.e(num + "");
                 params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM));
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
@@ -422,14 +421,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      * 设置GridView的适配器
      */
     private void setGridViewAdapter() {
-        List<HomeBean.Good> goods_list = mHomeBean.getGoods_list();
-        mList.addAll(goods_list);
-        HomeGridViewAdapter Adapter = new HomeGridViewAdapter(getActivity(), mList, mBitmap);
-        mGridView.setAdapter(Adapter);
-        //这句是为了防止展示到GridView处
-        mGridView.requestChildFocus(mHomeVP, null);
-        if(num!=0){
-            mScrollView.onRefreshComplete();
+        if (mHomeBean != null) {
+            List<HomeBean.Good> goods_list = mHomeBean.getGoods_list();
+            mList.addAll(goods_list);
+            HomeGridViewAdapter Adapter = new HomeGridViewAdapter(getActivity(), mList, mBitmap);
+            mGridView.setAdapter(Adapter);
+            //这句是为了防止展示到GridView处
+            mGridView.requestChildFocus(mHomeVP, null);
+            if (num != 0) {
+                mScrollView.onRefreshComplete();
+            }
         }
     }
 

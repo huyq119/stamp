@@ -38,7 +38,7 @@ import java.util.List;
 /**
  * 商城页面
  */
-public class SelfMallActivity extends BaseActivity implements View.OnClickListener, AbsListView.OnScrollListener {
+public class SelfMallActivity extends BaseActivity implements View.OnClickListener, AbsListView.OnScrollListener, SelfMallFilterDialog.ClickEnsure {
 
     private View mSelfMallTitle, mSelfMallContent;
     private TextView mMarketPrice;//市场价
@@ -50,17 +50,16 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     private List<Fragment> mPopupList;//展示PopupWindow页面的Fragment的集合
     private String[] arr = {"自营商城", "第三方商家"};
     private int mCount;
-    private boolean scrollFlag,Salesflag,Priceflag,Synthesizeflag; // 标记是否滑动,销量，价格,综合
+    private boolean scrollFlag, Salesflag, Priceflag, Synthesizeflag; // 标记是否滑动,销量，价格,综合
     private int lastVisibleItemPosition = 0;// 标记上次滑动位置
-    private String[]  arrClass= {"人物", "植物", "节日", "器皿", "字画", "风光", "经济", "农业", "民俗", "动物", "生肖",
+    private String[] arrClass = {"人物", "植物", "节日", "器皿", "字画", "风光", "经济", "农业", "民俗", "动物", "生肖",
             "文化艺术", "政治", "科教", "工业", "交通", "军事", "文学", "邮政", "公共"};
     private String[] arrYear = {"2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005"};
-    private String[] arrPopson= {"任平", "于平", "甲钴胺", "邮票","任平", "于平", "甲钴胺", "邮票","任平", "于平", "甲钴胺", "邮票"};
+    private String[] arrPopson = {"任平", "于平", "甲钴胺", "邮票", "任平", "于平", "甲钴胺", "邮票", "任平", "于平", "甲钴胺", "邮票"};
     private TextView mTitle;
     private int num = 0;//初始索引
     private GoodsStampBean mGoodsStampBean;
     private Handler mHandler = new Handler() {
-
 
 
         @Override
@@ -70,13 +69,15 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
             switch (msg.what) {
                 case StaticField.SUCCESS://商城Lsit
                     Gson gson = new Gson();
-                     mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
+                    mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
                     mList = mGoodsStampBean.getGoods_list();
                     initAdapter();
                     break;
             }
         }
     };
+    private SelfMallFilterFragment mMallFragment;
+    private SelfMallFilterDialog mFilterDialogFragment;
 
 
     @Override
@@ -127,15 +128,15 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
                 Bundle bundle = new Bundle();
                 bundle.putString(StaticField.GOODS_SN, mGoods_sn);
-                openActivityWitchAnimation(SelfMallDetailActivity.class,bundle);
+                openActivityWitchAnimation(SelfMallDetailActivity.class, bundle);
             }
         });
     }
 
     private void initAdapter() {
         if (mStampMarAdapter == null) {
-        //为GridView设置适配器
-        mStampMarAdapter = new StampMarketGridViewAdapter(this, mList, mBitmap);
+            //为GridView设置适配器
+            mStampMarAdapter = new StampMarketGridViewAdapter(this, mList, mBitmap);
         }
         //内容GridView设置适配器
         mGridView.setAdapter(mStampMarAdapter);
@@ -162,7 +163,6 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
 //        });
 
 
-
         if (mList != null) {
             mList = new ArrayList<>();
         }
@@ -176,11 +176,13 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     public void AgainRequest() {
 
     }
+
     /**
-     *  商城list网络请求
+     * 商城list网络请求
+     *
      * @param Order_By 类别
-     * @param index 角标
-     * @param Sort 排序
+     * @param index    角标
+     * @param Sort     排序
      */
     private void RequestNet(final String Order_By, final int index, final String Sort) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
@@ -189,7 +191,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 HashMap<String, String> params = new HashMap<>();
                 params.put(StaticField.SERVICE_TYPE, StaticField.GOODSLIST);// 接口名称
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
-                params.put(StaticField.GOODS_SOURCE,StaticField.GOODSMALL); // 商品类型
+                params.put(StaticField.GOODS_SOURCE, StaticField.GOODSMALL); // 商品类型
                 params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；XL销量；JG价格)
                 params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
                 params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
@@ -228,8 +230,9 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
             case R.id.self_filter://筛选按钮
                 // 筛选有点问题
                 setPopupWindowListData();
-                SelfMallFilterDialog filterDialogFragment = new SelfMallFilterDialog(mPopupList, arr);
-                filterDialogFragment.show(getSupportFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
+                mFilterDialogFragment = new SelfMallFilterDialog(mPopupList, arr);
+                mFilterDialogFragment.show(getSupportFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
+                mFilterDialogFragment.setClickEnsure(this);
                 break;
             case R.id.self_synthesize://综合
                 setOtherButton(mSales, mPrice);
@@ -271,7 +274,6 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                     RequestNet(StaticField.JG, num, StaticField.D);
                     Priceflag = false;
                 } else {
-                    Log.e("flag", "false");
                     setDrawable(R.mipmap.top_arrow_top, mPrice, Color.parseColor("#ff0000"));
                     RequestNet(StaticField.JG, num, StaticField.A);
                     Priceflag = true;
@@ -292,6 +294,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
             mGridView.setSelection(pos);
         }
     }
+
     /**
      * GridView滑动状态改变监听的方法
      */
@@ -302,8 +305,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:// 是当屏幕停止滚动时
                 scrollFlag = false;
                 // 判断滚动到底部
-                if (mGridView.getLastVisiblePosition() == (mGridView
-                        .getCount() - 1)) {
+                if (mGridView.getLastVisiblePosition() == (mGridView.getCount() - 1)) {
                     mTopBtn.setVisibility(View.VISIBLE);
                 }
                 // 判断滚动到顶部
@@ -319,12 +321,14 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
     }
+
     /**
      * 置顶按钮显示的方法
+     *
      * @param absListView
      * @param firstVisibleItem 当前能看见的第一个列表项ID（从0开始）
      * @param visibleItemCount 当前能看见的列表项个数（小半个也算）
-     * @param totalItemCount totalItemCount：列表项共数
+     * @param totalItemCount   totalItemCount：列表项共数
      */
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -341,16 +345,15 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 return;
             }
             lastVisibleItemPosition = firstVisibleItem;
-
-
         }
     }
-        /**
-         * 设置其他button的方法
-         *
-         * @param btn1
-         * @param btn2
-         */
+
+    /**
+     * 设置其他button的方法
+     *
+     * @param btn1
+     * @param btn2
+     */
 
     private void setOtherButton(Button btn1, Button btn2) {
         setDrawable(R.mipmap.top_arrow_normal, btn1, Color.parseColor("#666666"));
@@ -373,10 +376,18 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     private void setPopupWindowListData() {
         //初始化集合
         mPopupList = new ArrayList<>();
-        SelfMallFilterFragment mallFragment = new SelfMallFilterFragment();
-        mPopupList.add(mallFragment);
-        mPopupList.add(mallFragment);
+        mMallFragment = new SelfMallFilterFragment();
+//        mPopupList.add(mMallFragment);
+        mPopupList.add(mMallFragment);
+        SelfMallFilterFragment mallFilterFragment = new SelfMallFilterFragment();
+        mPopupList.add(mallFilterFragment);
     }
 
 
+    @Override
+    public void setEnsureData() {
+        String mMallData = mMallFragment.getData();
+        MyLog.e(mMallData);
+        mFilterDialogFragment.dismiss();
+    }
 }

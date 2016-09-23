@@ -12,6 +12,8 @@ import com.example.stamp.adapter.StampTapFilterGridViewAdapter;
 public class GridViewOnItemClickListener implements AdapterView.OnItemClickListener {
     private int position;
     private StampTapFilterGridViewAdapter adapter;
+    private SelfMallItemClick mSelfMallItemClick;
+
 
     public GridViewOnItemClickListener(int position, StampTapFilterGridViewAdapter adapter) {
         this.position = position;
@@ -29,6 +31,20 @@ public class GridViewOnItemClickListener implements AdapterView.OnItemClickListe
             adapter.setSeclection(adapter.getCount() + 1);
             adapter.notifyDataSetChanged();
         }
+
+        //TODO 这里写个回调,这里是改变的数据
+        mSelfMallItemClick.GetClickItem();
+    }
+
+    /**
+     * 这个是接口的点击回调
+     */
+    public interface SelfMallItemClick {
+        void GetClickItem();
+    }
+
+    public void setSelfMallItemClick(SelfMallItemClick selfMallItemClick) {
+        mSelfMallItemClick = selfMallItemClick;
     }
 
     public int getPosition() {

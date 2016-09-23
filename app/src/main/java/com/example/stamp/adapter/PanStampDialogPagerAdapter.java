@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.stamp.fragment.popfragment.SelfMallFilterFragment;
-
 import java.util.List;
 
 
@@ -27,15 +25,7 @@ public class PanStampDialogPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int arg0) {
-//        if (arg0 == 0) {// 我的页面
-//            return new SelfMallFilterFragment(arrClass,arrYear,arrPopson);
-//        } else if (arg0 == 1) {// 行情
-//            return new StampTapFragment();
-//        }
-
-//        return null;
-
-       return new SelfMallFilterFragment();
+       return mList.get(arg0);
     }
 
     @Override
