@@ -2,21 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical">
 
     <com.viewpagerindicator.TabPageIndicator
         android:id="@+id/baseStamp_indicator"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="75dp" />
 
     <android.support.v4.view.ViewPager
-        android:overScrollMode="never"
-        android:scrollbars="none"
         android:id="@+id/baseStamp_vp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
 
     <View
         style="@style/myline"
@@ -25,7 +25,7 @@
     <LinearLayout
         android:id="@+id/stamptap_ll"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="47dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 

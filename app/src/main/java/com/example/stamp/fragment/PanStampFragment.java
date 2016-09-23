@@ -19,8 +19,8 @@ import com.example.stamp.activity.SearchActivity;
 import com.example.stamp.adapter.PanStampGridViewAdapter;
 import com.example.stamp.base.BaseFragment;
 import com.example.stamp.bean.GoodsStampBean;
-import com.example.stamp.dialog.SelfMallFilterDialog;
-import com.example.stamp.fragment.popfragment.SelfMallFragment;
+import com.example.stamp.dialog.SelfMallPanStampFilterDialog;
+import com.example.stamp.fragment.popfragment.PanStampFilterFragment;
 import com.example.stamp.http.HttpUtils;
 import com.example.stamp.utils.Encrypt;
 import com.example.stamp.utils.MyLog;
@@ -243,7 +243,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.panStamp_filter://筛选
                 setPopupWindowListData();
-                SelfMallFilterDialog filterDialogFragment = new SelfMallFilterDialog(mPopupList, arr);
+                SelfMallPanStampFilterDialog filterDialogFragment = new SelfMallPanStampFilterDialog(mPopupList, arr);
                 filterDialogFragment.show(getChildFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
                 break;
             case R.id.stamp_top_btn://置顶
@@ -328,13 +328,11 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
     private void setPopupWindowListData() {
         //初始化集合
         mPopupList = new ArrayList<>();
-
-        SelfMallFragment mallFragment = new SelfMallFragment();
-
-        mPopupList.add(mallFragment);
-        mPopupList.add(mallFragment);
-        mPopupList.add(mallFragment);
-        mPopupList.add(mallFragment);
+        PanStampFilterFragment mPanStampFragment = new PanStampFilterFragment();
+        mPopupList.add(mPanStampFragment);
+        mPopupList.add(mPanStampFragment);
+        mPopupList.add(mPanStampFragment);
+        mPopupList.add(null);
     }
 
     /**

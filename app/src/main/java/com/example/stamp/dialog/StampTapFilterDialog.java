@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.example.stamp.R;
 import com.example.stamp.StaticField;
 import com.example.stamp.adapter.StampTapFilterGridViewAdapter;
-import com.example.stamp.adapter.StampTapFilterThemeGridViewAdapter;
+import com.example.stamp.adapter.StampTapFilterPersonGridViewAdapter;
 import com.example.stamp.base.BaseDialogFragment;
 import com.example.stamp.http.HttpUtils;
 import com.example.stamp.listener.GridViewOnItemClickListener;
@@ -95,7 +95,7 @@ public class StampTapFilterDialog extends BaseDialogFragment {
         //创建适配器
         StampTapFilterGridViewAdapter mYearAdapter = new StampTapFilterGridViewAdapter(getActivity(), arr);
         StampTapFilterGridViewAdapter mCategoryAdapter = new StampTapFilterGridViewAdapter(getActivity(), arrs);
-        StampTapFilterThemeGridViewAdapter mThemeAdapter = new StampTapFilterThemeGridViewAdapter(getActivity(), arres);
+        StampTapFilterPersonGridViewAdapter mThemeAdapter = new StampTapFilterPersonGridViewAdapter(getActivity(), arres);
 
         //设置适配器
         mYearGV.setAdapter(mYearAdapter);
