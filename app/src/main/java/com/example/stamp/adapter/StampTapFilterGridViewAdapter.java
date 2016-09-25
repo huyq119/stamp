@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.example.stamp.R;
 
 /**
- * 筛选布局的GridView适配器
+ * （邮票目录）筛选布局的GridView适配器
  * Created by Administrator on 2016/7/29.
  */
 public class StampTapFilterGridViewAdapter extends BaseAdapter {

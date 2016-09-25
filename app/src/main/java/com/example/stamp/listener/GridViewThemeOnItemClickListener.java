@@ -3,7 +3,8 @@ package com.example.stamp.listener;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.example.stamp.adapter.StampTapFilterPersonGridViewAdapter;
+import com.example.stamp.adapter.StampTapFilterGridViewAdapter;
+import com.example.stamp.adapter.StampTapFilterThemeGridViewAdapter;
 
 /**
  * GridViewThemeOnItemClickListener
@@ -12,9 +13,9 @@ import com.example.stamp.adapter.StampTapFilterPersonGridViewAdapter;
  */
 public class GridViewThemeOnItemClickListener implements AdapterView.OnItemClickListener {
     private int position;
-    private StampTapFilterPersonGridViewAdapter adapter;
+    private StampTapFilterThemeGridViewAdapter adapter;
 
-    public GridViewThemeOnItemClickListener(int position, StampTapFilterPersonGridViewAdapter adapter) {
+    public GridViewThemeOnItemClickListener(int position, StampTapFilterThemeGridViewAdapter adapter) {
         this.position = position;
         this.adapter = adapter;
     }

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.example.stamp.R;
 import com.example.stamp.StaticField;
 import com.example.stamp.adapter.StampTapFilterGridViewAdapter;
-import com.example.stamp.adapter.StampTapFilterPersonGridViewAdapter;
+import com.example.stamp.adapter.StampTapFilterThemeGridViewAdapter;
 import com.example.stamp.base.BaseDialogFragment;
 import com.example.stamp.http.HttpUtils;
 import com.example.stamp.listener.GridViewOnItemClickListener;
@@ -23,7 +23,7 @@ import com.example.stamp.view.NoScrollGridView;
 import java.util.HashMap;
 
 /**
- * 邮票目录筛选Dialog
+ * 筛选对话框
  * Created by Administrator on 2016/8/2.
  */
 public class StampTapFilterDialog extends BaseDialogFragment {
@@ -53,13 +53,12 @@ public class StampTapFilterDialog extends BaseDialogFragment {
 
         //设置GridView的数据
         setPopupWindowData();
-
 //        RequestNet();
         return mFilterView;
     }
 
     /**
-     * 筛选页面数据请求网络
+     * 请求网络
      */
     private void RequestNet() {
         //请求类别信息
@@ -95,7 +94,7 @@ public class StampTapFilterDialog extends BaseDialogFragment {
         //创建适配器
         StampTapFilterGridViewAdapter mYearAdapter = new StampTapFilterGridViewAdapter(getActivity(), arr);
         StampTapFilterGridViewAdapter mCategoryAdapter = new StampTapFilterGridViewAdapter(getActivity(), arrs);
-        StampTapFilterPersonGridViewAdapter mThemeAdapter = new StampTapFilterPersonGridViewAdapter(getActivity(), arres);
+        StampTapFilterThemeGridViewAdapter mThemeAdapter = new StampTapFilterThemeGridViewAdapter(getActivity(), arres);
 
         //设置适配器
         mYearGV.setAdapter(mYearAdapter);
@@ -127,7 +126,7 @@ public class StampTapFilterDialog extends BaseDialogFragment {
             @Override
             public void onClick(View view) {
                 //所有PopupWindow选择的内容
-                MyLog.e("所有PopupWindow选择的内容---->"+mYearListener.getPosition() + "_" + mCategoryListener.getPosition() + "_" + mThemeListener.getPosition());
+                MyLog.e(mYearListener.getPosition() + "_" + mCategoryListener.getPosition() + "_" + mThemeListener.getPosition());
                 StampTapFilterDialog.this.dismiss();
             }
         });

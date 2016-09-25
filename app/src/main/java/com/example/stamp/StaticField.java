@@ -8,20 +8,28 @@ import com.example.stamp.utils.Version;
  */
 public class StaticField {
     // 短信验证码发送(登录)
-    public static final String SMS_SEND= "cn.com.chinau.sms.send";
+    public static final String SMS_SEND = "cn.com.chinau.sms.send";//短信验证码发送(登录)
     public static final String MOBILE = "mobile";// 手机号
     // 短信类型（DL登录，ZC注册，TX提现，BK绑定银行卡，JB解绑银行卡，XG修改银行卡，XGDL修改登录密码，XGTX修改提现密码，WJMM忘记密码，）
     public static final String SMS_TYPE = "sms_type";
     public static final int CODE_SUCCESS = 10;
+    public static final long GIVENTIME = 1000 * 60 * 10;// 设定时间
 
     // 登录、注册
-    public static final String LOGIN_REGISTER= "cn.com.chinau.user.login.register";
-    public static final String SMS_CODE= "sms_code";// 验证码
-    public static final String IS_AGREE= "is_agree";// 是否勾选协议
-    public static final String PASSWORD= "password";// 密码
-    public static final String ZC= "ZC";// 注册
-    public static final String DL= "DL";// 登录
-
+    public static final String LOGIN_REGISTER = "cn.com.chinau.user.login.register";
+    public static final String SMS_CODE = "sms_code";// 验证码
+    public static final String IS_AGREE = "is_agree";// 是否勾选协议
+    public static final String PASSWORD = "password";// 密码
+    public static final String ZC = "ZC";// 注册
+    public static final String DL = "DL";// 登录
+    // 忘记密码，重置密码，设置提现密码
+    public static final String NAME = "stamp";// 保存在本地的文件名
+    public static final String WJMM = "WJMM";// 忘记密码
+    public static final String PWD_MODIFY = "cn.com.chinau.pwd.modify";// 修改密码
+    public static final String NEW_PWD = "new_pwd";// 新密码
+    public static final String XGDL = "XGDL";// 修改登录密码
+    public static final String CZDL = "CZDL";// 重置登录密码
+    public static final String XGTX = "XGTX";// 修改提现密码
 
 
     // 后期更改的值

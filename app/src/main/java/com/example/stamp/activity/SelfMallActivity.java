@@ -23,6 +23,7 @@ import com.example.stamp.base.BaseActivity;
 import com.example.stamp.bean.GoodsStampBean;
 import com.example.stamp.dialog.SelfMallPanStampFilterDialog;
 import com.example.stamp.fragment.popfragment.SelfMallFilterFragment;
+import com.example.stamp.fragment.popfragment.ThreeMallFilterFragment;
 import com.example.stamp.http.HttpUtils;
 import com.example.stamp.utils.Encrypt;
 import com.example.stamp.utils.MyLog;
@@ -38,7 +39,7 @@ import java.util.List;
 /**
  * 商城页面
  */
-public class SelfMallActivity extends BaseActivity implements View.OnClickListener, AbsListView.OnScrollListener {
+public class SelfMallActivity extends BaseActivity implements View.OnClickListener, AbsListView.OnScrollListener, SelfMallPanStampFilterDialog.ClickEnsure {
 
     private View mSelfMallTitle, mSelfMallContent;
     private TextView mMarketPrice;//市场价
@@ -52,10 +53,6 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     private int mCount;
     private boolean scrollFlag,Salesflag,Priceflag,Synthesizeflag; // 标记是否滑动,销量，价格,综合
     private int lastVisibleItemPosition = 0;// 标记上次滑动位置
-//    private String[]  arrClass= {"人物", "植物", "节日", "器皿", "字画", "风光", "经济", "农业", "民俗", "动物", "生肖",
-//            "文化艺术", "政治", "科教", "工业", "交通", "军事", "文学", "邮政", "公共"};
-//    private String[] arrYear = {"2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005"};
-//    private String[] arrPopson= {"任平", "于平", "甲钴胺", "邮票","任平", "于平", "甲钴胺", "邮票","任平", "于平", "甲钴胺", "邮票"};
     private TextView mTitle;
     private int num = 0;//初始索引
     private GoodsStampBean mGoodsStampBean;
@@ -77,6 +74,9 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
             }
         }
     };
+    private SelfMallPanStampFilterDialog mSelfPanDialog;
+    private SelfMallFilterFragment mallFragment;
+    private ThreeMallFilterFragment mThreeFragment;
 
 
     @Override
@@ -228,8 +228,9 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
             case R.id.self_filter://筛选按钮
                 // 筛选有点问题
                 setPopupWindowListData();
-                SelfMallPanStampFilterDialog filterDialogFragment = new SelfMallPanStampFilterDialog(mPopupList, arr);
-                filterDialogFragment.show(getSupportFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
+                mSelfPanDialog = new SelfMallPanStampFilterDialog(mPopupList,arr);
+                mSelfPanDialog.show(getSupportFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
+                mSelfPanDialog.setClickEnsure(this);
                 break;
             case R.id.self_synthesize://综合
                 setOtherButton(mSales, mPrice);
@@ -368,15 +369,26 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     }
 
     /**
-     * 筛选Fragment页面
+     * 添加筛选Fragment页面
      */
     private void setPopupWindowListData() {
         //初始化集合
         mPopupList = new ArrayList<>();
-        SelfMallFilterFragment mallFragment = new SelfMallFilterFragment();
+        // 自营商城
+        mallFragment = new SelfMallFilterFragment();
         mPopupList.add(mallFragment);
-        mPopupList.add(mallFragment);
+        // 第三方商城
+        mThreeFragment = new ThreeMallFilterFragment();
+        mPopupList.add(mThreeFragment);
     }
 
 
+    @Override
+    public void setEnsureData() {
+        String mAlldata = mallFragment.getData();
+        String mThreedata = mThreeFragment.getData();
+
+        MyLog.e("点中了谁-->"+mAlldata+"---"+mThreedata);
+        mSelfPanDialog.dismiss();
+    }
 }

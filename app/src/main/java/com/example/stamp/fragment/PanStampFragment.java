@@ -20,7 +20,10 @@ import com.example.stamp.adapter.PanStampGridViewAdapter;
 import com.example.stamp.base.BaseFragment;
 import com.example.stamp.bean.GoodsStampBean;
 import com.example.stamp.dialog.SelfMallPanStampFilterDialog;
-import com.example.stamp.fragment.popfragment.PanStampFilterFragment;
+import com.example.stamp.fragment.popfragment.AuctionFilterFragment;
+import com.example.stamp.fragment.popfragment.SelfMallFilterFragment;
+import com.example.stamp.fragment.popfragment.StampFilterFragment;
+import com.example.stamp.fragment.popfragment.ThreeMallFilterFragment;
 import com.example.stamp.http.HttpUtils;
 import com.example.stamp.utils.Encrypt;
 import com.example.stamp.utils.MyLog;
@@ -38,7 +41,7 @@ import java.util.List;
 /**
  * 淘邮票页面
  */
-public class PanStampFragment extends BaseFragment implements View.OnClickListener,AbsListView.OnScrollListener {
+public class PanStampFragment extends BaseFragment implements View.OnClickListener,AbsListView.OnScrollListener ,SelfMallPanStampFilterDialog.ClickEnsure{
 
 
     private View mPanStampContent;//内容View
@@ -73,6 +76,11 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
             }
         }
     };
+    private SelfMallFilterFragment mallFragment;
+    private ThreeMallFilterFragment mThreeFragment;
+    private SelfMallPanStampFilterDialog mSelfPanDialog;
+    private AuctionFilterFragment mAuctionFragment;
+    private StampFilterFragment mStampFragment;
 
     @Override
     public View CreateTitle() {
@@ -242,9 +250,11 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                 }
                 break;
             case R.id.panStamp_filter://筛选
+                // 筛选有点问题
                 setPopupWindowListData();
-                SelfMallPanStampFilterDialog filterDialogFragment = new SelfMallPanStampFilterDialog(mPopupList, arr);
-                filterDialogFragment.show(getChildFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
+                  mSelfPanDialog = new SelfMallPanStampFilterDialog(mPopupList,arr);
+                mSelfPanDialog.setClickEnsure(this);
+                mSelfPanDialog.show(getChildFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
                 break;
             case R.id.stamp_top_btn://置顶
                 setListViewPos(0);
@@ -327,12 +337,27 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
      */
     private void setPopupWindowListData() {
         //初始化集合
+//        mPopupList = new ArrayList<>();
+//        ThreeMallFilterFragment mPanStampFragment = new ThreeMallFilterFragment();
+//        mPopupList.add(mPanStampFragment);
+//        mPopupList.add(mPanStampFragment);
+//        mPopupList.add(mPanStampFragment);
+//        mPopupList.add(null);
+
+        //初始化集合
         mPopupList = new ArrayList<>();
-        PanStampFilterFragment mPanStampFragment = new PanStampFilterFragment();
-        mPopupList.add(mPanStampFragment);
-        mPopupList.add(mPanStampFragment);
-        mPopupList.add(mPanStampFragment);
-        mPopupList.add(null);
+        // 自营商城
+        mallFragment = new SelfMallFilterFragment();
+        mPopupList.add(mallFragment);
+        // 第三方商家
+        mThreeFragment = new ThreeMallFilterFragment();
+        mPopupList.add(mThreeFragment);
+        // 邮市
+        mStampFragment = new StampFilterFragment();
+        mPopupList.add(mStampFragment);
+        // 竞拍
+        mAuctionFragment = new AuctionFilterFragment();
+        mPopupList.add(mAuctionFragment);
     }
 
     /**
@@ -354,5 +379,17 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         button.setCompoundDrawables(null, null, drawable, null);
         button.setTextColor(color);
+    }
+
+    @Override
+    public void setEnsureData() {
+        String mAlldata = mallFragment.getData();
+        String mThreedata = mThreeFragment.getData();
+        String mStampdata = mStampFragment.getData();
+        String mAuctiondata = mAuctionFragment.getData();
+
+        MyLog.e("点中了谁0001-->"+mAlldata+"---"+mThreedata+"--"+mStampdata+"---"+mAuctiondata);
+
+        mSelfPanDialog.dismiss();
     }
 }

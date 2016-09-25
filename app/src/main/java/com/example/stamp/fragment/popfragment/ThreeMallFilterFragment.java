@@ -15,9 +15,9 @@ import com.example.stamp.utils.MyLog;
 import com.example.stamp.view.NoScrollGridView;
 
 /**
- * 商城筛选（自营商城）Fragment
+ * 商城筛选（第三方商家）Fragment
  */
-public class SelfMallFilterFragment extends BaseDialogFragment implements SellMallPanStampGridViewOnItemClickListener.SelfMallItemClick {
+public class ThreeMallFilterFragment extends BaseDialogFragment implements SellMallPanStampGridViewOnItemClickListener.SelfMallItemClick{
 
     private String[] arrClass = {"人物", "植物", "节日", "器皿", "字画", "风光", "经济", "农业", "民俗", "动物", "生肖",
             "文化艺术", "政治", "科教", "工业", "交通", "军事", "文学", "邮政", "公共"};
@@ -27,12 +27,11 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
     private View mFilterView;
     private int Current = -1;//当前选择的年代角标
     private SellMallPanStampGridViewOnItemClickListener mYearListener, mCategoryListener,mThemeListener;//年份的监听,类别的监听,人物的监听
-
     private View mSelfMall;
     private String mData;
 
 
-    public SelfMallFilterFragment() {
+    public ThreeMallFilterFragment() {
     }
 
     @Override
@@ -53,7 +52,7 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
         NoScrollGridView mCategoryGV = (NoScrollGridView) mSelfMall.findViewById(R.id.selfmall_pop_category);
         //年代的GridView
         NoScrollGridView mYearGV = (NoScrollGridView) mSelfMall.findViewById(R.id.selfmall_pop_years);
-        //人物的GridView
+        //题材的GridView
         NoScrollGridView mThemeGV = (NoScrollGridView) mSelfMall.findViewById(R.id.selfmall_pop_theme);
 
         //创建适配器
@@ -80,11 +79,11 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
         mThemeListener.setSelfMallItemClick(this);
         mThemeGV.setOnItemClickListener(mThemeListener);
 
-
         SelfMallPanStampFilterDialog selfMallPanStampFilterDialog = (SelfMallPanStampFilterDialog) getParentFragment();
         selfMallPanStampFilterDialog.setClickReset(new SelfMallPanStampFilterDialog.ClickReset() {
             @Override
             public void setReset() {
+                MyLog.e("ThreeMallFilterFragment-->");
                 mYearListener.setPosition();
                 mCategoryListener.setPosition();
                 mThemeListener.setPosition();
@@ -106,7 +105,7 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
 
         mData = Year + "," + Category + "," + Person;
         setData(mData);
-        MyLog.e("点击了啥--->001"+mData);
+        MyLog.e("点击了啥002--->"+mData);
 
     }
 
@@ -117,6 +116,5 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
     public void setData(String data) {
         mData = data;
     }
-
 
 }
