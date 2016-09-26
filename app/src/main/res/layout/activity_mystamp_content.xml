@@ -1,59 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--我的邮集页面-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:layout_weight="9">-->
+
+
+    <!--<GridView-->
+    <!--android:id="@+id/myStamp_gv"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:horizontalSpacing="10dp"-->
+    <!--android:listSelector="@android:color/transparent"-->
+    <!--android:numColumns="2"-->
+    <!--android:overScrollMode="never"-->
+    <!--android:scrollbars="none"-->
+    <!--android:stretchMode="columnWidth"-->
+    <!--android:verticalSpacing="10dp" />-->
+    <!--</LinearLayout>-->
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/my_content_Viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        android:layout_weight="9">
+        android:layout_weight="1" />
 
 
-        <GridView
-            android:id="@+id/myStamp_gv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:horizontalSpacing="10dp"
-            android:listSelector="@android:color/transparent"
-            android:numColumns="2"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp" />
-    </LinearLayout>
+    <View style="@style/myline" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="43dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <View style="@style/myline"
-            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="资产总值:"
+            android:textColor="#333"
+            android:textSize="15sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="资产总值:"
-                android:textColor="#333"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="￥1000000.00"
-                android:textColor="#e20000"
-                android:textSize="15sp" />
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="￥1000000.00"
+            android:textColor="#e20000"
+            android:textSize="15sp" />
     </LinearLayout>
 
 

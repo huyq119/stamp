@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--每页显示的最多数量-->
+    <integer name="PagerCount">4</integer>
+</resources>

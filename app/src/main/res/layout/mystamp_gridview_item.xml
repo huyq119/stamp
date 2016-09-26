@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <com.example.stamp.view.SquareView
         android:id="@+id/mystamp_item_squareView"
-        android:layout_width="155dp"
-        android:layout_height="154dp"
-        android:layout_centerInParent="true"
+        android:layout_width="173dp"
+        android:layout_height="173dp"
         android:layout_weight="1"
         android:background="@drawable/roct_bg"
         android:orientation="horizontal">
@@ -16,16 +17,13 @@
             android:id="@+id/mystamp_item_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
             android:scaleType="centerInside"
             android:src="@mipmap/head_icon" />
     </com.example.stamp.view.SquareView>
 
     <LinearLayout
-        android:layout_width="155dp"
+        android:layout_width="173dp"
         android:layout_height="31dp"
-        android:layout_alignBottom="@+id/mystamp_item_squareView"
-        android:layout_alignLeft="@+id/mystamp_item_squareView"
         android:background="#8a8a8a">
 
         <TextView
@@ -39,6 +37,27 @@
             android:textSize="13sp" />
 
         <LinearLayout
+            android:id="@+id/stamp_NoEdit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/mystamp_item_nocCunt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/mystamp_count_bg"
+                android:gravity="center"
+                android:text="2"
+                android:textColor="#333"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/stamp_Edit"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -46,12 +65,12 @@
 
             <TextView
                 android:id="@+id/mystamp_item_subtract"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="6dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="-"
                 android:textColor="#fff"
-                android:visibility="gone"
                 android:textSize="15sp" />
 
             <TextView
@@ -60,19 +79,18 @@
                 android:layout_height="wrap_content"
                 android:background="@mipmap/mystamp_count_bg"
                 android:gravity="center"
-                android:text="3"
                 android:textColor="#333"
                 android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/mystamp_item_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="+"
                 android:textColor="#fff"
-                android:visibility="gone"
                 android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

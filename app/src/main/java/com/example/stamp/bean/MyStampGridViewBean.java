@@ -44,9 +44,7 @@ public class MyStampGridViewBean extends BaseBean {
         public String stamp_count;// 邮票数量
 
         public StampList(String stamp_name,String stamp_count,String stamp_img) {
-            super();
-
-            this.stamp_sn = stamp_name;
+            this.stamp_name = stamp_name;
             this.stamp_count = stamp_count;
             this.stamp_img = stamp_img;
         }
