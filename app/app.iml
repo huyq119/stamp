@@ -128,6 +128,5 @@
     <orderEntry type="library" exported="" name="animated-vector-drawable-24.0.0" level="project" />
     <orderEntry type="module" module-name="IndicatorLibrary" exported="" />
     <orderEntry type="module" module-name="RefurbishLibrary" exported="" />
-    <orderEntry type="library" exported="" name="android-android-24" level="project" />
   </component>
 </module>

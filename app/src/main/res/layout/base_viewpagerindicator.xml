@@ -37,7 +37,7 @@
             android:gravity="center"
             android:text="@string/resetting"
             android:textColor="#333"
-            android:textSize="12sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/stamptap_pop_ensure"
@@ -48,7 +48,7 @@
             android:gravity="center"
             android:text="@string/ensure"
             android:textColor="#fff"
-            android:textSize="12sp" />
+            android:textSize="15sp" />
     </LinearLayout>
 
 
