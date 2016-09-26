@@ -76,7 +76,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private static final String REGISTERTIME = "registertime";
     private SendProgressDialog pd;
     public SharedPreferences sp;
-    public static final String name = "stamp";
     private SussessDialog dialog;
     private boolean isShowPassWord = false;// 是否显示密码
     private RegisterDialog rDialog;
@@ -171,7 +170,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public View CreateSuccess() {
         mRegisterContent = View.inflate(this, R.layout.activity_register, null);
-        sp = getSharedPreferences(name, MODE_PRIVATE);
+        sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         initView();
         initListener();
         return mRegisterContent;

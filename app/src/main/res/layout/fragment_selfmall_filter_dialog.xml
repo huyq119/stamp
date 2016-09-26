@@ -19,40 +19,9 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/stamptap_pop_years"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/stamptap_class"
-                android:textColor="#000"
-                android:layout_marginBottom="5dp"
-                android:textSize="12sp" />
-
-            <View style="@style/myline" />
-
-            <com.example.stamp.view.NoScrollGridView
-                android:id="@+id/selfmall_pop_years"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:horizontalSpacing="16dp"
-                android:listSelector="@android:color/transparent"
-                android:numColumns="3"
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                android:stretchMode="columnWidth"
-                android:verticalSpacing="8dp" />
-
-            <View style="@style/myline" />
-
-            <TextView
-                android:id="@+id/stamptap_pop_categorys"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/Years"
                 android:textColor="#000"
                 android:layout_marginBottom="5dp"
                 android:textSize="12sp" />
@@ -68,7 +37,35 @@
                 android:gravity="center"
                 android:horizontalSpacing="16dp"
                 android:listSelector="@android:color/transparent"
-                android:numColumns="3"
+                android:numColumns="4"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="8dp" />
+
+            <View style="@style/myline" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/Years"
+                android:textColor="#000"
+                android:layout_marginBottom="5dp"
+                android:textSize="12sp" />
+
+            <View style="@style/myline" />
+
+            <com.example.stamp.view.NoScrollGridView
+                android:id="@+id/selfmall_pop_years"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:horizontalSpacing="16dp"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="4"
                 android:overScrollMode="never"
                 android:scrollbars="none"
                 android:stretchMode="columnWidth"
@@ -107,11 +104,11 @@
 
     </ScrollView>
 
-    <!--<View-->
-        <!--style="@style/myline"-->
-        <!--android:layout_above="@+id/stamptap_ll" />-->
+   <!-- <View
+        style="@style/myline"
+        android:layout_above="@+id/stamptap_ll" />
 
-    <!--<LinearLayout
+    <LinearLayout
         android:id="@+id/stamptap_ll"
         android:layout_width="match_parent"
         android:layout_height="36dp"

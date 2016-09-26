@@ -10,16 +10,16 @@ import android.widget.TextView;
 import com.example.stamp.R;
 
 /**
- * 筛选布局的题材的GridView适配器
+ * (商城，淘邮票)筛选布局的的GridView适配器
  * Created by Administrator on 2016/7/29.
  */
-public class StampTapFilterThemeGridViewAdapter extends BaseAdapter {
+public class SelfMallPanStampGridViewAdapter extends BaseAdapter {
 
     private Context context;
     private String[] arr;
     private int clickTemp = -1;
 
-    public StampTapFilterThemeGridViewAdapter(Context context, String[] arr) {
+    public SelfMallPanStampGridViewAdapter(Context context, String[] arr) {
         this.context = context;
         this.arr = arr;
     }
@@ -50,11 +50,8 @@ public class StampTapFilterThemeGridViewAdapter extends BaseAdapter {
         viewHolder holder;
         if (view == null) {
             holder = new viewHolder();
-            view = View.inflate(context, R.layout.stamptap_filter_gridview_item, null);
-            holder.mContent = (TextView) view.findViewById(R.id.stamptap_filter_theme_item_content);
-            holder.mContent.setVisibility(View.VISIBLE);
-            holder.mContents = (TextView) view.findViewById(R.id.stamptap_filter_item_content);
-            holder.mContents.setVisibility(View.GONE);
+            view = View.inflate(context, R.layout.selfmall_panstamp_filter_gridview_item, null);
+            holder.mContent = (TextView) view.findViewById(R.id.item_content);
             view.setTag(holder);
         } else {
             holder = (viewHolder) view.getTag();
