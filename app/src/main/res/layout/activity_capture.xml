@@ -7,13 +7,13 @@
     <SurfaceView
         android:id="@+id/surfaceview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></SurfaceView>
+        android:layout_height="match_parent"/>
 
-    <com.example.stamp.zxing.view.ViewfinderView
+    <cn.com.chinau.zxing.view.ViewfinderView
         android:id="@+id/viewfinderview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00000000"></com.example.stamp.zxing.view.ViewfinderView>
+        android:background="#00000000"/>
 
     <include layout="@layout/base_back_title" />
 

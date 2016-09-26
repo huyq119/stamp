@@ -44,26 +44,26 @@
             android:background="#E9E9E9"
             android:orientation="horizontal">
 
-            <com.example.stamp.view.widget.WheelView
+            <cn.com.chinau.widget.WheelView
                 android:id="@+id/province"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
-            </com.example.stamp.view.widget.WheelView>
+            </cn.com.chinau.widget.WheelView>
 
-            <com.example.stamp.view.widget.WheelView
+            <cn.com.chinau.widget.WheelView
                 android:id="@+id/city"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
-            </com.example.stamp.view.widget.WheelView>
+            </cn.com.chinau.widget.WheelView>
 
-            <com.example.stamp.view.widget.WheelView
+            <cn.com.chinau.widget.WheelView
                 android:id="@+id/district"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
-            </com.example.stamp.view.widget.WheelView>
+            </cn.com.chinau.widget.WheelView>
         </LinearLayout>
     </LinearLayout>
 

@@ -144,7 +144,7 @@
                 style="@style/myline"
                 android:layout_marginTop="15dp"/>
 
-            <com.example.stamp.view.WrapExpandableListView
+            <cn.com.chinau.view.WrapExpandableListView
                 android:id="@+id/order_details_lv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

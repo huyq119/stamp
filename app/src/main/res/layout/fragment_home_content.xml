@@ -145,7 +145,7 @@
                 android:textSize="16sp" />
         </RelativeLayout>
 
-        <com.example.stamp.view.WrapGridView
+        <cn.com.chinau.view.WrapGridView
             android:id="@+id/home_WGV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

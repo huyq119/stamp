@@ -5,7 +5,7 @@
     android:background="#f8f8f8"
     android:orientation="vertical">
 
-    <com.example.stamp.view.CustWebView
+    <cn.com.chinau.view.CustWebView
         android:id="@+id/market_detail_vb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

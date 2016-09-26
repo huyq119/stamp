@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:layout_weight="9">
 
-            <com.example.stamp.view.VerticalScrollView
+            <cn.com.chinau.view.VerticalScrollView
                 android:id="@+id/home_SV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -278,7 +278,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp" />
 
-                    <com.example.stamp.view.CustomViewPager
+                    <cn.com.chinau.CustomViewPager
                         android:id="@+id/stampdetail_viewpager"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -288,7 +288,7 @@
                     <View style="@style/myline" />
 
                 </LinearLayout>
-            </com.example.stamp.view.VerticalScrollView>
+            </cn.com.chinau.view.VerticalScrollView>
         </LinearLayout>
         <!-- 底下的代码，导航栏是不随SrcollView滑动的-->
         <LinearLayout

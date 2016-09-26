@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <com.example.stamp.view.VerticalScrollView
+    <cn.com.chinau.view.VerticalScrollView
         android:id="@+id/home_SV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,14 +87,14 @@
                 android:layout_height="45dp"
                 android:visibility="gone" />
 
-            <com.example.stamp.view.CustomViewPager
+            <cn.com.chinau.view.CustomViewPager
                 android:id="@+id/stamptapdetail_viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:overScrollMode="never"
                 android:scrollbars="none" />
         </LinearLayout>
-    </com.example.stamp.view.VerticalScrollView>
+    </cn.com.chinau.view.VerticalScrollView>
     <!--置顶按钮-->
     <Button
         android:id="@+id/stamp_top_detail_top_btn"

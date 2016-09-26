@@ -5,7 +5,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.example.stamp.view.SquareView
+    <cn.com.chinau.view.SquareView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
@@ -21,7 +21,7 @@
             android:scaleType="centerInside"
             android:src="@mipmap/head_icon" />
 
-        <com.example.stamp.view.RotateTextView
+        <cn.com.chinau.view.RotateTextView
             android:id="@+id/PanStamp_item_goodsSource"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:textColor="#fff"
             android:textSize="12sp" />
 
-    </com.example.stamp.view.SquareView>
+    </cn.com.chinau.view.SquareView>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -53,7 +53,7 @@
             </LinearLayout>
 
 
-            <com.example.stamp.view.NoScrollGridView
+            <cn.com.chinau.view.NoScrollGridView
                 android:id="@+id/auction_ompeting_goods_GV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
             </LinearLayout>
 
 
-            <com.example.stamp.view.NoScrollGridView
+            <cn.com.chinau.view.NoScrollGridView
                 android:id="@+id/auction_precious_metal_GV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
             </LinearLayout>
 
 
-            <com.example.stamp.view.NoScrollGridView
+            <cn.com.chinau.view.NoScrollGridView
                 android:id="@+id/auction_philatelic_items_GV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -168,7 +168,7 @@
 
             <View style="@style/myline" />
 
-            <com.example.stamp.view.NoScrollGridView
+            <cn.com.chinau.view.NoScrollGridView
                 android:id="@+id/auction_brand_GV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

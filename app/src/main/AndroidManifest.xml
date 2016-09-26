@@ -1,139 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.stamp">
+    package="cn.com.chinau">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
-        android:name=".ui.MyApplication"
+        android:name="cn.com.chinau.ui.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/NoTitleBar">
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name="cn.com.chinau.activity.SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            />
+        <activity android:name="cn.com.chinau.MainActivity" />
         <!-- 扫描二维码 -->
-        <activity android:name=".zxing.activity.CaptureActivity"/>
+        <activity android:name="cn.com.chinau.zxing.activity.CaptureActivity" />
         <!-- 搜索 -->
         <activity
-            android:name=".activity.SearchActivity"
-            android:launchMode="singleTask"/>
+            android:name="cn.com.chinau.activity.SearchActivity"
+            android:launchMode="singleTask" />
         <!-- 搜索的详情页面 -->
-        <activity android:name=".activity.SearchDetailActivity"/>
+        <activity android:name="cn.com.chinau.activity.SearchDetailActivity" />
         <!-- 邮票目录详情页 -->
         <activity
-            android:name=".activity.StampTapDetailActivity"
-            android:theme="@style/Theme.PageIndicatorDefaults"/>
+            android:name="cn.com.chinau.activity.StampTapDetailActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults" />
         <!-- 分享弹出页面 -->
         <activity
-            android:name=".activity.SharedActivity"
-            android:theme="@style/MyDialogStyleBottom"/>
+            android:name="cn.com.chinau.activity.SharedActivity"
+            android:theme="@style/MyDialogStyleBottom" />
         />
-        <activity android:name=".activity.StampActivity"/>
+        <activity android:name="cn.com.chinau.activity.StampActivity" />
 
         <!-- 商城 -->
-        <activity android:name=".activity.SelfMallActivity"/>
+        <activity android:name="cn.com.chinau.activity.SelfMallActivity" />
         <!--商城详情-->
-        <activity android:name=".activity.SelfMallDetailActivity"/>
+        <activity android:name="cn.com.chinau.activity.SelfMallDetailActivity" />
         <activity
-            android:name=".activity.StampDetailActivity"
-            android:theme="@style/Theme.PageIndicatorDefaults"/>
+            android:name="cn.com.chinau.activity.StampDetailActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults" />
 
-        <activity android:name=".activity.AuctionActivity"/>
-        <activity android:name=".activity.ScanActivity"/>
-        <activity android:name=".activity.AuctionDetailActivity"
-            android:theme="@style/Theme.PageIndicatorDefaults"
-            />
-        <activity android:name=".activity.DesignerActivity"/>
-        <activity android:name=".activity.LoginActivity"/>
-        <activity android:name=".activity.UsMeActivity"/>
-        <activity android:name=".activity.ResettingPassWordActivity"/>
-        <activity android:name=".activity.RegisterActivity"/>
-        <activity android:name=".activity.WithdrawActivity"/>
-        <activity android:name=".activity.CardActivity"/>
+        <activity android:name="cn.com.chinau.activity.AuctionActivity" />
+        <activity android:name="cn.com.chinau.activity.ScanActivity" />
         <activity
-            android:name=".activity.ReviseCardActivity"
-            android:label="@string/title_activity_revise"/>
-        <activity android:name=".activity.ApplyWithdrawActivity"/>
-        <activity android:name=".activity.UnBundlingActivity"/>
-        <activity android:name=".activity.ScanDetailsActivity"/>
-        <activity android:name=".activity.AffirmBuyBackActivity"/>
-        <activity android:name=".activity.FastMailInfoActivity"/>
-        <activity android:name=".activity.FastMailSubmitActivity"/>
-        <activity android:name=".activity.PressWordManagerActivity"/>
-        <activity android:name=".activity.LoginPressWordActivity"/>
-        <activity android:name=".activity.WithdrawPressWordActivity"/>
-        <activity android:name=".activity.ServiceProtocolActivity"/>
-        <activity android:name=".activity.MyStampActivity">
-        </activity>
-        <activity android:name=".activity.FirmOrderActivity">
-        </activity>
-        <activity android:name=".activity.ManagerAddressActivity">
-        </activity>
-        <activity android:name=".activity.EditReceiptAddressActivity">
-        </activity>
-        <activity android:name=".activity.AuctionRecordActivity">
-        </activity>
-        <activity android:name=".activity.MyCollectionActivity">
-        </activity>
+            android:name="cn.com.chinau.activity.AuctionDetailActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults" />
+        <activity android:name="cn.com.chinau.activity.DesignerActivity" />
+        <activity android:name="cn.com.chinau.activity.LoginActivity" />
+        <activity android:name="cn.com.chinau.activity.UsMeActivity" />
+        <activity android:name="cn.com.chinau.activity.ResettingPassWordActivity" />
+        <activity android:name="cn.com.chinau.activity.RegisterActivity" />
+        <activity android:name="cn.com.chinau.activity.WithdrawActivity" />
+        <activity android:name="cn.com.chinau.activity.CardActivity" />
         <activity
-            android:name=".activity.DesignerDetailActivity"
-            android:theme="@style/Theme.PageIndicatorDefaults">
-        </activity>
+            android:name="cn.com.chinau.activity.ReviseCardActivity"
+            android:label="@string/title_activity_revise" />
+        <activity android:name="cn.com.chinau.activity.ApplyWithdrawActivity" />
+        <activity android:name="cn.com.chinau.activity.UnBundlingActivity" />
+        <activity android:name="cn.com.chinau.activity.ScanDetailsActivity" />
+        <activity android:name="cn.com.chinau.activity.AffirmBuyBackActivity" />
+        <activity android:name="cn.com.chinau.activity.FastMailInfoActivity" />
+        <activity android:name="cn.com.chinau.activity.FastMailSubmitActivity" />
+        <activity android:name="cn.com.chinau.activity.PressWordManagerActivity" />
+        <activity android:name="cn.com.chinau.activity.LoginPressWordActivity" />
+        <activity android:name="cn.com.chinau.activity.WithdrawPressWordActivity" />
+        <activity android:name="cn.com.chinau.activity.ServiceProtocolActivity" />
+        <activity android:name="cn.com.chinau.activity.MyStampActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.FirmOrderActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.ManagerAddressActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.EditReceiptAddressActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.AuctionRecordActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.MyCollectionActivity"></activity>
+        <activity
+            android:name="cn.com.chinau.activity.DesignerDetailActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults"></activity>
         <!--设计家H5详情页面-->
-        <activity
-            android:name=".activity.DesignerH5DetailActivity">
-        </activity>
+        <activity android:name="cn.com.chinau.activity.DesignerH5DetailActivity"></activity>
 
-        <activity android:name=".activity.OrderAuditingActivity">
-        </activity>
-        <activity android:name=".activity.OrderBuyBackActivity">
-        </activity>
-        <activity android:name=".activity.OrderCloseActivity">
-        </activity>
-        <activity android:name=".activity.OrderFinishActivity">
-        </activity>
-        <activity android:name=".activity.OrderRejectActivity">
-        </activity>
-        <activity android:name=".activity.OrderWaitActivity">
-        </activity>
-        <activity android:name=".activity.LogisticsDetailsActivity">
-        </activity>
-        <activity android:name=".activity.OrderDetailsActivity">
-        </activity>
-        <activity android:name=".activity.HomeImageH5Activity">
-        </activity>
-        <activity android:name=".activity.OrdersGoodsActivity"
-            android:theme="@style/Theme.PageIndicatorDefaults"/>
+        <activity android:name="cn.com.chinau.activity.OrderAuditingActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.OrderBuyBackActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.OrderCloseActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.OrderFinishActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.OrderRejectActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.OrderWaitActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.LogisticsDetailsActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.OrderDetailsActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.HomeImageH5Activity"></activity>
+        <activity
+            android:name="cn.com.chinau.activity.OrdersGoodsActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity android:name=".activity.OrderSweepActivity"/>
-        <activity android:name=".activity.ChooseReceiverAddress"/>
 
-        <activity android:name=".activity.ApplyForRefuseActivity"/>
-        <activity android:name=".activity.SuccessApplyForRefuseActivity"/>
-        <activity android:name=".activity.LookOrderDetailRefuseActivity"/>
+        <activity android:name="cn.com.chinau.activity.OrderSweepActivity" />
+        <activity android:name="cn.com.chinau.activity.ChooseReceiverAddress" />
+
+        <activity android:name="cn.com.chinau.activity.ApplyForRefuseActivity" />
+        <activity android:name="cn.com.chinau.activity.SuccessApplyForRefuseActivity" />
+        <activity android:name="cn.com.chinau.activity.LookOrderDetailRefuseActivity" />
     </application>
 
 </manifest>

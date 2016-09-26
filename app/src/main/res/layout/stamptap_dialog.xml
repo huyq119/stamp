@@ -29,7 +29,7 @@
             <View style="@style/myline"
                 />
 
-            <com.example.stamp.view.NoScrollGridView
+            <cn.com.chinau.NoScrollGridView
                 android:id="@+id/stamptap_pop_years"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
             <View style="@style/myline"
                 />
 
-            <com.example.stamp.view.NoScrollGridView
+            <cn.com.chinau.view.NoScrollGridView
                 android:id="@+id/stamptap_pop_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
 
                 />
 
-            <com.example.stamp.view.NoScrollGridView
+            <cn.com.chinau.view.NoScrollGridView
                 android:id="@+id/stamptap_pop_theme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

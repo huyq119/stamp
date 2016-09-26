@@ -141,7 +141,7 @@
                 </LinearLayout>
             </RelativeLayout>
 
-            <com.example.stamp.view.OrderGoodsViewPager
+            <cn.com.chinau.view.OrderGoodsViewPager
                 android:id="@+id/designerdetail_viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

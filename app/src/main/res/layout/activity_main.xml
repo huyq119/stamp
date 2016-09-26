@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.example.stamp.view.NoScrollViewpager
+    <cn.com.chinau.view.NoScrollViewpager
         android:id="@+id/Main_ViewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -5,7 +5,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.example.stamp.view.SquareView
+    <cn.com.chinau.view.SquareView
         android:id="@+id/mystamp_item_squareView"
         android:layout_width="173dp"
         android:layout_height="173dp"
@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerInside"
             android:src="@mipmap/head_icon" />
-    </com.example.stamp.view.SquareView>
+    </cn.com.chinau.view.SquareView>
 
     <LinearLayout
         android:layout_width="173dp"

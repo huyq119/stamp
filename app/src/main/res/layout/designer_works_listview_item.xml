@@ -5,7 +5,7 @@
     android:orientation="horizontal">
 
 
-    <com.example.stamp.view.SquareView
+    <cn.com.chinau.view.SquareView
         android:layout_width="119dp"
         android:layout_height="119dp"
         android:layout_gravity="center_vertical"
@@ -23,7 +23,7 @@
             android:scaleType="centerInside"
             android:src="@mipmap/ic_launcher" />
 
-        <com.example.stamp.view.RotateTextView
+        <cn.com.chinau.view.RotateTextView
             android:id="@+id/works_category_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             android:textColor="#fff"
             android:textSize="9sp" />
 
-    </com.example.stamp.view.SquareView>
+    </cn.com.chinau.view.SquareView>
 
 
     <LinearLayout
