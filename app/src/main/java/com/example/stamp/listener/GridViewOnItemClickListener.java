@@ -6,7 +6,7 @@ import android.widget.AdapterView;
 import com.example.stamp.adapter.StampTapFilterGridViewAdapter;
 
 /**
- * GridViewOnItemClickListener的条目点击监听
+ * （邮票目录）筛选GridViewOnItemClickListener的条目点击监听
  * Created by Administrator on 2016/8/2.
  */
 public class GridViewOnItemClickListener implements AdapterView.OnItemClickListener {

@@ -3,12 +3,11 @@ package com.example.stamp.listener;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.example.stamp.adapter.StampTapFilterGridViewAdapter;
 import com.example.stamp.adapter.StampTapFilterThemeGridViewAdapter;
 
 /**
  * GridViewThemeOnItemClickListener
- * 邮票目录筛选题材的条目点击监听
+ * 邮票目录筛选（题材）的条目点击监听
  * Created by Administrator on 2016/8/2.
  */
 public class GridViewThemeOnItemClickListener implements AdapterView.OnItemClickListener {

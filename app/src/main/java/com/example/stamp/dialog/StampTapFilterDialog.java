@@ -23,7 +23,7 @@ import com.example.stamp.view.NoScrollGridView;
 import java.util.HashMap;
 
 /**
- * 筛选对话框
+ * (邮票目录)筛选弹出框
  * Created by Administrator on 2016/8/2.
  */
 public class StampTapFilterDialog extends BaseDialogFragment {
