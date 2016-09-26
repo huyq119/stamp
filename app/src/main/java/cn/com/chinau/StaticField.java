@@ -73,7 +73,7 @@ public class StaticField {
     public static final String OP_TYPE = "op_type";
     public static final String CURRENT_INDEX = "current_index";
     public static final String OFFSET = "offset";
-
+    public static final String SYSPARAM_QUERY= "cn.com.chinau.sysparam.query";// 系统参数接口
 
     //邮票目录
     public static final String STAMPTAP = "cn.com.chinau.stamplist.query";

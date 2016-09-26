@@ -33,6 +33,7 @@ import cn.com.chinau.adapter.HomeGridViewAdapter;
 import cn.com.chinau.adapter.HomeViewPagerAdapter;
 import cn.com.chinau.base.BaseFragment;
 import cn.com.chinau.bean.HomeBean;
+import cn.com.chinau.bean.SysParamQueryBean;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
@@ -45,7 +46,8 @@ import cn.com.chinau.zxing.activity.CaptureActivity;
  * 首页
  */
 public class HomeFragment extends BaseFragment implements View.OnClickListener {
-
+    private String mImage,mSummary;// 扫码页面的显示的图片,业务介绍
+    private ArrayList<String> mProcess;
     private View mHomeView;//内容页面
     private ImageView mScan;//扫码页面
     private LinearLayout mSearch;//搜索页面
@@ -175,6 +177,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         setChildContent();
         //设置GridView的适配器
         setGridViewAdapter();
+        getSysparamQuery();// 获取系统参数网络请求
 
     }
 
@@ -232,7 +235,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 openActivityWitchAnimation(AuctionActivity.class);
                 break;
             case R.id.home_scan://扫码按钮
-                openActivityWitchAnimation(ScanActivity.class);
+                Bundle  mBundle = new Bundle();
+                mBundle.putString("Image",mImage);
+                mBundle.putString("Summary",mSummary);
+                mBundle.putStringArrayList("Process",mProcess);
+                openActivityWitchAnimation(ScanActivity.class,mBundle);
                 break;
             case R.id.home_designer://设计家按钮
                 openActivityWitchAnimation(DesignerActivity.class);
@@ -354,7 +361,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.e(result);
+                MyLog.LogShitou("首页数据-->", result);
 
                 if (result.equals("-1")) {
                     return;
@@ -433,6 +440,53 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 mScrollView.onRefreshComplete();
             }
         }
+    }
+
+
+    /**
+     * 获取系统参数网络请求
+     */
+    private void getSysparamQuery() {
+        ThreadManager.getInstance().createLongPool().execute(new Runnable() {
+
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.SYSPARAM_QUERY);// 接口名称
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);//签名
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                if (result.equals("-1")) {
+                    return;
+                }
+
+                MyLog.LogShitou("系统参数-->", result);
+                Gson gson = new Gson();
+                SysParamQueryBean paramQueryBean =  gson.fromJson(result, SysParamQueryBean.class);
+                SysParamQueryBean.Sys_param_value sys_param_value = paramQueryBean.getSys_param_value();
+                // 获取快递公司
+                SysParamQueryBean.Sys_param_value.Express_comp expressComp =  sys_param_value.getExpress_comp();
+                String mShunfeng= expressComp.getShunfeng();
+                String mEms = expressComp.getEms();
+                // 获取支付类型
+                ArrayList<String> mPay_type = sys_param_value.getPay_type();
+                String mALIPAY = mPay_type.get(0);
+                String mWXPAY = mPay_type.get(1);
+                SysParamQueryBean.Sys_param_value.Buyback_scan_summary mBuyback_scan_summary =   sys_param_value.getBuyback_scan_summary();
+                mProcess = mBuyback_scan_summary.getProcess();// 业务流程
+                mImage = mBuyback_scan_summary.getImage();// 扫码回购显示的图片
+                mSummary = mBuyback_scan_summary.getSummary();// 业务介绍
+
+
+                MyLog.LogShitou("mEms快递公司-->",mEms+"--"+mShunfeng);
+                MyLog.LogShitou("支付-->",mALIPAY+"--"+mWXPAY);
+                MyLog.LogShitou("扫码回购头部图片-->", mImage);
+                MyLog.LogShitou("扫码回购内容-->",mSummary);
+
+            }
+        });
+
     }
 
 }
