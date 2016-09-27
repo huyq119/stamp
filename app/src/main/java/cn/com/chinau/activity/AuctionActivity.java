@@ -15,15 +15,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import cn.com.chinau.R;
+import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.AuctionListViewAdapter;
 import cn.com.chinau.adapter.StampHorizontalListViewAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.StampBean;
+import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.listener.GestureListener;
+import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.ScreenUtils;
+import cn.com.chinau.utils.SortUtils;
+import cn.com.chinau.utils.ThreadManager;
 import cn.com.chinau.view.HorizontalListView;
 
 /**
@@ -58,7 +64,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
     private LinearLayout mHeartll;//头部的布局
     private GestureDetector mGestureDetector;
-
+    private int num = 0;//初始索引
 
     @Override
     public View CreateTitle() {
@@ -161,6 +167,8 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         for (int i = 0; i < 10; i++) {
             mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
         }
+
+        RequestNet(StaticField.ZH, num, StaticField.A);
     }
 
     /**
@@ -443,4 +451,41 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         button.setCompoundDrawables(null, null, drawable, null);
         button.setTextColor(color);
     }
+    /**
+     *  商城list网络请求
+     * @param Order_By 类别
+     * @param index 角标
+     * @param Sort 排序
+     */
+    private void RequestNet(final String Order_By, final int index, final String Sort) {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.GOODSLIST);// 接口名称
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
+                params.put(StaticField.GOODS_SOURCE,StaticField.JP); // 商品类型
+                params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；XL销量；JG价格)
+                params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
+                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                MyLog.e(md5code);
+                params.put(StaticField.SIGN, md5code); // 签名
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                Log.e("result+竞拍~~~~>", result);
+//                if (result.equals("-1")) {
+//                    return;
+//                }
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = StaticField.SUCCESS;
+//                msg.obj = result;
+//                mHandler.sendMessage(msg);
+            }
+        });
+    }
+
+
 }

@@ -17,9 +17,13 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
@@ -55,6 +59,7 @@ public class CaptureActivity extends Activity implements Callback {
     private boolean vibrate;
     CameraManager cameraManager;
     private ImageView mBack;// 返回按钮
+    private TextView mTitle;
 
     /**
      * Called when the activity is first created.
@@ -64,39 +69,39 @@ public class CaptureActivity extends Activity implements Callback {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        /*
-         * this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-		 * WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
-		 * 
-		 * RelativeLayout layout = new RelativeLayout(this);
-		 * layout.setLayoutParams(new
-		 * ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,
-		 * LayoutParams.FILL_PARENT));
-		 * 
-		 * this.surfaceView = new SurfaceView(this); this.surfaceView
-		 * .setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,
-		 * LayoutParams.FILL_PARENT));
-		 * 
-		 * layout.addView(this.surfaceView);
-		 * 
-		 * this.viewfinderView = new ViewfinderView(this);
-		 * this.viewfinderView.setBackgroundColor(0x00000000);
-		 * this.viewfinderView.setLayoutParams(new
-		 * ViewGroup.LayoutParams(LayoutParams.FILL_PARENT,
-		 * LayoutParams.FILL_PARENT)); layout.addView(this.viewfinderView);
-		 * 
-		 * TextView status = new TextView(this); RelativeLayout.LayoutParams
-		 * params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-		 * LayoutParams.WRAP_CONTENT);
-		 * params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		 * params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-		 * status.setLayoutParams(params);
-		 * status.setBackgroundColor(0x00000000);
-		 * status.setTextColor(0xFFFFFFFF); status.setText("请将条码置于取景框内扫描。");
-		 * status.setTextSize(14.0f);
-		 * 
-		 * layout.addView(status); setContentView(layout);
-		 */
+
+          this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		  WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
+
+		  RelativeLayout layout = new RelativeLayout(this);
+		 layout.setLayoutParams(new
+		  ViewGroup.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+		  LinearLayout.LayoutParams.FILL_PARENT));
+
+		  this.surfaceView = new SurfaceView(this); this.surfaceView
+		  .setLayoutParams(new ViewGroup.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+		  LinearLayout.LayoutParams.FILL_PARENT));
+
+		  layout.addView(this.surfaceView);
+
+		  this.viewfinderView = new ViewfinderView(this);
+		  this.viewfinderView.setBackgroundColor(0x00000000);
+		  this.viewfinderView.setLayoutParams(new
+		  ViewGroup.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+		  LinearLayout.LayoutParams.FILL_PARENT)); layout.addView(this.viewfinderView);
+
+		  TextView status = new TextView(this); RelativeLayout.LayoutParams
+		  params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+		  LinearLayout.LayoutParams.WRAP_CONTENT);
+		  params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		  params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		  status.setLayoutParams(params);
+		  status.setBackgroundColor(0x00000000);
+		 status.setTextColor(0xFFFFFFFF); status.setText("请将条码置于取景框内扫描。");
+		  status.setTextSize(14.0f);
+
+		 layout.addView(status); setContentView(layout);
+
 
         setContentView(R.layout.activity_capture);
         surfaceView = (SurfaceView) findViewById(R.id.surfaceview);
@@ -109,6 +114,8 @@ public class CaptureActivity extends Activity implements Callback {
         inactivityTimer = new InactivityTimer(this);
 
         mBack = (ImageView) findViewById(R.id.base_title_back);
+        mTitle = (TextView) findViewById(R.id.base_title);
+        mTitle.setText("立即扫码");
         mBack.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -225,48 +232,52 @@ public class CaptureActivity extends Activity implements Callback {
     private void showResult(final Result rawResult, Bitmap barcode) {
 
         // 获取二维码的信息,并且把数据传到商品详情界面
-        // ShowDialog.showTextDialog(MyAppliation.getApplication(), "扫码成功");
-		Intent intent = new Intent(this, ScanDetailsActivity.class);
-		intent.putExtra("result", rawResult.getText());
-		startActivity(intent);
-		finish();
+//         ShowDialog.showTextDialog(this, "扫码成功");
+        Intent intent = new Intent(this, ScanDetailsActivity.class);
+        //用Bundle携带数据
+        Bundle bundle=new Bundle();
+        //传递name参数为tinyphp
+        bundle.putString("result", rawResult.getText());
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+        MyLog.e("二维码地址-->", rawResult.toString());
 
-        MyLog.e(rawResult.toString());
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //
-        // Drawable drawable = new BitmapDrawable(barcode);
-        // builder.setIcon(drawable);
-        //
-        // builder.setTitle("类型:" + rawResult.getBarcodeFormat() + "\n 结果：" +
-        // rawResult.getText());
-        // builder.setPositiveButton("确定", new OnClickListener() {
-        //
-        // @Override
-        // public void onClick(DialogInterface dialog, int which) {
-        // dialog.dismiss();
+//        Drawable drawable = new BitmapDrawable(barcode);
+//        builder.setIcon(drawable);
+//
+//        builder.setTitle("类型:" + rawResult.getBarcodeFormat() + "\n 结果：" +
+//                rawResult.getText());
+//
+//        MyLog.e("类型-->", rawResult.getBarcodeFormat().toString());
+//        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                dialog.dismiss();
+//                Intent intent = new Intent();
+//                intent.putExtra("result", rawResult.getText());
+//                setResult(RESULT_OK, intent);
+//                finish();
+//            }
+//        });
+//        builder.setNegativeButton("重新扫描", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//              dialog.dismiss();
+//                restartPreviewAfterDelay(0L);
+//            }
+//        });
+//
+//        builder.setCancelable(false);
+//        builder.show();
+
         // Intent intent = new Intent();
-        // intent.putExtra("result", rawResult.getText());
+        // intent.putExtra(QR_RESULT, rawResult.getText());
         // setResult(RESULT_OK, intent);
         // finish();
-        // }
-        // });
-        // builder.setNegativeButton("重新扫描", new OnClickListener() {
-        //
-        // @Override
-        // public void onClick(DialogInterface dialog, int which) {
-        // dialog.dismiss();
-        // restartPreviewAfterDelay(0L);
-        // }
-        // });
-        // builder.setCancelable(false);
-        // builder.show();
-        //
-        // // Intent intent = new Intent();
-        // // intent.putExtra(QR_RESULT, rawResult.getText());
-        // // setResult(RESULT_OK, intent);
-        // // finish();
     }
 
     public void restartPreviewAfterDelay(long delayMS) {
@@ -277,9 +288,6 @@ public class CaptureActivity extends Activity implements Callback {
 
     private void initBeepSound() {
         if (playBeep && mediaPlayer == null) {
-            // The volume on STREAM_SYSTEM is not adjustable, and users found it
-            // too loud,
-            // so we now play on the music stream.
             setVolumeControlStream(AudioManager.STREAM_MUSIC);
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);

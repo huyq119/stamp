@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#666"
+    android:orientation="vertical" >
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/BigPhoto_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="327dp"
+        android:layout_centerInParent="true"
+        android:background="#fff"
+        android:overScrollMode="never"
+        android:scrollbars="none" >
+    </android.support.v4.view.ViewPager>
+
+</RelativeLayout>

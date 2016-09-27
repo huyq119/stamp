@@ -47,7 +47,6 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
         mImage = bundle.getString("Image");// 头部图片
         mSummary= bundle.getString("Summary");// 业务介绍
         mProcess = bundle.getStringArrayList("Process");// 业务流程
-
         mBack = (ImageView) mScanTitle.findViewById(R.id.search_title_back);
         mTitle = (TextView) mScanTitle.findViewById(R.id.search_title);
         mTitle.setText("扫码回购");
@@ -63,10 +62,28 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
         if (mImage != null&&mSummary != null &&mProcess != null){
             mBitmap.display(mIcon,mImage);
             mSummaryTv.setText(mSummary);
-            mScan_Process1.setText(mProcess.get(0));
-            mScan_Process2.setText(mProcess.get(1));
-            mScan_Process3.setText(mProcess.get(2));
-            mScan_Process4.setText(mProcess.get(3));
+            if (mProcess.get(0) != null){
+                mScan_Process1.setText(mProcess.get(0));
+            }else{
+                mScan_Process1.setVisibility(View.GONE);
+            }
+            if (mProcess.get(1) != null){
+                mScan_Process2.setText(mProcess.get(1));
+            }else{
+                mScan_Process2.setVisibility(View.GONE);
+            }
+            if (mProcess.get(2) != null){
+                mScan_Process3.setText(mProcess.get(2));
+            }else{
+                mScan_Process3.setVisibility(View.GONE);
+            }
+            if (mProcess.get(3) != null){
+                mScan_Process4.setText(mProcess.get(3));
+            }else{
+                mScan_Process4.setVisibility(View.GONE);
+            }
+        }else{
+            return;
         }
 
         mScan = (Button) mScanContent.findViewById(R.id.scan_back_buy_now);

@@ -156,4 +156,14 @@ public class StaticField {
 
     // 个人信息查询
     public static final String PERSONQUERY = "cn.com.chinau.userinfo.query";
+    // 扫码回购商品详情
+    public static final String QUERY = "cn.com.chinau.buyback.goods.query";
+    //条码或二维码，可据此查询到该商品是否从平台购买，每个商品有一个唯一码
+    public static final String SCAN_CODE = "scan_code";
+    // 确认回购
+    public static final String CONFIRM = "cn.com.chinau.buyback.confirm";
+    // 操作类型，确认回购
+    public static final String HG = "HG";
+    public static final String ORDER_DETAIL_SN = "order_detail_sn";
+
 }
