@@ -100,8 +100,8 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
         MyLog.e(yearNum + "-" + CategoryNum + "-" + PersonNum);
 
 
-        String Year = (yearNum == -1) ? "" : arrClass[yearNum];
-        String Category = (CategoryNum == -1) ? "" : arrYear[CategoryNum];
+        String Category = (CategoryNum == -1) ? "" : arrClass[CategoryNum];
+        String Year = (yearNum == -1) ? "" : arrYear[yearNum];
         String Person = (PersonNum == -1) ? "" : arrPerson[PersonNum];
 
         mData = Year + "," + Category + "," + Person;

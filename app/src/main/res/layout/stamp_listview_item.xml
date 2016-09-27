@@ -53,7 +53,7 @@
                 android:textColor="@color/font"
                 android:textSize="@dimen/fount_size" />
 
-            <com.example.stamp.view.TimeTextView
+            <cn.com.chinau.view.TimeTextView
                 android:id="@+id/stamp_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
