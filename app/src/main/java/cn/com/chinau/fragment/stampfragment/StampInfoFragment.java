@@ -34,7 +34,8 @@ public class StampInfoFragment extends Fragment {
     }
 
     public void setInfoContent(String url) {
-        MyLog.e("邮票信息:" + mDetail);
+        if (url != null)
         mVB.loadUrl(url);
+        MyLog.e("邮票信息:" + mDetail + "-" + "mVB是否为空" + (mVB == null));
     }
 }

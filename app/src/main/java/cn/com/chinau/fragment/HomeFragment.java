@@ -356,7 +356,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
                 MyLog.e(result);
 
-                if (result.equals("-1")) {
+                if (result.equals("-1")|result.equals("-2")) {
                     return;
                 }
 

@@ -13,6 +13,7 @@ public class StampTapDetailBean extends BaseBean {
     public ArrayList<StampTapDetail> getStamp_info_list() {
         return stamp_info_list;
     }
+
     public void setStamp_info_list(ArrayList<StampTapDetail> stamp_info_list) {
         this.stamp_info_list = stamp_info_list;
     }
@@ -23,8 +24,16 @@ public class StampTapDetailBean extends BaseBean {
         public String stamp_sn;
         public String stamp_detail;
         public String current_price;
-        public String price_history_list;
+//        public List<HistoryPrice> price_history_list;
         public String stamp_story;
+
+//        public List<HistoryPrice> getPrice_history_list() {
+//            return price_history_list;
+//        }
+//
+//        public void setPrice_history_list(List<HistoryPrice> price_history_list) {
+//            this.price_history_list = price_history_list;
+//        }
 
         public String getStamp_image() {
             return stamp_image;
@@ -66,13 +75,6 @@ public class StampTapDetailBean extends BaseBean {
             this.current_price = current_price;
         }
 
-        public String getPrice_history_list() {
-            return price_history_list;
-        }
-
-        public void setPrice_history_list(String price_history_list) {
-            this.price_history_list = price_history_list;
-        }
 
         public String getStamp_story() {
             return stamp_story;
@@ -85,5 +87,25 @@ public class StampTapDetailBean extends BaseBean {
 
     }
 
+    public class HistoryPrice {
+        public String price;
+        public String time;
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public void setTime(String time) {
+            this.time = time;
+        }
+    }
 
 }

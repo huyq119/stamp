@@ -33,6 +33,7 @@ import cn.com.chinau.fragment.stampfragment.StampPracticeFragment;
 import cn.com.chinau.fragment.stampfragment.StampPriceFragment;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
+import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.ScreenUtils;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
@@ -43,7 +44,7 @@ import cn.com.chinau.view.VerticalScrollView;
  * 邮票目录详情页
  */
 public class StampTapDetailActivity extends BaseActivity implements View.OnClickListener,
-        View.OnTouchListener {
+        View.OnTouchListener, ViewPager.OnPageChangeListener {
 
     private View mStampTapDetailContent;//内容页面
     private View mStampTapDetailTitle;//标题页面
@@ -54,12 +55,12 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
 
-    private String mStampSn, mStampPrice,mDetail,mStory;//邮票标识(编号，价格)
+    private String mStampSn, mStampPrice, mDetail, mStory;//邮票标识(编号，价格)
 
     private List<Fragment> mList;
     private String[] arr = {"邮票信息", "价格行情", "邮票故事"};
-    private String [] mImages;
     private StampInfoFragment stampInfoFragment;
+    private StampPracticeFragment stampPracticeFragment;
     //    private StampTapDetailBean stampTapDetailBean;
     private TextView mPrice, mAddAlbum, mTitle;
     private Button mTopBtn;
@@ -67,6 +68,14 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     private View contentView;
     private int lastY = 0;
     private int scrollY; // 标记上次滑动位置
+
+    private String[] name;//名称
+    private String[] stamp_sn;//编号
+    private String[] current_price;///当前价格
+    private String[] stamp_detail;//邮票信息
+    private String[] stamp_story;//邮票故事
+
+
     private Handler mHandler = new Handler() {
 
         @Override
@@ -75,24 +84,9 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
                 case StaticField.SUCCESS://请求数据成功
                     Gson gson = new Gson();
                     StampTapDetailBean fromJson = gson.fromJson((String) msg.obj, StampTapDetailBean.class);
-
                     ArrayList<StampTapDetailBean.StampTapDetail> mStampTapDetail = fromJson.getStamp_info_list();
-                    String mImage = mStampTapDetail.get(0).getStamp_image();
-                    // 获取的字符串转成数组,以逗号隔开
-                    mImages =   mImage.split(",");
-                    Log.e("mImages+图片~~~~>", mImage);
 
-                    String mName = mStampTapDetail.get(0).getName();
-                    mTitle.setText(mName);
-                    String mSn = mStampTapDetail.get(0).getStamp_sn();
-                    mDetail = mStampTapDetail.get(0).getStamp_detail();
-
-                    String mCurrent_price = mStampTapDetail.get(0).getCurrent_price();
-                    mPrice.setText("￥" + mCurrent_price);
-                    mStory = mStampTapDetail.get(0).getStamp_story();
-
-                    Log.e("信息，故事~~~~>", mDetail +"-------"+ mStory);
-                    initAdapter();
+                    initAdapter(mStampTapDetail);
                     break;
                 case StaticField.TOUCH_EVENT_ID:// SrcollView滑动监听
                     View scroller = (View) msg.obj;
@@ -107,6 +101,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
             }
         }
     };
+
 
     @Override
     public View CreateTitle() {
@@ -170,6 +165,8 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
+                MyLog.e(result);
+
                 Log.e("result+邮票目录详情---->", result);
                 if (result.equals("-1")) {
                     return;
@@ -182,23 +179,55 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         });
     }
 
-    private void initAdapter() {
+    /**
+     * 传入的是返回的数据
+     *
+     * @param mStampTapDetail
+     */
+    private void initAdapter(ArrayList<StampTapDetailBean.StampTapDetail> mStampTapDetail) {
+        //获取轮播图的数组
+        String[] imageBanner = getBannerData(mStampTapDetail);
+
+        //获取其他数据的数组
+        name = new String[mStampTapDetail.size()];
+        stamp_sn = new String[mStampTapDetail.size()];
+        stamp_detail = new String[mStampTapDetail.size()];
+        current_price = new String[mStampTapDetail.size()];
+        stamp_story = new String[mStampTapDetail.size()];
+
+        for (int i = 0; i < mStampTapDetail.size(); i++) {
+            name[i] = mStampTapDetail.get(i).getName();
+            stamp_sn[i] = mStampTapDetail.get(i).getStamp_sn();
+            stamp_detail[i] = mStampTapDetail.get(i).getStamp_detail();
+            current_price[i] = mStampTapDetail.get(i).getCurrent_price();
+            stamp_story[i] = mStampTapDetail.get(i).getStamp_story();
+        }
+
+
+        //设置Fragment
         mList = new ArrayList<>();
-        stampInfoFragment = new StampInfoFragment(mDetail);
+        stampInfoFragment = new StampInfoFragment(stamp_detail[0]);
         mList.add(stampInfoFragment);
-        StampPriceFragment priceFragment = new StampPriceFragment();
+        StampPriceFragment priceFragment =  new StampPriceFragment();
         mList.add(priceFragment);
-        StampPracticeFragment stampPracticeFragment = new StampPracticeFragment(mStory);
+        stampPracticeFragment = new StampPracticeFragment(stamp_story[0]);
         mList.add(stampPracticeFragment);
 
+
+
+        //设置数据
+        mTitle.setText(name[0]);
+        mPrice.setText("￥" + current_price[0]);
+
         //顶部导航的View
-        HomeViewPagerAdapter mViewPagerAdapter = new HomeViewPagerAdapter(mBitmap, mImages, this);
+        HomeViewPagerAdapter mViewPagerAdapter = new HomeViewPagerAdapter(mBitmap, imageBanner, this);
         mTopVP.setAdapter(mViewPagerAdapter);
         mTopVPI.setVisibility(View.VISIBLE);
         mTopVPI.setViewPager(mTopVP);
         //底部导航的ViewPager
-        StampTapDetailAdapter adapter = new StampTapDetailAdapter(getSupportFragmentManager(), mList, arr,mDetail,mStory);
+        StampTapDetailAdapter adapter = new StampTapDetailAdapter(getSupportFragmentManager(), mList, arr);
         mViewPager.setAdapter(adapter);
+        mViewPager.setOffscreenPageLimit(3);
         mIndicator.setVisibility(View.VISIBLE);
         mIndicator.setViewPager(mViewPager);
 
@@ -211,7 +240,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         mAddAlbum.setOnClickListener(this);
         mTopBtn.setOnClickListener(this);
         home_SV.setOnTouchListener(this);
-//        mTopVPI.setOnPageChangeListener(this);
+        mTopVPI.setOnPageChangeListener(this);
     }
 
     @Override
@@ -249,8 +278,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            mHandler.sendMessageDelayed(
-                    mHandler.obtainMessage(StaticField.TOUCH_EVENT_ID, view), StaticField.HOME_SV_COUNT);
+            mHandler.sendMessageDelayed(mHandler.obtainMessage(StaticField.TOUCH_EVENT_ID, view), StaticField.HOME_SV_COUNT);
         }
         return false;
     }
@@ -279,8 +307,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         // 滑动到底部底部
         if (contentView != null && contentView.getMeasuredHeight() <= home_SV.getScrollY() + home_SV.getHeight()) {
             mTopBtn.setVisibility(View.VISIBLE);
-        } else if (home_SV.getScrollY() < ScreenUtils
-                .getScreenHeight(StampTapDetailActivity.this) / 3) { // 下滑 ScrollView滑动的距离小于当前手机屏幕高度的1/3就隐藏
+        } else if (home_SV.getScrollY() < ScreenUtils.getScreenHeight(StampTapDetailActivity.this) / 3) { // 下滑 ScrollView滑动的距离小于当前手机屏幕高度的1/3就隐藏
             mTopBtn.setVisibility(View.GONE);
         } else if (home_SV.getScrollY() > ScreenUtils
                 .getScreenHeight(StampTapDetailActivity.this) / 2) {// 上滑 ScrollView滑动的距离大于当前手机屏幕高度的1/2就显示
@@ -289,21 +316,42 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
 
     }
 
-//    @Override
-//    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//    }
-//
-//    @Override
-//    public void onPageSelected(final int position) {
-//        MyLog.e(position+"页面改变了");
-//
-//        stampInfoFragment.setInfoContent(stampTapDetailBean.getStamp_info_list().get(position).getStamp_detail());
-////        stampInfoFragment.mVB.loadUrl(stampTapDetailBean.getStamp_info_list().get(position).getStamp_detail());
-//    }
-//
-//    @Override
-//    public void onPageScrollStateChanged(int state) {
-//
-//    }
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        MyLog.e(position + "页面改变了");
+
+        MyLog.e(stamp_detail[position] + "-" + stamp_story[position]);
+        //这里应该把三个页面的数据全部改变
+        stampInfoFragment.setInfoContent(stamp_detail[position]);
+        stampPracticeFragment.setInfoContent(stamp_story[position]);
+
+        //动态设置数据
+        mTitle.setText(name[position]);
+        mPrice.setText("￥" + current_price[position]);
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    /**
+     * 轮播图
+     *
+     * @param mStampTapDetail 数据源
+     * @return 轮播图数组
+     */
+    public String[] getBannerData(ArrayList<StampTapDetailBean.StampTapDetail> mStampTapDetail) {
+        String[] bannerDate = new String[mStampTapDetail.size()];
+        for (int i = 0; i < mStampTapDetail.size(); i++) {
+            bannerDate[i] = mStampTapDetail.get(i).getStamp_image();
+        }
+        return bannerDate;
+    }
 }

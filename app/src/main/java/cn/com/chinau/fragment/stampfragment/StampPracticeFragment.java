@@ -20,7 +20,7 @@ public class StampPracticeFragment extends Fragment {
     private String mStory;
 
     public StampPracticeFragment(String mStory) {
-      this.mStory = mStory;
+        this.mStory = mStory;
     }
 
 
@@ -32,9 +32,11 @@ public class StampPracticeFragment extends Fragment {
         setInfoContent(mStory);
         return mStampPractice;
     }
+
     public void setInfoContent(String url) {
-        MyLog.e("邮票故事:" + mStory);
-        mSWB.loadUrl(url);
+        MyLog.e("邮票故事:" + mStory+ "-" + "mVB是否为空" + (mSWB == null));
+        if (url != null)
+            mSWB.loadUrl(url);
     }
 
 }
