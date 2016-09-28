@@ -164,6 +164,11 @@ public class StaticField {
     public static final String CONFIRM = "cn.com.chinau.buyback.confirm";
     // 操作类型，确认回购
     public static final String HG = "HG";
+    // 订单明细编号(原订单) ，确认回购（HG）时传，物流（WL）时不传
     public static final String ORDER_DETAIL_SN = "order_detail_sn";
+    public static final String EXPRESS_COMP = "express_comp";// 快递公司
+    public static final String EXPRESS_NO = "express_no";// 快递单号
+    public static final String ORDER_SN = "order_sn";// 回购订单编号
+    public static final String WL = "WL";// HG确认回购；WL物流
 
 }

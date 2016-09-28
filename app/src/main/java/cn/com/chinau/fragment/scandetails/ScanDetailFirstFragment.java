@@ -44,7 +44,7 @@ public class ScanDetailFirstFragment extends Fragment{
     private TextView mBuyback_price,mService_fee,mCurrent_price,mIncome,mPublishcount,mBuytime,
             mName,mCurrentPrice,mIncrease,mService_fee_rate;
 
-    public ScanDetailFirstFragment(String result, BitmapUtils bitmapUtils, SendProgressDialog pd) {
+    public ScanDetailFirstFragment(String result, BitmapUtils bitmapUtils) {
         this.result = result;
         this.bitmapUtils = bitmapUtils;
         this.pd = pd;
@@ -55,11 +55,11 @@ public class ScanDetailFirstFragment extends Fragment{
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case DELPRESSAGE :
-                    if (pd != null) {
-                        pd.dismiss();
-                    }
-                    break;
+//                case DELPRESSAGE :
+//                    if (pd != null) {
+//                        pd.dismiss();
+//                    }
+//                    break;
                 case AUTO :
                     int currentItem = mViewpagerPager.getCurrentItem();
                     mViewpagerPager.setCurrentItem(currentItem + 1, false);
@@ -146,7 +146,7 @@ public class ScanDetailFirstFragment extends Fragment{
         ChartView view = new ChartView(getActivity());
         view.SetInfo(xLabels, arr, ylab, "价格曲线图");
         mChart.addView(view);
-        handler.sendEmptyMessage(DELPRESSAGE);
+//        handler.sendEmptyMessage(DELPRESSAGE);
     }
     /**
      * 整理数据,并设置适配器

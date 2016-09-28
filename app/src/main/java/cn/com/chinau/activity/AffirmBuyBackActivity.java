@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Message;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -14,11 +13,15 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.base.BaseActivity;
+import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.ScanBean;
 import cn.com.chinau.dialog.SendProgressDialog;
 import cn.com.chinau.dialog.SussessDialog;
@@ -51,29 +54,32 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
     private SharedPreferences sp;
     private SendProgressDialog pd;
     private String mGoodsSn,mDetailSn,mToken,mUserId,mPhone;
+    private SussessDialog dialog;
+    private String result;
     private MyHandler handler = new MyHandler(this) {
-        private SussessDialog dialog;
+
         @Override
         public void handleMessage(Message msg) {
 
             switch (msg.what) {
                 case SUCCESS :// 成功
                     String Result = (String) msg.obj;
-//                    try {
-//                        JSONObject json = new JSONObject(Result);
-//                        String order_sn = json.getString("order_sn");
-//                        Intent intent = new Intent(Activity_ensure_back_buy.this, Activity_express_info.class);
-//                        intent.putExtra("Result", result);
-//                        intent.putExtra("phone", mPhone);
-//                        intent.putExtra("order_sn", order_sn);
-//                        startActivity(intent);
-//                    } catch (JSONException e) {
-//                        // TODO Auto-generated catch block
-//                        e.printStackTrace();
-//                    }
+                    try {
+                        JSONObject json = new JSONObject(Result);
+                        String order_sn = json.getString("order_sn");
+                        sp.edit().putString("order_sn",order_sn).commit();
+//                        Bundle mBundle = new Bundle();
+//                        mBundle.putString("Result",result);
+//                        mBundle.putString("phone",mPhone);
+//                        mBundle.putString("order_sn",order_sn);
+                        openActivityWitchAnimation(FastMailInfoActivity.class);
+                        finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case FAIL :// 失败
-//                    dialog = new SussessDialog(Activity_ensure_back_buy.this);
+                    dialog = new SussessDialog(AffirmBuyBackActivity.this);
                     dialog.setText((String) msg.obj);
                     dialog.show();
                     handler.sendEmptyMessage(DELSURESS);
@@ -82,20 +88,21 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
                     if (dialog != null)
                         dialog.dismiss();
                     break;
-                case DELPROGRESS :// 关闭对话框
-                    if (pd != null)
-                        pd.dismiss();
-                    break;
+//                case DELPROGRESS :// 关闭对话框
+//                    if (pd != null)
+//                        pd.dismiss();
+//                    break;
                 case AGAINLOGIN :// 再次登录
-                    if (dialog != null)
+                    if (dialog != null){
                         dialog.dismiss();
-//                    Intent intent = new Intent(Activity_ensure_back_buy.this, LogInActivity.class);
-//                    intent.putExtra("WithDraw", "buy_back");
-//                    startActivity(intent);
-//                    finish();
+                    }
+                    Intent intent = new Intent(AffirmBuyBackActivity.this, LoginActivity.class);
+                    intent.putExtra("WithDraw", "buy_back");
+                    startActivity(intent);
+                    finish();
                     break;
                 case AGAINDIALOG :
-//                    dialog = new SussessDialog(Activity_ensure_back_buy.this);
+                    dialog = new SussessDialog(AffirmBuyBackActivity.this);
                     dialog.setText("用户需要重新登录");
                     dialog.show();
                     break;
@@ -105,6 +112,7 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
         }
 
     };
+
 
     @Override
     public View CreateTitle() {
@@ -156,11 +164,14 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
      * 给组件赋值
      */
     private void initData() {
-        String mResult = getIntent().getStringExtra("RESULT");
-        MyLog.LogShitou("mResult商品详情传过来的--->", mResult);
-        if (mResult != null) {
+//        Bundle bundle = getIntent().getExtras();
+//        result = bundle.getString("RESULT");
+
+        result = sp.getString("ScanBack","");
+        MyLog.LogShitou("mResult商品详情传过来的--->", result);
+        if (result != null) {
             Gson gson = new Gson();
-            ScanBean scanBean = gson.fromJson(mResult, ScanBean.class);
+            ScanBean scanBean = gson.fromJson(result, ScanBean.class);
             String mGoods_names = scanBean.getGoods_name();// 商品名称
             mGoodsName.setText(mGoods_names);
             String mBuy_time = scanBean.getBuy_time(); // 购买时间
@@ -186,21 +197,24 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.base_title_back://返回
-                finishWitchAnimation();
+                openActivityWitchAnimation(ScanDetailsActivity.class);
+                finish();
+//                finishWitchAnimation();
                 break;
             case R.id.Affirm_buyBack://确认回购按钮
                 mToken = sp.getString("token", "");
                 mUserId = sp.getString("userId", "");
-                if (TextUtils.isEmpty(mToken) && TextUtils.isEmpty(mUserId)) {
-                    Intent intent = new Intent(AffirmBuyBackActivity.this, LoginActivity.class);
-                    intent.putExtra("WithDraw", "buyback");
-                    startActivity(intent);
-                } else {
-                    mPhone = mBuyPhone.getText().toString();
-                    GetNetBackBuy(mPhone);
-                }
-
-                openActivityWitchAnimation(FastMailInfoActivity.class);
+//                if (TextUtils.isEmpty(mToken) && TextUtils.isEmpty(mUserId)) {
+//                    Intent intent = new Intent(AffirmBuyBackActivity.this, LoginActivity.class);
+//                    intent.putExtra("WithDraw", "buyback");
+//                    startActivity(intent);
+//                } else {
+//                    mPhone = mBuyPhone.getText().toString();
+//                    GetNetBackBuy(mPhone);
+//                }
+                mPhone = mBuyPhone.getText().toString();
+                sp.edit().putString("Phone",mPhone).commit();
+                GetNetBackBuy(mPhone);
                 break;
             default:
                 break;
@@ -211,8 +225,8 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
      * 确认回购网络请求
      */
     private void GetNetBackBuy(final String phone){
-        pd = new SendProgressDialog(this);
-        pd.show();
+//        pd = new SendProgressDialog(this);
+//        pd.show();
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -230,28 +244,28 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
                 String mResult = HttpUtils.submitPostData(StaticField.ROOT, params);
                 MyLog.LogShitou("确认回购页面--->", mResult);
 //                handler.sendEmptyMessage(DELPROGRESS);
-//                if (mResult.equals("-1")) {
-//                    return;
-//                }
-//                Gson gson = new Gson();
-//                CodeBean codeBean = gson.fromJson(mResult, CodeBean.class);
-//                String rsp_msg = codeBean.getRsp_msg();
-//
-//                if (rsp_msg.equals("成功")) {
-//                    Message msg = handler.obtainMessage();
-//                    msg.what = SUCCESS;
-//                    msg.obj = mResult;
-//                    handler.sendMessage(msg);
-//
-//                } else if (rsp_msg.equals("用户需要重新登录")) {
-//                    handler.sendEmptyMessage(AGAINDIALOG);
-//                    handler.sendEmptyMessageDelayed(AGAINLOGIN, 2000);
-//                } else {
-//                    Message msg = handler.obtainMessage();
-//                    msg.what = FAIL;
-//                    msg.obj = mResult;
-//                    handler.sendMessage(msg);
-//                }
+                if (mResult.equals("-1")) {
+                    return;
+                }
+                Gson gson = new Gson();
+                BaseBean codeBean = gson.fromJson(mResult, BaseBean.class);
+                String rsp_coode = codeBean.getRsp_code();
+                if (rsp_coode.equals("0000")) {
+                    Message msg = handler.obtainMessage();
+                    msg.what = SUCCESS;
+                    msg.obj = mResult;
+                    handler.sendMessage(msg);
+
+                } else if (rsp_coode.equals("1002")) {
+                    handler.sendEmptyMessage(AGAINDIALOG);
+                    handler.sendEmptyMessageDelayed(AGAINLOGIN, 2000);
+                } else {
+                    Message msg = handler.obtainMessage();
+                    msg.what = FAIL;
+                    String rsp_msg = codeBean.getRsp_msg();
+                    msg.obj = rsp_msg;
+                    handler.sendMessage(msg);
+                }
             }
         });
 

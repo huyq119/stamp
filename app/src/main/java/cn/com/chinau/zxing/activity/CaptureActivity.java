@@ -2,6 +2,7 @@ package cn.com.chinau.zxing.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
@@ -32,6 +33,8 @@ import java.io.IOException;
 import java.util.Vector;
 
 import cn.com.chinau.R;
+import cn.com.chinau.StaticField;
+import cn.com.chinau.activity.ScanActivity;
 import cn.com.chinau.activity.ScanDetailsActivity;
 import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.zxing.MessageIDs;
@@ -60,6 +63,7 @@ public class CaptureActivity extends Activity implements Callback {
     CameraManager cameraManager;
     private ImageView mBack;// 返回按钮
     private TextView mTitle;
+    private SharedPreferences sp;
 
     /**
      * Called when the activity is first created.
@@ -69,10 +73,8 @@ public class CaptureActivity extends Activity implements Callback {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-          this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-		  WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
-
+//          this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//		  WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
 		  RelativeLayout layout = new RelativeLayout(this);
 		 layout.setLayoutParams(new
 		  ViewGroup.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
@@ -102,8 +104,9 @@ public class CaptureActivity extends Activity implements Callback {
 
 		 layout.addView(status); setContentView(layout);
 
-
         setContentView(R.layout.activity_capture);
+
+        sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
         surfaceView = (SurfaceView) findViewById(R.id.surfaceview);
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinderview);
 
@@ -120,8 +123,14 @@ public class CaptureActivity extends Activity implements Callback {
 
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(CaptureActivity.this, ScanActivity.class);
+                startActivity(intent);
+                //跳转动画
                 finish();
-                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+
+//                finish();
+//                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
             }
         });
     }
@@ -234,14 +243,17 @@ public class CaptureActivity extends Activity implements Callback {
         // 获取二维码的信息,并且把数据传到商品详情界面
 //         ShowDialog.showTextDialog(this, "扫码成功");
         Intent intent = new Intent(this, ScanDetailsActivity.class);
-        //用Bundle携带数据
-        Bundle bundle=new Bundle();
-        //传递name参数为tinyphp
-        bundle.putString("result", rawResult.getText());
-        intent.putExtras(bundle);
+        sp.edit().putString("result", rawResult.getText()).commit();
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+
+//        //用Bundle携带数据
+//        Bundle bundle=new Bundle();
+//        //传递name参数为tinyphp
+//        bundle.putString("result", rawResult.getText());
+//        intent.putExtras(bundle);
+
         MyLog.e("二维码地址-->", rawResult.toString());
 
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);

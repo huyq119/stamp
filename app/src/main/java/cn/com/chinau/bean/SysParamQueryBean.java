@@ -123,6 +123,7 @@ public class SysParamQueryBean extends BaseBean {
         }
 
         public class Express_comp {
+
             private String shunfeng;
 
             private String ems;

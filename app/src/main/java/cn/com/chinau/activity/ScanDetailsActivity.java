@@ -2,7 +2,6 @@ package cn.com.chinau.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
@@ -111,8 +110,8 @@ public class ScanDetailsActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void AgainRequest() {
-        if (pd != null)
-            pd.dismiss();
+//        if (pd != null)
+//            pd.dismiss();
         getIntentData();
     }
 
@@ -128,12 +127,14 @@ public class ScanDetailsActivity extends BaseActivity implements View.OnClickLis
      * 获取上个页面传过来的数据
      */
     private void getIntentData() {
-        introduction = getIntent().getExtras().getString("result");
-        MyLog.e("传过来的值-->", introduction);
+//        introduction = getIntent().getExtras().getString("result");
+         introduction = sp.getString("result","");
+
+        MyLog.e("获取在本地的url-->", introduction);
         // 判断返回结果的
         if (introduction != null) {
-         pd = new SendProgressDialog(this);
-            pd.show();
+//         pd = new SendProgressDialog(this);
+//            pd.show();
             Log.e("扫描结果-->", introduction);
             getNetData(introduction);
         }
@@ -141,7 +142,7 @@ public class ScanDetailsActivity extends BaseActivity implements View.OnClickLis
 
     private void initData(String result) {
         // 上面显示的view,下面显示的view
-        ScanDetailFirstFragment first = new ScanDetailFirstFragment(result, mBitmap,pd);
+        ScanDetailFirstFragment first = new ScanDetailFirstFragment(result, mBitmap);
         final ScanDetailSecondFragment second = new ScanDetailSecondFragment(result);
 
         getSupportFragmentManager().beginTransaction().add(R.id.first, first).add(R.id.second, second).commit();
@@ -166,24 +167,25 @@ public class ScanDetailsActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.base_title_back://返回
-                finishWitchAnimation();
+                openActivityWitchAnimation(ScanActivity.class);
+                finish();
+//                finishWitchAnimation();
                 break;
             case R.id.scan_buyBack://申请回购
                 token = sp.getString("token", "");
                 userId = sp.getString("userId", "");
                 if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(userId)) {// 已经登录进入下一页面
-                    Bundle mBundle = new Bundle();
-                    mBundle.putString("RESULT",result);
-                    openActivityWitchAnimation(AffirmBuyBackActivity.class,mBundle);// 确认回购
+//                    Bundle mBundle = new Bundle();
+//                    mBundle.putString("RESULT",result);
+//                    openActivityWitchAnimation(AffirmBuyBackActivity.class,mBundle);// 确认回购
+                    openActivityWitchAnimation(AffirmBuyBackActivity.class);// 确认回购
+                    finish();
+
                 } else {// 进入登录界面
                     Intent intent = new Intent(ScanDetailsActivity.this, LoginActivity.class);
                     intent.putExtra("WithDraw", "buyback");
                     startActivity(intent);
                 }
-
-
-
-
                 break;
         }
     }

@@ -117,6 +117,7 @@
         <activity android:name="cn.com.chinau.activity.ApplyForRefuseActivity" />
         <activity android:name="cn.com.chinau.activity.SuccessApplyForRefuseActivity" />
         <activity android:name="cn.com.chinau.activity.LookOrderDetailRefuseActivity" />
+        <activity android:name="cn.com.chinau.activity.BigPhotoActivity" />
     </application>
 
 </manifest>

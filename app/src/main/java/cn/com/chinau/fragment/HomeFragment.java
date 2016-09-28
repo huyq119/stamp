@@ -1,5 +1,7 @@
 package cn.com.chinau.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -98,6 +100,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     break;
                 case SYSPARAM:
                    String mData = (String) msg.obj;
+                    sp.edit().putString("System", mData).commit();
                     Gson gsons = new Gson();
                     SysParamQueryBean paramQueryBean = gsons.fromJson(mData, SysParamQueryBean.class);
                     SysParamQueryBean.Sys_param_value sys_param_value = paramQueryBean.getSys_param_value();
@@ -134,6 +137,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             }
         }
     };
+    private SharedPreferences sp;
 
 
     @Override
@@ -147,6 +151,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public View CreateSuccess() {
         mHomeView = View.inflate(getActivity(), R.layout.fragment_home_content, null);
+        sp = getActivity().getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         initView();
         initData();
         initListener();
@@ -274,11 +279,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 finishwitchAnimation();
                 break;
             case R.id.home_scan://扫码按钮
-                Bundle  mBundle = new Bundle();
-                mBundle.putString("Image",mImage);
-                mBundle.putString("Summary",mSummary);
-                mBundle.putStringArrayList("Process",mProcess);
-                openActivityWitchAnimation(ScanActivity.class,mBundle);
+//                Bundle  mBundle = new Bundle();
+//                mBundle.putString("Image",mImage);
+//                mBundle.putString("Summary",mSummary);
+//                mBundle.putStringArrayList("Process",mProcess);
+
+                openActivityWitchAnimation(ScanActivity.class);
                 break;
             case R.id.home_designer://设计家按钮
                 openActivityWitchAnimation(DesignerActivity.class);
@@ -499,6 +505,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 params.put(StaticField.SIGN, md5code);//签名
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
                 if (result.equals("-1")) {
+                    getSysparamQuery();
                     return;
                 }
 

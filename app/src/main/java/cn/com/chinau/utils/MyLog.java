@@ -83,7 +83,6 @@ public class MyLog {
     public static void LogShitou(String type, String msg) {
 
         if (isPrintLog) {
-
             int strLength = msg.length();
             int start = 0;
             int end = LOG_MAXLENGTH;

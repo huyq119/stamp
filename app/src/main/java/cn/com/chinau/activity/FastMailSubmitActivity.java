@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import cn.com.chinau.R;
 import cn.com.chinau.base.BaseActivity;
-import cn.com.chinau.utils.MyToast;
 
 /**
  * 快递提交成功页面
@@ -59,7 +58,9 @@ public class FastMailSubmitActivity extends BaseActivity implements View.OnClick
                 finishWitchAnimation();
                 break;
             case R.id.commit_sumbit://查看订单按钮
-                MyToast.showShort(this,"点击了查看订单");
+                openActivityWitchAnimation(OrderBuyBackActivity.class);
+                finish();
+//                MyToast.showShort(this,"点击了查看订单");
                 break;
         }
     }
