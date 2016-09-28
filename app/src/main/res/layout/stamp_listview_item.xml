@@ -3,20 +3,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
     android:orientation="horizontal">
 
 
     <RelativeLayout
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="131dp"
+        android:layout_height="131dp"
+        android:background="@drawable/roct_bg"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/distance"
-        android:background="#0f0">
+        >
 
         <ImageView
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:id="@+id/stamp_icon"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
     </RelativeLayout>
 

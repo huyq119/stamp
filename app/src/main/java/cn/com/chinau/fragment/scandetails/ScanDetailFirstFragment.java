@@ -5,7 +5,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -171,14 +170,14 @@ public class ScanDetailFirstFragment extends Fragment{
             if (small_images != null) {
 
                 // 截取图片返回的url
-                for (int i = 0; i < small_images.length; i++) {
-                    int first = small_images[i].lastIndexOf("_");
-                    int last = small_images[i].lastIndexOf(".");
-                    StringBuffer sb = new StringBuffer(small_images[i]);
-                    StringBuffer banner = sb.delete(first, last);
-                    Log.e("url-------------->", banner.toString());
-                    small_images[i] = banner.toString();
-                }
+//                for (int i = 0; i < small_images.length; i++) {
+//                    int first = small_images[i].lastIndexOf("_");
+//                    int last = small_images[i].lastIndexOf(".");
+//                    StringBuffer sb = new StringBuffer(small_images[i]);
+//                    StringBuffer banner = sb.delete(first, last);
+//                    Log.e("url-------------->", banner.toString());
+//                    small_images[i] = banner.toString();
+//                }
 
                 BackMarketAdapter mVAdapter = new BackMarketAdapter(bitmapUtils, small_images, getActivity());
                 mViewpagerPager.setAdapter(mVAdapter);

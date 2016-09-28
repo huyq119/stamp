@@ -2,7 +2,9 @@ package cn.com.chinau.activity;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,7 +26,7 @@ import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.AuctionListViewAdapter;
 import cn.com.chinau.adapter.StampHorizontalListViewAdapter;
 import cn.com.chinau.base.BaseActivity;
-import cn.com.chinau.bean.StampBean;
+import cn.com.chinau.bean.GoodsStampBean;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.listener.GestureListener;
 import cn.com.chinau.utils.Encrypt;
@@ -40,13 +44,13 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private View mAuctionContent, mAuctionTitle, mBlankView;
     private HorizontalListView hListView;//筛选横向滑动的listView
     private StampHorizontalListViewAdapter hListViewAdapter;//筛选横向花的listView的适配器
-    private ArrayList<StampBean> mList;
+    private ArrayList<GoodsStampBean.GoodsList> mList;
     private ListView mListView;
     private ImageView mBack, mSearch;//返回按钮,搜索
 
     private String[] mArrTitle = {"新中国邮票", "民国邮票", "解放区邮票", "清代邮票"};
     private String[] mArr = {"全部", "编年邮票", "新JT邮票", "编号邮票", "文革邮票", "老纪特邮票", "普通邮票"};
-    private TextView mTitle;
+    private TextView mTitle,mNoListTV;
     // 新中国邮票, 民国邮票, 解放区邮票, 清代邮票
     private LinearLayout mNewChinese, mRepublicChina, mLiberatedArea, mQingDynasty;
 
@@ -60,11 +64,35 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private boolean scrollFlag = false; // 标记是否滑动
     private int lastVisibleItemPosition = 0;// 标记上次滑动位置
     private int mCount;
-    private AuctionListViewAdapter mListAdapter;
-
     private LinearLayout mHeartll;//头部的布局
     private GestureDetector mGestureDetector;
     private int num = 0;//初始索引
+    private GoodsStampBean mGoodsStampBean;
+    private Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case StaticField.SUCCESS://商城Lsit
+                    Gson gson = new Gson();
+                    mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
+                    mList = mGoodsStampBean.getGoods_list();
+                    MyLog.LogShitou("竞拍列表有几条-->:",mList.size()+"");
+                    if (mList!=null&&mList.size()!=0){
+                        //竖向ListView设置适配器
+                        initAdapter();
+                    }else{
+                        mListView.setVisibility(View.GONE);
+                        mNoListTV.setVisibility(View.VISIBLE);
+                    }
+
+
+                    break;
+            }
+        }
+    };
 
     @Override
     public View CreateTitle() {
@@ -77,18 +105,12 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mAuctionContent = View.inflate(this, R.layout.activity_auction_content, null);
         initView();
         initData();
-        initAdapter();
         initListener();
         return mAuctionContent;
     }
 
 
     private void initView() {
-        mList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-        }
-
         mBack = (ImageView) mAuctionTitle.findViewById(R.id.base_title_back);
         mSearch = (ImageView) mAuctionTitle.findViewById(R.id.base_search);
         mTitle = (TextView) mAuctionTitle.findViewById(R.id.base_title);
@@ -96,6 +118,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mTopBtn = (Button) mAuctionContent.findViewById(R.id.base_top_btn);// 置顶
         hListView = (HorizontalListView) mAuctionContent.findViewById(R.id.stamp_hl);//横向ListView
         mListView = (ListView) mAuctionContent.findViewById(R.id.auction_lv);// 竖向ListView
+        mNoListTV = (TextView) mAuctionContent.findViewById(R.id.auction_no_lv_tv);
         mNewChinese = (LinearLayout) mAuctionContent.findViewById(R.id.auction_newchinese_ll);
         mAuctionContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorRed);// 初始化新中国邮票
         mRepublicChina = (LinearLayout) mAuctionContent.findViewById(R.id.auction_republicChina_ll);
@@ -105,12 +128,12 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mOver = (Button) mAuctionContent.findViewById(R.id.auction_over);
         mCamera = (Button) mAuctionContent.findViewById(R.id.auction_camera);
 
-        initGestureListener();
+        initGestureListener();// 滑动lsitview隐藏导航栏的方法
 
     }
 
     /**
-     *滑动lsitview隐藏导航栏的方法
+     * 滑动lsitview隐藏导航栏的方法
      */
     private void initGestureListener(){
         mHeartll = (LinearLayout) mAuctionContent.findViewById(R.id.auction_heart);
@@ -125,13 +148,15 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
 
     private void initAdapter() {
-        //竖向ListView设置适配器
-        AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
-        mListView.setAdapter(mListAdapter);
 
         // 横向的listView设置适配器
         hListViewAdapter = new StampHorizontalListViewAdapter(this, mArr);
         hListView.setAdapter(hListViewAdapter);
+
+        //竖向ListView设置适配器
+        AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, mList);
+        mListView.setAdapter(mListAdapter);
+        mListAdapter.notifyDataSetChanged();
 
     }
 
@@ -161,13 +186,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         if (mList != null) {
             mList = new ArrayList<>();
         }
-
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-//        RequestNet(StaticField.ZH, num, StaticField.A);
-        for (int i = 0; i < 10; i++) {
-            mList.add(new StampBean("庚申年", "未开始", "￥1000.00" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-        }
-
         RequestNet(StaticField.ZH, num, StaticField.A);
     }
 
@@ -201,7 +220,11 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //去往竞拍详情页
-                openActivityWitchAnimation(AuctionDetailActivity.class);
+                Bundle bundle = new Bundle();
+                String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
+                bundle.putString(StaticField.GOODS_SN, mGoods_sn);// 传入商品编号
+                MyLog.LogShitou("mGoods_sn商品编号-->",mGoods_sn);
+                openActivityWitchAnimation(AuctionDetailActivity.class,bundle);
             }
         });
         mListView.setOnTouchListener(new View.OnTouchListener() {
@@ -218,7 +241,41 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     public void AgainRequest() {
 
     }
+    /**
+     *  商城list网络请求
+     * @param Order_By 类别
+     * @param index 角标
+     * @param Sort 排序
+     */
+    private void RequestNet(final String Order_By, final int index, final String Sort) {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.GOODSLIST);// 接口名称
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
+                params.put(StaticField.GOODS_SOURCE,StaticField.JP); // 商品类型
+                params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；XL销量；JG价格)
+                params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
+                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                MyLog.e(md5code);
+                params.put(StaticField.SIGN, md5code); // 签名
 
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                MyLog.LogShitou("result+竞拍~~~~>", result);
+                if (result.equals("-1")) {
+                    return;
+                }
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        });
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -263,29 +320,11 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 // true代表降序,false代表升序
                 if (Synthesizeflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("戊戌年", "未开始", "￥200.0" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-                    }
-                    mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
-                    mListView.setAdapter(mListAdapter);
-                    mListAdapter.notifyDataSetChanged();
-
-//                    RequestNet(StaticField.ZH, num, StaticField.D);
+                    RequestNet(StaticField.ZH, num, StaticField.D);
                     Synthesizeflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSynthesize, Color.parseColor("#ff0000"));
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("庚申年", "未开始", "￥1000.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
-                    }
-                    AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
-                    mListView.setAdapter(mListAdapter);
-                    mListAdapter.notifyDataSetChanged();
-//                    RequestNet(StaticField.ZH, num, StaticField.D);
-
+                    RequestNet(StaticField.ZH, num, StaticField.A);
                     Synthesizeflag = true;
                 }
                 break;
@@ -296,30 +335,11 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                 if (Overflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mOver, Color.parseColor("#ff0000"));
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("戊戌年", "即将结束", "￥200.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
-                    }
-                    AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
-                    mListView.setAdapter(mListAdapter);
-                    mListAdapter.notifyDataSetChanged();
-
-//                    RequestNet(StaticField.SJ, num, StaticField.D);
+                    RequestNet(StaticField.JS, num, StaticField.D);
                     Overflag = false;
                 } else {
-                    Log.e("flag", "false");
                     setDrawable(R.mipmap.top_arrow_top, mOver, Color.parseColor("#ff0000"));
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("庚申年", "即将结束", "￥100.0" + i, "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
-                    }
-                    AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
-                    mListView.setAdapter(mListAdapter);
-                    mListAdapter.notifyDataSetChanged();
-
-//                    RequestNet(StaticField.SJ, num, StaticField.A);
+                    RequestNet(StaticField.JS, num, StaticField.A);
                     Overflag = true;
                 }
                 break;
@@ -330,29 +350,11 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                 if (Cameraflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mCamera, Color.parseColor("#ff0000"));
-//                    RequestNet(StaticField.JG, num, StaticField.D);
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("庚申年", "等待开拍", "￥800.0" + i, "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg"));
-                    }
-                    AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
-                    mListView.setAdapter(mListAdapter);
-                    mListAdapter.notifyDataSetChanged();
-
+                    RequestNet(StaticField.KP, num, StaticField.D);
                     Cameraflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mCamera, Color.parseColor("#ff0000"));
-//                    RequestNet(StaticField.JG, num, StaticField.A);
-
-                    mList = new ArrayList<>();
-                    for (int i = 0; i < 20; i++) {
-                        mList.add(new StampBean("戊戌年", "等待开拍", "￥400.0" + i, "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"));
-                    }
-                    AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(this, mBitmap, mList);
-                    mListView.setAdapter(mListAdapter);
-                    mListAdapter.notifyDataSetChanged();
-
+                    RequestNet(StaticField.KP, num, StaticField.A);
                     Cameraflag = true;
                 }
                 break;
@@ -451,41 +453,4 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         button.setCompoundDrawables(null, null, drawable, null);
         button.setTextColor(color);
     }
-    /**
-     *  商城list网络请求
-     * @param Order_By 类别
-     * @param index 角标
-     * @param Sort 排序
-     */
-    private void RequestNet(final String Order_By, final int index, final String Sort) {
-        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                HashMap<String, String> params = new HashMap<>();
-                params.put(StaticField.SERVICE_TYPE, StaticField.GOODSLIST);// 接口名称
-                params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
-                params.put(StaticField.GOODS_SOURCE,StaticField.JP); // 商品类型
-                params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；XL销量；JG价格)
-                params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
-                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
-                String mapSort = SortUtils.MapSort(params);
-                String md5code = Encrypt.MD5(mapSort);
-                MyLog.e(md5code);
-                params.put(StaticField.SIGN, md5code); // 签名
-
-                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-
-                Log.e("result+竞拍~~~~>", result);
-//                if (result.equals("-1")) {
-//                    return;
-//                }
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = StaticField.SUCCESS;
-//                msg.obj = result;
-//                mHandler.sendMessage(msg);
-            }
-        });
-    }
-
-
 }

@@ -276,7 +276,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.home_auction://竞拍
                 openActivityWitchAnimation(AuctionActivity.class);
-                finishwitchAnimation();
                 break;
             case R.id.home_scan://扫码按钮
 //                Bundle  mBundle = new Bundle();

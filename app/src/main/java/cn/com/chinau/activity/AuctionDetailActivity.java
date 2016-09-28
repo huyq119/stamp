@@ -1,9 +1,11 @@
 package  cn.com.chinau.activity;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +20,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.com.chinau.R;
@@ -29,9 +32,14 @@ import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.StampDetailBean;
 import cn.com.chinau.dialog.AuctionRegulationsAgreementDialog;
 import cn.com.chinau.fragment.stampdetailfragment.StampDetailInfoFragment;
+import cn.com.chinau.http.HttpUtils;
+import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.ListViewHeight;
+import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.ScreenUtils;
+import cn.com.chinau.utils.SortUtils;
+import cn.com.chinau.utils.ThreadManager;
 import cn.com.chinau.view.CustomViewPager;
 import cn.com.chinau.view.VerticalScrollView;
 
@@ -67,11 +75,16 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                         lastY = scroller.getScrollY();
                     }
                     break;
+                case StaticField.SUCCESS:// 竞拍详情数据
+
+
+                    break;
             }
         }
     };
+
     private int intCount = 0;// 每次出价加减的值
-    private String count;// 获取出价的值
+    private String count,mGoods_sn;// 获取出价的值
     private int goods_storage = 1; //出价最低价
     private AuctionRegulationsAgreementDialog auctiondialog; // 协议dialog
     private boolean bidFlag = false,addFlag;// 出价标识,加价标识
@@ -91,12 +104,18 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     public View CreateSuccess() {
         mAuctionDetailContent = View.inflate(this, R.layout.activity_auctiondetail_content, null);
         initView();
+        initData();
         initAdapter();
         initListener();
         return mAuctionDetailContent;
     }
 
     private void initView() {
+
+        // 获取竞拍页面传过来的的值
+        Bundle bundle = getIntent().getExtras();
+        mGoods_sn = bundle.getString(StaticField.GOODS_SN);
+        Log.e("mGoods_sn编号001~~~~>", mGoods_sn);
         //下面的之后得删除
         mList = new ArrayList<>();
         StampDetailInfoFragment mStampDetailInfoFragment = new StampDetailInfoFragment();
@@ -173,7 +192,47 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     public void AgainRequest() {
 
     }
+    /**
+     * 商品竞拍详情请求的数据
+     */
+    private void initData() {
+        RequestNet();
+    }
 
+    /**
+     * 商品竞拍详情网络请求
+     */
+    private void RequestNet() {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.GOODSDETAIL);// 接口名称
+                params.put(StaticField.GOODS_SN, mGoods_sn); // 商品编号
+                String token = "";
+                String user_id = "";
+                if (!(token.equals("") || user_id.equals(""))) {
+                    params.put(StaticField.TOKEN, token); // 登录标识
+                    params.put(StaticField.USER_ID, user_id); // 用户ID
+                }
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code); // 签名
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+               MyLog.LogShitou("竞拍详情~~~~>", result);
+                if (result.equals("-1")) {
+                    return;
+                }
+
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = StaticField.SUCCESS;
+//                msg.obj = result;
+//                mHandler.sendMessage(msg);
+            }
+        });
+    }
     private void initListener() {
         mShared.setOnClickListener(this);
         mBack.setOnClickListener(this);
