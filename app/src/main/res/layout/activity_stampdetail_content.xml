@@ -268,6 +268,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/distance"
+
                         android:background="@color/background" />
 
                     <View style="@style/myline" />
@@ -276,9 +277,11 @@
                     <com.viewpagerindicator.TabPageIndicator
                         android:id="@+id/stampdetail_indicator"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp" />
+                        android:layout_height="45dp"
+                        android:visibility="gone"
+                        />
 
-                    <cn.com.chinau.CustomViewPager
+                    <cn.com.chinau.view.CustomViewPager
                         android:id="@+id/stampdetail_viewpager"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

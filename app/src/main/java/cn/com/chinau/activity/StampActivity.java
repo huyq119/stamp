@@ -15,18 +15,24 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.StampHorizontalListViewAdapter;
 import cn.com.chinau.adapter.StampMarketGridViewAdapter;
 import cn.com.chinau.base.BaseActivity;
+import cn.com.chinau.bean.CategoryBean;
 import cn.com.chinau.bean.GoodsStampBean;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.listener.GestureListener;
@@ -47,13 +53,11 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     private StampHorizontalListViewAdapter hListViewAdapter;//横向花的listView的适配器
     private ArrayList<GoodsStampBean.GoodsList> mList;
     private GridView mGridView;
-    private ImageView mBack, mSearch;//返回按钮,搜索
-    private String[] mArrTitle = {"新中国邮票", "民国邮票", "解放区邮票", "清代邮票"};
-    private String[] mArr = {"全部", "编年邮票", "新JT邮票", "编号邮票", "文革邮票", "老纪特邮票", "普通邮票"};
+    private ImageView mBack, mSearch; // 返回按钮,搜索
     private TextView mTitle;
     // 新中国邮票, 民国邮票, 解放区邮票, 清代邮票
-    private LinearLayout mNewChinese, mRepublicChina, mLiberatedArea, mQingDynasty,
-            mTitleStamp;
+    private RadioButton mNewChinese, mRepublicChina, mLiberatedArea, mQingDynasty;
+    private LinearLayout   mTitleStamp;
 
     private int mColorGray = Color.parseColor("#dddfe3");// 横线灰色
     private int mColorRed = Color.parseColor("#e20000");// 横线红色
@@ -70,6 +74,11 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     private GestureDetector mGestureDetector;
     private int num = 0;//初始索引
     private GoodsStampBean mGoodsStampBean;
+    public static final int SUCCESS = 1;
+    private RadioGroup mRadioGroup;
+
+    private String[] string0,string1,string2,string3;
+
     private Handler mHandler = new Handler() {
 
 
@@ -81,13 +90,73 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             switch (msg.what) {
                 case StaticField.SUCCESS://套邮票Lsit
                     Gson gson = new Gson();
-                     mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
+                    mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
                     mList = mGoodsStampBean.getGoods_list();
                     initAdapter();
+                    break;
+                case SUCCESS://类别查询
+                    Gson gsons = new Gson();
+                    CategoryBean mCategoryBean = gsons.fromJson((String) msg.obj, CategoryBean.class);
+                    ArrayList<CategoryBean.Category> mCategory = mCategoryBean.getCategory();
+                    CategoryBean.Category category = mCategory.get(0);
+                    ArrayList<CategoryBean.Category.SubCategory> subCategory1 = category.getSubCategory();
+
+                    // 外分类
+                    int sub = subCategory1.size();
+
+                    String [] mArrTitle = new String[sub] ;
+                    String [] mImgUrl = new String[sub] ;
+
+                    //子分类
+                    List<String []> mArrList = new ArrayList<>();
+                    List<String []> mImgUrlList = new ArrayList<>();
+                    for (int i = 0; i < subCategory1.size(); i++) {
+                       mArrTitle[i] = subCategory1.get(i).getName();
+                        mImgUrl [i] =  subCategory1.get(i).getImg_url();// 图片的url
+
+                        MyLog.LogShitou("类别0001----->:", mArrTitle[i]+"--"+mImgUrl [i]);
+                        ArrayList<CategoryBean.Category.SubCategory.SmllSubCategoryData> subCategory = subCategory1.get(i).getSubCategory();
+                        String [] mArr = new String[subCategory.size()];
+                        for (int j = 0; j < subCategory.size(); j++) {
+                            mArr[j] =  subCategory.get(j).getName();
+                            MyLog.LogShitou("类别00"+j+"----->:", mArr[j]);
+                        }
+                        mArrList.add(mArr);
+                    }
+
+
+                    String title0 =  mArrTitle[0];
+                    String imgurl0 = mImgUrl [0];
+                    mNewChinese.setText(title0);
+//                    mNewChinese.setCompoundDrawables(null, topDrawable,null, null);
+                    String title1 =  mArrTitle[1];
+                    String imgurl1 = mImgUrl [1];
+                    mRepublicChina.setText(title1);
+                    String title2=  mArrTitle[2];
+                    String imgurl2 = mImgUrl [2];
+                    mLiberatedArea.setText(title2);
+                    String title3 =  mArrTitle[3];
+                    String imgurl3 = mImgUrl [3];
+                    mQingDynasty.setText(title3);
+                    MyLog.LogShitou("外部分类-->:",sub+"----"+title0+"--"+title1+"--"+title2+"--"+title3);
+
+                    mArrList.size();
+                    string0 = mArrList.get(0);
+                     string1 = mArrList.get(1);
+                     string2 = mArrList.get(2);
+                     string3 = mArrList.get(3);
+
+                    //横向的listView设置适配器
+                    hListViewAdapter = new StampHorizontalListViewAdapter(StampActivity.this, string0);
+                    hListView.setAdapter(hListViewAdapter);
+
+                    MyLog.LogShitou("几个数-->:", mArrList.size()+"--"+ string0.length+"----"+string1.length+"--"+string2.length+"--"+string3.length);
                     break;
             }
         }
     };
+
+
     @Override
     public View CreateTitle() {
         mStampTitle = View.inflate(this, R.layout.base_search_title, null);
@@ -114,17 +183,36 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
 
         hListView = (HorizontalListView) mStampContent.findViewById(R.id.stamp_hl);//横向ListView
 
-        mNewChinese = (LinearLayout) mStampContent.findViewById(R.id.stamp_newchinese_ll);
-        mStampContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorRed);// 初始化新中国邮票
-        mRepublicChina = (LinearLayout) mStampContent.findViewById(R.id.stamp_republicChina_ll);
-        mLiberatedArea = (LinearLayout) mStampContent.findViewById(R.id.stamp_liberatedArea_ll);
-        mQingDynasty = (LinearLayout) mStampContent.findViewById(R.id.stamp_qingDynasty_ll);
+        mRadioGroup = (RadioGroup) mStampContent.findViewById(R.id.stamp_RadioGroup);
+        mNewChinese = (RadioButton) mStampContent.findViewById(R.id.stamp_newchinese_btn);
+        mRepublicChina= (RadioButton) mStampContent.findViewById(R.id.stamp_republicChina_btn);
+        mLiberatedArea = (RadioButton) mStampContent.findViewById(R.id.stamp_liberatedArea_btn);
+        mQingDynasty = (RadioButton) mStampContent.findViewById(R.id.stamp_qingDynasty_btn);
+        mRadioGroup.check(R.id.stamp_newchinese_btn);
 
         mSynthesize = (Button) mStampContent.findViewById(R.id.stamp_synthesize);
         mSales = (Button) mStampContent.findViewById(R.id.stamp_sales);
         mPrice = (Button) mStampContent.findViewById(R.id.stamp_price);
 
         initGestureListener(); // 滑动lsitview隐藏导航栏的方法
+    }
+
+    private Drawable loadImageFromNetwork(String imageUrl) {
+        Drawable drawable = null;
+        try {
+            // 可以在这里通过文件名来判断，是否本地有此图片
+            drawable = Drawable.createFromStream(
+                    new URL(imageUrl).openStream(), "image.png");
+        } catch (IOException e) {
+            Log.d("test", e.getMessage());
+        }
+        if (drawable == null) {
+            Log.d("test", "null drawable");
+        } else {
+            Log.d("test", "not null drawable");
+        }
+
+        return drawable ;
     }
 
     /**
@@ -146,54 +234,22 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         mStampMarAdapter = new StampMarketGridViewAdapter(this, mList, mBitmap);
         mGridView.setAdapter(mStampMarAdapter);
         mStampMarAdapter.notifyDataSetChanged();
-
-        //横向的listView设置适配器
-        hListViewAdapter = new StampHorizontalListViewAdapter(this, mArr);
-        hListView.setAdapter(hListViewAdapter);
-
     }
 
+    /**
+     * 添加网络数据
+     */
     private void initData() {
-        // 邮市类别查询网络请求
-        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                HashMap<String, String> params = new HashMap<>();
-                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
-                params.put(StaticField.OP_TYPE, "YS");
-                String mapSort = SortUtils.MapSort(params);
-                String md5code = Encrypt.MD5(mapSort);
-                params.put(StaticField.SIGN, md5code);
-
-                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-
-                Log.e("邮市类别查询~~~>",result);
-                if (result.equals("-1")) {
-                    return;
-                }
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = StaticField.SUCCESS;
-//                msg.obj = result;
-//                mHandler.sendMessage(msg);
-
-            }
-        });
-
-        if (mList != null) {
-            mList = new ArrayList<>();
-        }
-
+        GetInitCategory();// 类别查询网络请求
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
         RequestNet(StaticField.ZH, num, StaticField.A);
     }
-
-
-
 
     private void initListener() {
         mTopBtn.setOnClickListener(this);
         mBack.setOnClickListener(this);
         mSearch.setOnClickListener(this);
+
         mNewChinese.setOnClickListener(this);
         mRepublicChina.setOnClickListener(this);
         mLiberatedArea.setOnClickListener(this);
@@ -222,7 +278,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 Bundle bundle = new Bundle();
                 String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
                 bundle.putString(StaticField.GOODS_SN, mGoods_sn);// 传入商品编号
-                openActivityWitchAnimation(StampDetailActivity.class,bundle);
+                openActivityWitchAnimation(StampDetailActivity.class, bundle);
             }
         });
         mGridView.setOnTouchListener(new View.OnTouchListener() {
@@ -237,14 +293,45 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void AgainRequest() {
-
+        initData();
     }
 
     /**
-     *  邮市list网络请求
+     * 邮市类别查询网络请求
+     */
+    private void GetInitCategory() {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
+                params.put(StaticField.OP_TYPE, "YS");
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                MyLog.LogShitou("邮市类别查询--->", result);
+                if (result.equals("-1")) {
+                    return;
+                }
+                Message msg = mHandler.obtainMessage();
+                msg.what = SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+
+            }
+        });
+    }
+
+
+    /**
+     * 邮市list网络请求
+     *
      * @param Order_By 类别
-     * @param index 角标
-     * @param Sort 排序
+     * @param index    角标
+     * @param Sort     排序
      */
     private void RequestNet(final String Order_By, final int index, final String Sort) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
@@ -253,7 +340,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 HashMap<String, String> params = new HashMap<>();
                 params.put(StaticField.SERVICE_TYPE, StaticField.GOODSLIST);// 接口名称
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
-                params.put(StaticField.GOODS_SOURCE,StaticField.YS ); // 商品类型(SC_ZY,SC_DSF,YS,JP)
+                params.put(StaticField.GOODS_SOURCE, StaticField.YS); // 商品类型(SC_ZY,SC_DSF,YS,JP)
                 params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；XL销量；JG价格)
                 params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
                 params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
@@ -264,7 +351,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                Log.e("邮市List~~~~>", result);
+                MyLog.LogShitou("邮市List~~~~>", result);
                 if (result.equals("-1")) {
                     return;
                 }
@@ -285,29 +372,26 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             case R.id.base_search://搜索按钮
                 openActivityWitchAnimation(SearchActivity.class);
                 break;
-            case R.id.stamp_newchinese_ll://新中国邮票
-                mStampContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorRed);
-                mStampContent.findViewById(R.id.republicChina_view).setBackgroundColor(mColorGray);
-                mStampContent.findViewById(R.id.liberatedArea_view).setBackgroundColor(mColorGray);
-                mStampContent.findViewById(R.id.qingDynasty_view).setBackgroundColor(mColorGray);
+            case R.id.stamp_newchinese_btn://新中国邮票
+                hListViewAdapter = new StampHorizontalListViewAdapter(this, string0);
+                hListView.setAdapter(hListViewAdapter);
+                hListViewAdapter.notifyDataSetChanged();
+
                 break;
-            case R.id.stamp_republicChina_ll:// 民国邮票
-                mStampContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorGray);
-                mStampContent.findViewById(R.id.republicChina_view).setBackgroundColor(mColorRed);
-                mStampContent.findViewById(R.id.liberatedArea_view).setBackgroundColor(mColorGray);
-                mStampContent.findViewById(R.id.qingDynasty_view).setBackgroundColor(mColorGray);
+            case R.id.stamp_republicChina_btn:// 民国邮票
+                hListViewAdapter = new StampHorizontalListViewAdapter(this, string1);
+                hListView.setAdapter(hListViewAdapter);
+                hListViewAdapter.notifyDataSetChanged();
                 break;
-            case R.id.stamp_liberatedArea_ll://解放区邮票
-                mStampContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorGray);
-                mStampContent.findViewById(R.id.republicChina_view).setBackgroundColor(mColorGray);
-                mStampContent.findViewById(R.id.liberatedArea_view).setBackgroundColor(mColorRed);
-                mStampContent.findViewById(R.id.qingDynasty_view).setBackgroundColor(mColorGray);
+            case R.id.stamp_liberatedArea_btn://解放区邮票
+                hListViewAdapter = new StampHorizontalListViewAdapter(this, string2);
+                hListView.setAdapter(hListViewAdapter);
+                hListViewAdapter.notifyDataSetChanged();
                 break;
-            case R.id.stamp_qingDynasty_ll://清代邮票
-                mStampContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorGray);
-                mStampContent.findViewById(R.id.republicChina_view).setBackgroundColor(mColorGray);
-                mStampContent.findViewById(R.id.liberatedArea_view).setBackgroundColor(mColorGray);
-                mStampContent.findViewById(R.id.qingDynasty_view).setBackgroundColor(mColorRed);
+            case R.id.stamp_qingDynasty_btn://清代邮票
+                hListViewAdapter = new StampHorizontalListViewAdapter(this, string3);
+                hListView.setAdapter(hListViewAdapter);
+                hListViewAdapter.notifyDataSetChanged();
                 break;
             case R.id.base_top_btn://置顶
                 setListViewPos(0);
@@ -324,7 +408,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                     Synthesizeflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSynthesize, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.ZH, num, StaticField.D);
+                    RequestNet(StaticField.ZH, num, StaticField.A);
                     Synthesizeflag = true;
                 }
                 break;

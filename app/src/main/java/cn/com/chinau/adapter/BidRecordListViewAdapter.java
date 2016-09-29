@@ -13,12 +13,13 @@ import cn.com.chinau.bean.StampDetailBean;
 
 /**
  * Created by Administrator on 2016/9/1.
+ * 竞拍出价记录适配器
  */
 public class BidRecordListViewAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<StampDetailBean.StampDetail> mList;
+    private ArrayList<StampDetailBean.OfferListData> mList;
 
-    public BidRecordListViewAdapter(Context context, ArrayList<StampDetailBean.StampDetail> mList) {
+    public BidRecordListViewAdapter(Context context, ArrayList<StampDetailBean.OfferListData> mList) {
         this.context = context;
         this.mList = mList;
     }

@@ -6,8 +6,9 @@ import java.util.ArrayList;
  * Created by Administrator on 2016/9/1.
  * 商品（邮票）详情查询
  */
-public class StampDetailBean {
-    public String goods_images;// 商品图片 (多个商品图片（大小图成对），用逗号分隔)
+public class StampDetailBean extends BaseBean{
+
+    public String [] goods_images;// 商品图片 (多个商品图片（大小图成对），用逗号分隔)
     public String auction_status;// 竞拍状态：DP未开始(待拍)，JP竞拍中，JS竞拍结束
     public String left_time; // 剩余时间 (针对竞拍商品：未开拍时为距开拍时间，已开拍时为剩余时间)
     public String goods_name; // 商品名称
@@ -26,18 +27,14 @@ public class StampDetailBean {
     public String is_favorite; // 是否被收藏
     public String verify_info; // 鉴定信息
     public String share_url; // 分享链接地址
-    public ArrayList<StampDetail> offer_list;// 出价记录List
-    public String rsp_code; // 返回码
-    public String rsp_msg; // 返回信息
-    public String sign; // 签名
+    public ArrayList<OfferListData> offer_list;// 出价记录List
 
 
-
-    public String getGoods_images() {
+    public String[] getGoods_images() {
         return goods_images;
     }
 
-    public void setGoods_images(String goods_images) {
+    public void setGoods_images(String[] goods_images) {
         this.goods_images = goods_images;
     }
 
@@ -185,20 +182,21 @@ public class StampDetailBean {
         this.share_url = share_url;
     }
 
-    public ArrayList<StampDetail> getOffer_list() {
+
+    public ArrayList<OfferListData> getOffer_list() {
         return offer_list;
     }
 
-    public void setOffer_list(ArrayList<StampDetail> offer_list) {
+    public void setOffer_list(ArrayList<OfferListData> offer_list) {
         this.offer_list = offer_list;
     }
 
-    public static class StampDetail {
+    public static class OfferListData {
         public String offer_time;// 出价时间
         public String mobile; // 出价人手机号
         public String price;// 出价价格
 
-        public StampDetail(String offer_time, String mobile, String price) {
+        public OfferListData(String offer_time, String mobile, String price) {
             this.offer_time = offer_time;
             this.mobile = mobile;
             this.price = price;
@@ -231,27 +229,5 @@ public class StampDetailBean {
 
     }
 
-    public String getRsp_code() {
-        return rsp_code;
-    }
 
-    public void setRsp_code(String rsp_code) {
-        this.rsp_code = rsp_code;
-    }
-
-    public String getRsp_msg() {
-        return rsp_msg;
-    }
-
-    public void setRsp_msg(String rsp_msg) {
-        this.rsp_msg = rsp_msg;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
 }

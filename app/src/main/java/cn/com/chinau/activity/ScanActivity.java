@@ -42,35 +42,35 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
         mScanContent = View.inflate(this, R.layout.activity_scan_content, null);
         sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
         initView();
+        GetInitData();// 获取保存在本地的系统数据
         initListener();
         return mScanContent;
     }
 
 
     private void initView() {
-        // 获取首页传过来的数据
-//        Bundle bundle = getIntent().getExtras();
-//        mImage = bundle.getString("Image");// 头部图片
-//        mSummary= bundle.getString("Summary");// 业务介绍
-//        mProcess = bundle.getStringArrayList("Process");// 业务流程
-
-        String mData = sp.getString("System","");
-        Gson gson = new Gson();
-        SysParamQueryBean paramQueryBean = gson.fromJson(mData, SysParamQueryBean.class);
-        SysParamQueryBean.Sys_param_value sys_param_value = paramQueryBean.getSys_param_value();
-
-        // 扫码回购页面的数据
-        SysParamQueryBean.Sys_param_value.Buyback_scan_summary mBuyback_scan_summary = sys_param_value.getBuyback_scan_summary();
-        mImage = mBuyback_scan_summary.getImage();// 扫码回购头部显示的图片
-        mSummary = mBuyback_scan_summary.getSummary();// 业务介绍
-        mProcess = mBuyback_scan_summary.getProcess();// 业务流程
-
         mBack = (ImageView) mScanTitle.findViewById(R.id.search_title_back);
         mTitle = (TextView) mScanTitle.findViewById(R.id.search_title);
         mTitle.setText("扫码回购");
         mIcon = (ImageView) mScanContent.findViewById(R.id.scan_icon);
-
         mSummaryTv = (TextView) mScanContent.findViewById(R.id.scan_summary);
+        mScan = (Button) mScanContent.findViewById(R.id.scan_back_buy_now);
+    }
+
+    /**
+     * 获取保存在本地的系统数据
+     */
+    private void GetInitData(){
+        String mData = sp.getString("System","");
+        Gson gson = new Gson();
+        SysParamQueryBean paramQueryBean = gson.fromJson(mData, SysParamQueryBean.class);
+        SysParamQueryBean.Sys_param_value mSysValue = paramQueryBean.getSys_param_value();
+        // 扫码回购页面的数据
+        SysParamQueryBean.Sys_param_value.Buyback_scan_summary mBuyback_scan_summary = mSysValue.getBuyback_scan_summary();
+
+        mImage = mBuyback_scan_summary.getImage();// 扫码回购头部显示的图片
+        mSummary = mBuyback_scan_summary.getSummary();// 业务介绍
+        mProcess = mBuyback_scan_summary.getProcess();// 业务流程
 
         mScan_Process1 = (TextView) mScanContent.findViewById(R.id.scan_process1);
         mScan_Process2 = (TextView) mScanContent.findViewById(R.id.scan_process2);
@@ -104,7 +104,6 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
             return;
         }
 
-        mScan = (Button) mScanContent.findViewById(R.id.scan_back_buy_now);
     }
 
     private void initListener() {

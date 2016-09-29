@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import cn.com.chinau.fragment.stampdetailfragment.StampDetailInfoFragment;
-
 import java.util.List;
 
 
@@ -19,14 +17,14 @@ public class StampDetailPagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> mList;//内容Fragment集合
     private String[] arr;//标题数组
 //    private Context context;
-//    private String detail;
+//    private String url;
 
     public StampDetailPagerAdapter(FragmentManager fragmentManager, List<Fragment> list, String[] arr) {
         super(fragmentManager);
         mList = list;
         this.arr = arr;
 //        this.context = context;
-//        this.detail = detail;
+//        this.url = url;
     }
 
     @Override
@@ -45,7 +43,8 @@ public class StampDetailPagerAdapter extends FragmentPagerAdapter {
 
 //        return null;
 
-        return new StampDetailInfoFragment();
+        return  mList.get(arg0);
+//                StampDetailInfoFragment(context,url);
     }
 
     @Override

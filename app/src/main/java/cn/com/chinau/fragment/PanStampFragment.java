@@ -3,17 +3,18 @@ package cn.com.chinau.fragment;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import cn.com.chinau.StaticField;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -21,7 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.com.chinau.R;
+import cn.com.chinau.StaticField;
+import cn.com.chinau.activity.AuctionDetailActivity;
 import cn.com.chinau.activity.SearchActivity;
+import cn.com.chinau.activity.SelfMallDetailActivity;
+import cn.com.chinau.activity.StampDetailActivity;
 import cn.com.chinau.adapter.PanStampGridViewAdapter;
 import cn.com.chinau.base.BaseFragment;
 import cn.com.chinau.bean.GoodsStampBean;
@@ -138,6 +143,29 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
 
         mTopBtn.setOnClickListener(this);
         mPanStampGV.setOnScrollListener(this);
+
+        mPanStampGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+               String mSource = mList.get(i).getGoods_source();
+               String mGoodsSn = mList.get(i).getGoods_sn();
+                Bundle bundle = new Bundle();
+                MyLog.LogShitou("哪个商家-->:",mSource);
+                if (mSource.equals("SC_ZY")){
+                    bundle.putString(StaticField.GOODS_SN,mGoodsSn);
+                    openActivityWitchAnimation(SelfMallDetailActivity.class,bundle);
+                }else if(mSource.equals("YS")){
+                    bundle.putString(StaticField.GOODS_SN,mGoodsSn);
+                    openActivityWitchAnimation(StampDetailActivity.class,bundle);
+                }else if(mSource.equals("JP")){
+                    bundle.putString(StaticField.GOODS_SN,mGoodsSn);
+                    openActivityWitchAnimation(AuctionDetailActivity.class,bundle);
+                }else if(mSource.equals("SC_DSF")){
+                    bundle.putString(StaticField.GOODS_SN,mGoodsSn);
+                    openActivityWitchAnimation(SelfMallDetailActivity.class,bundle);
+                }
+            }
+        });
     }
 
     @Override

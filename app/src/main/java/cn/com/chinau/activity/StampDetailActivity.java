@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +29,7 @@ import cn.com.chinau.bean.StampDetailBean;
 import cn.com.chinau.fragment.stampdetailfragment.StampDetailInfoFragment;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
+import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.ScreenUtils;
 import cn.com.chinau.utils.SortUtils;
@@ -48,10 +48,10 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private List<Fragment> mList;
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
-    private String[] arrImage = {"http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg",
-            "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg",
-            "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"};
-//    private String[] arrImage;
+//    private String[] arrImage = {"http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg",
+//            "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg",
+//            "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"};
+    private String[] small_images,big_images; // viewPager小图，大图
     private ImageView mBack, mShared, mCollect, mShoppingCart;// 返回，分享，收藏，购物车
     private TextView mTitle, mSellerNo, mAddShoppingCart, mBuyNow,
             mGoodsName,mCurrentPrice,mFreight,mSaleCount,mFeeRate,mFee,
@@ -79,12 +79,20 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 case StaticField.SUCCESS:// 详情数据
                     Gson gson = new Gson();
                     StampDetailBean mStampDetailBean = gson.fromJson((String)msg.obj, StampDetailBean.class);
-
-                   String mImage = mStampDetailBean.getGoods_images();
-                   String mGoods_images = mImage.substring(1,mImage.length()-1);
-
-                    Log.e("mImage~~~~>", mImage+"");
-                    arrImage = mGoods_images.split(",");
+                   // 赋值头布局显示的图片
+                    if (mStampDetailBean.getGoods_images() != null){
+                       String [] mGoods_images = mStampDetailBean.getGoods_images();
+//                       MyLog.LogShitou("mGoods_images商品图片001-->:", mGoods_images.length + "");
+                      small_images = new String[mGoods_images.length];
+                        big_images = new String[mGoods_images.length];
+                       for (int i = 0; i < mGoods_images.length; i++) {
+                           String[] image = mGoods_images[i].split(",");
+                           small_images[i] = image[0];// 小图集合
+                           big_images[i] = image[1];// 大图集合
+                       }
+//                       MyLog.LogShitou("small_images-->:", small_images.length + "");
+//                       MyLog.LogShitou("big_images-->:", big_images.length + "");
+                   }
 
                     String mGoods_name = mStampDetailBean.getGoods_name();
                     mTitle.setText(mGoods_name);
@@ -100,20 +108,36 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                     String mFees = mStampDetailBean.getService_fee();
                     mFee.setText(mFees);
                     String mGoodsSources = mStampDetailBean.getGoods_source();
-                    mGoodsSource.setText(mGoodsSources);
+                    MyLog.LogShitou("邮票类型-->:",mGoodsSources);
+                    if (mGoodsSources.equals("YS")){
+                        mGoodsSource.setText("邮市");
+                    }else if(mGoodsSources.equals("JP")){
+                        mGoodsSource.setText("竞拍");
+                    }else if(mGoodsSources.equals("SC_ZY")){
+                        mGoodsSource.setText("自营");
+                    }else if(mGoodsSources.equals("SC_DSF")){
+                        mGoodsSource.setText("第三方");
+                    }
                     String mSellerNames = mStampDetailBean.getSeller_name();
                     mSellerName.setText(mSellerNames);
                     String mSellerNos = mStampDetailBean.getSeller_no();
-                    String mPhone = mSellerNos.substring(0, 3) + "****" + mSellerNos.substring(7, mSellerNos.length());
-                    mSellerNo.setText(mPhone);
+                    if (mSellerNos.length()<11){
+                        mSellerNo.setText(mSellerNos);
+                    }else{
+                        String mPhone = mSellerNos.substring(0, 3) + "****" + mSellerNos.substring(7, mSellerNos.length());
+                        mSellerNo.setText(mPhone);
+                    }
+
                     mGoodsDetail = mStampDetailBean.getGoods_detail();  // 商家信息H5url
                     mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
+                    MyLog.LogShitou("请求下来的H5url-->:",mGoodsDetail+"--"+mVerifyInfo);
+                    initAdapter();
 
                     break;
             }
         }
     };
-
+    private TabPageIndicator mIndicator;
 
 
     @Override
@@ -127,8 +151,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     public View CreateSuccess() {
         mStampDetailContent = View.inflate(this, R.layout.activity_stampdetail_content, null);
         initView();
-//        initData();
-        initAdapter();
+        initData();
         initListener();
         return mStampDetailContent;
     }
@@ -136,14 +159,8 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private void initView() {
         // 获取邮市页面传过来的的值
         Bundle bundle = getIntent().getExtras();
-        mGoods_sn = bundle.getString(StaticField.GOODS_SN);
+        mGoods_sn = bundle.getString(StaticField.GOODS_SN);// 商品编号
 //        Log.e("mGoods_sn编号001~~~~>", mGoods_sn);
-        //下面的之后得删除
-        mList = new ArrayList<>();
-        StampDetailInfoFragment mStampDetailInfoFragment = new StampDetailInfoFragment();
-        mList.add(mStampDetailInfoFragment);
-        mList.add(mStampDetailInfoFragment);
-
         //初始化控件
         mBack = (ImageView) mStampDetailTitle.findViewById(R.id.base_title_back);
         mTitle = (TextView) mStampDetailTitle.findViewById(R.id.base_title);
@@ -173,21 +190,33 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         mTopVP = (ViewPager) mStampDetailContent.findViewById(R.id.base_viewpager);
         mTopVPI = (CirclePageIndicator) mStampDetailContent.findViewById(R.id.base_viewpagerIndicator);
 
-        //初始化控件
-        StampDetailPagerAdapter adapter = new StampDetailPagerAdapter(getSupportFragmentManager(), mList, arr);
-        CustomViewPager mViewPager = (CustomViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
-        mViewPager.setAdapter(adapter);
-        TabPageIndicator mIndicator = (TabPageIndicator) mStampDetailContent.findViewById(R.id.stampdetail_indicator);
-        mIndicator.setViewPager(mViewPager);
     }
 
     private void initAdapter() {
         //顶部导航的View
-        HomeViewPagerAdapter mViewPagerAdapter = new HomeViewPagerAdapter(mBitmap, arrImage, this);
+        HomeViewPagerAdapter mViewPagerAdapter = new HomeViewPagerAdapter(mBitmap, small_images, this);
         mTopVP.setAdapter(mViewPagerAdapter);
         mTopVPI.setVisibility(View.VISIBLE);
         mTopVPI.setViewPager(mTopVP);
+
+
+        mList = new ArrayList<>();
+        StampDetailInfoFragment mStampDetailInfoFragment = new StampDetailInfoFragment(this,mGoodsDetail);
+        mList.add(mStampDetailInfoFragment);
+        StampDetailInfoFragment mStampFragment = new StampDetailInfoFragment(this,mVerifyInfo);
+        mList.add(mStampFragment);
+
+        //初始化控件
+        StampDetailPagerAdapter adapter = new StampDetailPagerAdapter(getSupportFragmentManager(), mList, arr);
+        CustomViewPager mViewPager = (CustomViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
+        mViewPager.setAdapter(adapter);
+
+        mIndicator = (TabPageIndicator) mStampDetailContent.findViewById(R.id.stampdetail_indicator);
+        mIndicator.setViewPager(mViewPager);
+        mIndicator.setVisibility(View.VISIBLE);
+
     }
+
 
     private void initListener() {
         mShared.setOnClickListener(this);
@@ -210,6 +239,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
      * 商品详情请求的数据
      */
     private void initData() {
+
         RequestNet();
     }
 
@@ -234,7 +264,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 params.put(StaticField.SIGN, md5code); // 签名
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                Log.e("邮市详情~~~~>", result);
+                MyLog.LogShitou("result邮市详情~~~~>", result);
                 if (result.equals("-1")) {
                     return;
                 }

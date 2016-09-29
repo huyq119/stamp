@@ -132,7 +132,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                 Gson gson = new Gson();
                 StampDetailBean mStampDetailBean = gson.fromJson(result, StampDetailBean.class);
                 Log.e("商城详情mStampDetailBean-->", mStampDetailBean + "");
-                String mImage = mStampDetailBean.getGoods_images();
+//                String mImage = mStampDetailBean.getGoods_images();
 
 //                Message msg = mHandler.obtainMessage();
 //                msg.what = StaticField.SUCCESS;

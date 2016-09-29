@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -52,7 +54,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private String[] mArr = {"全部", "编年邮票", "新JT邮票", "编号邮票", "文革邮票", "老纪特邮票", "普通邮票"};
     private TextView mTitle,mNoListTV;
     // 新中国邮票, 民国邮票, 解放区邮票, 清代邮票
-    private LinearLayout mNewChinese, mRepublicChina, mLiberatedArea, mQingDynasty;
+    private RadioButton mNewChinese, mRepublicChina, mLiberatedArea, mQingDynasty;
 
     private int mColorGray = Color.parseColor("#dddfe3");// 横线灰色
     private int mColorRed = Color.parseColor("#e20000");// 横线红色
@@ -67,6 +69,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private LinearLayout mHeartll;//头部的布局
     private GestureDetector mGestureDetector;
     private int num = 0;//初始索引
+    public static final int SUCCESS = 1;
     private GoodsStampBean mGoodsStampBean;
     private Handler mHandler = new Handler() {
 
@@ -88,11 +91,15 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                         mNoListTV.setVisibility(View.VISIBLE);
                     }
 
+                    break;
+                case SUCCESS://类别查询
+
 
                     break;
             }
         }
     };
+    private RadioGroup mRadioGroup;
 
     @Override
     public View CreateTitle() {
@@ -119,11 +126,13 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         hListView = (HorizontalListView) mAuctionContent.findViewById(R.id.stamp_hl);//横向ListView
         mListView = (ListView) mAuctionContent.findViewById(R.id.auction_lv);// 竖向ListView
         mNoListTV = (TextView) mAuctionContent.findViewById(R.id.auction_no_lv_tv);
-        mNewChinese = (LinearLayout) mAuctionContent.findViewById(R.id.auction_newchinese_ll);
-        mAuctionContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorRed);// 初始化新中国邮票
-        mRepublicChina = (LinearLayout) mAuctionContent.findViewById(R.id.auction_republicChina_ll);
-        mLiberatedArea = (LinearLayout) mAuctionContent.findViewById(R.id.auction_liberatedArea_ll);
-        mQingDynasty = (LinearLayout) mAuctionContent.findViewById(R.id.auction_qingDynasty_ll);
+        mRadioGroup = (RadioGroup) mAuctionContent.findViewById(R.id.stamp_RadioGroup);
+
+        mNewChinese = (RadioButton) mAuctionContent.findViewById(R.id.auction_newchinese_btn);
+        mRadioGroup.check(R.id.auction_newchinese_btn);
+        mRepublicChina = (RadioButton) mAuctionContent.findViewById(R.id.auction_republicChina_btn);
+        mLiberatedArea = (RadioButton) mAuctionContent.findViewById(R.id.auction_liberatedArea_btn);
+        mQingDynasty = (RadioButton) mAuctionContent.findViewById(R.id.auction_qingDynasty_btn);
         mSynthesize = (Button) mAuctionContent.findViewById(R.id.auction_synthesize);
         mOver = (Button) mAuctionContent.findViewById(R.id.auction_over);
         mCamera = (Button) mAuctionContent.findViewById(R.id.auction_camera);
@@ -164,28 +173,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
      * 初始化第一个按钮
      */
     private void initData() {
-        // 以下注释的网络请求别删数据正确后要用
-//        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                HashMap<String, String> params = new HashMap<>();
-//                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
-//                params.put(StaticField.OP_TYPE, "JP");
-//                String mapSort = SortUtils.MapSort(params);
-//                String md5code = Encrypt.MD5(mapSort);
-//                params.put(StaticField.SIGN, md5code);
-//
-//                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-//
-//
-//                MyLog.e(result);
-//            }
-//        });
-
-
-        if (mList != null) {
-            mList = new ArrayList<>();
-        }
+        GetInitCategory();
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
         RequestNet(StaticField.ZH, num, StaticField.A);
     }
@@ -241,6 +229,36 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     public void AgainRequest() {
 
     }
+
+    /**
+     * 竞拍类别查询网络请求
+     */
+    private void GetInitCategory() {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
+                params.put(StaticField.OP_TYPE, "YS");
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                MyLog.LogShitou("邮市类别查询--->", result);
+                if (result.equals("-1")) {
+                    return;
+                }
+                Message msg = mHandler.obtainMessage();
+                msg.what = SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+
+            }
+        });
+    }
+
     /**
      *  商城list网络请求
      * @param Order_By 类别
@@ -285,29 +303,17 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
             case R.id.base_search://搜索按钮
                 openActivityWitchAnimation(SearchActivity.class);
                 break;
-            case R.id.auction_newchinese_ll://新中国邮票
-                mAuctionContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorRed);
-                mAuctionContent.findViewById(R.id.republicChina_view).setBackgroundColor(mColorGray);
-                mAuctionContent.findViewById(R.id.liberatedArea_view).setBackgroundColor(mColorGray);
-                mAuctionContent.findViewById(R.id.qingDynasty_view).setBackgroundColor(mColorGray);
+            case R.id.auction_newchinese_btn://新中国邮票
+
                 break;
-            case R.id.auction_republicChina_ll:// 民国邮票
-                mAuctionContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorGray);
-                mAuctionContent.findViewById(R.id.republicChina_view).setBackgroundColor(mColorRed);
-                mAuctionContent.findViewById(R.id.liberatedArea_view).setBackgroundColor(mColorGray);
-                mAuctionContent.findViewById(R.id.qingDynasty_view).setBackgroundColor(mColorGray);
+            case R.id.auction_republicChina_btn:// 民国邮票
+
                 break;
-            case R.id.auction_liberatedArea_ll://解放区邮票
-                mAuctionContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorGray);
-                mAuctionContent.findViewById(R.id.republicChina_view).setBackgroundColor(mColorGray);
-                mAuctionContent.findViewById(R.id.liberatedArea_view).setBackgroundColor(mColorRed);
-                mAuctionContent.findViewById(R.id.qingDynasty_view).setBackgroundColor(mColorGray);
+            case R.id.auction_liberatedArea_btn://解放区邮票
+
                 break;
-            case R.id.auction_qingDynasty_ll://清代邮票
-                mAuctionContent.findViewById(R.id.newChinese_view).setBackgroundColor(mColorGray);
-                mAuctionContent.findViewById(R.id.republicChina_view).setBackgroundColor(mColorGray);
-                mAuctionContent.findViewById(R.id.liberatedArea_view).setBackgroundColor(mColorGray);
-                mAuctionContent.findViewById(R.id.qingDynasty_view).setBackgroundColor(mColorRed);
+            case R.id.auction_qingDynasty_btn://清代邮票
+
                 break;
             case R.id.base_top_btn://置顶
                 setListViewPos(0);

@@ -236,7 +236,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp" />
 
-                <cn.com.chinau.view.view.CustomViewPager
+                <cn.com.chinau.view.CustomViewPager
                     android:id="@+id/auctiondetail_viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
