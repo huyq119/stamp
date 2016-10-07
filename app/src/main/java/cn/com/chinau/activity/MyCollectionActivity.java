@@ -1,5 +1,8 @@
 package cn.com.chinau.activity;
 
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -7,15 +10,25 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.com.chinau.R;
+import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.CollectionListViewAdapter;
 import cn.com.chinau.adapter.MyCollectionListViewEditerAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.CollectionBean;
 import cn.com.chinau.dialog.ProgressDialog;
+import cn.com.chinau.http.HttpUtils;
+import cn.com.chinau.utils.Encrypt;
+import cn.com.chinau.utils.MyLog;
+import cn.com.chinau.utils.MyToast;
+import cn.com.chinau.utils.SortUtils;
+import cn.com.chinau.utils.ThreadManager;
 
 /**
  * 我的收藏页面
@@ -38,6 +51,36 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
     private Button dialog_button_ok;
     private boolean isDel = true;
     private ImageView mALLImg;
+    private String mToken,mUser_id;
+    private SharedPreferences sp;
+    private int num = 0;//初始索引
+    private Button mAllBtn,mStampBtn,mAuctionBtn,mMallBtn;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+                case StaticField.SUCCESS:
+                    String msge = (String) msg.obj;
+                    Gson gson = new Gson();
+                    CollectionBean mCollectionBean = gson.fromJson(msge, CollectionBean.class);
+                    String mRsp_code = mCollectionBean.getRsp_code();
+                    if (mRsp_code.equals("0000")) {
+                        mList = mCollectionBean.getGoods_list();
+                        MyLog.LogShitou("收藏夹有几条-->:", mList.size() + "");
+                        if (mList != null && mList.size() != 0) {
+                            //竖向ListView设置适配器
+                            initAdapter();
+                        }else {
+                            MyToast.showShort(MyCollectionActivity.this,"还未有竞拍记录。。。");
+                        }
+                    }
+
+                    break;
+
+            }
+        }
+    };
 
     @Override
     public View CreateTitle() {
@@ -47,6 +90,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
     @Override
     public View CreateSuccess() {
         mCollectionContent = View.inflate(this, R.layout.activity_mycollection_content, null);
+        sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
         initView();
         initData();
         initAdapter();
@@ -54,6 +98,10 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
         return mCollectionContent;
     }
     private void initView() {
+
+        mToken = sp.getString("token", "");
+        mUser_id = sp.getString("userId", "");
+
         Back = (ImageView) mCollectionTitle.findViewById(R.id.base_title_back);
         TextView Title = (TextView) mCollectionTitle.findViewById(R.id.base_title);
         Title.setText("收藏夹");
@@ -64,6 +112,14 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
 
         mDelete = (TextView)mCollectionContent.findViewById(R.id.delete);
         cocollection_edit = (LinearLayout)mCollectionContent.findViewById(R.id.collection_edit);
+
+        mAllBtn = (Button)mCollectionContent.findViewById(R.id.collection_all_btn);// 全部
+        mStampBtn = (Button)mCollectionContent.findViewById(R.id.collection_stamps_btn);// 邮市
+        mAuctionBtn = (Button)mCollectionContent.findViewById(R.id.collection_auction_btn);// 竞拍
+        mMallBtn = (Button)mCollectionContent.findViewById(R.id.collection_mall_btn);// 商城
+
+
+
     }
     private void initData(){
         mList = new ArrayList<>();
@@ -82,6 +138,8 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
         mList.add(collection);
         collection = new CollectionBean.Collection("庚申年1", "WH", "SC", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
         mList.add(collection);
+
+        GetInitNet(num,StaticField.QB);// 收藏夹网络请求
     }
     private void initAdapter() {
         adapter = new CollectionListViewAdapter(this, mBitmap, mList);
@@ -93,6 +151,10 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
         mEdit.setOnClickListener(this);
         mALLImg.setOnClickListener(this);
         mDelete.setOnClickListener(this);
+        mAllBtn.setOnClickListener(this);
+        mStampBtn.setOnClickListener(this);
+        mAuctionBtn.setOnClickListener(this);
+        mMallBtn.setOnClickListener(this);
     }
     @Override
     public void onClick(View view) {
@@ -140,6 +202,21 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
             case R.id.delete:
                 DeleteDialog();//删除弹出框
                 break;
+            case R.id.collection_all_btn:// 全部
+                GetInitNet(num,StaticField.QB);// 收藏夹网络请求
+                break;
+            case R.id.collection_stamps_btn:// 邮市
+                GetInitNet(num,StaticField.YS);// 收藏夹网络请求
+                break;
+            case R.id.collection_auction_btn:// 竞拍
+                GetInitNet(num,StaticField.JP);// 收藏夹网络请求
+                break;
+            case R.id.collection_mall_btn:// 商城
+                GetInitNet(num,StaticField.SC);// 收藏夹网络请求
+                break;
+
+
+
             default:
                 break;
         }
@@ -192,5 +269,77 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
     public void AgainRequest(){
     }
 
+    /**
+     * 收藏夹网络请求
+     * @param num 索引
+     * @param goods_type 商品类型
+     */
+    private void GetInitNet(final int num,final String goods_type){
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.FAVORITELIST);// 接口名称
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 当前记录索引
+                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+                params.put(StaticField.GOODS_TYPE, goods_type);// 商品类型：SC商城，YS邮市，JP竞拍，QB全部
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("收藏夹List-->:", result);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = StaticField.SUCCESS;
+//                msg.obj = result;
+//                mHandler.sendMessage(msg);
+
+            }
+        });
+    }
+
+    /**
+     *  修改收藏夹网络请求
+     * @param num 索引
+     * @param op_type 操作类型
+     */
+    private void DeleteGetInitNet(final int num,final String op_type){
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.FAVORITELIST);// 接口名称
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 当前记录索引
+                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+                params.put(StaticField.GOODS_SN, "");//  邮票编号 （暂时为空）
+                params.put(StaticField.OP_TYPE, op_type);// 操作类型：SC删除；JR加入
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("result修改-->:", result);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = StaticField.SUCCESS;
+//                msg.obj = result;
+//                mHandler.sendMessage(msg);
+
+            }
+        });
+    }
 
 }

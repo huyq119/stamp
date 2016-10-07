@@ -12,7 +12,7 @@ import com.lidroid.xutils.BitmapUtils;
 import java.util.ArrayList;
 
 import cn.com.chinau.R;
-import cn.com.chinau.bean.OrderBean;
+import cn.com.chinau.bean.OrderSweepBean;
 
 /**
  * Created by Administrator on 2016/8/12.
@@ -21,9 +21,9 @@ import cn.com.chinau.bean.OrderBean;
 public class OrderAdapter extends BaseAdapter {
     private Context context;
     private BitmapUtils bitmapUtils;
-    private ArrayList<OrderBean> list;
+    private ArrayList<OrderSweepBean.Orderbean> list;
 
-    public OrderAdapter(Context context, BitmapUtils bitmapUtils, ArrayList<OrderBean> list) {
+    public OrderAdapter(Context context, BitmapUtils bitmapUtils, ArrayList<OrderSweepBean.Orderbean> list) {
         this.context = context;
         this.bitmapUtils = bitmapUtils;
         this.list = list;

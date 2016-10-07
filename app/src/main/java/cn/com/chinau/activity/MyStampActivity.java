@@ -1,6 +1,9 @@
 package cn.com.chinau.activity;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +13,23 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.com.chinau.R;
+import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.MyStampViewPagerAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.MyStampGridViewBean;
+import cn.com.chinau.http.HttpUtils;
+import cn.com.chinau.utils.Encrypt;
+import cn.com.chinau.utils.MyLog;
+import cn.com.chinau.utils.MyToast;
+import cn.com.chinau.utils.SortUtils;
+import cn.com.chinau.utils.ThreadManager;
 
 /**
  * 我的邮集页面
@@ -42,7 +55,33 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     private int pageSize; //每页的数量
     private int pageCount;//总共的页数
     private LayoutInflater layoutInflater;
+    private SharedPreferences sp;
+    private String mToken,mUser_id,result;
+    private int num = 0;//初始索引
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case StaticField.SUCCESS:// 我的邮集
+                    String msge = (String) msg.obj;
+                    Gson gson = new Gson();
+                    MyStampGridViewBean mOrderSweepBean = gson.fromJson(msge, MyStampGridViewBean.class);
+                    String mRsp_code = mOrderSweepBean.getRsp_code();
+                    if (mRsp_code.equals("0000")) {
+                        mList = mOrderSweepBean.getStamp_list();
+                        MyLog.LogShitou("我的邮集有几条-->:", mList.size() + "");
+                        if (mList != null && mList.size() != 0) {
+                            initAdapter();
+                        }else {
+                            MyToast.showShort(MyStampActivity.this,"我的邮集为空。。。");
+                        }
+                    }
 
+                    break;
+
+            }
+        }
+    };
 
     @Override
     public View CreateTitle() {
@@ -53,6 +92,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     @Override
     public View CreateSuccess() {
         mMyStampContent = View.inflate(this, R.layout.activity_mystamp_content, null);
+        sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
         initView();
         initData();
         initAdapter();
@@ -67,6 +107,9 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
+        mToken = sp.getString("token", "");
+        mUser_id = sp.getString("userId", "");
+
         mBack = (ImageView) mMyStampTitle.findViewById(R.id.base_title_back);
         mMore = (ImageView) mMyStampTitle.findViewById(R.id.base_more);
         //初始化ViewPager
@@ -106,6 +149,8 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
             mViewPagerList.add(grid);
         }
 
+
+        GetInitNet(num);// 我的邮集列表网络请求方法
     }
 
     private void initAdapter() {
@@ -209,6 +254,77 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
             mViewPagerList.add(grid);
         }
         myStampViewPager.setAdapter(new MyStampViewPagerAdapter(mViewPagerList));
+    }
+
+
+    /**
+     * 我的邮集列表网络请求
+     * @param num 初始化索引
+     */
+    private void GetInitNet(final int num){
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.ALBUMLIST);// 接口名称
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 当前记录索引
+                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("我的邮集List-->:", result);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = StaticField.SUCCESS;
+//                msg.obj = result;
+//                mHandler.sendMessage(msg);
+
+            }
+        });
+    }
+
+    /**
+     * 修改邮集网络请求
+     */
+    private void UpDateGetInitNet(final String stamp_count,final String op_type){
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.MODIFY);// 接口名称
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.STAMP_SN, "");//  邮票编号 （暂时为空）
+                params.put(StaticField.STAMP_COUNT, stamp_count);//  邮票数量
+                params.put(StaticField.OP_TYPE, op_type);//  操作类型：SC：删除；JR加入；XG修改
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 当前记录索引
+                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("我的邮集List-->:", result);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = StaticField.SUCCESS;
+//                msg.obj = result;
+//                mHandler.sendMessage(msg);
+
+            }
+        });
     }
 
 }

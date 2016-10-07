@@ -1,27 +1,27 @@
 package cn.com.chinau.base;
 
 
+import java.util.ArrayList;
+
 import cn.com.chinau.bean.BaseBean;
 
-import java.util.List;
-
 /**
- * 地址的javaBean
+ * 管理收货地址的Bean
  * Created by Administrator on 2016/8/19.
  */
 public class AddressBean extends BaseBean {
 
-    public List<Address> address_list;
+    public ArrayList<Address> address_list;
 
-    public AddressBean(List<Address> address_list) {
+    public AddressBean(ArrayList<Address> address_list) {
         this.address_list = address_list;
     }
 
-    public List<Address> getAddress_list() {
+    public ArrayList<Address> getAddress_list() {
         return address_list;
     }
 
-    public void setAddress_list(List<Address> address_list) {
+    public void setAddress_list(ArrayList<Address> address_list) {
         this.address_list = address_list;
     }
 

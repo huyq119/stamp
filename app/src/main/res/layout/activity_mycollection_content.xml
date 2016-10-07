@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/collection_all"
+            android:id="@+id/collection_all_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -35,14 +35,14 @@
             android:background="#dedfe3" />
 
         <Button
-            android:id="@+id/collection_stamps"
+            android:id="@+id/collection_stamps_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
             android:button="@null"
             android:gravity="center"
-            android:text="@string/stamp"
+            android:text="@string/stampshop"
             android:textColor="#666"
             android:textSize="12sp" />
 
@@ -54,7 +54,7 @@
             android:background="#dedfe3" />
 
         <Button
-            android:id="@+id/collection_auction"
+            android:id="@+id/collection_auction_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -73,7 +73,7 @@
             android:background="#dedfe3" />
 
         <Button
-            android:id="@+id/collection_mall"
+            android:id="@+id/collection_mall_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

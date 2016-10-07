@@ -5,9 +5,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import cn.com.chinau.utils.MyLog;
-import cn.com.chinau.utils.ThreadManager;
-import cn.com.chinau.utils.UIUtils;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -19,6 +16,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
+
+import cn.com.chinau.utils.MyLog;
+import cn.com.chinau.utils.ThreadManager;
+import cn.com.chinau.utils.UIUtils;
 
 /**
  * 网络请求的基类
@@ -61,7 +62,7 @@ public class HttpUtils {
             OutputStream outputStream = httpURLConnection.getOutputStream();
             outputStream.write(data);
             int response = httpURLConnection.getResponseCode(); // 获得服务器的响应码
-            MyLog.e("response", "" + response);
+            MyLog.e("response请求响应码-->:", "" + response);
             if (response == HttpURLConnection.HTTP_OK) {
                 InputStream inptStream = httpURLConnection.getInputStream();
                 return dealResponseResult(inptStream); // 处理服务器的响应结果

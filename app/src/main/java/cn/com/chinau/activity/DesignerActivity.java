@@ -46,7 +46,6 @@ public class DesignerActivity extends BaseActivity {
                 case StaticField.SUCCESS:
                     Gson gson = new Gson();
                     DesignerBean designerBean = gson.fromJson((String) msg.obj, DesignerBean.class);
-
                     initAdapter(designerBean);
                     break;
             }
@@ -89,12 +88,11 @@ public class DesignerActivity extends BaseActivity {
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                if (result.equals("-1")) {
+                if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
 
                 MyLog.e("设计家List~~>" + result);
-
                 Message msg = mHandler.obtainMessage();
                 msg.what = StaticField.SUCCESS;
                 msg.obj = result;

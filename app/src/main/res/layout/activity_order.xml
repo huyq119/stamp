@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--回购订单页面-->
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-    <LinearLayout
+    <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/record_sweep"
+        <RadioButton
+            android:id="@+id/record_sweep_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -21,7 +21,7 @@
             android:button="@null"
             android:gravity="center"
             android:text="扫码回购订单"
-            android:textColor="#ff00"
+            android:textColor="@drawable/ordersweep_text_bg"
             android:textSize="12sp"/>
 
         <View
@@ -31,8 +31,8 @@
             android:layout_marginTop="3dp"
             android:background="#dedfe3"/>
 
-        <Button
-            android:id="@+id/btn_order"
+        <RadioButton
+            android:id="@+id/order_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -40,10 +40,10 @@
             android:button="@null"
             android:gravity="center"
             android:text="回购订单"
-            android:textColor="#666"
+            android:textColor="@drawable/ordersweep_text_bg"
             android:textSize="12sp"/>
 
-    </LinearLayout>
+    </RadioGroup>
 
     <View
         android:id="@+id/view"
@@ -60,4 +60,4 @@
         android:layout_below="@+id/view" />
 
 
-</RelativeLayout>
+</LinearLayout>

@@ -1,4 +1,5 @@
 package cn.com.chinau;
+
 import cn.com.chinau.utils.Version;
 
 
@@ -73,7 +74,7 @@ public class StaticField {
     public static final String OP_TYPE = "op_type";
     public static final String CURRENT_INDEX = "current_index";
     public static final String OFFSET = "offset";
-    public static final String SYSPARAM_QUERY= "cn.com.chinau.sysparam.query";// 系统参数接口
+    public static final String SYSPARAM_QUERY = "cn.com.chinau.sysparam.query";// 系统参数接口
 
     //邮票目录
     public static final String STAMPTAP = "cn.com.chinau.stamplist.query";
@@ -170,5 +171,45 @@ public class StaticField {
     public static final String EXPRESS_NO = "express_no";// 快递单号
     public static final String ORDER_SN = "order_sn";// 回购订单编号
     public static final String WL = "WL";// HG确认回购；WL物流
+
+    // 竞拍记录List
+
+    public static final String AUCTIONREC = "cn.com.chinau.auctionrec.query";
+    public static final String AUCTION_STATUS = "auction_status";// 竞拍状态
+    //竞拍状态：QB全部；CJ出局；CG成功，JPZ竞拍中；
+    public static final String CG = "CG";
+    public static final String CJ = "CJ";
+    public static final String JPZ = "JPZ";
+    // 回购订单List
+    public static final String ORDERLIST = "cn.com.chinau.buyback.orderlist.query";
+    public static final String BUYBACK_TYPE = "buyback_type"; //订单类型：SM：扫码回购；PT：普通回购
+    public static final String SM = "SM";
+    public static final String PT = "PT";
+    public static final int ORDERS_SUCCESS = 1;
+    // 我的邮集List
+    public static final String ALBUMLIST = "cn.com.chinau.album.list";
+    // 修改邮集
+    public static final String MODIFY = "cn.com.chinau.album.modify";
+    public static final String STAMP_COUNT = "stamp_count";// 邮票数量
+    // 操作类型：SC：删除；JR加入；XG修改
+    public static final String JR = "JR";
+    public static final String XG = "XG";
+    // 收藏夹列表
+    public static final String FAVORITELIST = "cn.com.chinau.favorite.list.query";
+    public static final String GOODS_TYPE = "goods_type";// 商品类型
+    // 收货地址管理list
+    public static final String ADDRESSLIST = "cn.com.chinau.address.list.query";
+    public static final String ADDRESS_ID = "address_id";
+    public static final String LB = "LB";
+    public static final String XQ = "XQ";
+    public static final String IS_DEFAULT = "is_default";
+    public static final String XZ = "XZ";
+    public static final String NAMES = "name";
+    public static final String ADDRESS_DETAIL = "detail";
+    public static final String PROV = "prov";
+    public static final String CITY = "city";
+    public static final String AREA = "area";
+
+
 
 }

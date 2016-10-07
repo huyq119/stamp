@@ -1,22 +1,34 @@
 package cn.com.chinau.activity;
 
-import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import cn.com.chinau.R;
+import cn.com.chinau.StaticField;
+import cn.com.chinau.adapter.OrderAdapter;
 import cn.com.chinau.adapter.OrderSweepAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.OrderSweepBean;
+import cn.com.chinau.http.HttpUtils;
+import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
+import cn.com.chinau.utils.MyToast;
+import cn.com.chinau.utils.SortUtils;
+import cn.com.chinau.utils.ThreadManager;
 
 /**
  * 回购订单页面
@@ -27,11 +39,57 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
     private View mOrderContent;
     private TextView mTitle;
     private ImageView mback;
-    private Button mOrderSweep,mOrder;
-    private ArrayList<OrderSweepBean.Orderbean> list;
+    private RadioGroup mRadioGroup;
+    private RadioButton mOrderSweepBtn,mOrderBtn;
+    private ArrayList<OrderSweepBean.Orderbean> mList;
     private ListView mlistview;
     private OrderSweepAdapter adapter;
     private ListView mOederListview;
+    private String mToken,mUser_id,result;
+    private SharedPreferences sp;
+    private int num = 0;//初始索引
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+                case StaticField.SUCCESS:// 扫码回购
+                    String msge = (String) msg.obj;
+                    Gson gson = new Gson();
+                    OrderSweepBean mOrderSweepBean = gson.fromJson(msge, OrderSweepBean.class);
+                    String mRsp_code = mOrderSweepBean.getRsp_code();
+                    if (mRsp_code.equals("0000")) {
+                        mList = mOrderSweepBean.getOrder_list();
+                        MyLog.LogShitou("扫码回购订单列表有几条-->:", mList.size() + "");
+                        if (mList != null && mList.size() != 0) {
+                            initAdapter();
+                        }else {
+                            MyToast.showShort(OrderBuyBackActivity.this,"还未有扫码回购订单。。。");
+                        }
+                    }
+
+                    break;
+                case StaticField.ORDERS_SUCCESS: // 回购
+                    Gson gsons = new Gson();
+                    OrderSweepBean mOrderSweepBeans = gsons.fromJson((String) msg.obj, OrderSweepBean.class);
+                    String mRsp_codes = mOrderSweepBeans.getRsp_code();
+                    if (mRsp_codes.equals("0000")) {
+                        mList = mOrderSweepBeans.getOrder_list();
+                        MyLog.LogShitou("回购订单列表有几条-->:", mList.size() + "");
+                        if (mList != null && mList.size() != 0) {
+                            OrderAdapter  adapters = new OrderAdapter(OrderBuyBackActivity.this, mBitmap, mList);
+                            mOederListview.setAdapter(adapters);
+                            adapters.notifyDataSetChanged();
+                        }else {
+                            MyToast.showShort(OrderBuyBackActivity.this,"还未有回购订单。。。");
+                        }
+                    }
+
+                    break;
+
+            }
+        }
+    };
 
 
 
@@ -44,21 +102,45 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
     @Override
     public View CreateSuccess() {
         mOrderContent = View.inflate(this, R.layout.activity_order, null);
+        sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
         initView();
-        initdada();
+        initDada();
         initListener();
-        initAdapter();
-
         return mOrderContent;
     }
 
+    @Override
+    public void AgainRequest() {
+
+    }
+
     private void initView() {
+        mToken = sp.getString("token", "");
+        mUser_id = sp.getString("userId", "");
+
         mTitle= (TextView)mOrderTitle.findViewById(R.id.base_title);
         mTitle.setText("回购订单");
         mback = (ImageView)mOrderTitle.findViewById(R.id.base_title_back);
-        mOrderSweep = (Button)mOrderContent.findViewById(R.id.record_sweep);
-        mOrder = (Button)mOrderContent.findViewById(R.id.btn_order);
+
+
+        mRadioGroup = (RadioGroup)mOrderContent.findViewById(R.id.radioGroup);
+        mOrderSweepBtn = (RadioButton)mOrderContent.findViewById(R.id.record_sweep_btn);
+        mOrderBtn = (RadioButton)mOrderContent.findViewById(R.id.order_btn);
+        mRadioGroup.check(R.id.record_sweep_btn);// 默认选中
         mOederListview = (ListView)mOrderContent.findViewById(R.id.listView);
+
+
+    }
+
+    private void initDada() {
+        GetInitNet(num,StaticField.SM);
+    }
+
+    private void initListener() {
+        mback.setOnClickListener(this);
+        mOrderSweepBtn.setOnClickListener(this);
+        mOrderBtn.setOnClickListener(this);
+
         mOederListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -85,54 +167,23 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
                 }
             }
         });
-
     }
-    private void initdada() {
 
-
-        list = new ArrayList<>();
-        list.add(new OrderSweepBean.Orderbean("中国共产党二十八周年诞生纪念邮票3枚全",  "62.0", "64.99", "2016-08-12", "待寄送", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-        list.add(new OrderSweepBean.Orderbean("中国共产党二十八周年诞生纪念邮票3枚全",  "62.0", "64.99", "2016-08-25", "订单关闭", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-        list.add(new OrderSweepBean.Orderbean("中国共产党二十八周年诞生纪念邮票3枚全",  "69.0", "64.99", "2016-05-13", "审核中", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-        list.add(new OrderSweepBean.Orderbean("中国共产党二十八周年诞生纪念邮票3枚全",  "62.0", "64.99", "2016-12-13", "已完成", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-        list.add(new OrderSweepBean.Orderbean("中国共产党二十八周年诞生纪念邮票3枚全",  "62.0", "64.99", "2016-10-01", "订单驳回","http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-    }
-    private void initListener() {
-        mback.setOnClickListener(this);
-        mOrder.setOnClickListener(this);
-        mOrderSweep.setOnClickListener(this);
-    }
     private void initAdapter() {
-        mOrder.setTextColor(Color.GRAY);
-        mOrderSweep.setTextColor(Color.RED);
-        adapter = new OrderSweepAdapter(this, mBitmap, list);
+        adapter = new OrderSweepAdapter(this, mBitmap, mList);
         mOederListview.setAdapter(adapter);
-    }
-
-
-    @Override
-    public void AgainRequest() {
-
+        adapter.notifyDataSetChanged();
     }
 
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.record_sweep:
-                mOrderSweep.setTextColor(Color.GRAY);
-                mOrder.setTextColor(Color.RED);
-                startActivity(new Intent(OrderBuyBackActivity.this,OrderSweepActivity.class));
-                overridePendingTransition(0,0);
-                finish();
-
+            case R.id.record_sweep_btn://扫码回购
+                GetInitNet(num,StaticField.SM);
                 break;
-            case R.id.btn_order:
-                mOrderSweep.setTextColor(Color.GRAY);
-                mOrder.setTextColor(Color.RED);
-                startActivity(new Intent(OrderBuyBackActivity.this,OrderSweepActivity.class));
-                overridePendingTransition(0,0);
-                finish();
+            case R.id.order_btn: // 回购订单
+                GetInitNet(num,StaticField.PT);
                 break;
 
             case R.id.base_title_back:
@@ -140,7 +191,50 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
                 break;
         }
 
+    }
 
+    /**
+     * 回购订单列表的网络请求
+     * @param num 索引
+     * @param buyback_type 回购类型
+     */
+    private void GetInitNet(final int num, final String buyback_type){
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.ORDERLIST);// 接口名称
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 当前记录索引
+                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+                params.put(StaticField.BUYBACK_TYPE, buyback_type); // //订单类型：SM：扫码回购；PT：普通回购
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("回购订单List-->:", result);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+
+                if (buyback_type.equals("SM")){
+
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }else {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.ORDERS_SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+            }
+        });
     }
 
 }

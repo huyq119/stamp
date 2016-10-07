@@ -10,6 +10,15 @@ public class CollectionBean extends BaseBean {
 
     public ArrayList<Collection> goods_list;
 
+
+    public ArrayList<Collection> getGoods_list() {
+        return goods_list;
+    }
+
+    public void setGoods_list(ArrayList<Collection> goods_list) {
+        this.goods_list = goods_list;
+    }
+
     public CollectionBean(ArrayList<Collection> goods_list) {
         this.goods_list = goods_list;
     }

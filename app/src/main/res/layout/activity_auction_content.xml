@@ -35,7 +35,6 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:background="@drawable/tab_choose_bg"
-                    android:text="新中国邮票"
                     android:textColor="#666"
                     android:textSize="13sp" />
                 <RadioButton
@@ -49,7 +48,6 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:background="@drawable/tab_choose_bg"
-                    android:text="民国邮票"
                     android:textColor="#666"
                     android:textSize="13sp" />
                 <RadioButton
@@ -63,7 +61,6 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:background="@drawable/tab_choose_bg"
-                    android:text="解放区邮票"
                     android:textColor="#666"
                     android:textSize="13sp" />
                 <RadioButton
@@ -77,7 +74,6 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:background="@drawable/tab_choose_bg"
-                    android:text="清代邮票"
                     android:textColor="#666"
                     android:textSize="13sp" />
 
@@ -181,16 +177,6 @@
             android:overScrollMode="never"
             android:scrollbars="none"
             />
-        <TextView
-            android:id="@+id/auction_no_lv_tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="5dp"
-            android:text="还未有邮票进行拍卖"
-            android:textColor="#666"
-            android:gravity="center"
-            android:visibility="gone"
-            android:textSize="18sp" />
 
     </LinearLayout>
 
