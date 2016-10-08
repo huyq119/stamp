@@ -87,7 +87,7 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
         sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         initView();
         initData();
-        initAdapter();
+//        initAdapter();
         initListener();
         return mManagerAddressContent;
     }
@@ -237,10 +237,10 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = StaticField.SUCCESS;
-//                msg.obj = result;
-//                mHandler.sendMessage(msg);
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
 
             }
         });

@@ -16,7 +16,7 @@
         android:layout_marginTop="@dimen/distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/fount_size"
-        android:textColor="#fff"
+        android:textSize="@dimen/text3_size"
+        android:textColor="@color/white"
         android:text="@string/AddStamp"/>
 </LinearLayout>

@@ -210,6 +210,13 @@ public class StaticField {
     public static final String CITY = "city";
     public static final String AREA = "area";
 
+    // 商品订单list
+    public static final String GOODSORDERLIST = "cn.com.chinau.orderlist.query";
+    public static final String ORDERSTATUS = "order_status";
+    public static final String DFK = "DFK";// 待付款
+    public static final String DSH = "DSH";// 待收货
+    public static final String WC = "WC"; // 已完成
+    public static final String TK = "TK";// 退款
 
 
 }

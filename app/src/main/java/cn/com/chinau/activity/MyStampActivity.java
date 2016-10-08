@@ -158,7 +158,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
 //        mStampGV.setAdapter(mMyStampAdapter);
 
         //设置翻页效果
-        myStampViewPager.setPageTransformer(true, new ViewPager.PageTransformer() {
+                myStampViewPager.setPageTransformer(true, new ViewPager.PageTransformer() {
             @Override
             public void transformPage(View page, float position) {
                 if (position <= 0) {
@@ -282,10 +282,10 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = StaticField.SUCCESS;
-//                msg.obj = result;
-//                mHandler.sendMessage(msg);
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
 
             }
         });

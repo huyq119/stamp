@@ -93,7 +93,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
         sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
         initView();
         initData();
-        initAdapter();
+//        initAdapter();
         initListener();
         return mCollectionContent;
     }
@@ -122,22 +122,22 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
 
     }
     private void initData(){
-        mList = new ArrayList<>();
-        CollectionBean.Collection collection;
-        collection = new CollectionBean.Collection("庚申年", "YH", "YS", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
-        mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年", "WH", "YS", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
-        mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年", "JPZ", "JP", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
-        mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年", "WKS", "JP", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
-        mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年", "YJS", "JP", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
-        mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年", "YH", "SC", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
-        mList.add(collection);
-        collection = new CollectionBean.Collection("庚申年1", "WH", "SC", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
-        mList.add(collection);
+//        mList = new ArrayList<>();
+//        CollectionBean.Collection collection;
+//        collection = new CollectionBean.Collection("庚申年", "YH", "YS", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+//        mList.add(collection);
+//        collection = new CollectionBean.Collection("庚申年", "WH", "YS", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+//        mList.add(collection);
+//        collection = new CollectionBean.Collection("庚申年", "JPZ", "JP", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+//        mList.add(collection);
+//        collection = new CollectionBean.Collection("庚申年", "WKS", "JP", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+//        mList.add(collection);
+//        collection = new CollectionBean.Collection("庚申年", "YJS", "JP", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+//        mList.add(collection);
+//        collection = new CollectionBean.Collection("庚申年", "YH", "SC", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+//        mList.add(collection);
+//        collection = new CollectionBean.Collection("庚申年1", "WH", "SC", "100000.00", "7983247", "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg");
+//        mList.add(collection);
 
         GetInitNet(num,StaticField.QB);// 收藏夹网络请求
     }
@@ -296,10 +296,10 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = StaticField.SUCCESS;
-//                msg.obj = result;
-//                mHandler.sendMessage(msg);
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
 
             }
         });

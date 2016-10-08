@@ -9,6 +9,12 @@
 
     <!--基础大小-->
     <dimen name="fount_size">12sp</dimen>
+    <!--字体大小1-->
+    <dimen name="text1_size">12sp</dimen>
+    <!--字体大小2-->
+    <dimen name="text2_size">13sp</dimen>
+    <!--字体大小3-->
+    <dimen name="text3_size">15sp</dimen>
 
     <!--安全边距-->
     <dimen name="distance">12dp</dimen>

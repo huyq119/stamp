@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:state_selected="false" android:drawable="@drawable/vpi__tab_unselected_holo"/>
-    <item android:state_selected="true" android:drawable="@drawable/vpi__tab_unselected_pressed_holo"/>
+    <item  android:drawable="@drawable/vpi__tab_unselected_pressed_holo" android:state_checked="true"/>
+    <item  android:drawable="@drawable/vpi__tab_unselected_holo"/>
 </selector>

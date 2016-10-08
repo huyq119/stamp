@@ -1,6 +1,10 @@
 package cn.com.chinau.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -10,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +30,11 @@ import cn.com.chinau.adapter.OrderPaymentReceivingCompleteLsitViewAdapter;
 import cn.com.chinau.adapter.OrderRefuseLsitViewAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.OrderAllListViewGoodsBean;
+import cn.com.chinau.http.HttpUtils;
+import cn.com.chinau.utils.Encrypt;
+import cn.com.chinau.utils.MyLog;
+import cn.com.chinau.utils.SortUtils;
+import cn.com.chinau.utils.ThreadManager;
 import cn.com.chinau.view.OrderGoodsViewPager;
 
 /**
@@ -44,12 +55,38 @@ public class OrdersGoodsActivity extends BaseActivity {
     private ExpandableListView all_edListview, payment_edListview, receiving_edListview, complete_edListview, refuse_edListview;
     private int position = 0;
     private int mPosition;
+    private String mToken,mUser_id;// 标识，用户ID
+    private static final int num = 0; // 初始化索引
     private OrderAllLsitViewAdapter allLsitViewAdapter;
     private List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList> groups = new ArrayList<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList>();// 组元素数据列表
     private Map<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>> goods = new HashMap<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>>();// 子元素数据列表
 
     private List<HashMap<String, String>> lists;
+    private SharedPreferences sp;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case StaticField.SUCCESS:// 我的邮集
+                    String msge = (String) msg.obj;
+                    Gson gson = new Gson();
+//                    MyStampGridViewBean mOrderSweepBean = gson.fromJson(msge, MyStampGridViewBean.class);
+//                    String mRsp_code = mOrderSweepBean.getRsp_code();
+//                    if (mRsp_code.equals("0000")) {
+//                        mList = mOrderSweepBean.getStamp_list();
+//                        MyLog.LogShitou("我的邮集有几条-->:", mList.size() + "");
+//                        if (mList != null && mList.size() != 0) {
+//                            initAdapter();
+//                        }else {
+//                            MyToast.showShort(MyStampActivity.this,"我的邮集为空。。。");
+//                        }
+//                    }
 
+                    break;
+
+            }
+        }
+    };
 
     @Override
     public View CreateTitle() {
@@ -60,6 +97,7 @@ public class OrdersGoodsActivity extends BaseActivity {
     @Override
     public View CreateSuccess() {
         mOrderContent = View.inflate(this, R.layout.activity_order_goods, null);
+        sp = getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         initViews();
         initDatas();
         initAdapter();
@@ -91,44 +129,27 @@ public class OrdersGoodsActivity extends BaseActivity {
 
     private void initstartview() {
         if (tag.equals("all")) {
-            view1.setBackgroundResource(R.color.red_font);
-            view2.setBackgroundResource(R.color.line_bg);
-            view3.setBackgroundResource(R.color.line_bg);
-            view4.setBackgroundResource(R.color.line_bg);
-            view5.setBackgroundResource(R.color.line_bg);
+            mRadioGroup.check(R.id.RBtn_All);
             mViewPager.setCurrentItem(0);
         } else if (tag.equals("payment")) {
-            view1.setBackgroundResource(R.color.line_bg);
-            view2.setBackgroundResource(R.color.red_font);
-            view3.setBackgroundResource(R.color.line_bg);
-            view4.setBackgroundResource(R.color.line_bg);
-            view5.setBackgroundResource(R.color.line_bg);
+            mRadioGroup.check(R.id.RBtn_Payment);
             mViewPager.setCurrentItem(1);
         } else if (tag.equals("receiving")) {
-            view1.setBackgroundResource(R.color.line_bg);
-            view2.setBackgroundResource(R.color.line_bg);
-            view3.setBackgroundResource(R.color.red_font);
-            view4.setBackgroundResource(R.color.line_bg);
-            view5.setBackgroundResource(R.color.line_bg);
+            mRadioGroup.check(R.id.RBtn_Receiving);
             mViewPager.setCurrentItem(2);
         } else if (tag.equals("completed")) {
-            view1.setBackgroundResource(R.color.line_bg);
-            view2.setBackgroundResource(R.color.line_bg);
-            view3.setBackgroundResource(R.color.line_bg);
-            view4.setBackgroundResource(R.color.red_font);
-            view5.setBackgroundResource(R.color.line_bg);
+            mRadioGroup.check(R.id.RBtn_Complete);
             mViewPager.setCurrentItem(3);
         } else if (tag.equals("refused")) {
-            view1.setBackgroundResource(R.color.line_bg);
-            view2.setBackgroundResource(R.color.line_bg);
-            view3.setBackgroundResource(R.color.line_bg);
-            view4.setBackgroundResource(R.color.line_bg);
-            view5.setBackgroundResource(R.color.red_font);
+            mRadioGroup.check(R.id.RBtn_Refuse);
             mViewPager.setCurrentItem(4);
         }
     }
 
     private void initViews() {
+
+        mToken = sp.getString("token", "");
+        mUser_id = sp.getString("userId", "");
         // 获取我的页面传过来的键值
         Bundle bundle = getIntent().getExtras();
         tag = bundle.getString(StaticField.ORDERS);
@@ -152,12 +173,6 @@ public class OrdersGoodsActivity extends BaseActivity {
         mComplete = (RadioButton) mOrderContent.findViewById(R.id.RBtn_Complete);
         mRefuse = (RadioButton) mOrderContent.findViewById(R.id.RBtn_Refuse);
 
-        view1 = mOrderContent.findViewById(R.id.view1);// line为红色
-        view1.setBackgroundResource(R.color.red_font);
-        view2 = mOrderContent.findViewById(R.id.view2);
-        view3 = mOrderContent.findViewById(R.id.view3);
-        view4 = mOrderContent.findViewById(R.id.view4);
-        view5 = mOrderContent.findViewById(R.id.view5);
 
     }
 
@@ -253,6 +268,8 @@ public class OrdersGoodsActivity extends BaseActivity {
 
         }
 
+        GetInitNet(num,StaticField.QB); // 商品订单列表网络请求
+
     }
 
 
@@ -311,7 +328,9 @@ public class OrdersGoodsActivity extends BaseActivity {
 
     }
 
-
+    /**
+     * 滑动ViewPager监听事件
+     */
     public class MyPagerChangeListener implements ViewPager.OnPageChangeListener {
 
 
@@ -328,68 +347,21 @@ public class OrdersGoodsActivity extends BaseActivity {
             mPosition = position;
             switch (position) {
                 case 0:
-                    mAllBtn.setTextColor(getResources().getColor(R.color.red_font));
-                    mPaymentBtn.setTextColor(getResources().getColor(R.color.black));
-                    mReceiving.setTextColor(getResources().getColor(R.color.black));
-                    mComplete.setTextColor(getResources().getColor(R.color.black));
-                    mRefuse.setTextColor(getResources().getColor(R.color.black));
-                    view1.setBackgroundResource(R.color.red_font);
-                    view2.setBackgroundResource(R.color.line_bg);
-                    view3.setBackgroundResource(R.color.line_bg);
-                    view4.setBackgroundResource(R.color.line_bg);
-                    view5.setBackgroundResource(R.color.line_bg);
+                    mRadioGroup.check(R.id.RBtn_All);
+
                     break;
                 case 1:
-                    mAllBtn.setTextColor(getResources().getColor(R.color.black));
-                    mPaymentBtn.setTextColor(getResources().getColor(R.color.red_font));
-                    mReceiving.setTextColor(getResources().getColor(R.color.black));
-                    mComplete.setTextColor(getResources().getColor(R.color.black));
-                    mRefuse.setTextColor(getResources().getColor(R.color.black));
-                    view1.setBackgroundResource(R.color.line_bg);
-                    view2.setBackgroundResource(R.color.red_font);
-                    view3.setBackgroundResource(R.color.line_bg);
-                    view4.setBackgroundResource(R.color.line_bg);
-                    view5.setBackgroundResource(R.color.line_bg);
-
+                    mRadioGroup.check(R.id.RBtn_Payment);
                     break;
                 case 2:
-                    mAllBtn.setTextColor(getResources().getColor(R.color.black));
-                    mPaymentBtn.setTextColor(getResources().getColor(R.color.black));
-                    mReceiving.setTextColor(getResources().getColor(R.color.red_font));
-                    mComplete.setTextColor(getResources().getColor(R.color.black));
-                    mRefuse.setTextColor(getResources().getColor(R.color.black));
-                    view1.setBackgroundResource(R.color.line_bg);
-                    view2.setBackgroundResource(R.color.line_bg);
-                    view3.setBackgroundResource(R.color.red_font);
-                    view4.setBackgroundResource(R.color.line_bg);
-                    view5.setBackgroundResource(R.color.line_bg);
-
+                    mRadioGroup.check(R.id.RBtn_Receiving);
                     break;
                 case 3:
-                    mAllBtn.setTextColor(getResources().getColor(R.color.black));
-                    mPaymentBtn.setTextColor(getResources().getColor(R.color.black));
-                    mReceiving.setTextColor(getResources().getColor(R.color.black));
-                    mComplete.setTextColor(getResources().getColor(R.color.red_font));
-                    mRefuse.setTextColor(getResources().getColor(R.color.black));
-                    view1.setBackgroundResource(R.color.line_bg);
-                    view2.setBackgroundResource(R.color.line_bg);
-                    view3.setBackgroundResource(R.color.line_bg);
-                    view4.setBackgroundResource(R.color.red_font);
-                    view5.setBackgroundResource(R.color.line_bg);
+                    mRadioGroup.check(R.id.RBtn_Complete);
 
                     break;
                 case 4:
-                    mAllBtn.setTextColor(getResources().getColor(R.color.black));
-                    mPaymentBtn.setTextColor(getResources().getColor(R.color.black));
-                    mReceiving.setTextColor(getResources().getColor(R.color.black));
-                    mComplete.setTextColor(getResources().getColor(R.color.black));
-                    mRefuse.setTextColor(getResources().getColor(R.color.red_font));
-                    view1.setBackgroundResource(R.color.line_bg);
-                    view2.setBackgroundResource(R.color.line_bg);
-                    view3.setBackgroundResource(R.color.line_bg);
-                    view4.setBackgroundResource(R.color.line_bg);
-                    view5.setBackgroundResource(R.color.red_font);
-
+                    mRadioGroup.check(R.id.RBtn_Refuse);
                     break;
                 default:
                     break;
@@ -400,55 +372,38 @@ public class OrdersGoodsActivity extends BaseActivity {
         ;
     }
 
+    /**
+     * 点击RadioButton监听事件
+     */
     public class MyGroupListener implements RadioGroup.OnCheckedChangeListener {
 
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             switch (checkedId) {
-                case R.id.RBtn_All:
+                case R.id.RBtn_All:// 全部
                     position = 0;
-                    view1.setBackgroundResource(R.color.red_font);
-                    view2.setBackgroundResource(R.color.line_bg);
-                    view3.setBackgroundResource(R.color.line_bg);
-                    view4.setBackgroundResource(R.color.line_bg);
-                    view5.setBackgroundResource(R.color.line_bg);
                     mViewPager.setCurrentItem(0);
+                    GetInitNet(num,StaticField.QB); // 商品订单列表网络请求
                     break;
-                case R.id.RBtn_Payment:
+                case R.id.RBtn_Payment:// 待付款
                     position = 1;
-                    view1.setBackgroundResource(R.color.line_bg);
-                    view2.setBackgroundResource(R.color.red_font);
-                    view3.setBackgroundResource(R.color.line_bg);
-                    view4.setBackgroundResource(R.color.line_bg);
-                    view5.setBackgroundResource(R.color.line_bg);
                     mViewPager.setCurrentItem(1);
+                    GetInitNet(num,StaticField.DFK);
                     break;
-                case R.id.RBtn_Receiving:
+                case R.id.RBtn_Receiving:// 待收货
                     position = 2;
-                    view1.setBackgroundResource(R.color.line_bg);
-                    view2.setBackgroundResource(R.color.line_bg);
-                    view3.setBackgroundResource(R.color.red_font);
-                    view4.setBackgroundResource(R.color.line_bg);
-                    view5.setBackgroundResource(R.color.line_bg);
                     mViewPager.setCurrentItem(2);
+                    GetInitNet(num,StaticField.DSH);
                     break;
-                case R.id.RBtn_Complete:
+                case R.id.RBtn_Complete:// 已完成
                     position = 3;
-                    view1.setBackgroundResource(R.color.line_bg);
-                    view2.setBackgroundResource(R.color.line_bg);
-                    view3.setBackgroundResource(R.color.line_bg);
-                    view4.setBackgroundResource(R.color.red_font);
-                    view5.setBackgroundResource(R.color.line_bg);
                     mViewPager.setCurrentItem(3);
+                    GetInitNet(num,StaticField.WC);
                     break;
-                case R.id.RBtn_Refuse:
+                case R.id.RBtn_Refuse://退款
                     position = 4;
-                    view1.setBackgroundResource(R.color.line_bg);
-                    view2.setBackgroundResource(R.color.line_bg);
-                    view3.setBackgroundResource(R.color.line_bg);
-                    view4.setBackgroundResource(R.color.line_bg);
-                    view5.setBackgroundResource(R.color.red_font);
                     mViewPager.setCurrentItem(4);
+                    GetInitNet(num,StaticField.TK);
                     break;
 
                 default:
@@ -457,6 +412,45 @@ public class OrdersGoodsActivity extends BaseActivity {
 
         }
 
+    }
+
+    /**
+     * 商品订单列表网络请求
+     * @param num 索引
+     * @param orderStatus 订单状态
+     */
+    private void GetInitNet(final int num,final String orderStatus){
+        ThreadManager.getInstance().createLongPool().execute(new Runnable() {
+
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.GOODSORDERLIST);// 接口名称
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id); // 用户ID
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 索引
+                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+                // 订单状态：QB：全部；DFK：待付款；DSH：待收货；WC：已完成；TK：退款/退货
+                params.put(StaticField.ORDERSTATUS, orderStatus);
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                MyLog.LogShitou("商品订单list-->:",result);
+                if (result.equals("-1")|result.equals("-2")) {
+                    return;
+                }
+
+//                Message msgSuccess = handler.obtainMessage();
+//                msgSuccess.what = StaticField.SUCCESS;
+//                msgSuccess.obj = result;
+//                handler.sendMessage(msgSuccess);
+
+
+            }
+        });
     }
 
 

@@ -1,5 +1,7 @@
 package cn.com.chinau.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,7 +14,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -27,7 +28,9 @@ import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.HomeViewPagerAdapter;
 import cn.com.chinau.adapter.StampTapDetailAdapter;
 import cn.com.chinau.base.BaseActivity;
+import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.StampTapDetailBean;
+import cn.com.chinau.dialog.AddStampDialog;
 import cn.com.chinau.fragment.stampfragment.StampInfoFragment;
 import cn.com.chinau.fragment.stampfragment.StampPracticeFragment;
 import cn.com.chinau.fragment.stampfragment.StampPriceFragment;
@@ -67,6 +70,8 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     private VerticalScrollView home_SV;
     private View contentView;
     private int lastY = 0;
+    private static final int DELDIALOG = 0;
+    private static final int ADDSUCCESS = 1;// 加入邮集成功的标识
     private int scrollY; // 标记上次滑动位置
 
     private String[] name;//名称
@@ -74,8 +79,8 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     private String[] current_price;///当前价格
     private String[] stamp_detail;//邮票信息
     private String[] stamp_story;//邮票故事
-
-
+    private String mToken,mUser_id;
+    private AddStampDialog mAdd;
     private Handler mHandler = new Handler() {
 
         @Override
@@ -98,9 +103,20 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
                         lastY = scroller.getScrollY();
                     }
                     break;
+                case ADDSUCCESS:// 加入邮集 (还有点问题，到时候需要修改)
+                    Gson gsons = new Gson();
+                    BaseBean mBaseBean = gsons.fromJson((String) msg.obj, BaseBean.class);
+                    String code = mBaseBean.getRsp_code();
+                    if (code.equals("0000")){
+                        mAdd = new AddStampDialog(StampTapDetailActivity.this);
+                        mAdd.show();
+                        mHandler.sendEmptyMessageDelayed(DELDIALOG,1000);
+                    }
+                    break;
             }
         }
     };
+    private SharedPreferences sp;
 
 
     @Override
@@ -112,6 +128,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public View CreateSuccess() {
         mStampTapDetailContent = View.inflate(this, R.layout.activity_stamptapdetail_content, null);
+         sp = getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         initView();
         initData();
         initListener();
@@ -120,9 +137,12 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
 
 
     private void initView() {
+
+        mToken = sp.getString("token", "");
+        mUser_id = sp.getString("userId", "");
         //获取传邮市传过来的内容
         Bundle bundle = getIntent().getExtras();
-        mStampSn = bundle.getString(StaticField.STAMPDETAIL_SN);
+        mStampSn = bundle.getString(StaticField.STAMPDETAIL_SN);//
         mStampPrice = bundle.getString(StaticField.STAMPDETAIL_PRICE);
 
         mBack = (ImageView) mStampTapDetailTitle.findViewById(R.id.base_title_back);
@@ -168,7 +188,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
                 MyLog.e(result);
 
                 Log.e("result+邮票目录详情---->", result);
-                if (result.equals("-1")) {
+                if (result.equals("-1")|result.equals("-2")) {
                     return;
                 }
                 Message msg = mHandler.obtainMessage();
@@ -178,6 +198,44 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
             }
         });
     }
+
+    /**
+     * 加入邮集网络请求
+     * @param stamp_count　添加数量
+     * @param op_type 操作类型：SC：删除；JR加入；XG修改
+     */
+
+    private void UpDateGetInitNet(final String stamp_count,final String op_type){
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.MODIFY);// 接口名称
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.STAMP_SN, mStampSn);//  邮票编号 （暂时为空）
+//                params.put(StaticField.STAMP_COUNT, stamp_count);//  邮票数量
+                params.put(StaticField.OP_TYPE, op_type);//  操作类型：SC：删除；JR加入；XG修改
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("result加入邮集-->:", result);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+                Message msg = mHandler.obtainMessage();
+                msg.what = ADDSUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+
+            }
+        });
+    }
+
 
     /**
      * 传入的是返回的数据
@@ -257,8 +315,8 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
             case R.id.base_title_back://返回
                 finishWitchAnimation();
                 break;
-            case R.id.stamp_details_add_album://加入邮寄
-                Toast.makeText(this, "开发中...", Toast.LENGTH_SHORT).show();
+            case R.id.stamp_details_add_album://加入邮集
+                UpDateGetInitNet(null,StaticField.JR); // 加入邮集网络请求
                 break;
             case R.id.stamp_top_detail_top_btn://置顶
                 home_SV.post(new Runnable() {

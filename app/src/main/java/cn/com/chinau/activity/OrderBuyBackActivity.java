@@ -48,7 +48,10 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
     private String mToken,mUser_id,result;
     private SharedPreferences sp;
     private int num = 0;//初始索引
+    private OrderAdapter adapters;
     private Handler mHandler = new Handler() {
+
+
         @Override
         public void handleMessage(Message msg) {
 
@@ -77,11 +80,12 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
                         mList = mOrderSweepBeans.getOrder_list();
                         MyLog.LogShitou("回购订单列表有几条-->:", mList.size() + "");
                         if (mList != null && mList.size() != 0) {
-                            OrderAdapter  adapters = new OrderAdapter(OrderBuyBackActivity.this, mBitmap, mList);
+                              adapters =  new OrderAdapter(OrderBuyBackActivity.this, mBitmap, mList);
                             mOederListview.setAdapter(adapters);
                             adapters.notifyDataSetChanged();
                         }else {
                             MyToast.showShort(OrderBuyBackActivity.this,"还未有回购订单。。。");
+                            adapter.notifyDataSetChanged();
                         }
                     }
 
