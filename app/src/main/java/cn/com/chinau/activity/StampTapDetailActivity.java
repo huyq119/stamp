@@ -40,7 +40,6 @@ import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.ScreenUtils;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
-import cn.com.chinau.view.BadgeView;
 import cn.com.chinau.view.CustomViewPager;
 import cn.com.chinau.view.VerticalScrollView;
 
@@ -130,7 +129,6 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         }
     };
     private SharedPreferences sp;
-    private BadgeView mBadgeView;
     private LinearLayout mAddStampLl;
 
 
