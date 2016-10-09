@@ -14,42 +14,28 @@ import java.util.List;
  */
 public class StampDetailPagerAdapter extends FragmentPagerAdapter {
 
+
     private List<Fragment> mList;//内容Fragment集合
     private String[] arr;//标题数组
-//    private Context context;
-//    private String url;
+//    private String mDetail, mStory;
 
     public StampDetailPagerAdapter(FragmentManager fragmentManager, List<Fragment> list, String[] arr) {
         super(fragmentManager);
         mList = list;
         this.arr = arr;
-//        this.context = context;
-//        this.url = url;
-    }
-
-    @Override
-    public Fragment getItem(int arg0) {
-//        if (arg0 == 0) {// 我的页面
-//            return new HomeFragment();
-//        } else if (arg0 == 1) {// 行情
-//            return new StampTapFragment();
-//        } else if (arg0 == 2) {// 订单
-//            return new PanStampFragment();
-//        } else if (arg0 == 3) {// 订单
-//            return new ShopFragment();
-//        } else if (arg0 == 4) {// 我的
-//            return new MyFragment();
-//        }
-
-//        return null;
-
-        return  mList.get(arg0);
-//                StampDetailInfoFragment(context,url);
+//        this.mDetail = mDetail;
+//        this.mStory = mStory;
     }
 
     @Override
     public int getCount() {
         return mList.size();
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+
+        return mList.get(position);
     }
 
     @Override

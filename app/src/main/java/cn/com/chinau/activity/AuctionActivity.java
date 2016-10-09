@@ -273,7 +273,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 Bundle bundle = new Bundle();
                 String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
                 bundle.putString(StaticField.GOODS_SN, mGoods_sn);// 传入商品编号
-                MyLog.LogShitou("mGoods_sn商品编号-->", mGoods_sn);
+                MyLog.LogShitou("mGoods_sn竞拍商品编号-->", mGoods_sn);
                 openActivityWitchAnimation(AuctionDetailActivity.class, bundle);
             }
         });
@@ -456,11 +456,10 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；XL销量；JG价格)
                 params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
                 params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
-                MyLog.e(md5code);
                 params.put(StaticField.SIGN, md5code); // 签名
-
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
                 MyLog.LogShitou("result+竞拍~~~~>", result);

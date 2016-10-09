@@ -40,13 +40,13 @@
             android:layout_marginTop="18sp"
             android:text="庚申年"
             android:textColor="@color/black"
-            android:textSize="@dimen/fount_size" />
+            android:textSize="@dimen/text3_size" />
 
         <LinearLayout
+            android:id="@+id/stamp_time_ll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:drawablePadding="5dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -55,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@mipmap/clock"
                 android:text="距离开拍:"
+                android:drawablePadding="6dp"
                 android:textColor="@color/font"
                 android:textSize="@dimen/fount_size" />
 
@@ -70,37 +71,37 @@
             android:id="@+id/stamp_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:drawablePadding="5dp"
             android:text="未开始"
-            android:textColor="@color/red_font"
-            android:textSize="15sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="18dp"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/stamp_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:drawablePadding="5dp"
                 android:text="@string/starting_pricecolon"
-                android:textColor="@color/font"
-                android:textSize="9sp" />
+                android:textColor="@color/font_color"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/stamp_starting_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="15dp"
                 android:drawablePadding="5dp"
                 android:textColor="@color/red_font"
-                android:textSize="@dimen/fount_size"
+                android:textSize="@dimen/text3_size"
+                android:text="1000.00"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>

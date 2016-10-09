@@ -193,15 +193,16 @@ public class StampDetailBean extends BaseBean{
 
     public static class OfferListData {
         public String offer_time;// 出价时间
+        public String user_id;// 用户ID
         public String mobile; // 出价人手机号
         public String price;// 出价价格
 
-        public OfferListData(String offer_time, String mobile, String price) {
-            this.offer_time = offer_time;
-            this.mobile = mobile;
-            this.price = price;
-
-        }
+//        public OfferListData(String offer_time, String mobile, String price) {
+//            this.offer_time = offer_time;
+//            this.mobile = mobile;
+//            this.price = price;
+//
+//        }
 
         public String getOffer_time() {
             return offer_time;
@@ -209,6 +210,14 @@ public class StampDetailBean extends BaseBean{
 
         public void setOffer_time(String offer_time) {
             this.offer_time = offer_time;
+        }
+
+        public String getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(String user_id) {
+            this.user_id = user_id;
         }
 
         public String getMobile() {

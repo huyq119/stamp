@@ -21,8 +21,6 @@ public class StampTapDetailAdapter extends FragmentPagerAdapter {
         super(fragmentManager);
         mList = list;
         this.arr = arr;
-//        this.mDetail = mDetail;
-//        this.mStory = mStory;
     }
 
     @Override
@@ -32,14 +30,6 @@ public class StampTapDetailAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-
-//        if (position == 0) {
-//            return new StampInfoFragment(mDetail);
-//        } else if (position == 1) {
-//            return new StampPriceFragment();
-//        } else if (position == 2) {
-//            return new StampPracticeFragment(mStory);
-//        }
         return mList.get(position);
     }
 

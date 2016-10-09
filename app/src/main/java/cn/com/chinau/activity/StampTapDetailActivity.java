@@ -7,11 +7,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -40,6 +40,7 @@ import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.ScreenUtils;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
+import cn.com.chinau.view.BadgeView;
 import cn.com.chinau.view.CustomViewPager;
 import cn.com.chinau.view.VerticalScrollView;
 
@@ -65,12 +66,12 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     private StampInfoFragment stampInfoFragment;
     private StampPracticeFragment stampPracticeFragment;
     //    private StampTapDetailBean stampTapDetailBean;
-    private TextView mPrice, mAddAlbum, mTitle;
+    private TextView mPrice, mAddAlbum, mTitle, mAddStampCount;
     private Button mTopBtn;
     private VerticalScrollView home_SV;
     private View contentView;
     private int lastY = 0;
-    private static final int DELDIALOG = 0;
+    private static final int ADDCLOSE = 3;
     private static final int ADDSUCCESS = 1;// 加入邮集成功的标识
     private int scrollY; // 标记上次滑动位置
 
@@ -79,8 +80,12 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     private String[] current_price;///当前价格
     private String[] stamp_detail;//邮票信息
     private String[] stamp_story;//邮票故事
-    private String mToken,mUser_id;
+    private String mToken, mUser_id;
     private AddStampDialog mAdd;
+    private int intStampCount = 0;// 初始化邮集数
+    private boolean CountFlag = false;
+
+
     private Handler mHandler = new Handler() {
 
         @Override
@@ -103,20 +108,30 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
                         lastY = scroller.getScrollY();
                     }
                     break;
-                case ADDSUCCESS:// 加入邮集 (还有点问题，到时候需要修改)
+                case ADDSUCCESS:// 加入邮集
                     Gson gsons = new Gson();
                     BaseBean mBaseBean = gsons.fromJson((String) msg.obj, BaseBean.class);
                     String code = mBaseBean.getRsp_code();
-                    if (code.equals("0000")){
+                    if (code.equals("0000")) {
                         mAdd = new AddStampDialog(StampTapDetailActivity.this);
                         mAdd.show();
-                        mHandler.sendEmptyMessageDelayed(DELDIALOG,1000);
+                        mHandler.sendEmptyMessageDelayed(ADDCLOSE, 2000);
+                        intStampCount++;
+                        mAddStampCount.setText("+" + String.valueOf(intStampCount));
+                        mAddStampCount.setVisibility(View.VISIBLE);// 加入邮集成功后显示邮集数
+                    }
+                    break;
+                case ADDCLOSE:// 关闭弹出框
+                    if (mAdd != null) {
+                        mAdd.dismiss();
                     }
                     break;
             }
         }
     };
     private SharedPreferences sp;
+    private BadgeView mBadgeView;
+    private LinearLayout mAddStampLl;
 
 
     @Override
@@ -128,7 +143,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public View CreateSuccess() {
         mStampTapDetailContent = View.inflate(this, R.layout.activity_stamptapdetail_content, null);
-         sp = getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
+        sp = getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         initView();
         initData();
         initListener();
@@ -153,8 +168,12 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         home_SV = (VerticalScrollView) mStampTapDetailContent.findViewById(R.id.home_SV);
         // 加入邮集
         mAddAlbum = (TextView) mStampTapDetailContent.findViewById(R.id.stamp_details_add_album);
+        mAddStampLl = (LinearLayout) mStampTapDetailContent.findViewById(R.id.stamp_details_add_stamp_ll);
+        // 邮集数
+        mAddStampCount = (TextView) mStampTapDetailContent.findViewById(R.id.stamp_details_add_count);
+//        mAddStampCount.setVisibility(View.INVISIBLE); // 初始化邮集数组件不可见
         // 置顶
-        mTopBtn = (Button) mStampTapDetailContent.findViewById(R.id.stamp_top_detail_top_btn);
+        mTopBtn = (Button) mStampTapDetailContent.findViewById(R.id.base_top_btn);
 
         //轮播条的View
         mTopVP = (ViewPager) mStampTapDetailContent.findViewById(R.id.base_viewpager);
@@ -168,6 +187,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     private void initData() {
         RequestNet();
     }
+
 
     /**
      * 请求网络的方法,这里请求的是详情的所有内容
@@ -185,10 +205,9 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.e(result);
 
-                Log.e("result+邮票目录详情---->", result);
-                if (result.equals("-1")|result.equals("-2")) {
+                MyLog.LogShitou("result+邮票目录详情---->", result);
+                if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
                 Message msg = mHandler.obtainMessage();
@@ -201,11 +220,12 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
 
     /**
      * 加入邮集网络请求
-     * @param stamp_count　添加数量
-     * @param op_type 操作类型：SC：删除；JR加入；XG修改
+     *
+     * @param stamp_count 　添加数量
+     * @param op_type     操作类型：SC：删除；JR加入；XG修改
      */
 
-    private void UpDateGetInitNet(final String stamp_count,final String op_type){
+    private void UpDateGetInitNet(final String stamp_count, final String op_type) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -266,11 +286,10 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         mList = new ArrayList<>();
         stampInfoFragment = new StampInfoFragment(stamp_detail[0]);
         mList.add(stampInfoFragment);
-        StampPriceFragment priceFragment =  new StampPriceFragment();
+        StampPriceFragment priceFragment = new StampPriceFragment();
         mList.add(priceFragment);
         stampPracticeFragment = new StampPracticeFragment(stamp_story[0]);
         mList.add(stampPracticeFragment);
-
 
 
         //设置数据
@@ -282,6 +301,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         mTopVP.setAdapter(mViewPagerAdapter);
         mTopVPI.setVisibility(View.VISIBLE);
         mTopVPI.setViewPager(mTopVP);
+
         //底部导航的ViewPager
         StampTapDetailAdapter adapter = new StampTapDetailAdapter(getSupportFragmentManager(), mList, arr);
         mViewPager.setAdapter(adapter);
@@ -296,6 +316,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         mShared.setOnClickListener(this);
         mBack.setOnClickListener(this);
         mAddAlbum.setOnClickListener(this);
+        mAddStampLl.setOnClickListener(this);
         mTopBtn.setOnClickListener(this);
         home_SV.setOnTouchListener(this);
         mTopVPI.setOnPageChangeListener(this);
@@ -316,9 +337,17 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
                 finishWitchAnimation();
                 break;
             case R.id.stamp_details_add_album://加入邮集
-                UpDateGetInitNet(null,StaticField.JR); // 加入邮集网络请求
+
+                if (mToken.equals("") || mUser_id.equals("")) {
+                    openActivityWitchAnimation(LoginActivity.class);
+                } else {
+                    UpDateGetInitNet(null, StaticField.JR); // 加入邮集网络请求
+                }
                 break;
-            case R.id.stamp_top_detail_top_btn://置顶
+            case R.id.stamp_details_add_stamp_ll://邮集数
+                openActivityWitchAnimation(MyStampActivity.class);
+                break;
+            case R.id.base_top_btn://置顶
                 home_SV.post(new Runnable() {
                     @Override
                     public void run() {
@@ -329,6 +358,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
                 break;
         }
     }
+
 
     /**
      * ScrollView 滑动的监听事件

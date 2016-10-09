@@ -18,12 +18,11 @@
             android:background="#f8f8f8"
             android:orientation="vertical">
 
-            <include layout="@layout/base_viewpager"
-                />
+            <include layout="@layout/base_viewpager" />
 
-            <View style="@style/myline"
-                android:layout_marginTop="10dp"
-                />
+            <View
+                style="@style/myline"
+                android:layout_marginTop="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -36,8 +35,8 @@
                     android:layout_marginLeft="@dimen/left_distance"
                     android:gravity="center_vertical"
                     android:text="@string/market_price"
-                    android:textSize="18sp"
-                    android:textColor="#666" />
+                    android:textColor="@color/font"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/stamp_details_price"
@@ -47,28 +46,48 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="10000"
-                    android:textSize="18sp"
-                    android:textColor="#e20000" />
+                    android:textColor="@color/red_font"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/stamp_details_add_album"
-                    android:layout_width="40dp"
-                    android:layout_height="16dp"
+                    android:layout_width="52dp"
+                    android:layout_height="21dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="12dp"
                     android:background="@mipmap/rectangle_red"
                     android:gravity="center"
                     android:text="@string/join_stamp"
-                    android:textColor="#e20000"
-                    android:textSize="9sp" />
+                    android:textColor="@color/red_font"
+                    android:textSize="11sp" />
 
-                <ImageView
+                <LinearLayout
+                    android:id="@+id/stamp_details_add_stamp_ll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="25dp"
-                    android:src="@mipmap/shop_normal" />
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="15dp"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:id="@+id/stamp_details_add_stamp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/shop_normal" />
+
+                    <TextView
+                        android:id="@+id/stamp_details_add_count"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginBottom="18dp"
+                        android:background="@mipmap/message_bg"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:visibility="invisible" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -95,17 +114,8 @@
                 android:scrollbars="none" />
         </LinearLayout>
     </cn.com.chinau.view.VerticalScrollView>
+
     <!--置顶按钮-->
-    <Button
-        android:id="@+id/stamp_top_detail_top_btn"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="63dp"
-        android:layout_marginRight="10dp"
-        android:background="@mipmap/top"
-        android:gravity="center"
-        android:visibility="gone"
-        />
+    <include layout="@layout/top_btn" />
+
 </RelativeLayout>

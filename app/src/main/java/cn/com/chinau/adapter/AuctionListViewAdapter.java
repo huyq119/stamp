@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
@@ -55,8 +56,10 @@ public class AuctionListViewAdapter extends BaseAdapter {
             holder.mIcon = (ImageView) view.findViewById(R.id.stamp_icon);
             holder.mTitle = (TextView) view.findViewById(R.id.stamp_title);
             holder.mTimeTv = (TextView) view.findViewById(R.id.stamp_time_tv);
+            holder.mTimeLl = (LinearLayout) view.findViewById(R.id.stamp_time_ll);
             holder.mTime = (TimeTextView) view.findViewById(R.id.stamp_time);
             holder.mStatue = (TextView) view.findViewById(R.id.stamp_status);
+            holder.mStampPrice = (TextView) view.findViewById(R.id.stamp_price);
             holder.mPrice = (TextView) view.findViewById(R.id.stamp_starting_price);
             view.setTag(holder);
         } else {
@@ -66,19 +69,29 @@ public class AuctionListViewAdapter extends BaseAdapter {
         holder.mTitle.setText(mGoodsList.getGoods_name());
         holder.mTime.setText(mGoodsList.getLeft_time());
         String mStatues = mGoodsList.getAuction_status();
-        holder.mStatue.setText(mStatues);
-        holder.mPrice.setText(mGoodsList.getCurrent_price());
-        String mStatueTv = holder.mStatue.getText().toString().trim();
-        if (mStatues.equals("未开始")) {
-            holder.mTimeTv.setText("距离开拍:");
-        } else if (mStatues.equals("即将结束")) {
-            holder.mTimeTv.setText("距离结束:");
-        } else if (mStatues.equals("等待开拍")) {
-            holder.mTimeTv.setText("距离开拍:");
+        holder.mPrice.setText("￥" +mGoodsList.getCurrent_price());
+
+
+        if (mStatues.equals("DP")) {
+            holder.mStatue.setText("未开始");
+            holder.mTimeTv.setText("距离开拍：");
+            holder.mStampPrice.setText("起拍价：");
+            holder.mStatue.setTextColor(context.getResources().getColor(R.color.red_font));
+        } else if (mStatues.equals("JP")) {
+            holder.mStatue.setText("竞拍中");
+            holder.mStatue.setTextColor(context.getResources().getColor(R.color.refuse));
+            holder.mTimeTv.setText("剩余时间：");
+            holder.mStampPrice.setText("当前价：");
+        } else if (mStatues.equals("JS")) {
+            holder.mStatue.setText("已结束");
+            holder.mTimeTv.setText("距离开拍：");
+            holder.mStampPrice.setText("成交价：");
+            holder.mTimeLl.setVisibility(View.INVISIBLE);
+            holder.mStatue.setTextColor(context.getResources().getColor(R.color.font_color));
         }
 
 
-        int[] time = {00, 01, 05};
+        int[] time = {01, 01, 05};
 
         holder.mTime.setTimes(time);
         if (!holder.mTime.isRun()) {
@@ -90,7 +103,8 @@ public class AuctionListViewAdapter extends BaseAdapter {
 
     public class ViewHolder {
         public ImageView mIcon;
+        public LinearLayout mTimeLl;
         public TimeTextView mTime;
-        public TextView mTitle, mStatue, mPrice, mTimeTv;
+        public TextView mTitle, mStatue, mPrice, mTimeTv,mStampPrice;
     }
 }

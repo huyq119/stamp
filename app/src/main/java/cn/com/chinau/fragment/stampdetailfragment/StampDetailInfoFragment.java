@@ -33,7 +33,7 @@ public class StampDetailInfoFragment extends Fragment {
 
         View mStampInfo = View.inflate(getActivity(), R.layout.fragment_stampdetailinfo, null);
        mWebView = (WebView) mStampInfo.findViewById(R.id.Web_View);
-        mWebView.loadUrl("http://test.chinau.com.cn:8090/app/dealHtmlData.do?type=DESIGNEREXTEND&sn=151");
+        mWebView.loadUrl(H5url);
 //        SetWebView(H5url);
        MyLog.LogShitou("前面传过来的URL001-->:",H5url);
         return mStampInfo;
@@ -41,8 +41,8 @@ public class StampDetailInfoFragment extends Fragment {
 
     private void SetWebView(String H5url){
         if (mWebView != null){
-//            mWebView.loadUrl(H5url);
-            mWebView.loadUrl("http://test.chinau.com.cn:8090/app/dealHtmlData.do?type=DESIGNERSTAMPDESC&sn=26038086970");
+            mWebView.loadUrl(H5url);
+//            mWebView.loadUrl("http://test.chinau.com.cn:8090/app/dealHtmlData.do?type=DESIGNERSTAMPDESC&sn=26038086970");
          Log.e("传过来的URL001-->:",H5url);
         }
     }

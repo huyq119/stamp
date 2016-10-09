@@ -26,7 +26,8 @@ import cn.com.chinau.adapter.HomeViewPagerAdapter;
 import cn.com.chinau.adapter.StampDetailPagerAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.StampDetailBean;
-import cn.com.chinau.fragment.stampdetailfragment.StampDetailInfoFragment;
+import cn.com.chinau.fragment.stampfragment.StampInfoFragment;
+import cn.com.chinau.fragment.stampfragment.StampPracticeFragment;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
@@ -62,6 +63,12 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private int lastY = 0;
     private int scrollY; // 标记上次滑动位置
     private String mGoods_sn,mGoodsDetail,mVerifyInfo;
+    private TabPageIndicator mIndicator;
+    private StampInfoFragment stampInfoFragment;// 邮票信息
+    private StampPracticeFragment stampPracticeFragment;// 鉴定信息
+
+
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -106,7 +113,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                     String mFeeRates = mStampDetailBean.getService_fee_rate();
                     mFeeRate.setText("("+mFeeRates+"):");
                     String mFees = mStampDetailBean.getService_fee();
-                    mFee.setText(mFees);
+                    mFee.setText("￥"+mFees);
                     String mGoodsSources = mStampDetailBean.getGoods_source();
                     MyLog.LogShitou("邮票类型-->:",mGoodsSources);
                     if (mGoodsSources.equals("YS")){
@@ -128,7 +135,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                         mSellerNo.setText(mPhone);
                     }
 
-                    mGoodsDetail = mStampDetailBean.getGoods_detail();  // 商家信息H5url
+                    mGoodsDetail = mStampDetailBean.getGoods_detail();  // 邮票信息H5url
                     mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
                     MyLog.LogShitou("请求下来的H5url-->:",mGoodsDetail+"--"+mVerifyInfo);
                     initAdapter();
@@ -137,7 +144,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
             }
         }
     };
-    private TabPageIndicator mIndicator;
+    private CustomViewPager mViewPager;
 
 
     @Override
@@ -189,31 +196,31 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         //轮播条的View
         mTopVP = (ViewPager) mStampDetailContent.findViewById(R.id.base_viewpager);
         mTopVPI = (CirclePageIndicator) mStampDetailContent.findViewById(R.id.base_viewpagerIndicator);
-
+        //底部ViewPager的页面
+         mViewPager = (CustomViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
+        mIndicator = (TabPageIndicator) mStampDetailContent.findViewById(R.id.stampdetail_indicator);
     }
 
     private void initAdapter() {
-        //顶部导航的View
+
+        mList = new ArrayList<>();
+        stampInfoFragment = new StampInfoFragment(mGoodsDetail);
+        mList.add(stampInfoFragment);
+        stampPracticeFragment = new StampPracticeFragment(mVerifyInfo);
+        mList.add(stampPracticeFragment);
+
+        //顶部导航的Viewpager
         HomeViewPagerAdapter mViewPagerAdapter = new HomeViewPagerAdapter(mBitmap, small_images, this);
         mTopVP.setAdapter(mViewPagerAdapter);
         mTopVPI.setVisibility(View.VISIBLE);
         mTopVPI.setViewPager(mTopVP);
 
-
-        mList = new ArrayList<>();
-        StampDetailInfoFragment mStampDetailInfoFragment = new StampDetailInfoFragment(this,mGoodsDetail);
-        mList.add(mStampDetailInfoFragment);
-        StampDetailInfoFragment mStampFragment = new StampDetailInfoFragment(this,mVerifyInfo);
-        mList.add(mStampFragment);
-
-        //初始化控件
+        //底部导航的ViewPager
         StampDetailPagerAdapter adapter = new StampDetailPagerAdapter(getSupportFragmentManager(), mList, arr);
-        CustomViewPager mViewPager = (CustomViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
         mViewPager.setAdapter(adapter);
-
-        mIndicator = (TabPageIndicator) mStampDetailContent.findViewById(R.id.stampdetail_indicator);
-        mIndicator.setViewPager(mViewPager);
+        mViewPager.setOffscreenPageLimit(2);
         mIndicator.setVisibility(View.VISIBLE);
+        mIndicator.setViewPager(mViewPager);
 
     }
 
