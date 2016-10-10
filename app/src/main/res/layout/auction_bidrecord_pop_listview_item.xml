@@ -9,7 +9,8 @@
         android:id="@+id/bidRecord_item_time"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_weight="0.8"
+        android:layout_weight="0.4"
+        android:textColor="@color/geay_font"
         android:gravity="center_vertical"
         android:text="2016/10/12 14:24:53"
         android:textSize="13sp" />
@@ -20,6 +21,7 @@
         android:layout_height="35dp"
         android:layout_weight="1.6"
         android:gravity="center"
+        android:textColor="@color/geay_font"
         android:text="13599256535"
         android:textSize="13sp" />
 
@@ -29,6 +31,7 @@
         android:layout_height="35dp"
         android:layout_weight="1.6"
         android:layout_marginRight="12dp"
+        android:textColor="@color/geay_font"
         android:gravity="center_vertical|right"
         android:text="￥9999.99"
         android:textSize="13sp" />

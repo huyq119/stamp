@@ -58,9 +58,6 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     private int num = 0;//初始索引
     private GoodsStampBean mGoodsStampBean;
     private Handler mHandler = new Handler() {
-
-
-
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -201,8 +198,8 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                Log.e("result+邮市~~~~>", result);
-                if (result.equals("-1")) {
+                Log.e("result+商城~~~~>", result);
+                if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
                 Message msg = mHandler.obtainMessage();

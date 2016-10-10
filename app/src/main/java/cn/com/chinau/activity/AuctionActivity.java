@@ -308,7 +308,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
                 MyLog.LogShitou("竞拍类别查询--->", result);
-                if (result.equals("-1")) {
+                if (result.equals("-1")|result.equals("-2")) {
                     GetInitCategory();
                     return;
                 }
@@ -463,7 +463,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
                 MyLog.LogShitou("result+竞拍~~~~>", result);
-                if (result.equals("-1")) {
+                if (result.equals("-1") |result.equals("-2")) {
                     return;
                 }
                 Message msg = mHandler.obtainMessage();

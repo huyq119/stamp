@@ -44,6 +44,10 @@ public class StaticField {
     public static final int SUCCESS = 0;
     public static final int TOUCH_EVENT_ID = 2;// SrcollView滑动的ID
     public static final int HOME_SV_COUNT = 1;// Handler发送的结果码
+    public static final int ADDSUCCESS = 1;// Handler发送的结果码(加入成功)
+    public static final int DeleteSUCCESS = 4;// Handler发送的结果码（删除成功）
+    public static final int ADDSHOPPINGCARTSUCCESS = 3;// Handler发送的结果码（加入购物车）
+    public static final int PRICESUCCESS = 3;// Handler发送的结果码（出价）
 
     //步长
     public final static int OFFSETNUM = 20;
@@ -173,9 +177,12 @@ public class StaticField {
     public static final String WL = "WL";// HG确认回购；WL物流
 
     // 竞拍记录List
-
     public static final String AUCTIONREC = "cn.com.chinau.auctionrec.query";
     public static final String AUCTION_STATUS = "auction_status";// 竞拍状态
+    public static final String AUCTIONOFFER = "cn.com.chinau.auction.offer";// 竞拍商品出价
+    public static final String AUCTIONPRICE = "auction_price";// 出价
+
+
     //竞拍状态：QB全部；CJ出局；CG成功，JPZ竞拍中；
     public static final String CG = "CG";
     public static final String CJ = "CJ";
@@ -196,6 +203,9 @@ public class StaticField {
     public static final String XG = "XG";
     // 收藏夹列表
     public static final String FAVORITELIST = "cn.com.chinau.favorite.list.query";
+    // 修改收藏状态
+    public static final String FAVORITEMODIFY = "cn.com.chinau.favorite.modify";
+
     public static final String GOODS_TYPE = "goods_type";// 商品类型
     // 收货地址管理list
     public static final String ADDRESSLIST = "cn.com.chinau.address.list.query";
@@ -217,6 +227,8 @@ public class StaticField {
     public static final String DSH = "DSH";// 待收货
     public static final String WC = "WC"; // 已完成
     public static final String TK = "TK";// 退款
+    // 购物车
+    public static final String SHOPCARTMODIFY = "cn.com.chinau.shopcart.modify";
 
 
 }

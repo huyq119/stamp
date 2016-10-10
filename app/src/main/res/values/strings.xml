@@ -53,7 +53,7 @@
     <string name="Version_update">版本更新</string>
     <string name="high_praise">给我们好评</string>
     <string name="quit">退出登录</string>
-    <string name="market_price">市场价:</string>
+    <string name="market_price">市场价：</string>
     <string name="join_stamp">加入邮集</string>
     <string name="name">名称</string>
     <string name="stampnumber">志编号:</string>
@@ -72,8 +72,8 @@
     <string name="gum">背胶</string>
     <string name="cancel">取消</string>
     <string name="stamp_shop">邮市</string>
-    <string name="selling_price">售价:</string>
-    <string name="freight">运费:</string>
+    <string name="selling_price">售价：</string>
+    <string name="freight">运费：</string>
     <string name="unDisplay">已下架</string>
     <string name="namecolon">名称:</string>
     <string name="stampnumbercolon">志编号:</string>
@@ -90,7 +90,7 @@
     <string name="Perforationcolon">齿孔度数:</string>
     <string name="editioncolon">版别:</string>
     <string name="freightcolon">运费:</string>
-    <string name="sales_volumecolon">销量:</string>
+    <string name="sales_volumecolon">销量：</string>
     <string name="starting_pricecolon">起拍价:</string>
     <string name="Business_introduction">业务介绍</string>
     <string name="Business_introduction_detail">

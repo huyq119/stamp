@@ -82,60 +82,62 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private ImageView mThreeImage5;
     private SharedPreferences sp;
     private Handler handler = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    super.handleMessage(msg);
-                    switch (msg.what) {
-                        case StaticField.SUCCESS:
-                            Gson gson = new Gson();
-                            mHomeBean = gson.fromJson((String) msg.obj, HomeBean.class);
-                            if (num == 0) {
-                                initAdapter();
-                            } else {
-                                //设置GridView的适配器
-                                setGridViewAdapter();
-                            }
-                            break;
-                        case SYSPARAM:
-                            String mData = (String) msg.obj;
-                            sp.edit().putString("System", mData).commit();
-                            Gson gsons = new Gson();
-                            SysParamQueryBean paramQueryBean = gsons.fromJson(mData, SysParamQueryBean.class);
-                            SysParamQueryBean.Sys_param_value sys_param_value = paramQueryBean.getSys_param_value();
-                            // 获取快递公司
-                            SysParamQueryBean.Sys_param_value.Express_comp expressComp = sys_param_value.getExpress_comp();
-                            String mShunfeng = expressComp.getShunfeng();
-                            String mEms = expressComp.getEms();
-                            // 获取支付类型
-                            ArrayList<String> mPay_type = sys_param_value.getPay_type();
-                            String mALIPAY = mPay_type.get(0);
-                            String mWXPAY = mPay_type.get(1);
-
-                            // 扫码回购页面的数据
-                            SysParamQueryBean.Sys_param_value.Buyback_scan_summary mBuyback_scan_summary = sys_param_value.getBuyback_scan_summary();
-                            mProcess = mBuyback_scan_summary.getProcess();// 业务流程
-                            mImage = mBuyback_scan_summary.getImage();// 扫码回购显示的图片
-                            mSummary = mBuyback_scan_summary.getSummary();// 业务介绍
-                            // 竞拍规则
-                            ArrayList<SysParamQueryBean.Sys_param_value.Auction_rule> mAuction_rule = sys_param_value.getAuction_rule();
-                            String mPrice = mAuction_rule.get(0).getPrice();
-                            String mScope = mAuction_rule.get(0).getScope();
-                            // 银行卡图片
-                            ArrayList<SysParamQueryBean.Sys_param_value.Bank_icon> mBank_icon = sys_param_value.getBank_icon();
-                            String mName = mBank_icon.get(0).getName();
-                            String mUrl = mBank_icon.get(0).getUrl();
-
-                            MyLog.LogShitou("mEms快递公司-->", mEms + "--" + mShunfeng);
-                            MyLog.LogShitou("支付-->", mALIPAY + "--" + mWXPAY);
-                            MyLog.LogShitou("扫码回购头部图片-->", mImage);
-                            MyLog.LogShitou("扫码回购内容-->", mSummary);
-                            MyLog.LogShitou("mAuction_rule出价规则-->", mPrice + "--" + mScope);
-                            MyLog.LogShitou("mBank_icon银行图片-->", mName + "--" + mUrl);
-                            break;
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case StaticField.SUCCESS:
+                    Gson gson = new Gson();
+                    mHomeBean = gson.fromJson((String) msg.obj, HomeBean.class);
+                    if (num == 0) {
+                        initAdapter();
+                    } else {
+                        //设置GridView的适配器
+                        setGridViewAdapter();
                     }
-                }
-            };
+                    break;
+                case SYSPARAM:
+                    String mData = (String) msg.obj;
+                    Gson gsons = new Gson();
+                    SysParamQueryBean paramQueryBean = gsons.fromJson(mData, SysParamQueryBean.class);
+                    String mCode = paramQueryBean.getRsp_code();
+                    if (mCode.equals("0000")) {
+                        sp.edit().putString("System", mData).commit();
+                        SysParamQueryBean.Sys_param_value sys_param_value = paramQueryBean.getSys_param_value();
+                        // 获取快递公司
+                        SysParamQueryBean.Sys_param_value.Express_comp expressComp = sys_param_value.getExpress_comp();
+                        String mShunfeng = expressComp.getShunfeng();
+                        String mEms = expressComp.getEms();
+                        // 获取支付类型
+                        ArrayList<String> mPay_type = sys_param_value.getPay_type();
+                        String mALIPAY = mPay_type.get(0);
+                        String mWXPAY = mPay_type.get(1);
 
+                        // 扫码回购页面的数据
+                        SysParamQueryBean.Sys_param_value.Buyback_scan_summary mBuyback_scan_summary = sys_param_value.getBuyback_scan_summary();
+                        mProcess = mBuyback_scan_summary.getProcess();// 业务流程
+                        mImage = mBuyback_scan_summary.getImage();// 扫码回购显示的图片
+                        mSummary = mBuyback_scan_summary.getSummary();// 业务介绍
+                        // 竞拍规则
+                        ArrayList<SysParamQueryBean.Sys_param_value.Auction_rule> mAuction_rule = sys_param_value.getAuction_rule();
+                        String mPrice = mAuction_rule.get(0).getPrice();
+                        String mScope = mAuction_rule.get(0).getScope();
+                        // 银行卡图片
+                        ArrayList<SysParamQueryBean.Sys_param_value.Bank_icon> mBank_icon = sys_param_value.getBank_icon();
+                        String mName = mBank_icon.get(0).getName();
+                        String mUrl = mBank_icon.get(0).getUrl();
+
+                        MyLog.LogShitou("mEms快递公司-->", mEms + "--" + mShunfeng);
+                        MyLog.LogShitou("支付-->", mALIPAY + "--" + mWXPAY);
+                        MyLog.LogShitou("扫码回购头部图片-->", mImage);
+                        MyLog.LogShitou("扫码回购内容-->", mSummary);
+                        MyLog.LogShitou("mAuction_rule出价规则-->", mPrice + "--" + mScope);
+                        MyLog.LogShitou("mBank_icon银行图片-->", mName + "--" + mUrl);
+                    }
+                    break;
+            }
+        }
+    };
 
 
     @Override
@@ -494,7 +496,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);//签名
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                if (result.equals("-1")) {
+                if (result.equals("-1") | result.equals("-2")) {
                     getSysparamQuery();
                     return;
                 }

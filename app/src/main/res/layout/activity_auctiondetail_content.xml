@@ -308,33 +308,32 @@
                     <include layout="@layout/auction_bidrecord_pop" />
                 </FrameLayout>
 
-                <TextView
-                    android:id="@+id/auction_deatail_over_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:background="#cccccc"
-                    android:gravity="center"
-                    android:textColor="#000"
-                    android:textSize="@dimen/text3_size"
-                    android:visibility="gone" />
-
-
             </LinearLayout>
         </cn.com.chinau.view.VerticalScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_weight="1"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/auction_deatail_over_tv"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="#cccccc"
+                android:gravity="center"
+                android:textColor="#000"
+                android:textSize="@dimen/text3_size"
+                android:text="已结束"
+                />
 
             <View style="@style/myline" />
 
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="43dp"
+                android:layout_height="48dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -343,7 +342,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:padding="8dp"
-                    android:src="@mipmap/start" />
+                    android:scaleType="center"
+                    android:src="@mipmap/collection" />
 
                 <View style="@style/mylist" />
 
@@ -357,7 +357,7 @@
                         android:id="@+id/auction_subtract"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="1.2"
                         android:gravity="center"
                         android:text="-"
                         android:textColor="#000"
@@ -367,7 +367,7 @@
                         android:id="@+id/auction_count"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:gravity="center"
                         android:text="3"
                         android:textColor="#000"
@@ -377,7 +377,7 @@
                         android:id="@+id/auction_add"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="1.2"
                         android:gravity="center"
                         android:text="+"
                         android:textColor="#000"
@@ -393,7 +393,7 @@
                     android:gravity="center"
                     android:text="出价"
                     android:textColor="#fff"
-                    android:textSize="12sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
 

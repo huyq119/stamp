@@ -30,6 +30,7 @@ import cn.com.chinau.adapter.BidRecordListViewAdapter;
 import cn.com.chinau.adapter.HomeViewPagerAdapter;
 import cn.com.chinau.adapter.StampDetailPagerAdapter;
 import cn.com.chinau.base.BaseActivity;
+import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.StampDetailBean;
 import cn.com.chinau.dialog.AuctionRegulationsAgreementDialog;
 import cn.com.chinau.fragment.stampfragment.StampInfoFragment;
@@ -64,7 +65,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     private int lastY = 0;
     private int scrollY; // 标记上次滑动位置
     private int intCount = 0;// 每次出价加减的值
-    private String count, mGoods_sn, mGoodsDetail, mVerifyInfo;// 获取出价的值
+    private String count, mGoods_sn, mGoodsDetail, mVerifyInfo,mToken,mUser_id,mIsFavorite;// 获取出价的值
     private int goods_storage = 1; //出价最低价
     private AuctionRegulationsAgreementDialog auctiondialog; // 协议dialog
     private boolean bidFlag = false, addFlag;// 出价标识,加价标识
@@ -74,6 +75,11 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     private FrameLayout mBidRecordFl;
     private ArrayList<StampDetailBean.OfferListData> mBidList;
     private SharedPreferences sp;
+    private CustomViewPager mViewPager;
+    private TabPageIndicator mIndicator;
+    private StampInfoFragment stampInfoFragment;
+    private StampPracticeFragment stampPracticeFragment;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -94,7 +100,6 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     // 赋值头布局显示的图片
                     if (mStampDetailBean.getGoods_images() != null) {
                         String[] mGoods_images = mStampDetailBean.getGoods_images();
-//                       MyLog.LogShitou("mGoods_images商品图片001-->:", mGoods_images.length + "");
                         small_images = new String[mGoods_images.length];
                         big_images = new String[mGoods_images.length];
                         for (int i = 0; i < mGoods_images.length; i++) {
@@ -102,8 +107,6 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                             small_images[i] = image[0];// 小图集合
                             big_images[i] = image[1];// 大图集合
                         }
-//                       MyLog.LogShitou("small_images-->:", small_images.length + "");
-//                       MyLog.LogShitou("big_images-->:", big_images.length + "");
                     }
 
                     String mGoods_name = mStampDetailBean.getGoods_name();
@@ -111,6 +114,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     mGoodsName.setText(mGoods_name);
                     String mPrice = mStampDetailBean.getCurrent_price();
                     mPrivce.setText("￥" + mPrice);
+                    mCount.setText(mPrice);
                    String status = mStampDetailBean.getAuction_status();
                     if(status.equals("DP")){
                         mStatus.setText("未开始");
@@ -149,6 +153,14 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                         mNumber.setText(mPhone);
                     }
 
+                    mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
+                    MyLog.LogShitou("商品收藏状态-->:", mIsFavorite);
+                    if (mIsFavorite.equals("0")) { // 未收藏
+                        mCollect.setImageResource(R.mipmap.collection);
+                    } else if (mIsFavorite.equals("1")) { // 已收藏
+                        mCollect.setImageResource(R.mipmap.collections);
+                    }
+
                     mGoodsDetail = mStampDetailBean.getGoods_detail();  // 商家信息H5url
                     mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
                     MyLog.LogShitou("竞拍详情请求下来的H5url-->:", mGoodsDetail + "--" + mVerifyInfo);
@@ -161,16 +173,37 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                         mBidCount.setText("0");
                     }
                     initAdapter();
-
-
+                    break;
+                case StaticField.ADDSUCCESS:// 收藏成功
+                    Gson gsons = new Gson();
+                    BaseBean mBaseBean = gsons.fromJson((String) msg.obj, BaseBean.class);
+                    String mRsp_code = mBaseBean.getRsp_code();
+                    if (mRsp_code.equals("0000")) {
+                        mCollect.setImageResource(R.mipmap.collections);
+                        initData();// 再次详情请求,获取收藏状态
+                    }
+                    break;
+                case StaticField.DeleteSUCCESS:// 取消收藏成功
+                    Gson gsonss = new Gson();
+                    BaseBean mBaseBeans = gsonss.fromJson((String) msg.obj, BaseBean.class);
+                    String mRsp_codes = mBaseBeans.getRsp_code();
+                    if (mRsp_codes.equals("0000")) {
+                        mCollect.setImageResource(R.mipmap.collection);
+                        initData(); // 再次详情请求,获取收藏状态
+                    }
+                    break;
+                case StaticField.PRICESUCCESS:// 出价成功
+                    Gson gsones = new Gson();
+                    BaseBean mBaseBeanees = gsones.fromJson((String) msg.obj, BaseBean.class);
+                    String mRsp_codees = mBaseBeanees.getRsp_code();
+                    if (mRsp_codees.equals("0000")) {
+                        MyToast.showShort(AuctionDetailActivity.this,"出价成功");
+                    }
                     break;
             }
         }
     };
-    private CustomViewPager mViewPager;
-    private TabPageIndicator mIndicator;
-    private StampInfoFragment stampInfoFragment;
-    private StampPracticeFragment stampPracticeFragment;
+
 
 
     @Override
@@ -191,7 +224,8 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initView() {
-
+        mToken = sp.getString("token", "");
+        mUser_id = sp.getString("userId", "");
         // 获取竞拍页面传过来的的值
         Bundle bundle = getIntent().getExtras();
         mGoods_sn = bundle.getString(StaticField.GOODS_SN);
@@ -218,7 +252,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         mCollect = (ImageView) mAuctionDetailContent.findViewById(R.id.auction_collect);
         mSubtract = (TextView) mAuctionDetailContent.findViewById(R.id.auction_subtract);
         mCount = (TextView) mAuctionDetailContent.findViewById(R.id.auction_count);
-        mCount.setText("0"); // 初始化值为0
+//        mCount.setText("0"); // 初始化值为0
         mAdd = (TextView) mAuctionDetailContent.findViewById(R.id.auction_add);
         mBid = (TextView) mAuctionDetailContent.findViewById(R.id.auction_bid);
 
@@ -294,14 +328,12 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 HashMap<String, String> params = new HashMap<>();
                 params.put(StaticField.SERVICE_TYPE, StaticField.GOODSDETAIL);// 接口名称
                 params.put(StaticField.GOODS_SN, mGoods_sn); // 商品编号
-                String token = sp.getString("token", "");
-                String user_id = sp.getString("userId", "");
 
-                MyLog.LogShitou("标识+ID-->", token + "--" + user_id);
-                if (!token.equals("") || !user_id.equals("")) {
-                    params.put(StaticField.TOKEN, token); // 登录标识
-                    params.put(StaticField.USER_ID, user_id); // 用户ID
-                    MyLog.LogShitou("01-->", token + "--" + user_id);
+                MyLog.LogShitou("标识+ID-->", mToken + "--" + mUser_id);
+                if (!mToken.equals("") || !mUser_id.equals("")) {
+                    params.put(StaticField.TOKEN, mToken); // 登录标识
+                    params.put(StaticField.USER_ID, mUser_id); // 用户ID
+                    MyLog.LogShitou("01-->", mToken + "--" + mUser_id);
                 }
 
                 String mapSort = SortUtils.MapSort(params);
@@ -322,6 +354,79 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         });
     }
 
+    /**
+     * 修改收藏夹网络请求
+     *
+     * @param op_type 操作类型：SC删除,JR加入
+     */
+    private void DeleteGetInitNet(final String op_type) {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.FAVORITEMODIFY);// 接口名称
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.GOODS_SN, mGoods_sn);//  邮票编号
+                params.put(StaticField.OP_TYPE, op_type);// 操作类型
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("result收藏修改-->:", result);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+
+                if (op_type.equals("JR")) {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.ADDSUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.DeleteSUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+
+            }
+        });
+    }
+
+    private void AuctionGoodsPriceDate() {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.AUCTIONOFFER);// 接口名称
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.GOODS_SN, mGoods_sn);//  邮票编号
+                String mPrice = mCount.getText().toString().trim();
+                params.put(StaticField.AUCTIONPRICE, mPrice);// 操作类型
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("result出价-->:", result);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+                    Message msg = mHandler.obtainMessage();
+                        msg.what = StaticField.PRICESUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+
+            }
+        });
+    }
     private void initListener() {
         mShared.setOnClickListener(this);
         mBack.setOnClickListener(this);
@@ -384,8 +489,15 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
                 break;
             case R.id.auction_collect:// 收藏
-                MyToast.showShort(this, "点击了收藏");
-
+                if (mToken.equals("") || mUser_id.equals("")) {
+                    openActivityWitchAnimation(LoginActivity.class);
+                } else {
+                    if (mIsFavorite.equals("0")) {
+                        DeleteGetInitNet(StaticField.JR);// 修改收藏网络请求
+                    } else if (mIsFavorite.equals("1")) {
+                        DeleteGetInitNet(StaticField.SC);
+                    }
+                }
                 break;
             case R.id.auction_subtract:// 出价减
 

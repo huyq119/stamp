@@ -29,7 +29,7 @@ public class MainActivity extends FragmentActivity implements LazyViewPager.OnPa
     private List<Fragment> mList;
 
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -98,13 +98,13 @@ public class MainActivity extends FragmentActivity implements LazyViewPager.OnPa
             if (Login.equals("login")) {
                 mViewPager.setCurrentItem(4);
                 mRadioGroup.check(R.id.Radio_my);
+
+            } else if (Login.equals("SelfMallDetail")) {
+                mViewPager.setCurrentItem(3);
+                mRadioGroup.check(R.id.Radio_shop);
             }
-//            else if (Login.equals("Order")) {
-//                Log.e("订单页面", "是否执行");
-//                mViewPager.setCurrentItem(2);
-//                mRadioGroup.check(R.id.Radio_order);
-//            }
         }
+
     }
 
 
