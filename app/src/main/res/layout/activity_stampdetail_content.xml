@@ -133,8 +133,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/distance"
                             android:layout_marginBottom="@dimen/distance"
+                            android:layout_marginTop="@dimen/distance"
                             android:gravity="center"
                             android:orientation="horizontal">
 
@@ -176,8 +176,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <View
-                        style="@style/myline"/>
+                    <View style="@style/myline" />
 
                     <View
                         android:layout_width="match_parent"
@@ -273,8 +272,7 @@
                         android:id="@+id/stampdetail_indicator"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                     <cn.com.chinau.view.CustomViewPager
                         android:id="@+id/stampdetail_viewpager"
@@ -289,63 +287,100 @@
             </cn.com.chinau.view.VerticalScrollView>
         </LinearLayout>
         <!-- 底下的代码，导航栏是不随SrcollView滑动的-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
 
-            <View style="@style/myline" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="43dp"
-                android:orientation="horizontal">
-
-
-                <ImageView
-                    android:id="@+id/stamp_details_collect"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="8dp"
-                    android:src="@mipmap/collection" />
-
-                <View style="@style/mylist" />
-
-                <ImageView
-                    android:id="@+id/stamp_details_shoppingCart"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="8dp"
-                    android:src="@mipmap/shop_gray" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/stamp_details_addShoppingCart"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2.5"
-                    android:background="#ff8503"
+                    android:id="@+id/stamp_detail_goods_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="#cccccc"
                     android:gravity="center"
-                    android:text="加入购物车"
-                    android:textColor="#fff"
-                    android:textSize="12sp" />
+                    android:text="已下架"
+                    android:textColor="#000"
+                    android:textSize="@dimen/text3_size"
+                    android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/stamp_details_buyNow"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2.5"
-                    android:background="#e20000"
-                    android:gravity="center"
-                    android:text="立即购买"
-                    android:textColor="#fff"
-                    android:textSize="12sp" />
+                <View style="@style/myline" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/stamp_details_collect"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.2"
+                        android:padding="8dp"
+                        android:gravity="center"
+                        android:scaleType="center"
+                        android:src="@mipmap/collection" />
+
+                    <View style="@style/mylist" />
+
+                    <LinearLayout
+                        android:id="@+id/stamp_details_shopping_ll"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.2"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/stamp_deatail_shopping"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/shop_gray" />
+
+                        <TextView
+                            android:id="@+id/stamp_details_shoppingCart"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@mipmap/message_bg"
+                            android:gravity="center"
+                            android:text="+10"
+                            android:textColor="@color/white"
+                            android:textSize="8sp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/stamp_details_addShoppingCart"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5"
+                        android:background="#ff8503"
+                        android:gravity="center"
+                        android:text="加入购物车"
+                        android:textColor="#fff"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/stamp_details_buyNow"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5"
+                        android:background="#e20000"
+                        android:gravity="center"
+                        android:text="立即购买"
+                        android:textColor="#fff"
+                        android:textSize="16sp" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
-
     <!--置顶按钮-->
     <include layout="@layout/top_btn" />
 

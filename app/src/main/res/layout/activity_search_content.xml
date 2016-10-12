@@ -12,13 +12,14 @@
         android:layout_marginLeft="@dimen/left_distance"
         android:layout_marginTop="15dp"
         android:text="@string/Hot_Search"
-        android:textSize="11sp" />
+        android:textColor="@color/font_color"
+        android:textSize="14sp" />
 
     <View
         style="@style/myline"
         android:layout_marginLeft="@dimen/left_distance" />
 
-    <com.example.stamp.view.FlowLayout
+    <cn.com.chinau.view.FlowLayout
         android:id="@+id/search_fl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,7 +41,8 @@
             android:layout_marginLeft="@dimen/left_distance"
             android:layout_marginTop="15dp"
             android:text="@string/Historical_Search"
-            android:textSize="11sp" />
+            android:textColor="@color/font_color"
+            android:textSize="14sp" />
 
         <View
             style="@style/myline"
@@ -64,7 +66,7 @@
             android:drawablePadding="5dp"
             android:gravity="center"
             android:text="@string/clean_search_historical"
-            android:textColor="#000"
-            android:textSize="9sp" />
+            android:textColor="@color/black"
+            android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

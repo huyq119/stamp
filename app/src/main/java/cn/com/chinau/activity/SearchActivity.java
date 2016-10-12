@@ -1,16 +1,23 @@
 package cn.com.chinau.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +25,8 @@ import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.SearchListViewAdapter;
 import cn.com.chinau.base.BaseActivity;
+import cn.com.chinau.bean.CategoryRMBean;
+import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.SPUtils;
 import cn.com.chinau.view.FlowLayout;
 
@@ -35,9 +44,10 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private EditText mSearchText;//搜索文字内容
     private TextView mClean;//清除搜索历史
     private LinearLayout mHistoricalView;//搜索历史整块布局
-
-    private String[] arr = {"猴票", "龙票猴票", "大猴票", "金属邮票金属邮票金属邮票金属邮票", "猴票", "猴票", "猴票", "龙票猴票", "大猴票", "龙票猴票", "大猴票", "猴票", "龙票猴票", "大猴票", "金属邮票", "猴票", "猴票", "猴票", "猴票", "龙票猴票", "大猴票", "金属邮票", "猴票", "猴票", "猴票"};
+    private String[] mArrName;
     private List<String> mHList;
+    private SharedPreferences sp;
+    private String mCategory;
 
     @Override
     public View CreateTitle() {
@@ -48,21 +58,25 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     @Override
     public View CreateSuccess() {
         mSearchContent = View.inflate(this, R.layout.activity_search_content, null);
+        sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         initSuccessView();
         initData();
         initListener();
         return mSearchContent;
     }
 
-
     /**
      * 初始化控件
      */
     private void initSuccessView() {
+
         //标题的控件
         mBack = (ImageView) mSearchTitle.findViewById(R.id.search_title_back);
         mSearch = (ImageView) mSearchTitle.findViewById(R.id.search_title_search);
         mSearchText = (EditText) mSearchTitle.findViewById(R.id.search_title_scanContent);
+        // 强制隐藏Android输入法窗口
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mSearchText.getWindowToken(),0);
         //内容的控件
         mClean = (TextView) mSearchContent.findViewById(R.id.search_clean);
         mFlowLayout = (FlowLayout) mSearchContent.findViewById(R.id.search_fl);
@@ -70,15 +84,30 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         mHistoricalView = (LinearLayout) mSearchContent.findViewById(R.id.search_Historical_LV);
     }
 
-
     /**
      * 初始化数据(流式布局和搜索历史)
      */
     private void initData() {
-        setFlowData(arr, mFlowLayout);
-        setListData();
-    }
+        mCategory = sp.getString("Category1", "");// 保存在本地热搜数据
+//        MyLog.LogShitou("一级类别0001----->:", mCategory);
+        if (mCategory != null) {
+            Gson gson = new Gson();
+            CategoryRMBean mCategoryRMBean = gson.fromJson(mCategory, CategoryRMBean.class);
+            ArrayList<CategoryRMBean.Category> list = mCategoryRMBean.getCategory();
+            CategoryRMBean.Category SubCategory = list.get(0);
+            ArrayList<CategoryRMBean.Category.SubCategory> subCategory1 = SubCategory.getSubCategory();
 
+            int sub = subCategory1.size();// 获取subCategory1的个数
+            mArrName = new String[sub];// 一级分类
+            for (int i = 0; i < subCategory1.size(); i++) {
+                mArrName[i] = subCategory1.get(i).getName();
+//                MyLog.LogShitou("一级类别0001----->:", mArrName[i]);
+            }
+        }
+
+        setFlowData(mArrName, mFlowLayout);  // 设置热门搜索的标签
+        setListData(); // 设置搜索历史ListView
+    }
 
     /**
      * 初始化监听
@@ -87,6 +116,21 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         mBack.setOnClickListener(this);
         mSearch.setOnClickListener(this);
         mClean.setOnClickListener(this);
+
+        mHistoricalSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // 点击搜索历史记录进行搜索
+                String data = mHList.get(i);
+                if (!TextUtils.isEmpty(data)) {
+                    //传递的搜索内容
+                    Bundle bundle = new Bundle();
+                    bundle.putString(StaticField.SEARCHBUNDLE, data);
+                    openActivityWitchAnimation(SearchDetailActivity.class, bundle);
+                }
+
+            }
+        });
     }
 
 
@@ -132,10 +176,24 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private void setFlowData(String[] data, FlowLayout layout) {
         LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 0; i < data.length; i++) {
-            TextView tv = (TextView) inflater.inflate(R.layout.flowlayout_tv_item, layout, false);
+          final TextView  tv = (TextView) inflater.inflate(R.layout.flowlayout_tv_item, layout, false);
             tv.setText(data[i]);
+            tv.setTag(data[i]);
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String tag = (String) tv.getTag();
+                    MyLog.LogShitou("点击了啥", tag);
+                    //传递的搜索内容
+                    Bundle bundle = new Bundle();
+                    bundle.putString(StaticField.SEARCHBUNDLE, tag);
+                    openActivityWitchAnimation(SearchDetailActivity.class, bundle);
+                }
+            });
             layout.addView(tv);
         }
+
+
     }
 
     /**

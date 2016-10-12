@@ -45,9 +45,6 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
     private ImageView mBack, mShared, mCollection, mShopping;
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
-    private String[] arrImage = {"http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg",
-            "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg",
-            "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"};
     private String mGoods_sn, mGoodsDetai, mToken, mUser_id, mIsFavorite;
     private String[] small_images, big_images;
     private WebView mWeb; // 邮票信息url

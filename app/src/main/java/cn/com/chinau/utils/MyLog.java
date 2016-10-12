@@ -92,7 +92,7 @@ public class MyLog {
                     start = end;
                     end = end + LOG_MAXLENGTH;
                 } else {
-                    Log.e(type + i, msg.substring(start, strLength));
+                    Log.e(type+i+"--->", msg.substring(start, strLength));
                     break;
                 }
             }

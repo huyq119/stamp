@@ -48,6 +48,16 @@ public class StaticField {
     public static final int DeleteSUCCESS = 4;// Handler发送的结果码（删除成功）
     public static final int ADDSHOPPINGCARTSUCCESS = 3;// Handler发送的结果码（加入购物车）
     public static final int PRICESUCCESS = 3;// Handler发送的结果码（出价）
+    public static final int QUERYSUCCESS = 1;// Handler发送的结果码（地址查询）
+    public static final int DETAILSUCCESS = 2;// Handler发送的结果码（编辑地址查询）
+    public static final int ADDRESSSUCCESS = 2;// Handler发送的结果码（获取地址省市区）
+
+    public static final int CLASS_SUCCESS = 3;// Handler发送的结果码（热搜类别查询）
+    public static final int ML_SUCCESS = 4;// Handler发送的结果码（邮票目录类别查询）
+    public static final int SC_SUCCESS = 5;// Handler发送的结果码（商城类别查询）
+    public static final int DSF_SUCCESS = 6;// Handler发送的结果码（第三方类别查询）
+    public static final int YS_SUCCESS = 7;// Handler发送的结果码（邮市类别查询）
+    public static final int JP_SUCCESS = 8;// Handler发送的结果码（竞拍类别查询）
 
     //步长
     public final static int OFFSETNUM = 20;
@@ -89,6 +99,8 @@ public class StaticField {
     public static final String SJ = "SJ";
     public static final String JG = "JG";
     public static final String ML = "ML";
+    public static final String SC_ZY = "SC_ZY";
+    public static final String SC_DSF = "SC_DSF";
 
 
     public static final String A = "A";//升序
@@ -141,10 +153,11 @@ public class StaticField {
     public static final String CONDITION = "query_condition";//搜索条件
     public static final String SCOPE = "query_scope";//查询范围
     public static final String SORT_BY = "sort_by";
-    public static final String QB = "QB";//QB全部
-    public static final String SC = "SC";//SC商城
-    public static final String YS = "YS";//YS邮市
-    public static final String JP = "JP";//JP竞拍
+    public static final String QB = "QB"; //QB全部
+    public static final String SC = "SC"; //SC商城
+    public static final String YS = "YS"; //YS邮市
+    public static final String JP = "JP"; //JP竞拍
+    public static final String RM = "RM"; //RM热门
 
     // 我的页面，商品订单跳转的标识键
     public static final String ORDERS = "orders";
@@ -219,6 +232,8 @@ public class StaticField {
     public static final String PROV = "prov";
     public static final String CITY = "city";
     public static final String AREA = "area";
+    // 修改地址url（删除；修改；新增 ）
+    public static final String UPDATERESSMODIFY= "cn.com.chinau.address.modify";
 
     // 商品订单list
     public static final String GOODSORDERLIST = "cn.com.chinau.orderlist.query";

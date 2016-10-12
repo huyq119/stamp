@@ -6,7 +6,7 @@ import java.util.List;
  * 省市县实体类
  * Created by Administrator on 2016/8/22.
  */
-public class AddressBean {
+public class AddressBean extends BaseBean{
     private List<Province> province_list;
 
     public List<Province> getProvince_list() {
@@ -17,10 +17,15 @@ public class AddressBean {
         this.province_list = province_list;
     }
 
-    public class Province {
+    public static class Province {
         private String province_code; //省份代码
         private String province_name;//省份名称
         private List<City> city_list;
+
+        public Province(String province_code, String province_name) {
+            this.province_code = province_code;
+            this.province_name = province_name;
+        }
 
         public String getProvince_code() {
             return province_code;
@@ -47,10 +52,15 @@ public class AddressBean {
         }
     }
 
-    public class City {
+    public static class City {
         private String city_code; //省份代码
         private String city_name;//省份名称
         private List<Area> area_list;
+
+        public City(String city_code, String city_name) {
+            this.city_code = city_code;
+            this.city_name = city_name;
+        }
 
         public String getCity_code() {
             return city_code;

@@ -1,5 +1,7 @@
 package cn.com.chinau.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -20,11 +23,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cn.com.chinau.MainActivity;
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.HomeViewPagerAdapter;
 import cn.com.chinau.adapter.StampDetailPagerAdapter;
 import cn.com.chinau.base.BaseActivity;
+import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.StampDetailBean;
 import cn.com.chinau.fragment.stampfragment.StampInfoFragment;
 import cn.com.chinau.fragment.stampfragment.StampPracticeFragment;
@@ -49,20 +54,16 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private List<Fragment> mList;
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
-//    private String[] arrImage = {"http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg",
-//            "http://f.hiphotos.baidu.com/image/h%3D200/sign=a31c9680a1773912db268261c8198675/730e0cf3d7ca7bcb5f591712b6096b63f624a8e9.jpg",
-//            "http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg"};
     private String[] small_images,big_images; // viewPager小图，大图
-    private ImageView mBack, mShared, mCollect, mShoppingCart;// 返回，分享，收藏，购物车
-    private TextView mTitle, mSellerNo, mAddShoppingCart, mBuyNow,
-            mGoodsName,mCurrentPrice,mFreight,mSaleCount,mFeeRate,mFee,
-            mGoodsSource,mSellerName;// 标题，商家账号，加入购物车，立即购买
+    private ImageView mBack, mShared, mCollect;// 返回，分享，收藏
+    private TextView mTitle, mSellerNo,mGoodsName,mCurrentPrice,mFreight,mSaleCount,mFeeRate,mFee,
+            mGoodsSource,mSellerName,mGoodsStatus,mShoppingCart, mShoppingCount, mAddShoppingCart, mBuyNow;// 标题，商家账号，加入购物车，立即购买
     private Button mTopBtn;
     private VerticalScrollView home_SV;
     private View contentView;
     private int lastY = 0;
     private int scrollY; // 标记上次滑动位置
-    private String mGoods_sn,mGoodsDetail,mVerifyInfo;
+    private String mGoods_sn,mGoodsDetail,mVerifyInfo,mToken,mUser_id,mIsFavorite;
     private TabPageIndicator mIndicator;
     private StampInfoFragment stampInfoFragment;// 邮票信息
     private StampPracticeFragment stampPracticeFragment;// 鉴定信息
@@ -97,8 +98,6 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                            small_images[i] = image[0];// 小图集合
                            big_images[i] = image[1];// 大图集合
                        }
-//                       MyLog.LogShitou("small_images-->:", small_images.length + "");
-//                       MyLog.LogShitou("big_images-->:", big_images.length + "");
                    }
 
                     String mGoods_name = mStampDetailBean.getGoods_name();
@@ -138,13 +137,64 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                     mGoodsDetail = mStampDetailBean.getGoods_detail();  // 邮票信息H5url
                     mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
                     MyLog.LogShitou("请求下来的H5url-->:",mGoodsDetail+"--"+mVerifyInfo);
-                    initAdapter();
 
+                    mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
+                    MyLog.LogShitou("商品收藏状态-->:", mIsFavorite);
+                    if (mIsFavorite.equals("0")) { // 未收藏
+                        mCollect.setImageResource(R.mipmap.collection);
+                    } else if (mIsFavorite.equals("1")) { // 已收藏
+                        mCollect.setImageResource(R.mipmap.collections);
+                    }
+
+                    String mCartGoodsCount = mStampDetailBean.getCart_goods_count();// 购物车里的商品数量
+                    MyLog.LogShitou("商品数量-->:", mCartGoodsCount);
+                    if (!mCartGoodsCount.equals("0")&& !mCartGoodsCount.equals("")) {
+                        mShoppingCount.setVisibility(View.VISIBLE);
+                        mShoppingCount.setText("+"+mCartGoodsCount);
+                        MyLog.LogShitou("商品数量---002>","走了吗。。。。。。。。。。");
+                    }
+
+                    String mGoodsStatuss = mStampDetailBean.getGoods_status();// 商品状态
+                    MyLog.LogShitou("商品状态-->:", mGoodsStatuss);
+                    if (mGoodsStatuss.equals("0")) {
+                        mGoodsStatus.setVisibility(View.VISIBLE);
+                        mGoodsStatus.setText("已下架");
+                        // 加入购物车，立即购买按钮背景，字体置灰，不可点击
+                        mAddShoppingCart.setBackgroundColor(getResources().getColor(R.color.gary));
+                        mBuyNow.setBackgroundColor(getResources().getColor(R.color.gary));
+                        mAddShoppingCart.setTextColor(getResources().getColor(R.color.font));
+                        mBuyNow.setTextColor(getResources().getColor(R.color.font));
+                        mAddShoppingCart.setEnabled(false);
+                        mBuyNow.setEnabled(false);
+                    }
+                    initAdapter();
+                    break;
+                case StaticField.ADDSUCCESS:// 收藏成功
+                    Gson gsons = new Gson();
+                    BaseBean mBaseBean = gsons.fromJson((String) msg.obj, BaseBean.class);
+                    String mRsp_code = mBaseBean.getRsp_code();
+                    if (mRsp_code.equals("0000")) {
+                        mCollect.setImageResource(R.mipmap.collections);
+                        initData();// 再次详情请求,获取收藏状态
+                    }
+                    break;
+                case StaticField.DeleteSUCCESS:// 取消收藏成功
+                    Gson gsonss = new Gson();
+                    BaseBean mBaseBeans = gsonss.fromJson((String) msg.obj, BaseBean.class);
+                    String mRsp_codes = mBaseBeans.getRsp_code();
+                    if (mRsp_codes.equals("0000")) {
+                        mCollect.setImageResource(R.mipmap.collection);
+                        initData(); // 再次详情请求,获取收藏状态
+                    }
+                    break;
+                default:
                     break;
             }
         }
     };
     private CustomViewPager mViewPager;
+    private LinearLayout mShoppingLl;
+    private SharedPreferences sp;
 
 
     @Override
@@ -157,6 +207,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     @Override
     public View CreateSuccess() {
         mStampDetailContent = View.inflate(this, R.layout.activity_stampdetail_content, null);
+        sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         initView();
         initData();
         initListener();
@@ -164,6 +215,8 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
+        mToken = sp.getString("token", "");
+        mUser_id = sp.getString("userId", "");
         // 获取邮市页面传过来的的值
         Bundle bundle = getIntent().getExtras();
         mGoods_sn = bundle.getString(StaticField.GOODS_SN);// 商品编号
@@ -184,12 +237,13 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         mGoodsSource = (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_goods_source);// 商品类型
         mSellerName = (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_seller_name);// 商家名称
         mSellerNo = (TextView) mStampDetailContent.findViewById(R.id.stamp_details_seller_no);// 商家账号
+        mGoodsStatus = (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_goods_status);// 商品状态
 
-
-        mCollect = (ImageView) mStampDetailContent.findViewById(R.id.stamp_details_collect);
-        mShoppingCart = (ImageView) mStampDetailContent.findViewById(R.id.stamp_details_shoppingCart);
-        mAddShoppingCart = (TextView) mStampDetailContent.findViewById(R.id.stamp_details_addShoppingCart);
-        mBuyNow = (TextView) mStampDetailContent.findViewById(R.id.stamp_details_buyNow);
+        mCollect = (ImageView) mStampDetailContent.findViewById(R.id.stamp_details_collect);// 收藏
+        mShoppingLl = (LinearLayout) mStampDetailContent.findViewById(R.id.stamp_details_shopping_ll);// 购物车
+        mShoppingCount = (TextView) mStampDetailContent.findViewById(R.id.stamp_details_shoppingCart);// 购物车商品数量
+        mAddShoppingCart = (TextView) mStampDetailContent.findViewById(R.id.stamp_details_addShoppingCart);// 加入购物车
+        mBuyNow = (TextView) mStampDetailContent.findViewById(R.id.stamp_details_buyNow);// 立即购买
 
         home_SV = (VerticalScrollView) mStampDetailContent.findViewById(R.id.home_SV);
 
@@ -228,12 +282,12 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private void initListener() {
         mShared.setOnClickListener(this);
         mBack.setOnClickListener(this);
-        mCollect.setOnClickListener(this);
-        mShoppingCart.setOnClickListener(this);
-        mAddShoppingCart.setOnClickListener(this);
-        mBuyNow.setOnClickListener(this);
         mTopBtn.setOnClickListener(this);
         home_SV.setOnTouchListener(this);
+        mCollect.setOnClickListener(this);
+        mShoppingLl.setOnClickListener(this);
+        mAddShoppingCart.setOnClickListener(this);
+        mBuyNow.setOnClickListener(this);
 
     }
 
@@ -250,40 +304,6 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         RequestNet();
     }
 
-    /**
-     * 商品邮市详情网络请求
-     */
-    private void RequestNet() {
-        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                HashMap<String, String> params = new HashMap<>();
-                params.put(StaticField.SERVICE_TYPE, StaticField.GOODSDETAIL);// 接口名称
-                params.put(StaticField.GOODS_SN, mGoods_sn); // 商品编号
-                String token = "";
-                String user_id = "";
-                if (!(token.equals("") || user_id.equals(""))) {
-                    params.put(StaticField.TOKEN, token); // 登录标识
-                    params.put(StaticField.USER_ID, user_id); // 用户ID
-                }
-                String mapSort = SortUtils.MapSort(params);
-                String md5code = Encrypt.MD5(mapSort);
-                params.put(StaticField.SIGN, md5code); // 签名
-                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-
-                MyLog.LogShitou("result邮市详情~~~~>", result);
-                if (result.equals("-1")) {
-                    return;
-                }
-
-                Message msg = mHandler.obtainMessage();
-                msg.what = StaticField.SUCCESS;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
-            }
-        });
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -294,16 +314,36 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 openActivity(SharedActivity.class);
                 break;
             case R.id.stamp_details_collect:// 收藏
-                MyToast.showShort(this, "点击了收藏");
+                if (mToken.equals("") || mUser_id.equals("")) {
+                    openActivityWitchAnimation(LoginActivity.class);
+                } else {
+
+                    if (mIsFavorite.equals("0")) {
+                        DeleteGetInitNet(StaticField.JR);// 修改收藏网络请求
+                    } else if (mIsFavorite.equals("1")) {
+                        DeleteGetInitNet(StaticField.SC);
+                    }
+                }
                 break;
-            case R.id.stamp_details_shoppingCart:// 购物车
-                MyToast.showShort(this, "购物车需要跳转1701页面");
+            case R.id.stamp_details_shopping_ll:// 购物车
+                Intent intent = new Intent(StampDetailActivity.this, MainActivity.class);
+                intent.putExtra("Login", "StampDetail");
+                startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+
                 break;
             case R.id.stamp_details_addShoppingCart:// 加入购物车
                 MyToast.showShort(this, "加入购物车");
                 break;
             case R.id.stamp_details_buyNow:// 立即购买
-                MyToast.showShort(this, "立即购买跳转至1001页面");
+                Intent intents = new Intent(StampDetailActivity.this, MainActivity.class);
+                intents.putExtra("Login", "StampDetail");
+                startActivity(intents);
+                finish();
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+                MyToast.showShort(this, "点击了立即购买");
+
                 break;
             case R.id.base_top_btn:// 置顶
                 home_SV.post(new Runnable() {
@@ -315,6 +355,81 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 mTopBtn.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    /**
+     * 商品邮市详情网络请求
+     */
+    private void RequestNet() {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.GOODSDETAIL);// 接口名称
+                params.put(StaticField.GOODS_SN, mGoods_sn); // 商品编号
+                if (!mToken.equals("") || !mUser_id.equals("")) {
+                    params.put(StaticField.TOKEN, mToken); // 登录标识
+                    params.put(StaticField.USER_ID, mUser_id); // 用户ID
+                    MyLog.LogShitou("标识与用户id-->:", mToken + "-" + mUser_id);
+                }
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code); // 签名
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                MyLog.LogShitou("result邮市详情~~~~>", result);
+                if (result.equals("-1")) {
+                    return;
+                }
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        });
+    }
+
+    /**
+     * 修改收藏夹网络请求
+     *
+     * @param op_type 操作类型：SC删除,JR加入
+     */
+    private void DeleteGetInitNet(final String op_type) {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.FAVORITEMODIFY);// 接口名称
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.GOODS_SN, mGoods_sn);//  邮票编号
+                params.put(StaticField.OP_TYPE, op_type);// 操作类型
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("result收藏修改-->:", result);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+
+                if (op_type.equals("JR")) {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.ADDSUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.DeleteSUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+
+            }
+        });
     }
 
     /**

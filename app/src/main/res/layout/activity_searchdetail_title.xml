@@ -33,9 +33,11 @@
             android:hint="@string/search_keyword"
             android:paddingLeft="9dp"
             android:textColorHint="#ccc"
+            android:cursorVisible="false"
             android:textSize="12sp" />
 
         <ImageView
+            android:id="@+id/search_title_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

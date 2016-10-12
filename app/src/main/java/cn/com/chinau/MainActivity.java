@@ -99,7 +99,10 @@ public class MainActivity extends FragmentActivity implements LazyViewPager.OnPa
                 mViewPager.setCurrentItem(4);
                 mRadioGroup.check(R.id.Radio_my);
 
-            } else if (Login.equals("SelfMallDetail")) {
+            } else if (Login.equals("SelfMallDetail") ) {
+                mViewPager.setCurrentItem(3);
+                mRadioGroup.check(R.id.Radio_shop);
+            } else if (Login.equals("StampDetail")) {
                 mViewPager.setCurrentItem(3);
                 mRadioGroup.check(R.id.Radio_shop);
             }

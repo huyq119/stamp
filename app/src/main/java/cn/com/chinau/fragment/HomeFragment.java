@@ -34,6 +34,10 @@ import cn.com.chinau.activity.StampActivity;
 import cn.com.chinau.adapter.HomeGridViewAdapter;
 import cn.com.chinau.adapter.HomeViewPagerAdapter;
 import cn.com.chinau.base.BaseFragment;
+import cn.com.chinau.bean.AddressBean;
+import cn.com.chinau.bean.CategoryBean;
+import cn.com.chinau.bean.CategoryDSFBean;
+import cn.com.chinau.bean.CategoryRMBean;
 import cn.com.chinau.bean.HomeBean;
 import cn.com.chinau.bean.SysParamQueryBean;
 import cn.com.chinau.http.HttpUtils;
@@ -86,53 +90,103 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case StaticField.SUCCESS:
+                case StaticField.SUCCESS: // 首页数据
                     Gson gson = new Gson();
                     mHomeBean = gson.fromJson((String) msg.obj, HomeBean.class);
-                    if (num == 0) {
-                        initAdapter();
-                    } else {
-                        //设置GridView的适配器
-                        setGridViewAdapter();
+                    String code = mHomeBean.getRsp_code();
+                    if (code.equals("0000")) {
+                        if (num == 0) {
+                            initAdapter();
+                        } else {
+                            //设置GridView的适配器
+                            setGridViewAdapter();
+                        }
+                        getSysparamQuery();// 获取系统参数网络请求
                     }
                     break;
-                case SYSPARAM:
+                case SYSPARAM:// 获取系统参数
                     String mData = (String) msg.obj;
                     Gson gsons = new Gson();
                     SysParamQueryBean paramQueryBean = gsons.fromJson(mData, SysParamQueryBean.class);
                     String mCode = paramQueryBean.getRsp_code();
                     if (mCode.equals("0000")) {
                         sp.edit().putString("System", mData).commit();
-                        SysParamQueryBean.Sys_param_value sys_param_value = paramQueryBean.getSys_param_value();
-                        // 获取快递公司
-                        SysParamQueryBean.Sys_param_value.Express_comp expressComp = sys_param_value.getExpress_comp();
-                        String mShunfeng = expressComp.getShunfeng();
-                        String mEms = expressComp.getEms();
-                        // 获取支付类型
-                        ArrayList<String> mPay_type = sys_param_value.getPay_type();
-                        String mALIPAY = mPay_type.get(0);
-                        String mWXPAY = mPay_type.get(1);
+                        getNetAddress(); // 获取网络地址信息数据
+                    }
+                    break;
+                case StaticField.ADDRESSSUCCESS://获取地址省市区
+                    String result = (String) msg.obj;
+                    Gson gsones = new Gson();
+                    AddressBean mAddressBean = gsones.fromJson(result, AddressBean.class);
+                    if (mAddressBean.getRsp_code().equals("0000")) {
+                        sp.edit().putString("Address", result).commit();
 
-                        // 扫码回购页面的数据
-                        SysParamQueryBean.Sys_param_value.Buyback_scan_summary mBuyback_scan_summary = sys_param_value.getBuyback_scan_summary();
-                        mProcess = mBuyback_scan_summary.getProcess();// 业务流程
-                        mImage = mBuyback_scan_summary.getImage();// 扫码回购显示的图片
-                        mSummary = mBuyback_scan_summary.getSummary();// 业务介绍
-                        // 竞拍规则
-                        ArrayList<SysParamQueryBean.Sys_param_value.Auction_rule> mAuction_rule = sys_param_value.getAuction_rule();
-                        String mPrice = mAuction_rule.get(0).getPrice();
-                        String mScope = mAuction_rule.get(0).getScope();
-                        // 银行卡图片
-                        ArrayList<SysParamQueryBean.Sys_param_value.Bank_icon> mBank_icon = sys_param_value.getBank_icon();
-                        String mName = mBank_icon.get(0).getName();
-                        String mUrl = mBank_icon.get(0).getUrl();
-
-                        MyLog.LogShitou("mEms快递公司-->", mEms + "--" + mShunfeng);
-                        MyLog.LogShitou("支付-->", mALIPAY + "--" + mWXPAY);
-                        MyLog.LogShitou("扫码回购头部图片-->", mImage);
-                        MyLog.LogShitou("扫码回购内容-->", mSummary);
-                        MyLog.LogShitou("mAuction_rule出价规则-->", mPrice + "--" + mScope);
-                        MyLog.LogShitou("mBank_icon银行图片-->", mName + "--" + mUrl);
+                        GetInitCategory(StaticField.ML); // 邮票目录搜索网络请求
+                        GetInitCategory(StaticField.SC_ZY); // 自营商城搜索网络请求
+                        GetInitCategory(StaticField.SC_DSF); // 热门搜索网络请求
+                        GetInitCategory(StaticField.YS); // 邮市搜索网络请求
+                        GetInitCategory(StaticField.JP); // 竞拍搜索网络请求
+                        GetInitCategory(StaticField.RM); //热门搜索网络请求
+                    }
+                    break;
+                case StaticField.CLASS_SUCCESS://热搜类别查询
+                    Gson mGsones1 = new Gson();
+                    String mCategory1 = (String) msg.obj;
+                    CategoryRMBean mCategoryRMBean = mGsones1.fromJson(mCategory1, CategoryRMBean.class);
+                    String code1 = mCategoryRMBean.getRsp_code();
+                    if (code1.equals("0000")) {
+                        sp.edit().putString("Category1", mCategory1).commit();// 保存在本地的热搜类别查询
+                        MyLog.LogShitou("保存在本地的热搜类别",mCategory1);
+                    }
+                    break;
+                case StaticField.ML_SUCCESS://邮票目录类别查询
+                    Gson mGsones2 = new Gson();
+                    String mCategory2 = (String) msg.obj;
+                    CategoryDSFBean mCategoryDSFBean1 = mGsones2.fromJson(mCategory2, CategoryDSFBean.class);
+                    String code2 = mCategoryDSFBean1.getRsp_code();
+                    if (code2.equals("0000")) {
+                        sp.edit().putString("Category2", mCategory2).commit();// 保存在本地的邮票目录类别查询
+                        MyLog.LogShitou("保存在本地的邮票目录类别",mCategory2);
+                    }
+                    break;
+                case StaticField.SC_SUCCESS://商城类别查询
+//                    Gson mGsones3 = new Gson();
+//                    String mCategory3 = (String) msg.obj;
+//                    CategoryBean mCategoryBean2 = mGsones3.fromJson(mCategory3, CategoryBean.class);
+//                    String code3 = mCategoryBean2.getRsp_code();
+//                    if (code3.equals("0000")) {
+//                        sp.edit().putString("Category3", mCategory3);// 保存在本地的商城类别查询
+//                        MyLog.LogShitou("保存在本地的商城类别",mCategory3);
+//                    }
+                    break;
+                case StaticField.DSF_SUCCESS://邮票第三方类别查询
+                    Gson mGsones4 = new Gson();
+                    String mCategory4 = (String) msg.obj;
+                    CategoryDSFBean mCategoryDSFBean3 = mGsones4.fromJson(mCategory4, CategoryDSFBean.class);
+                    String code4 = mCategoryDSFBean3.getRsp_code();
+                    if (code4.equals("0000")) {
+                        sp.edit().putString("Category4", mCategory4).commit();// 保存在本地的第三方类别查询
+                        MyLog.LogShitou("保存在本地的第三方类别",mCategory4);
+                    }
+                    break;
+                case StaticField.YS_SUCCESS://邮市类别查询
+                    Gson mGsones5 = new Gson();
+                    String mCategory5 = (String) msg.obj;
+                    CategoryBean mCategoryBean4 = mGsones5.fromJson(mCategory5, CategoryBean.class);
+                    String code5 = mCategoryBean4.getRsp_code();
+                    if (code5.equals("0000")) {
+                        sp.edit().putString("Category5", mCategory5).commit();// 保存在本地的邮市类别查询
+                        MyLog.LogShitou("保存在本地的邮市类别",mCategory5);
+                    }
+                    break;
+                case StaticField.JP_SUCCESS://竞拍类别查询
+                    Gson mGsones6 = new Gson();
+                    String mCategory6 = (String) msg.obj;
+                    CategoryBean mCategoryBean = mGsones6.fromJson(mCategory6, CategoryBean.class);
+                    String code6 = mCategoryBean.getRsp_code();
+                    if (code6.equals("0000")) {
+                        sp.edit().putString("Category6", mCategory6).commit();// 保存在本地的竞拍类别查询
+                        MyLog.LogShitou("保存在本地的竞拍类别",mCategory6);
                     }
                     break;
             }
@@ -220,7 +274,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         setChildContent();
         //设置GridView的适配器
         setGridViewAdapter();
-        getSysparamQuery();// 获取系统参数网络请求
+
 
     }
 
@@ -399,9 +453,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 params.put(StaticField.SIGN, md5code);
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-
-                MyLog.LogShitou("首页数据-->", result);
-
+//                MyLog.LogShitou("首页数据", result);
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
@@ -500,8 +552,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     getSysparamQuery();
                     return;
                 }
-
-                MyLog.LogShitou("系统参数-->", result);
+//                MyLog.LogShitou("系统参数-->", result);
                 Message msg = handler.obtainMessage();
                 msg.what = SYSPARAM;
                 msg.obj = result;
@@ -510,6 +561,88 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             }
         });
 
+    }
+
+    /**
+     * 获取网络地址信息数据
+     */
+    public void getNetAddress() {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.NATION);
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+//                MyLog.LogShitou("result获取省市区的地址-->:", result);
+                //发送请求
+                Message msg = handler.obtainMessage();
+                msg.obj = result;
+                msg.what = StaticField.ADDRESSSUCCESS;
+                handler.sendMessage(msg);
+            }
+        });
+    }
+
+    /**
+     * 类别查询网络请求
+     */
+    private void GetInitCategory(final String op_type) {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
+                params.put(StaticField.OP_TYPE, op_type);// 操作类型
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                MyLog.LogShitou(op_type+"类别查询数据", result);
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+                if(op_type.equals(StaticField.ML)){// 邮票目录
+                    Message msg = handler.obtainMessage();
+                    msg.what = StaticField.ML_SUCCESS;
+                    msg.obj = result;
+                    handler.sendMessage(msg);
+                }else if(op_type.equals(StaticField.SC_ZY)){ // 商城
+                    Message msg = handler.obtainMessage();
+                    msg.what = StaticField.SC_SUCCESS;
+                    msg.obj = result;
+                    handler.sendMessage(msg);
+                }else if(op_type.equals(StaticField.SC_DSF)){// 第三方
+                    Message msg = handler.obtainMessage();
+                    msg.what = StaticField.DSF_SUCCESS;
+                    msg.obj = result;
+                    handler.sendMessage(msg);
+                }else if(op_type.equals(StaticField.YS)){ // 邮市
+                    Message msg = handler.obtainMessage();
+                    msg.what = StaticField.YS_SUCCESS;
+                    msg.obj = result;
+                    handler.sendMessage(msg);
+                }else if(op_type.equals(StaticField.JP)){// 竞拍
+                    Message msg = handler.obtainMessage();
+                    msg.what = StaticField.JP_SUCCESS;
+                    msg.obj = result;
+                    handler.sendMessage(msg);
+                }else if(op_type.equals(StaticField.RM)){ // 热搜
+                    Message msg = handler.obtainMessage();
+                    msg.what = StaticField.CLASS_SUCCESS;
+                    msg.obj = result;
+                    handler.sendMessage(msg);
+                }
+            }
+        });
     }
 
 }

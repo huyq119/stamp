@@ -18,6 +18,8 @@ import cn.com.chinau.widget.OnWheelChangedListener;
 import cn.com.chinau.widget.WheelView;
 import cn.com.chinau.widget.adapters.ArrayWheelAdapter;
 
+import static cn.com.chinau.R.id.province;
+
 /**
  * 省市县三级联动的PopupWindow的页面
  * Created by Administrator on 2016/8/22.
@@ -43,24 +45,30 @@ public class AddressPopupWindow extends PopupWindow implements OnWheelChangedLis
      * 所有省
      */
     private String[] mProvince;
+    private AddressBean.Province[] Province;
     /**
      * key - 省 value - 市
      */
-    protected Map<String, String[]> mCityMap = new HashMap<>();
+//    protected Map<String, String[]> mCityMap = new HashMap<>();
+    protected Map<String, AddressBean.City[]> CityMap = new HashMap<>();
     /**
      * key - 市 values - 区
      */
-    protected Map<String, String[]> mAreaMap = new HashMap<>();
+    protected Map<String, AddressBean.Area[]> AreaMap = new HashMap<>();
     /**
      * 区县的集合
      */
-    protected Map<String, String> mAreaCode = new HashMap<>();
+//    protected Map<String, String> mAreaCode = new HashMap<>();
 
     public String mCurrentProvince;//当前省份的名字
     public String mCurrentCity;//当前城市的名字
     public String mCurrentArea;//当前区的名字
     private TextView mFinish;//完成按钮
     private TextView mCancel;//取消按钮
+
+    public String mCurrentProvinceCode;
+    public String mCurrentCityCode;
+    public String mCurrentAreaCode;
 
 
     /**
@@ -107,7 +115,7 @@ public class AddressPopupWindow extends PopupWindow implements OnWheelChangedLis
     }
 
     private void initView() {
-        mProvinceView = (WheelView) mAddressView.findViewById(R.id.province);
+        mProvinceView = (WheelView) mAddressView.findViewById(province);
         mCityView = (WheelView) mAddressView.findViewById(R.id.city);
         mAreaView = (WheelView) mAddressView.findViewById(R.id.district);
         mCancel = (TextView) mAddressView.findViewById(R.id.address_cancel);
@@ -120,43 +128,56 @@ public class AddressPopupWindow extends PopupWindow implements OnWheelChangedLis
      */
     private void initData() {
         //获取省份的集合数据
-                List<AddressBean.Province> province_list = mAddress.getProvince_list();
-                mProvince = new String[province_list.size()];
-                for (int i=0; i< province_list.size(); i++) {
-                    // 遍历所有省的数据
-                    mProvince[i] = province_list.get(i).getProvince_name();
-                    //获取当前省对应的城市信息
-                    List<AddressBean.City> cityList = province_list.get(i).getCity_list();
-                    //创建城市数组
-                    String[] cityNames = new String[cityList.size()];
-                    for (int j=0; j< cityList.size(); j++) {
-                        // 遍历省下面的所有市的数据
-                        cityNames[j] = cityList.get(j).getCity_name();
-                        //获取当前市对应的地区信息
-                        List<AddressBean.Area> AreaList = cityList.get(j).getArea_list();
-                        //用于记录区/县的数组
-                        String[] AreaArray = new String[AreaList.size()];
-                        //区/县的邮编,这里应该记录一下,应该创建一个实体类记录一下
+        List<AddressBean.Province> province_list = mAddress.getProvince_list();
+
+        //这里应该创建一个对象去接收
+
+        mProvince = new String[province_list.size()];
+        Province = new AddressBean.Province[province_list.size()];
+
+        for (int i = 0; i < province_list.size(); i++) {
+            // 遍历所有省的数据
+            mProvince[i] = province_list.get(i).getProvince_name();
+            Province[i] = new AddressBean.Province(province_list.get(i).getProvince_code(), province_list.get(i).getProvince_name());
+
+
+            //获取当前省对应的城市信息
+            List<AddressBean.City> cityList = province_list.get(i).getCity_list();
+            //创建城市数组
+            String[] cityNames = new String[cityList.size()];
+            AddressBean.City[] cityName = new AddressBean.City[cityList.size()];
+
+            for (int j = 0; j < cityList.size(); j++) {
+                // 遍历省下面的所有市的数据
+                cityName[j] = new AddressBean.City(cityList.get(j).getCity_code(), cityList.get(j).getCity_name());
+                cityNames[j] = cityList.get(j).getCity_name();
+
+
+                //获取当前市对应的地区信息
+                List<AddressBean.Area> AreaList = cityList.get(j).getArea_list();
+                //用于记录区/县的数组
+                String[] AreaArray = new String[AreaList.size()];
+                //区/县的邮编,这里应该记录一下,应该创建一个实体类记录一下
                 AddressBean.Area[] AreaCode = new AddressBean.Area[AreaList.size()];
-                for (int k=0; k<AreaList.size(); k++) {
+                for (int k = 0; k < AreaList.size(); k++) {
                     // 遍历市下面所有区/县的数据
-                    AddressBean.Area area = new AddressBean.Area(AreaList.get(k).getArea_name(), AreaList.get(k).getArea_code());
-                    // 区/县对于的邮编，保存到mAreaCode集合中
-                    mAreaCode.put(AreaList.get(k).getArea_name(), AreaList.get(k).getArea_code());
-                    AreaCode[k] = area;
-                    AreaArray[k] = area.getArea_name();
+                    AreaCode[k] = new AddressBean.Area(AreaList.get(k).getArea_name(), AreaList.get(k).getArea_code());
+//                    // 区/县对于的邮编，保存到mAreaCode集合中
+//                    mAreaCode.put(AreaList.get(k).getArea_name(), AreaList.get(k).getArea_code());
+//                    AreaCode[k] = area;
+//                    AreaArray[k] = area.getArea_name();
                 }
                 // 市-区/县的数据，保存到mAreaMap集合中
-                mAreaMap.put(cityNames[j], AreaArray);
+                AreaMap.put(cityNames[j], AreaCode);
             }
             // 省-市的数据，保存到mCityMap集合中
-            mCityMap.put(province_list.get(i).getProvince_name(), cityNames);
+            CityMap.put(province_list.get(i).getProvince_name(), cityName);
         }
     }
 
 
-
     private void initAdapter() {
+        //这里传递集合的时候必须是String[] 类型的
         mProvinceView.setViewAdapter(new ArrayWheelAdapter<>(context, mProvince));
         mProvinceView.setVisibleItems(7);
         mCityView.setVisibleItems(7);
@@ -185,7 +206,12 @@ public class AddressPopupWindow extends PopupWindow implements OnWheelChangedLis
         } else if (wheel == mCityView) {
             updateAreas();
         } else if (wheel == mAreaView) {
-            mCurrentArea = mAreaMap.get(mCurrentCity)[newValue];
+            //这个是获取地区的信息
+            AddressBean.Area area = AreaMap.get(mCurrentCity)[newValue];
+
+            mCurrentArea = area.getArea_name();
+            mCurrentAreaCode = area.getArea_code();
+
 //            mCurrentZipCode = mZipcodeDatasMap.get(mCurrentDistrictName);
         }
     }
@@ -196,12 +222,26 @@ public class AddressPopupWindow extends PopupWindow implements OnWheelChangedLis
      */
     private void updateCities() {
         int pCurrent = mProvinceView.getCurrentItem();
-        mCurrentProvince = mProvince[pCurrent];
-        String[] cities = mCityMap.get(mCurrentProvince);
-        if (cities == null) {
-            cities = new String[]{""};
+//        mCurrentProvince = mProvince[pCurrent];
+        //省份的数据
+        mCurrentProvince = Province[pCurrent].getProvince_name();
+        //省份的id
+        mCurrentProvinceCode = Province[pCurrent].getProvince_code();
+//
+//        String[] cities = mCityMap.get(mCurrentProvince);
+        AddressBean.City[] cities = CityMap.get(mCurrentProvince);
+
+        String[] citie = new String[cities.length];
+        //这里应该是新来一个数组吧
+        for (int i = 0; i < cities.length; i++) {
+            citie[i] = cities[i].getCity_name();
         }
-        mCityView.setViewAdapter(new ArrayWheelAdapter<>(context, cities));
+
+        if (citie == null) {
+            citie = new String[]{""};
+
+        }
+        mCityView.setViewAdapter(new ArrayWheelAdapter<>(context, citie));
         mCityView.setCurrentItem(0);
         updateAreas();
     }
@@ -211,8 +251,20 @@ public class AddressPopupWindow extends PopupWindow implements OnWheelChangedLis
      */
     private void updateAreas() {
         int pCurrent = mCityView.getCurrentItem();
-        mCurrentCity = mCityMap.get(mCurrentProvince)[pCurrent];
-        String[] areas = mAreaMap.get(mCurrentCity);
+
+//        mCurrentCity = mCityMap.get(mCurrentProvince)[pCurrent];
+        AddressBean.City city = CityMap.get(mCurrentProvince)[pCurrent];
+        mCurrentCity = city.getCity_name();
+        mCurrentCityCode = city.getCity_code();
+
+
+        AddressBean.Area[] area = AreaMap.get(mCurrentCity);
+        String[] areas = new String[area.length];
+        for (int i = 0; i < area.length; i++) {
+            areas[i] = area[i].getArea_name();
+        }
+
+//        String[] areas = mAreaMap.get(mCurrentCity);
 
         if (areas == null) {
             areas = new String[]{""};
@@ -221,5 +273,6 @@ public class AddressPopupWindow extends PopupWindow implements OnWheelChangedLis
         mAreaView.setViewAdapter(new ArrayWheelAdapter<>(context, areas));
         mAreaView.setCurrentItem(0);
         mCurrentArea = areas[0];
+        mCurrentAreaCode = area[0].getArea_code();
     }
 }

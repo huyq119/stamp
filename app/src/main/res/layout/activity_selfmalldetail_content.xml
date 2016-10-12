@@ -152,8 +152,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        >
+        android:layout_alignParentBottom="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -169,8 +168,7 @@
                 android:text="已下架"
                 android:textColor="#000"
                 android:textSize="@dimen/text3_size"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
             <View style="@style/myline" />
 
@@ -241,12 +239,6 @@
                     android:textColor="#fff"
                     android:textSize="16sp" />
             </LinearLayout>
-
-
         </LinearLayout>
-
-
     </RelativeLayout>
-
-
 </LinearLayout>

@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="28dp"
+        android:layout_height="36dp"
         android:orientation="horizontal">
 
         <Button
@@ -22,7 +22,8 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="@string/synthesize"
-            android:textColor="#666666" />
+            android:textSize="12sp"
+            android:textColor="@color/font" />
 
         <View
             android:layout_width="1dp"
@@ -43,7 +44,8 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="@string/price"
-            android:textColor="#666666" />
+            android:textSize="12sp"
+            android:textColor="@color/font" />
 
         <View
             android:layout_width="1dp"
@@ -64,7 +66,8 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="@string/classify"
-            android:textColor="#666666" />
+            android:textSize="12sp"
+            android:textColor="@color/font" />
 
     </LinearLayout>
 

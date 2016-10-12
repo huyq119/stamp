@@ -81,23 +81,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     if (dialog != null)
                         dialog.dismiss();
                     if (flag == 1) {// 从提现页面来的
-//                        startActivity(new Intent(LogInActivity.this, WithdrawPassWordActivity.class));
+//                        startActivity(new Intent(LoginActivity.this, WithdrawPassWordActivity.class));
                         finish();
                     } else if (flag == 2) {// 从重置登陆密码页面
-//                        startActivity(new Intent(LogInActivity.this, ResettingPassWordActivity.class));
+//                        startActivity(new Intent(LoginActivity.this, ResettingPassWordActivity.class));
                         finish();
                     } else if (flag == 5) {// 从订单页面来的
-//                        Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //                        intent.putExtra("Login", "Order");
 //                        startActivity(intent);
                         finish();
                     } else if (flag == 6) {// 从密码管理页面来的
-//                        startActivity(new Intent(LogInActivity.this, PressWordManagerActivity.class));
+//                        startActivity(new Intent(LoginActivity.this, PressWordManagerActivity.class));
                         finish();
                     } else if (flag == 7) {// 回购页面来的
                         String result = sp.getString("ScanBack", "");
                         if (!TextUtils.isEmpty(result)) {
-//                            Intent intent = new Intent(LogInActivity.this, Activity_ensure_back_buy.class);
+//                            Intent intent = new Intent(LoginActivity.this, Activity_ensure_back_buy.class);
 //                            intent.putExtra("Result", result);
 //                            startActivity(intent);
                             finish();
@@ -105,10 +105,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     } else if (flag == 9) {// 回购页面来的
                         finish();
                     } else if (flag == 10) {// 回购页面来的
-//                        startActivity(new Intent(LogInActivity.this, OrderActivity.class));
+//                        startActivity(new Intent(LoginActivity.this, OrderActivity.class));
                         finish();
-                    } else if (flag == 8) {// 回购页面来的
-//                        startActivity(new Intent(LogInActivity.this, MainActivity.class));
+                    } else if (flag == 8) {// 我的页面来的
+//                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else {// 不是从提现页面来的
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -352,7 +352,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
                 handler.sendEmptyMessage(LOGIN);
                 Log.e("登录--->", result);
-                if (result.equals("-1")) {
+                if (result.equals("-1") |result.equals("-1")) {
                     handler.sendEmptyMessage(NONET);
                     return;
                 }

@@ -64,7 +64,6 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     private LinearLayout mOrderGoods;
     private String phone,mToken,mUser_id;// 手机号，标识，用户ID
     public SharedPreferences sp;
-    public static final String name = "stamp";
     private SendProgressDialog pd;
     private String result;
     private SussessDialog dialog;
@@ -135,7 +134,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public View CreateSuccess() {
         myContentView = View.inflate(getActivity(), R.layout.fragment_my_content, null);
-        sp = getActivity().getSharedPreferences(name, Context.MODE_PRIVATE);
+        sp = getActivity().getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         Log.e("跳转后的--->", mToken+"-->"+mUser_id+"-->"+phone);
         initView();
         judgeView();// 判断view的方法(判断页面是否显示)
@@ -252,7 +251,15 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 openActivityWitchAnimation(MyCollectionActivity.class);
                 break;
             case R.id.my_Address://收获地址管理
-                openActivityWitchAnimation(ManagerAddressActivity.class);
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
+                    openActivityWitchAnimation(ManagerAddressActivity.class);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("WithDraw","myFragmentLogin");
+                    startActivity(intent);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
                 break;
             case R.id.my_order_buy_back://回购订单
                 openActivityWitchAnimation(OrderBuyBackActivity.class);
@@ -316,8 +323,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                if (result.equals("-1")) {
-                    getNetData();// 递归调用网络请求
+                if (result.equals("-1")|result.equals("-2")) {
                     return;
                 }
                 Log.e("登陆后的测试-->", result);

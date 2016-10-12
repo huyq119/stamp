@@ -213,23 +213,6 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         initGestureListener(); // 滑动lsitview隐藏导航栏的方法
     }
 
-//    private Drawable loadImageFromNetwork(String imageUrl) {
-//        Drawable drawable = null;
-//        try {
-//            // 可以在这里通过文件名来判断，是否本地有此图片
-//            drawable = Drawable.createFromStream(
-//                    new URL(imageUrl).openStream(), "image.png");
-//        } catch (IOException e) {
-//            Log.d("test", e.getMessage());
-//        }
-//        if (drawable == null) {
-//            Log.d("test", "null drawable");
-//        } else {
-//            Log.d("test", "not null drawable");
-//        }
-//
-//        return drawable;
-//    }
 
     /**
      * 滑动lsitview隐藏导航栏的方法
