@@ -5,21 +5,15 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.HashMap;
+import android.widget.TextView;
 
 import cn.com.chinau.R;
-import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.StampTapFilterGridViewAdapter;
 import cn.com.chinau.adapter.StampTapFilterThemeGridViewAdapter;
 import cn.com.chinau.base.BaseDialogFragment;
-import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.listener.GridViewOnItemClickListener;
 import cn.com.chinau.listener.GridViewThemeOnItemClickListener;
-import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
-import cn.com.chinau.utils.SortUtils;
-import cn.com.chinau.utils.ThreadManager;
 import cn.com.chinau.view.NoScrollGridView;
 
 /**
@@ -28,16 +22,17 @@ import cn.com.chinau.view.NoScrollGridView;
  */
 public class StampTapFilterDialog extends BaseDialogFragment {
 
-    private String[] arr;
-    private String[] arrs;
-    private String[] arres;
+    private String[] title,arr,arrs,arres;
+
     private View mFilterView;
     private int Current = -1;//当前选择的年代角标
     private GridViewOnItemClickListener mYearListener, mCategoryListener;//年份的监听,类别的监听
     private GridViewThemeOnItemClickListener mThemeListener;// 题材的监听
+    private TextView mYears,mCategory,mTheme;
 
 
-    public StampTapFilterDialog(String[] arr,String[] arrs,String[] arres) {
+    public StampTapFilterDialog(String[] title,String[] arr,String[] arrs,String[] arres) {
+        this.title = title;
         this.arr = arr;
         this.arrs = arrs;
         this.arres = arres;
@@ -50,35 +45,28 @@ public class StampTapFilterDialog extends BaseDialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //创建显示的View
         mFilterView = CreateBaseView(inflater, R.layout.stamptap_dialog);
-
+        initView();
+        initData();
         //设置GridView的数据
         setPopupWindowData();
 //        RequestNet();
         return mFilterView;
     }
 
-    /**
-     * 请求网络
-     */
-    private void RequestNet() {
-        //请求类别信息
-        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                HashMap<String, String> params = new HashMap<>();
-                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
-                params.put(StaticField.OP_TYPE, StaticField.ML);
-                String mapSort = SortUtils.MapSort(params);
-                String md5code = Encrypt.MD5(mapSort);
-                MyLog.e(md5code);
-                params.put(StaticField.SIGN, md5code);
-                //这里请求的是筛选的布局
-                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                MyLog.e(result);
-            }
-        });
+    private void initData(){
+      String title1 =  title[0];
+        mYears.setText(title1);
+        String title2 =  title[1];
+        mCategory.setText(title2);
+        String title3 =  title[2];
+        mTheme.setText(title3);
     }
 
+    private void initView(){
+      mYears = (TextView) mFilterView.findViewById(R.id.pop_title_years);
+      mCategory = (TextView) mFilterView.findViewById(R.id.pop_title_category);
+      mTheme = (TextView) mFilterView.findViewById(R.id.pop_title_theme);
+    }
 
     /**
      * 设置PopupWindow页面的数据

@@ -1,14 +1,22 @@
 package cn.com.chinau.fragment.popfragment;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+
 import cn.com.chinau.R;
+import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.SelfMallPanStampGridViewAdapter;
 import cn.com.chinau.base.BaseDialogFragment;
+import cn.com.chinau.bean.CategoryDSFBean;
 import cn.com.chinau.dialog.SelfMallPanStampFilterDialog;
 import cn.com.chinau.listener.SellMallPanStampGridViewOnItemClickListener;
 import cn.com.chinau.utils.MyLog;
@@ -30,6 +38,8 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
 
     private View mSelfMall;
     private String mData;
+    private SharedPreferences sp;
+    private String[] mTitle;
 
 
     public SelfMallFilterFragment() {
@@ -39,6 +49,7 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mSelfMall = View.inflate(getActivity(), R.layout.fragment_selfmall_filter_dialog, null);
+        sp = getActivity().getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         //设置GridView的数据
         setPopupWindowData();
 //        RequestNet();
@@ -46,9 +57,27 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
     }
 
     /**
+     * 获取保存在本地的类别数据
+     */
+    private void GetCategory(){
+       String mCategory = sp.getString("Category4","");
+        Gson gson = new Gson();
+        CategoryDSFBean mCategoryDSFBean3 = gson.fromJson(mCategory, CategoryDSFBean.class);
+        ArrayList<CategoryDSFBean.Category> CategoryList =  mCategoryDSFBean3.getCategory();
+
+        mTitle = new String[CategoryList.size()];
+        for (int i = 0; i < CategoryList.size(); i++) {
+            mTitle[i] = CategoryList.get(i).getName();
+            MyLog.LogShitou("第三方1级mTitle", mTitle[i]);
+        }
+    }
+
+    /**
      * 设置PopupWindow页面的数据
      */
     private void setPopupWindowData() {
+
+
         //类别的GridView
         NoScrollGridView mCategoryGV = (NoScrollGridView) mSelfMall.findViewById(R.id.selfmall_pop_category);
         //年代的GridView

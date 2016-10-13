@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -47,6 +48,8 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
     private ArrayList<AddressBean.Address> mList;
     private String mToken, mUser_id;
     private SharedPreferences sp;
+    private String id;
+    private boolean activityFlag = false;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -69,6 +72,7 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
             }
         }
     };
+    private ConfirmOrderListViewAdapter adapter;
 
 
     @Override
@@ -110,12 +114,49 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
 
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
-        initData(); // 再出获取焦点重新请求
+        if(activityFlag){
+            initData(); // 再出获取焦点重新请求
+            MyLog.LogShitou("到这了吗3", "-->onResume");
+        }else{
+            activityFlag= true;
+        }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        MyLog.LogShitou("到这了吗1", "-->onStart");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        MyLog.LogShitou("到这了吗2", "-->onRestart");
+    }
+
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MyLog.LogShitou("到这了吗4", "-->onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MyLog.LogShitou("到这了吗5", "-->onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MyLog.LogShitou("到这了吗6", "-->onDestroy");
+    }
+
 
     private void initView() {
 
@@ -134,18 +175,38 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
 
     private void initData() {
         GetInitNet(StaticField.LB);// 管理收货地址列表网络请求
+        MyLog.LogShitou("到这了吗1", StaticField.LB);
 
     }
 
     private void initAdapter() {
-        ConfirmOrderListViewAdapter adapter = new ConfirmOrderListViewAdapter(this, mList);
+        adapter = new ConfirmOrderListViewAdapter(this, mList);
         mAddressLV.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        //自定义回调函数
+        adapter.setOncheckChanged(new ConfirmOrderListViewAdapter.OnMyCheckChangedListener() {
+
+            @Override
+            public void setSelectID(int selectID) {
+                adapter.setSelectID(selectID);				//选中位置
+                adapter.notifyDataSetChanged();		//刷新适配器
+            }
+        });
     }
+
 
     private void initListener() {
         mBack.setOnClickListener(this);
         mAddNewAddress.setOnClickListener(this);
+        mAddressLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                adapter.setSelectID(i);				//选中位置
+                adapter.notifyDataSetChanged();		//刷新适配器
+            }
+        });
+
     }
 
     /**
@@ -169,7 +230,7 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
                 params.put(StaticField.SIGN, md5code);
 
                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                MyLog.LogShitou("管理收货地址List-->:", result);
+                MyLog.LogShitou("管理收货地址List", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;

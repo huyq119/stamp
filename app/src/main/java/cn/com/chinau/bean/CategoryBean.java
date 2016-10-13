@@ -19,75 +19,71 @@ public class CategoryBean extends BaseBean {
     }
 
     public class Category {
-        private String name;// 类别
+        private String name;
+
         private String value;
-        private String img_url;// 图片
+
+        private String img_url;
+
         private ArrayList<SubCategory> subCategory;
 
-        public String getName() {
-            return name;
-        }
-        public void setName(String name) {
+        public void setName(String name){
             this.name = name;
         }
-        public String getValue() {
-            return value;
+        public String getName(){
+            return this.name;
         }
-        public void setValue(String value) {
+        public void setValue(String value){
             this.value = value;
         }
-
-        public String getImg_url() {
-            return img_url;
+        public String getValue(){
+            return this.value;
         }
-
-        public void setImg_url(String img_url) {
+        public void setImg_url(String img_url){
             this.img_url = img_url;
         }
-
-        public ArrayList<SubCategory> getSubCategory() {
-            return subCategory;
+        public String getImg_url(){
+            return this.img_url;
         }
-        public void setSubCategory(ArrayList<SubCategory> subCategory) {
+        public void setSubCategory(ArrayList<SubCategory> subCategory){
             this.subCategory = subCategory;
+        }
+        public ArrayList<SubCategory> getSubCategory(){
+            return this.subCategory;
         }
 
         public class SubCategory {
-            private String name;// 新中国邮票，清民区邮票，主题邮册，其他邮品
+            private String name;
+
             private String value;
-            private String img_url;// 图片
+
+            private String img_url;
+
             private ArrayList<SmllSubCategoryData> subCategory;
 
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
+            public void setName(String name){
                 this.name = name;
             }
-
-            public String getValue() {
-                return value;
+            public String getName(){
+                return this.name;
             }
-
-            public void setValue(String value) {
+            public void setValue(String value){
                 this.value = value;
             }
-
-            public String getImg_url() {
-                return img_url;
+            public String getValue(){
+                return this.value;
             }
-
-            public void setImg_url(String img_url) {
+            public void setImg_url(String img_url){
                 this.img_url = img_url;
             }
-
-            public ArrayList<SmllSubCategoryData> getSubCategory() {
-                return subCategory;
+            public String getImg_url(){
+                return this.img_url;
             }
-
-            public void setSubCategory(ArrayList<SmllSubCategoryData> subCategory) {
+            public void setSubCategory(ArrayList<SmllSubCategoryData> subCategory){
                 this.subCategory = subCategory;
+            }
+            public ArrayList<SmllSubCategoryData> getSubCategory(){
+                return this.subCategory;
             }
 
             public class SmllSubCategoryData {

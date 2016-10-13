@@ -52,7 +52,6 @@ public class SelfMallPanStampFilterDialog extends BaseDialogFragment implements 
         TabPageIndicator indicator = (TabPageIndicator) mFilterView.findViewById(R.id.baseStamp_indicator);
         indicator.setViewPager(pager);
 
-
         initView();
         initListener();
 

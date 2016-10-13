@@ -121,12 +121,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     if (mAddressBean.getRsp_code().equals("0000")) {
                         sp.edit().putString("Address", result).commit();
 
-                        GetInitCategory(StaticField.ML); // 邮票目录搜索网络请求
-                        GetInitCategory(StaticField.SC_ZY); // 自营商城搜索网络请求
-                        GetInitCategory(StaticField.SC_DSF); // 热门搜索网络请求
-                        GetInitCategory(StaticField.YS); // 邮市搜索网络请求
-                        GetInitCategory(StaticField.JP); // 竞拍搜索网络请求
-                        GetInitCategory(StaticField.RM); //热门搜索网络请求
+                        GetInitCategory(StaticField.ML); // 邮票目录类别查询网络请求
+                        GetInitCategory(StaticField.SC_ZY); // 自营商城类别查询网络请求
+                        GetInitCategory(StaticField.SC_DSF); // 第三方类别查询网络请求
+                        GetInitCategory(StaticField.YS); // 邮市类别查询网络请求
+                        GetInitCategory(StaticField.JP); // 竞拍类别查询网络请求
+                        GetInitCategory(StaticField.RM); //热门类别查询网络请求
                     }
                     break;
                 case StaticField.CLASS_SUCCESS://热搜类别查询
@@ -151,11 +151,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     break;
                 case StaticField.SC_SUCCESS://商城类别查询
 //                    Gson mGsones3 = new Gson();
-//                    String mCategory3 = (String) msg.obj;
+                    String mCategory3 = (String) msg.obj;
 //                    CategoryBean mCategoryBean2 = mGsones3.fromJson(mCategory3, CategoryBean.class);
 //                    String code3 = mCategoryBean2.getRsp_code();
 //                    if (code3.equals("0000")) {
-//                        sp.edit().putString("Category3", mCategory3);// 保存在本地的商城类别查询
+                        sp.edit().putString("Category3", mCategory3);// 保存在本地的商城类别查询
 //                        MyLog.LogShitou("保存在本地的商城类别",mCategory3);
 //                    }
                     break;
@@ -615,31 +615,33 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     msg.what = StaticField.ML_SUCCESS;
                     msg.obj = result;
                     handler.sendMessage(msg);
-                }else if(op_type.equals(StaticField.SC_ZY)){ // 商城
-                    Message msg = handler.obtainMessage();
-                    msg.what = StaticField.SC_SUCCESS;
-                    msg.obj = result;
-                    handler.sendMessage(msg);
-                }else if(op_type.equals(StaticField.SC_DSF)){// 第三方
-                    Message msg = handler.obtainMessage();
-                    msg.what = StaticField.DSF_SUCCESS;
-                    msg.obj = result;
-                    handler.sendMessage(msg);
-                }else if(op_type.equals(StaticField.YS)){ // 邮市
-                    Message msg = handler.obtainMessage();
-                    msg.what = StaticField.YS_SUCCESS;
-                    msg.obj = result;
-                    handler.sendMessage(msg);
-                }else if(op_type.equals(StaticField.JP)){// 竞拍
-                    Message msg = handler.obtainMessage();
-                    msg.what = StaticField.JP_SUCCESS;
-                    msg.obj = result;
-                    handler.sendMessage(msg);
-                }else if(op_type.equals(StaticField.RM)){ // 热搜
-                    Message msg = handler.obtainMessage();
-                    msg.what = StaticField.CLASS_SUCCESS;
-                    msg.obj = result;
-                    handler.sendMessage(msg);
+                }else {
+                    if (op_type.equals(StaticField.SC_ZY)) { // 商城
+                        Message msg = handler.obtainMessage();
+                        msg.what = StaticField.SC_SUCCESS;
+                        msg.obj = result;
+                        handler.sendMessage(msg);
+                    } else if (op_type.equals(StaticField.SC_DSF)) {// 第三方
+                        Message msg = handler.obtainMessage();
+                        msg.what = StaticField.DSF_SUCCESS;
+                        msg.obj = result;
+                        handler.sendMessage(msg);
+                    } else if (op_type.equals(StaticField.YS)) { // 邮市
+                        Message msg = handler.obtainMessage();
+                        msg.what = StaticField.YS_SUCCESS;
+                        msg.obj = result;
+                        handler.sendMessage(msg);
+                    } else if (op_type.equals(StaticField.JP)) {// 竞拍
+                        Message msg = handler.obtainMessage();
+                        msg.what = StaticField.JP_SUCCESS;
+                        msg.obj = result;
+                        handler.sendMessage(msg);
+                    } else if (op_type.equals(StaticField.RM)) { // 热搜
+                        Message msg = handler.obtainMessage();
+                        msg.what = StaticField.CLASS_SUCCESS;
+                        msg.obj = result;
+                        handler.sendMessage(msg);
+                    }
                 }
             }
         });

@@ -85,13 +85,12 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
         mAddress = intent.getStringExtra("Address");
         if (mAddress.equals("mAddressAdapter")) {
             mAddressId = intent.getStringExtra("AddressId");
-            mIsDefault = intent.getStringExtra("is_default");
-            if (mIsDefault.equals("0")) { //0:非默认；1默认
-                mToggleBtn.setBackgroundResource(R.mipmap.toggle_grey);
-            } else {
-                mToggleBtn.setBackgroundResource(R.mipmap.toggle_red);
-            }
-
+//            mIsDefault = intent.getStringExtra("is_default");
+//            if (mIsDefault.equals("0")) { //0:非默认；1默认
+//                mToggleBtn.setBackgroundResource(R.mipmap.toggle_grey);
+//            } else {
+//                mToggleBtn.setBackgroundResource(R.mipmap.toggle_red);
+//            }
             GetInitNet(StaticField.XQ); // 查询地址详情请求
             MyLog.LogShitou("这是从编辑跳过来的", mAddressId);
         }
@@ -323,14 +322,6 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case StaticField.ADDSUCCESS:// 新增地址
-                    Gson gsons = new Gson();
-                    BaseBean mBaseBean = gsons.fromJson((String) msg.obj, BaseBean.class);
-                    String mCoode = mBaseBean.getRsp_code();
-                    if (mCoode.equals("0000")) {
-                        finishWitchAnimation();
-                    }
-                    break;
                 case StaticField.DETAILSUCCESS:// 地址详情
                     String msge = (String) msg.obj;
                     Gson gsones = new Gson();
@@ -360,6 +351,21 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                         city = mList.get(0).getCity();
                         area = mList.get(0).getArea();
 
+                      String Isdefault = mList.get(0).getIs_default();
+                        if (Isdefault.equals("0")) { //0:非默认；1默认
+                            mToggleBtn.setBackgroundResource(R.mipmap.toggle_grey);
+                        } else {
+                            mToggleBtn.setBackgroundResource(R.mipmap.toggle_red);
+                        }
+
+                    }
+                    break;
+                case StaticField.ADDSUCCESS:// 新增地址
+                    Gson gsons = new Gson();
+                    BaseBean mBaseBean = gsons.fromJson((String) msg.obj, BaseBean.class);
+                    String mCoode = mBaseBean.getRsp_code();
+                    if (mCoode.equals("0000")) {
+                        finishWitchAnimation();
                     }
                     break;
             }

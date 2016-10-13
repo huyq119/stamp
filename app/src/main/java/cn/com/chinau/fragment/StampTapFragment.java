@@ -1,6 +1,8 @@
 package cn.com.chinau.fragment;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import cn.com.chinau.activity.SearchActivity;
 import cn.com.chinau.activity.StampTapDetailActivity;
 import cn.com.chinau.adapter.StampTapGridViewAdapter;
 import cn.com.chinau.base.BaseFragment;
+import cn.com.chinau.bean.CategoryRMBean;
 import cn.com.chinau.bean.StampTapBean;
 import cn.com.chinau.dialog.StampTapFilterDialog;
 import cn.com.chinau.http.HttpUtils;
@@ -50,7 +53,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
     private ImageView mSearch;//搜索按钮
     private GridView mGrid;
     private View mStampTapContent;
-    private Button mSynthesize, mRelease, mPrice, mFilter,mTop;
+    private Button mSynthesize, mRelease, mPrice, mFilter, mTop;
 
     private StampTapGridViewAdapter gvAdapter;
 
@@ -78,7 +81,6 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
         }
     };
 
-    private String[] arr = {"清代邮票", "明国邮票", "解放区邮票", "新中国邮票"};
     private String[] arrs = {"纪字头邮票", "纪字头邮票", "文字头邮票", "编号邮票", "J字头邮票", "T字头邮票", "编年邮票", "其他邮票"};
     private String[] arres = {"人物", "植物", "节日", "器皿", "字画", "风光", "经济", "农业", "民俗", "动物", "生肖",
             "文化艺术", "政治", "科教", "工业", "交通", "军事", "文学", "邮政", "公共", "成就", "儿童", "建筑", "会议",
@@ -86,6 +88,8 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
     private boolean scrollFlag; // 标记是否滑动
     private int lastVisibleItemPosition = 0;// 标记上次滑动位置
     private int mCount;
+    private SharedPreferences sp;
+    private String[] mTitle,mArrTitle0, mArrTitle1, mArrTitle2;
 
     @Override
     public View CreateTitle() {
@@ -96,6 +100,8 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
     @Override
     public View CreateSuccess() {
         mStampTapContent = View.inflate(getActivity(), R.layout.fragment_stamptap_content, null);
+
+        sp = getActivity().getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         initView();
         initData();
         initListener();
@@ -104,6 +110,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
 
     private void initView() {
+
         mScan = (ImageView) mStampTitle.findViewById(R.id.stamptap_title_scan);
         mSearch = (ImageView) mStampTitle.findViewById(R.id.stamptap_search);
         mGrid = (GridView) mStampTapContent.findViewById(R.id.stamptap_gl);
@@ -115,17 +122,65 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
     }
 
+
     private void initData() {
+        GetCategory(); // 获取在本地的邮票目录类别数据
+
         if (mList != null) {
             mList = new ArrayList<>();
         }
         // 初始化第一个按钮
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-        RequestNet(StaticField.ZH, num, StaticField.D);
+        RequestNet(StaticField.ZH, num, StaticField.D); // 邮票目录请求网络的方法
     }
 
     /**
-     * 请求网络的方法
+     * 获取在本地的邮票目录类别数据
+     */
+    private void GetCategory() {
+        String mCategory = sp.getString("Category2", "");
+        Gson gson = new Gson();
+        CategoryRMBean mCategoryRMBean = gson.fromJson(mCategory, CategoryRMBean.class);
+        ArrayList<CategoryRMBean.Category> list = mCategoryRMBean.getCategory();
+
+        mTitle = new String[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            mTitle[i] = list.get(i).getName();
+            MyLog.LogShitou("1级mTitle",mTitle[i]);
+
+        }
+
+        CategoryRMBean.Category SubCategory0 = list.get(0);
+        CategoryRMBean.Category SubCategory1 = list.get(1);
+        CategoryRMBean.Category SubCategory2 = list.get(2);
+        ArrayList<CategoryRMBean.Category.SubCategory> subCategory0 = SubCategory0.getSubCategory();
+        ArrayList<CategoryRMBean.Category.SubCategory> subCategory1 = SubCategory1.getSubCategory();
+        ArrayList<CategoryRMBean.Category.SubCategory> subCategory2 = SubCategory2.getSubCategory();
+
+        int sub0 = subCategory0.size();// 获取subCategory0的个数
+        int sub1 = subCategory1.size();// 获取subCategory1的个数
+        int sub2 = subCategory2.size();// 获取subCategory2的个数
+        mArrTitle0 = new String[sub0];// 一级分类
+        mArrTitle1 = new String[sub1];// 一级分类
+        mArrTitle2 = new String[sub2];// 一级分类
+
+        for (int i = 0; i < subCategory0.size(); i++) {
+            mArrTitle0[i] = subCategory0.get(i).getName();
+            MyLog.LogShitou("2级Title1", mArrTitle0[i]);
+        }
+        for (int i = 0; i < subCategory1.size(); i++) {
+            mArrTitle1[i] = subCategory1.get(i).getName();
+            MyLog.LogShitou("2级Title1", mArrTitle1[i]);
+        }
+        for (int i = 0; i < subCategory2.size(); i++) {
+            mArrTitle2[i] = subCategory2.get(i).getName();
+            MyLog.LogShitou("2级Title1", mArrTitle2[i]);
+        }
+
+    }
+
+    /**
+     * 邮票目录请求网络的方法
      *
      * @param Order_By 类别
      * @param index    角标
@@ -148,7 +203,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.e("邮票目录~~~>"+result);
+                MyLog.e("邮票目录~~~>" + result);
 
                 if (result.equals("-1")) {
                     return;
@@ -193,7 +248,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.stamptap_filter://筛选按钮
-                StampTapFilterDialog stampTapFilterDialog = new StampTapFilterDialog(arr, arrs, arres);
+                StampTapFilterDialog stampTapFilterDialog = new StampTapFilterDialog(mTitle,mArrTitle0, mArrTitle1, mArrTitle2);
                 stampTapFilterDialog.show(getFragmentManager(), StaticField.STAMPTAPFILTERDIALOG);
                 break;
             case R.id.stamptap_title_scan://扫码按钮
@@ -303,10 +358,11 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
     /**
      * 置顶按钮显示的方法
+     *
      * @param absListView
      * @param firstVisibleItem 当前能看见的第一个列表项ID（从0开始）
      * @param visibleItemCount 当前能看见的列表项个数（小半个也算）
-     * @param totalItemCount totalItemCount：列表项共数
+     * @param totalItemCount   totalItemCount：列表项共数
      */
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -316,10 +372,10 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                 && ScreenUtils.getScreenViewBottomHeight(mGrid) >= ScreenUtils
                 .getScreenHeight(getActivity())) {
             if (firstVisibleItem > lastVisibleItemPosition) {// 上滑
-                Log.e("上滑~~~~>","上滑"+firstVisibleItem+"-"+visibleItemCount+"-"+totalItemCount);
+                Log.e("上滑~~~~>", "上滑" + firstVisibleItem + "-" + visibleItemCount + "-" + totalItemCount);
                 mTop.setVisibility(View.VISIBLE);
             } else if (firstVisibleItem < lastVisibleItemPosition) {// 下滑
-                Log.e("下滑~~~~>","下滑"+firstVisibleItem+"-"+visibleItemCount+"-"+totalItemCount);
+                Log.e("下滑~~~~>", "下滑" + firstVisibleItem + "-" + visibleItemCount + "-" + totalItemCount);
                 mTop.setVisibility(View.GONE);
             } else {
                 return;
@@ -327,6 +383,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
             lastVisibleItemPosition = firstVisibleItem;
         }
     }
+
     /**
      * 滚动GridView到指定位置
      *
@@ -335,9 +392,9 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
     private void setListViewPos(int pos) {
         if (android.os.Build.VERSION.SDK_INT >= mCount) {
             mGrid.smoothScrollToPosition(pos);
-            Log.e("这是多少~~>001","hehe--"+pos);
+            Log.e("这是多少~~>001", "hehe--" + pos);
         } else {
-            Log.e("这是多少~~>002","haha--"+pos);
+            Log.e("这是多少~~>002", "haha--" + pos);
             mGrid.setSelection(pos);
         }
     }

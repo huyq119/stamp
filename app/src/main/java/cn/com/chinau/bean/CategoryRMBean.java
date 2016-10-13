@@ -7,12 +7,13 @@ import java.util.ArrayList;
  * 在首页类别查询实体类
  */
 public class CategoryRMBean extends BaseBean{
+
+
     private ArrayList<Category> category;
 
     public ArrayList<Category> getCategory() {
         return category;
     }
-
     public void setCategory(ArrayList<Category> category) {
         this.category = category;
     }
