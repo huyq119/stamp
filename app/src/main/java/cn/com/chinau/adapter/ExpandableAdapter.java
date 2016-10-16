@@ -101,8 +101,15 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         //父View的实体类
         ShopNameBean.SellerBean sellerBean = shopNameBean.getSeller_list().get(i);
-        groupHolder.mName.setText(sellerBean.getSeller_name());
-        groupHolder.mType.setText(sellerBean.getSeller_type());
+        groupHolder.mName.setText(sellerBean.getSeller_name()); //卖家名称
+        String mTypes = sellerBean.getSeller_type(); // 卖家类型
+        if (mTypes.equals("SC_ZY")) {
+            groupHolder.mType.setText("自营商城");
+        }else if (mTypes.equals("SC_DSF")) {
+            groupHolder.mType.setText("第三方商家");
+        }else if (mTypes.equals("YS")) {
+            groupHolder.mType.setText("邮市");
+        }
 
         //这里设置父View是否被选中
         ShoppingCartBiz.checkItem(sellerBean.isGroupSelected(), groupHolder.selected);
@@ -118,84 +125,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     //内部展示的布局
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-//        if (isEditing) {
-//            ItemHolder itemHolder;
-//            if (view == null) {
-//                itemHolder = new ItemHolder();
-//                view = View.inflate(context, R.layout.shop_expandable_item_child, null);
-//                itemHolder.mCount = (TextView) view.findViewById(R.id.child_count);
-//                itemHolder.mName = (TextView) view.findViewById(R.id.child_name);
-//                itemHolder.mPrice = (TextView) view.findViewById(R.id.child_price);
-//                itemHolder.mImg = (ImageView) view.findViewById(R.id.child_icon);
-//                itemHolder.child_selected = (ImageView) view.findViewById(R.id.child_image);
-//                view.setTag(itemHolder);
-//            } else {
-//                itemHolder = (ItemHolder) view.getTag();
-//            }
-////        ArrayList<ShopNameBean.GoodsBean> goods_list = shopNameBean.getSeller_list().get(i).getGoods_list();
-//////        itemHolder.mCount.setText(goods_list.get(i1).getGoods_count() );
-////        itemHolder.mName.setText(goods_list.get(i1).getGoods_name());
-////        itemHolder.mPrice.setText(goods_list.get(i1).getGoods_price());
-////        bitmap.display(itemHolder.mImg, goods_list.get(i1).getGoods_img());
-//
-//           //是否选中
-//            boolean isChildSelected = shopNameBean.getSeller_list().get(i).getGoods_list().get(i1).isChildSelected();
-//
-//            ShopNameBean.GoodsBean goodsBean = shopNameBean.getSeller_list().get(i).getGoods_list().get(i1);
-//            itemHolder.mName.setText(goodsBean.getGoods_name());
-//            itemHolder.mPrice.setText(goodsBean.getGoods_price());
-//            itemHolder.mCount.setText(goodsBean.getGoods_count());
-//            bitmap.display(itemHolder.mImg, goodsBean.getGoods_img());
-//
-//            //子View的checkBox
-//            itemHolder.child_selected.setTag(i + "," + i1);
-//            //子View的点击事件
-//            itemHolder.child_selected.setOnClickListener(listener);
-//
-//            //设置子View的选择状态
-//            ShoppingCartBiz.checkItem(isChildSelected, itemHolder.child_selected);
-//
-//        } else {//编辑的显示
-//            MyLog.e("是否执行");
-//            ItemHolderSelected itemHolderSelected = null;
-//            if (view == null) {
-//                itemHolderSelected = new ItemHolderSelected();
-//                view = View.inflate(context, R.layout.shop_expandable_item_childselected, null);
-//                itemHolderSelected.mChild_selected = (ImageView) view.findViewById(R.id.checkbox_shopCart);
-//                itemHolderSelected.mImageUrl = (ImageView) view.findViewById(R.id.iv_adapter_list_pic);
-//                itemHolderSelected.mName = (TextView) view.findViewById(R.id.tv_intro);
-//                itemHolderSelected.mAdd = (TextView) view.findViewById(R.id.tv_add);
-//                itemHolderSelected.mNum = (TextView) view.findViewById(R.id.tv_num);
-//                itemHolderSelected.mSub = (TextView) view.findViewById(R.id.tv_reduce);
-//                itemHolderSelected.mPrice = (TextView) view.findViewById(R.id.tv_price);
-//                view.setTag(itemHolderSelected);
-//            } else {
-//                itemHolderSelected = (ItemHolderSelected) view.getTag();
-//            }
-//
-//            ShopNameBean.GoodsBean goodsBean = shopNameBean.getSeller_list().get(i).getGoods_list().get(i1);
-//            itemHolderSelected.mName.setText(goodsBean.getGoods_name());
-//            itemHolderSelected.mPrice.setText(goodsBean.getGoods_price());
-//            itemHolderSelected.mNum.setText(goodsBean.getGoods_count());
-//            bitmap.display(itemHolderSelected.mImageUrl, goodsBean.getGoods_img());
-//
-//            //是否选中
-//            boolean isChildSelected = shopNameBean.getSeller_list().get(i).getGoods_list().get(i1).isChildSelected();
-//            //设置子View的选择状态
-//            ShoppingCartBiz.checkItem(isChildSelected, itemHolderSelected.mChild_selected);
-//
-//            //增加的按钮监听,这里应该把相应的值传过去
-//            itemHolderSelected.mAdd.setTag(i + "," + i1);
-//            itemHolderSelected.mAdd.setOnClickListener(listener);
-//
-//            //减少的按钮监听
-//            itemHolderSelected.mSub.setTag(i + "," + i1);//减少按钮
-//            itemHolderSelected.mSub.setOnClickListener(listener);
-//
-//            //子View的checkBox
-//            itemHolderSelected.mChild_selected.setTag(i + "," + i1);
-//            itemHolderSelected.mChild_selected.setOnClickListener(listener);
-//        }
         ItemHolder itemHolder;
         if (view == null) {
             itemHolder = new ItemHolder();
@@ -231,7 +160,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         ShopNameBean.GoodsBean goodsBean = shopNameBean.getSeller_list().get(i).getGoods_list().get(i1);
         itemHolder.mName.setText(goodsBean.getGoods_name());
-        itemHolder.mPrice.setText(goodsBean.getGoods_price());
+        itemHolder.mPrice.setText("￥"+goodsBean.getGoods_price());
         itemHolder.mCount.setText("x" + goodsBean.getGoods_count());
         bitmap.display(itemHolder.mImg, goodsBean.getGoods_img());
         //这两个是编辑模式的数据
@@ -341,6 +270,10 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                         mEditText.setText("编辑");
                     }
                     notifyDataSetChanged();
+                    break;
+                case R.id.Shop_pay://结算按钮
+
+
                     break;
 
 

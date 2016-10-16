@@ -34,6 +34,7 @@
             android:textSize="15sp"/>
 
         <TextView
+            android:id="@+id/distribution_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/distance"
@@ -43,6 +44,7 @@
             android:textSize="15sp"/>
 
         <TextView
+            android:id="@+id/distribution_price_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/distance"
@@ -104,12 +106,19 @@
             android:textColor="#333"
             android:textSize="15sp"/>
 
-        <TextView
+        <ImageView
+            android:id="@+id/firmorder_pay_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@mipmap/zhifubao"
             android:layout_marginLeft="@dimen/distance"
-            android:drawableLeft="@mipmap/zhifubao"
-            android:drawablePadding="10dp"
+            android:layout_marginRight="10dp"
+            />
+        <TextView
+            android:id="@+id/firmorder_pay_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
             android:gravity="right"
             android:text="@string/mode_of_payment"
             android:textColor="#333"

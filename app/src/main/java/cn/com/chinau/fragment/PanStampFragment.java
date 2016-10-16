@@ -209,8 +209,8 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                Log.e("result+淘邮票~~~~>", result);
-                if (result.equals("-1")) {
+                MyLog.LogShitou("result+淘邮票", result);
+                if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
                 Message msg = mHandler.obtainMessage();

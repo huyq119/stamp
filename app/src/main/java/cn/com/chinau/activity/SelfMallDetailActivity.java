@@ -23,6 +23,7 @@ import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.HomeViewPagerAdapter;
 import cn.com.chinau.base.BaseActivity;
+import cn.com.chinau.bean.AddShopCartBean;
 import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.StampDetailBean;
 import cn.com.chinau.http.HttpUtils;
@@ -152,6 +153,20 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                         initData(); // 再次详情请求,获取收藏状态
                     }
                     break;
+                case StaticField.ADDSHOPPINGCARTSUCCESS:
+                    Gson gsones = new Gson();
+                    BaseBean mBasebean = gsones.fromJson((String) msg.obj,BaseBean.class);
+                    if (mBasebean.getRsp_code().equals("0000")){
+                        String mCount = mShoppingCount.getText().toString().trim();
+                        String count = mCount.substring(1);// 去掉"+"号
+                        int mShopCount=Integer.valueOf(count).intValue();// 转int
+                        MyLog.LogShitou("请求下来的数量","--->:"+mCount+"--"+mShopCount);
+                        mShopCount++; // 数量自增
+                        mShoppingCount.setVisibility(View.VISIBLE);// 加入购物车成功后显示数量
+                        mShoppingCount.setText("+" + String.valueOf(mShopCount));
+                        MyLog.LogShitou("加入后的数量","--->:"+mShopCount);
+                    }
+                    break ;
             }
         }
     };
@@ -264,7 +279,18 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                 break;
 
             case R.id.mall_detail_addshopping://加入购物车
-                MyToast.showShort(this, "点击加入购物车");
+                if (mToken.equals("") || mUser_id.equals("")) {
+                    openActivityWitchAnimation(LoginActivity.class);
+                } else {
+                    AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+                    mAddShopCartBean.setGoods_count("1");
+                    mAddShopCartBean.setGoods_sn(mGoods_sn);
+                    String mSnJson = new Gson().toJson(mAddShopCartBean); // 转json串
+                    String toJson = "["+mSnJson+"]"; // 转数组
+                    AddShopCart(toJson); // 加入购物车网络请求
+                    MyLog.LogShitou("加入购物车转换的Json",toJson);
+
+                }
                 break;
             case R.id.mall_detail_gobuy://立即购买
                 Intent intents = new Intent(SelfMallDetailActivity.this, MainActivity.class);
@@ -362,10 +388,10 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
     }
 
     /**
-     *  加入购物车网络请求
-     * @param op_type 操作类型
+     * 加入购物车网络请求
+     * @param Goods_info  商品信息：所有商品的json字符串
      */
-    private void DeleteAddShoppingCart(final String op_type) {
+    private void AddShopCart(final String Goods_info) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -374,24 +400,25 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
                 params.put(StaticField.GOODS_SN, mGoods_sn);//  邮票编号
-
-                params.put(StaticField.OP_TYPE, op_type);// 操作类型
-
+                params.put(StaticField.GOODESINFO, Goods_info);//  商品信息：所有商品的json字符串
+                params.put(StaticField.OP_TYPE, StaticField.JR);// 操作类型：SC删除；JR加入；XG修改
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                MyLog.LogShitou("result加入购物车-->:", result);
+                MyLog.LogShitou("result加入购物车", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-                    Message msg = mHandler.obtainMessage();
-                    msg.what = StaticField.ADDSHOPPINGCARTSUCCESS;
-                    msg.obj = result;
-                    mHandler.sendMessage(msg);
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.ADDSHOPPINGCARTSUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+
             }
         });
     }
+
 }

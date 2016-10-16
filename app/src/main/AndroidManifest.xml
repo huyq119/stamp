@@ -96,10 +96,6 @@
 
         <activity android:name=".activity.ScanOrderBuyDetailActivity"></activity>
         <activity android:name="cn.com.chinau.activity.OrderBuyBackActivity"></activity>
-        <activity android:name="cn.com.chinau.activity.OrderCloseActivity"></activity>
-        <activity android:name="cn.com.chinau.activity.OrderFinishActivity"></activity>
-        <activity android:name="cn.com.chinau.activity.OrderRejectActivity"></activity>
-        <activity android:name="cn.com.chinau.activity.OrderWaitActivity"></activity>
         <activity android:name="cn.com.chinau.activity.LogisticsDetailsActivity"></activity>
         <activity android:name="cn.com.chinau.activity.OrderDetailsActivity"></activity>
         <activity android:name="cn.com.chinau.activity.HomeImageH5Activity"></activity>

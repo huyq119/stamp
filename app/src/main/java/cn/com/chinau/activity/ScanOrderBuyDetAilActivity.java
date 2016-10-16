@@ -21,12 +21,11 @@ import cn.com.chinau.bean.OrderBuyDetailBean;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
-import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 
 /**
- * 扫码回购订单详情（审核中）页面
+ * 扫码回购订单详情页面
  */
 public class ScanOrderBuyDetailActivity extends BaseActivity implements View.OnClickListener {
 
@@ -127,7 +126,7 @@ public class ScanOrderBuyDetailActivity extends BaseActivity implements View.OnC
     private void initView() {
         mToken = sp.getString("token", "");
         mUser_id = sp.getString("userId", "");
-        // 获取竞拍页面传过来的的值
+
         Bundle bundle = getIntent().getExtras();
         Order_sn = bundle.getString("Order_sn", "");
         MyLog.LogShitou("传过来的订单编号", Order_sn);
@@ -211,11 +210,10 @@ public class ScanOrderBuyDetailActivity extends BaseActivity implements View.OnC
                 finishWitchAnimation();
                 break;
             case R.id.btn_order_send: // 去寄送
-                MyToast.showShort(this, "点击了去寄送");
-                openActivityWitchAnimation(FastMailInfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("ScanOrderBuyDetail","ScanOrderBuyDetail");
+                openActivityWitchAnimation(FastMailInfoActivity.class,bundle);
                 break;
-
-
         }
     }
 }

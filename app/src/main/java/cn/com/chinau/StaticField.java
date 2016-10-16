@@ -246,7 +246,10 @@ public class StaticField {
     public static final String WC = "WC"; // 已完成
     public static final String TK = "TK";// 退款
     // 购物车
+    public static final String SHOPCARTQUERY = "cn.com.chinau.shopcart.query";
+    // 修改购物车
     public static final String SHOPCARTMODIFY = "cn.com.chinau.shopcart.modify";
+    public static final String GOODESINFO = "goods_info";
 
 
 }

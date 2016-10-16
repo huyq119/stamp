@@ -22,7 +22,7 @@
         android:gravity="center"
         android:text="编辑"
         android:textColor="#fff"
-        android:textSize="@dimen/fount_size"
+        android:textSize="@dimen/text3_size"
 
          />
 </RelativeLayout>

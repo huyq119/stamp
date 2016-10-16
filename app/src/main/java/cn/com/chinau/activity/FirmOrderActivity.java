@@ -29,8 +29,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private SelectPayPopupWindow mPayPopupWindow;//支付的弹出框
     private SelectDistributionPopupWindow mDistributionPopupWindow;//配送方式的弹出框
     private ExpandableListView mListView;//底部列表展示
-    private ImageView mBack;
-    private TextView mTitle,mOkPay;
+    private ImageView mBack,mPayImg;
+    private TextView mTitle,mOkPay,mDistributionTv,mDistributionPrice,mPayNmme;
 
     @Override
     public View CreateTitle() {
@@ -61,7 +61,10 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         mDistribution = (LinearLayout) mFirmOrderContent.findViewById(R.id.FirmOrder_distribution);
         mListView = (ExpandableListView) mFirmOrderContent.findViewById(R.id.firmOrder_expandableLV);
         mOkPay = (TextView) mFirmOrderContent.findViewById(R.id.firmOrder_ok_pay);
-        //TODO	服务费，邮市、竞拍商品包含服务费，商城商品没有。
+        mDistributionTv = (TextView) mFirmOrderContent.findViewById(R.id.distribution_tv);
+        mDistributionPrice = (TextView) mFirmOrderContent.findViewById(R.id.distribution_price_tv);
+        mPayImg = (ImageView) mFirmOrderContent.findViewById(R.id.firmorder_pay_img);
+        mPayNmme = (TextView) mFirmOrderContent.findViewById(R.id.firmorder_pay_name);
 
     }
 
@@ -165,10 +168,12 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             mPayPopupWindow.dismiss();
             switch (view.getId()) {
                 case R.id.Wechat_click://点击了微信按钮
-                    MyToast.showShort(FirmOrderActivity.this, "点击了微信按钮");
+                    mPayImg.setImageResource(R.mipmap.weixin_pay);
+                    mPayNmme.setText("微信");
                     break;
                 case R.id.Alipay_click://点击了支付宝按钮
-                    MyToast.showShort(FirmOrderActivity.this, "点击了支付宝按钮");
+                    mPayImg.setImageResource(R.mipmap.zhifubao);
+                    mPayNmme.setText("支付宝");
                     break;
             }
         }
@@ -182,10 +187,12 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             mDistributionPopupWindow.dismiss();
             switch (view.getId()) {
                 case R.id.EMS_click://Ems的点击按钮
-                    MyToast.showShort(FirmOrderActivity.this, "点击了EMS按钮");
+                    mDistributionTv.setText("EMS");
+                    mDistributionPrice.setText("￥"+10);
                     break;
                 case R.id.Wind_click://顺丰的点击按钮
-                    MyToast.showShort(FirmOrderActivity.this, "点击了顺丰按钮");
+                    mDistributionTv.setText("顺丰速递");
+                    mDistributionPrice.setText("￥"+10);
                     break;
             }
         }

@@ -2,6 +2,7 @@ package cn.com.chinau.activity;
 
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.os.Message;
 import android.text.Editable;
 import android.text.InputType;
@@ -132,6 +133,7 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
             }
         }
     };
+    private String mDetail;
 
 
     @Override
@@ -156,6 +158,10 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
+
+        Bundle bundle = getIntent().getExtras();
+        mDetail = bundle.getString("ScanOrderBuyDetail", "");
+
         mBack = (ImageView) mFastMailInfoTitle.findViewById(R.id.base_title_back);
         mTitle = (TextView) mFastMailInfoTitle.findViewById(R.id.base_title);
         mTitle.setText("快递信息");
@@ -241,9 +247,12 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.base_title_back://返回
-                openActivityWitchAnimation(AffirmBuyBackActivity.class);
-                finish();
-//                finishWitchAnimation();
+                if(mDetail.equals("ScanOrderBuyDetail")){
+                    finishWitchAnimation();
+                }else{
+                    openActivityWitchAnimation(AffirmBuyBackActivity.class);
+                    finish();
+                }
                 break;
             case R.id.express_kuaidi://选择快递公司
                 if (mPopup == null) {

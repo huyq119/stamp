@@ -181,7 +181,7 @@ public class ShoppingCartBiz {
                     String price = listGoods.get(i).getGoods_list().get(j).getGoods_price();
                     String num = listGoods.get(i).getGoods_list().get(j).getGoods_count();
                     //子View的总价格,数量
-                    childMoney += Integer.valueOf(price) * Integer.valueOf(num);
+                    childMoney += Double.valueOf(price) * Integer.valueOf(num);
                     childCount++;
 //                    String countMoney = DecimalUtil.multiply(price, num);
 //                    selectedMoney = DecimalUtil.add(selectedMoney, countMoney);

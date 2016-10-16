@@ -40,6 +40,8 @@
             android:layout_marginTop="@dimen/distance"
             android:layout_weight="1"
             android:text="庚申年"
+            android:singleLine="true"
+            android:layout_marginRight="12dp"
             android:textColor="#000"
             android:textSize="15sp" />
 

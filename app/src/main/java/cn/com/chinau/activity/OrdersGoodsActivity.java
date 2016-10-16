@@ -67,7 +67,7 @@ public class OrdersGoodsActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case StaticField.SUCCESS:// 我的邮集
+                case StaticField.SUCCESS://
                     String msge = (String) msg.obj;
                     Gson gson = new Gson();
 //                    MyStampGridViewBean mOrderSweepBean = gson.fromJson(msge, MyStampGridViewBean.class);
@@ -358,7 +358,6 @@ public class OrdersGoodsActivity extends BaseActivity {
                     break;
                 case 3:
                     mRadioGroup.check(R.id.RBtn_Complete);
-
                     break;
                 case 4:
                     mRadioGroup.check(R.id.RBtn_Refuse);
@@ -438,7 +437,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                 params.put(StaticField.SIGN, md5code);
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.LogShitou("商品订单list-->:",result);
+                MyLog.LogShitou(orderStatus+"商品订单list",result);
                 if (result.equals("-1")|result.equals("-2")) {
                     return;
                 }
