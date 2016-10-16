@@ -126,8 +126,8 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
         int yearNum = mYearListener.getPosition();
         int CategoryNum = mCategoryListener.getPosition();
         int PersonNum = mThemeListener.getPosition();
-        MyLog.e(yearNum + "-" + CategoryNum + "-" + PersonNum);
 
+        MyLog.LogShitou("筛选点击的位置Position",CategoryNum+ "-" + yearNum + "-" + PersonNum);
 
         String Category = (CategoryNum == -1) ? "" : arrClass[CategoryNum];
         String Year = (yearNum == -1) ? "" : arrYear[yearNum];

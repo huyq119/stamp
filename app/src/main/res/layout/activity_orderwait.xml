@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#f8f8f8"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f8f8f8"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,10 +23,10 @@
                 android:gravity="center"
                 android:text="@string/order_wait"
                 android:textColor="#000"
-                android:textSize="30sp"/>
+                android:textSize="30sp" />
         </LinearLayout>
 
-        <View style="@style/myline"/>
+        <View style="@style/myline" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                 android:layout_weight="1"
                 android:text="@string/order_num"
                 android:textColor="#999"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_order_num"
@@ -50,7 +50,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:textColor="#000"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -67,7 +67,7 @@
                 android:layout_weight="1"
                 android:text="@string/order_time"
                 android:textColor="#999"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_order_time"
@@ -75,7 +75,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:textColor="#000"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -92,7 +92,7 @@
                 android:layout_weight="1"
                 android:text="@string/order_goods"
                 android:textColor="#999"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_order_name"
@@ -100,7 +100,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:textColor="#000"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -117,7 +117,7 @@
                 android:layout_weight="1"
                 android:text="@string/order_buyTime"
                 android:textColor="#999"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_order_time_buy"
@@ -125,7 +125,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:textColor="#000"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -142,7 +142,7 @@
                 android:layout_weight="1"
                 android:text="@string/order_current_price"
                 android:textColor="#999"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_order_current_price"
@@ -150,7 +150,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:textColor="#000"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -167,7 +167,7 @@
                 android:layout_weight="1"
                 android:text="@string/order_pre_earn"
                 android:textColor="#999"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_order_pre_earn"
@@ -175,7 +175,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:textColor="#000"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -192,7 +192,7 @@
                 android:layout_marginLeft="@dimen/distance"
                 android:layout_weight="1"
                 android:textColor="#999"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_order_server"
@@ -200,7 +200,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:textColor="#000"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -217,7 +217,7 @@
                 android:layout_weight="1"
                 android:text="@string/order_back_price"
                 android:textColor="#999"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_order_back_price"
@@ -225,7 +225,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:textColor="#000"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -242,7 +242,7 @@
                 android:layout_weight="1"
                 android:text="@string/order_users"
                 android:textColor="#999"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_order_users"
@@ -250,7 +250,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:textColor="#000"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -268,7 +268,7 @@
                 android:layout_weight="1"
                 android:text="@string/order_phone"
                 android:textColor="#999"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_order_phone"
@@ -276,17 +276,17 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:textColor="#000"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <View style="@style/myline"/>
+    <View style="@style/myline" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical"/>
+        android:orientation="vertical" />
 
     <Button
         android:id="@+id/btn_send"
@@ -297,6 +297,6 @@
         android:gravity="center"
         android:text="@string/order_Send"
         android:textColor="#fff"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
 
 </LinearLayout>

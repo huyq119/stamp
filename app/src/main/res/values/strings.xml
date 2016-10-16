@@ -199,10 +199,10 @@
     <string name="order_current_price">当前价格:</string>
     <string name="order_pre_earn">预计收益:</string>
     <string name="order_back_price">回收价格:</string>
-    <string name="order_users">用户:</string>
-    <string name="order_phone">联系人手机号:</string>
-    <string name="order_Express_name">快递公司:</string>
-    <string name="order_express_num">快递单号:</string>
+    <string name="order_users">用户</string>
+    <string name="order_phone">联系人手机号</string>
+    <string name="order_Express_name">快递公司</string>
+    <string name="order_express_num">快递单号</string>
     <string name="order_auditing">审核中</string>
     <string name="order_close">订单关闭</string>
     <string name="order_finish">已完成</string>

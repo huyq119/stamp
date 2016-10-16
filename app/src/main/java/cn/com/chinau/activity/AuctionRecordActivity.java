@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,7 +24,6 @@ import cn.com.chinau.bean.AuctionRecordBean;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
-import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 
@@ -42,10 +42,10 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
     private SharedPreferences sp;
     private String mToken, mUser_id,result;
     private int num = 0;//初始索引
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             switch (msg.what) {
                 case StaticField.SUCCESS:
                     String msge = (String) msg.obj;
@@ -59,15 +59,18 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
                             //竖向ListView设置适配器
                             initAdapter();
                         }else {
-                            MyToast.showShort(AuctionRecordActivity.this,"还未有竞拍记录。。。");
+                            mRecordGroup_ll.setVisibility(View.GONE);// 标签栏
+                            mRecordListView.setVisibility(View.GONE);
+                            mNoOrderTv.setVisibility(View.VISIBLE); // 无信息控件显示
+                            mNoOrderTv.setText("暂无订单信息");
                         }
                     }
-
                     break;
-
             }
         }
     };
+    private LinearLayout mRecordGroup_ll;
+    private TextView mNoOrderTv;
 
     @Override
     public View CreateTitle() {
@@ -137,6 +140,8 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
         mRecording = (Button) mAuctionRecordContent.findViewById(R.id.btn_recording);
         mRecordOut = (Button) mAuctionRecordContent.findViewById(R.id.btn_recordout);
         mRecordSuccess = (Button) mAuctionRecordContent.findViewById(R.id.record_success);
+        mRecordGroup_ll = (LinearLayout) mAuctionRecordContent.findViewById(R.id.record_radioGroup_ll);
+        mNoOrderTv = (TextView) mAuctionRecordContent.findViewById(R.id.no_order_tv);
     }
 
     private void initData() {

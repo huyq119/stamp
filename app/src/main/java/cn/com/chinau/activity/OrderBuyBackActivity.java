@@ -1,6 +1,7 @@
 package cn.com.chinau.activity;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -15,7 +16,6 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
@@ -26,18 +26,17 @@ import cn.com.chinau.bean.OrderSweepBean;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
-import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 
 /**
- * 回购订单页面
+ * 扫码回购订单页面
  */
 public class OrderBuyBackActivity extends BaseActivity implements View.OnClickListener {
 
     private View mOrderTitle;
     private View mOrderContent;
-    private TextView mTitle;
+    private TextView mTitle,mOederTv;
     private ImageView mback;
     private RadioGroup mRadioGroup;
     private RadioButton mOrderSweepBtn,mOrderBtn;
@@ -50,8 +49,6 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
     private int num = 0;//初始索引
     private OrderAdapter adapters;
     private Handler mHandler = new Handler() {
-
-
         @Override
         public void handleMessage(Message msg) {
 
@@ -63,14 +60,14 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
                     String mRsp_code = mOrderSweepBean.getRsp_code();
                     if (mRsp_code.equals("0000")) {
                         mList = mOrderSweepBean.getOrder_list();
-                        MyLog.LogShitou("扫码回购订单列表有几条-->:", mList.size() + "");
                         if (mList != null && mList.size() != 0) {
+                            mOederListview.setVisibility(View.VISIBLE);
                             initAdapter();
                         }else {
-                            MyToast.showShort(OrderBuyBackActivity.this,"还未有扫码回购订单。。。");
+                            mOederListview.setVisibility(View.GONE);
+                            mOederTv.setVisibility(View.VISIBLE);
                         }
                     }
-
                     break;
                 case StaticField.ORDERS_SUCCESS: // 回购
                     Gson gsons = new Gson();
@@ -78,24 +75,19 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
                     String mRsp_codes = mOrderSweepBeans.getRsp_code();
                     if (mRsp_codes.equals("0000")) {
                         mList = mOrderSweepBeans.getOrder_list();
-                        MyLog.LogShitou("回购订单列表有几条-->:", mList.size() + "");
                         if (mList != null && mList.size() != 0) {
                               adapters =  new OrderAdapter(OrderBuyBackActivity.this, mBitmap, mList);
                             mOederListview.setAdapter(adapters);
                             adapters.notifyDataSetChanged();
                         }else {
-                            MyToast.showShort(OrderBuyBackActivity.this,"还未有回购订单。。。");
-                            adapter.notifyDataSetChanged();
+                            mOederListview.setVisibility(View.GONE);
+                            mOederTv.setVisibility(View.VISIBLE);
                         }
                     }
-
                     break;
-
             }
         }
     };
-
-
 
     @Override
     public View CreateTitle() {
@@ -132,6 +124,7 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
         mOrderBtn = (RadioButton)mOrderContent.findViewById(R.id.order_btn);
         mRadioGroup.check(R.id.record_sweep_btn);// 默认选中
         mOederListview = (ListView)mOrderContent.findViewById(R.id.listView);
+        mOederTv = (TextView)mOrderContent.findViewById(R.id.no_order_tv);
 
 
     }
@@ -148,27 +141,12 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
         mOederListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Random random = new Random();
-                int ran = random.nextInt(5);
-                MyLog.e(ran + "");
-                if (ran == 0) {
-                    openActivityWitchAnimation(OrderCloseActivity.class);
 
-                } else if (ran == 1) {
-
-                    openActivityWitchAnimation(OrderAuditingActivity.class);
-
-                } else if (ran == 2) {
-
-                    openActivityWitchAnimation(OrderFinishActivity.class);
-                } else if (ran == 3) {
-
-                    openActivityWitchAnimation(OrderRejectActivity.class);
-
-                } else {
-
-                    openActivityWitchAnimation(OrderWaitActivity.class);
-                }
+                String mOrder_sn =  mList.get(i).getOrder_sn();
+                Bundle bundle = new Bundle();
+                bundle.putString("Order_sn",mOrder_sn);
+                MyLog.LogShitou("mOrder_sn回购订单的编号",mOrder_sn);
+                openActivityWitchAnimation(ScanOrderBuyDetailActivity.class,bundle);
             }
         });
     }
@@ -178,7 +156,6 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
         mOederListview.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
 
     @Override
     public void onClick(View view) {
@@ -219,14 +196,13 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
                 params.put(StaticField.SIGN, md5code);
 
                 result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                MyLog.LogShitou("回购订单List-->:", result);
+                MyLog.LogShitou(buyback_type+"-:"+"回购订单List-->:", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
 
                 if (buyback_type.equals("SM")){
-
                     Message msg = mHandler.obtainMessage();
                     msg.what = StaticField.SUCCESS;
                     msg.obj = result;

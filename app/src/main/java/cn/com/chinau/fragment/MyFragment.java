@@ -227,7 +227,13 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_noLogin://没有登录
-                openActivityWitchAnimation(LoginActivity.class);
+
+                    Intent intents = new Intent(getActivity(), LoginActivity.class);
+                    intents.putExtra("WithDraw","myFragmentLogin");
+                    startActivity(intents);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+
                 break;
             case R.id.my_usMe://关于我们
                 openActivityWitchAnimation(UsMeActivity.class);
@@ -239,16 +245,49 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 openActivityWitchAnimation(WithdrawActivity.class);
                 break;
             case R.id.my_PressWordManager://密码管理
-                openActivityWitchAnimation(PressWordManagerActivity.class);
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
+                    openActivityWitchAnimation(PressWordManagerActivity.class);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("WithDraw","myFragmentLogin");
+                    startActivity(intent);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
+
                 break;
             case R.id.my_Stamp://我的邮集
-                openActivityWitchAnimation(MyStampActivity.class);
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
+                    openActivityWitchAnimation(MyStampActivity.class);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("WithDraw","myFragmentLogin");
+                    startActivity(intent);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
                 break;
             case R.id.my_auctionRecord://竞拍记录
-                openActivityWitchAnimation(AuctionRecordActivity.class);
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
+                    openActivityWitchAnimation(AuctionRecordActivity.class);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("WithDraw","myFragmentLogin");
+                    startActivity(intent);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
                 break;
             case R.id.my_collection://收藏夹
-                openActivityWitchAnimation(MyCollectionActivity.class);
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
+                    openActivityWitchAnimation(MyCollectionActivity.class);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("WithDraw","myFragmentLogin");
+                    startActivity(intent);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
                 break;
             case R.id.my_Address://收获地址管理
                 if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
@@ -262,7 +301,15 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case R.id.my_order_buy_back://回购订单
-                openActivityWitchAnimation(OrderBuyBackActivity.class);
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
+                    openActivityWitchAnimation(OrderBuyBackActivity.class);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("WithDraw","myFragmentLogin");
+                    startActivity(intent);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
                 break;
             case R.id.my_orders_goods:// 商品订单
                 Bundle bundle = new Bundle();

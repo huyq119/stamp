@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2016/9/20.
- * 跟人信息查询
+ * 个人信息查询
  */
 public class PersonBean {
 

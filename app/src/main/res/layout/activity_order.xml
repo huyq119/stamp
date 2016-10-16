@@ -56,5 +56,7 @@
         android:scrollbars="none"
         android:layout_below="@+id/view" />
 
+    <include layout="@layout/frameayout_no_order"/>
+
 
 </LinearLayout>

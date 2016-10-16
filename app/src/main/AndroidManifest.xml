@@ -94,7 +94,7 @@
         <!--设计家H5详情页面-->
         <activity android:name="cn.com.chinau.activity.DesignerH5DetailActivity"></activity>
 
-        <activity android:name="cn.com.chinau.activity.OrderAuditingActivity"></activity>
+        <activity android:name=".activity.ScanOrderBuyDetailActivity"></activity>
         <activity android:name="cn.com.chinau.activity.OrderBuyBackActivity"></activity>
         <activity android:name="cn.com.chinau.activity.OrderCloseActivity"></activity>
         <activity android:name="cn.com.chinau.activity.OrderFinishActivity"></activity>

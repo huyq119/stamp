@@ -43,7 +43,7 @@ import cn.com.chinau.zxing.activity.CaptureActivity;
  * 邮票目录页面
  */
 public class StampTapFragment extends BaseFragment implements View.OnClickListener,
-        AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+        AdapterView.OnItemClickListener, AbsListView.OnScrollListener,StampTapFilterDialog.JsonData {
 
 
     private static final int STAMPCONTENT = 0;
@@ -63,6 +63,11 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
     private ArrayList<StampTapBean.StampList> mList;
     private int num = 0;//初始索引
+    private boolean scrollFlag; // 标记是否滑动
+    private int lastVisibleItemPosition = 0;// 标记上次滑动位置
+    private int mCount;
+    private SharedPreferences sp;
+    private String[] mTitle, mArrTitle0, mArrTitle1, mArrTitle2;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -74,22 +79,17 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                     String result = (String) msg.obj;
                     Gson gson = new Gson();
                     StampTapBean stampTapBean = gson.fromJson(result, StampTapBean.class);
-                    mList = stampTapBean.getStamp_list();
-                    initAdapter();
+                    String code = stampTapBean.getRsp_code();
+                    if (code.equals("0000")) {
+//                        if (mList.size() !=0){
+                            mList = stampTapBean.getStamp_list();
+                            initAdapter();
+//                        }
+                    }
                     break;
             }
         }
     };
-
-    private String[] arrs = {"纪字头邮票", "纪字头邮票", "文字头邮票", "编号邮票", "J字头邮票", "T字头邮票", "编年邮票", "其他邮票"};
-    private String[] arres = {"人物", "植物", "节日", "器皿", "字画", "风光", "经济", "农业", "民俗", "动物", "生肖",
-            "文化艺术", "政治", "科教", "工业", "交通", "军事", "文学", "邮政", "公共", "成就", "儿童", "建筑", "会议",
-            "组织", "革命", "外事外交", "宣传"};
-    private boolean scrollFlag; // 标记是否滑动
-    private int lastVisibleItemPosition = 0;// 标记上次滑动位置
-    private int mCount;
-    private SharedPreferences sp;
-    private String[] mTitle,mArrTitle0, mArrTitle1, mArrTitle2;
 
     @Override
     public View CreateTitle() {
@@ -131,7 +131,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
         }
         // 初始化第一个按钮
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-        RequestNet(StaticField.ZH, num, StaticField.D); // 邮票目录请求网络的方法
+        RequestNet(StaticField.ZH, num, StaticField.D,""); // 邮票目录请求网络的方法
     }
 
     /**
@@ -146,7 +146,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
         mTitle = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {
             mTitle[i] = list.get(i).getName();
-            MyLog.LogShitou("1级mTitle",mTitle[i]);
+            MyLog.LogShitou("1级mTitle", mTitle[i]);
 
         }
 
@@ -166,7 +166,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
         for (int i = 0; i < subCategory0.size(); i++) {
             mArrTitle0[i] = subCategory0.get(i).getName();
-            MyLog.LogShitou("2级Title1", mArrTitle0[i]);
+            MyLog.LogShitou("2级Title0", mArrTitle0[i]);
         }
         for (int i = 0; i < subCategory1.size(); i++) {
             mArrTitle1[i] = subCategory1.get(i).getName();
@@ -174,7 +174,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
         }
         for (int i = 0; i < subCategory2.size(); i++) {
             mArrTitle2[i] = subCategory2.get(i).getName();
-            MyLog.LogShitou("2级Title1", mArrTitle2[i]);
+            MyLog.LogShitou("2级Title2", mArrTitle2[i]);
         }
 
     }
@@ -186,7 +186,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
      * @param index    角标
      * @param Sort     排序
      */
-    private void RequestNet(final String Order_By, final int index, final String Sort) {
+    private void RequestNet(final String Order_By, final int index, final String Sort,final String category) {
         ThreadManager.getInstance().createLongPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -195,6 +195,10 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
                 params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；SJ时间；JG价格)
                 params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
+
+                if (!category.equals("")){
+                    params.put(StaticField.CATEGORY, category); // 类别，json串
+                }
                 params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目)
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
@@ -203,12 +207,11 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.e("邮票目录~~~>" + result);
+                MyLog.LogShitou("邮票目录list",result);
 
-                if (result.equals("-1")) {
+                if (result.equals("-1") |result.equals("-2")  ) {
                     return;
                 }
-
                 Message msg = mHandler.obtainMessage();
                 msg.obj = result;
                 msg.what = STAMPCONTENT;
@@ -218,10 +221,8 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void initAdapter() {
-//        if (gvAdapter == null) {
         //为GridView设置适配器
         gvAdapter = new StampTapGridViewAdapter(getActivity(), mList, mBitmap);
-//        }
         mGrid.setAdapter(gvAdapter);
         gvAdapter.notifyDataSetChanged();
 
@@ -244,11 +245,21 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
         initData();
     }
 
+    // 回调json串方法
+    @Override
+    public void GetJsonData(String tojson) {
+        String mToJson = tojson;
+        MyLog.LogShitou("传过来的Json串",mToJson);
+        setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
+        RequestNet(StaticField.ZH, num, StaticField.D,mToJson); // 邮票目录请求网络的方法
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.stamptap_filter://筛选按钮
-                StampTapFilterDialog stampTapFilterDialog = new StampTapFilterDialog(mTitle,mArrTitle0, mArrTitle1, mArrTitle2);
+                StampTapFilterDialog stampTapFilterDialog = new StampTapFilterDialog(mTitle, mArrTitle0, mArrTitle1, mArrTitle2);
+                stampTapFilterDialog.setmJsonData(this);
                 stampTapFilterDialog.show(getFragmentManager(), StaticField.STAMPTAPFILTERDIALOG);
                 break;
             case R.id.stamptap_title_scan://扫码按钮
@@ -264,11 +275,11 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                 // true代表降序,false代表升序
                 if (Synthesizeflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.ZH, num, StaticField.D);
+                    RequestNet(StaticField.ZH, num, StaticField.D,"");
                     Synthesizeflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSynthesize, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.ZH, num, StaticField.A);
+                    RequestNet(StaticField.ZH, num, StaticField.A,"");
                     Synthesizeflag = true;
                 }
                 break;
@@ -279,12 +290,12 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
                 if (Salesflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mRelease, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.SJ, num, StaticField.D);
+                    RequestNet(StaticField.SJ, num, StaticField.D,"");
                     Salesflag = false;
                 } else {
                     Log.e("flag", "false");
                     setDrawable(R.mipmap.top_arrow_top, mRelease, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.SJ, num, StaticField.A);
+                    RequestNet(StaticField.SJ, num, StaticField.A,"");
                     Salesflag = true;
                 }
                 break;
@@ -295,12 +306,12 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
                 if (Priceflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mPrice, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.JG, num, StaticField.D);
+                    RequestNet(StaticField.JG, num, StaticField.D,"");
                     Priceflag = false;
                 } else {
                     Log.e("flag", "false");
                     setDrawable(R.mipmap.top_arrow_top, mPrice, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.JG, num, StaticField.A);
+                    RequestNet(StaticField.JG, num, StaticField.A,"");
                     Priceflag = true;
                 }
                 break;
@@ -419,6 +430,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
         button.setCompoundDrawables(null, null, drawable, null);
         button.setTextColor(color);
     }
+
 
 
 }

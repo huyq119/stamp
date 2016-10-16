@@ -56,7 +56,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     private ImageView mBack, mShared, mCollect, mArrows;
     private TextView mTitle, mNumber, mSubtract, mCount, mAdd, mBid, mRecordTv, mBidCount,
             mGoodsName, mTimeTv, mTime, mStatus, mPrivce, mFreight, mFeeRate, mServiceFee, mSellerName,
-            mGoodsSource,mOverTv;
+            mGoodsSource, mOverTv;
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
     private Button mTopBtn, mKonwBtn;
@@ -65,7 +65,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     private int lastY = 0;
     private int scrollY; // 标记上次滑动位置
     private int intCount = 0;// 每次出价加减的值
-    private String count, mGoods_sn, mGoodsDetail, mVerifyInfo,mToken,mUser_id,mIsFavorite;// 获取出价的值
+    private String count, mGoods_sn, mGoodsDetail, mVerifyInfo, mToken, mUser_id, mIsFavorite;// 获取出价的值
     private int goods_storage = 1; //出价最低价
     private AuctionRegulationsAgreementDialog auctiondialog; // 协议dialog
     private boolean bidFlag = false, addFlag;// 出价标识,加价标识
@@ -115,12 +115,12 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     String mPrice = mStampDetailBean.getCurrent_price();
                     mPrivce.setText("￥" + mPrice);
                     mCount.setText(mPrice);
-                   String status = mStampDetailBean.getAuction_status();
-                    if(status.equals("DP")){
+                    String status = mStampDetailBean.getAuction_status();
+                    if (status.equals("DP")) {
                         mStatus.setText("未开始");
-                    }else if(status.equals("JP")){
+                    } else if (status.equals("JP")) {
                         mStatus.setText("竞拍中");
-                    }else if(status.equals("JS")){
+                    } else if (status.equals("JS")) {
                         mStatus.setText("已结束");
                         mOverTv.setVisibility(View.VISIBLE);
                         mOverTv.setText("已结束");
@@ -131,7 +131,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     String mFeeRates = mStampDetailBean.getService_fee_rate();
                     mFeeRate.setText("(" + mFeeRates + "):");
                     String mFees = mStampDetailBean.getService_fee();
-                    mServiceFee.setText("￥" +mFees);
+                    mServiceFee.setText("￥" + mFees);
                     String mGoodsSources = mStampDetailBean.getGoods_source();
                     MyLog.LogShitou("邮票类型-->:", mGoodsSources);
                     if (mGoodsSources.equals("YS")) {
@@ -152,7 +152,6 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                         String mPhone = mSellerNos.substring(0, 3) + "****" + mSellerNos.substring(7, mSellerNos.length());
                         mNumber.setText(mPhone);
                     }
-
                     mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
                     MyLog.LogShitou("商品收藏状态-->:", mIsFavorite);
                     if (mIsFavorite.equals("0")) { // 未收藏
@@ -166,10 +165,10 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     MyLog.LogShitou("竞拍详情请求下来的H5url-->:", mGoodsDetail + "--" + mVerifyInfo);
 
                     mBidList = mStampDetailBean.getOffer_list();// 出价list
-                   int count =  mBidList.size();
-                    if (mBidList!= null && mBidList.size() !=0){
-                        mBidCount.setText(count+"");// 出价次数
-                    }else {
+                    int count = mBidList.size();
+                    if (mBidList != null && mBidList.size() != 0) {
+                        mBidCount.setText(count + "");// 出价次数
+                    } else {
                         mBidCount.setText("0");
                     }
                     initAdapter();
@@ -197,13 +196,12 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     BaseBean mBaseBeanees = gsones.fromJson((String) msg.obj, BaseBean.class);
                     String mRsp_codees = mBaseBeanees.getRsp_code();
                     if (mRsp_codees.equals("0000")) {
-                        MyToast.showShort(AuctionDetailActivity.this,"出价成功");
+                        MyToast.showShort(AuctionDetailActivity.this, "出价成功");
                     }
                     break;
             }
         }
     };
-
 
 
     @Override
@@ -419,14 +417,15 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-                    Message msg = mHandler.obtainMessage();
-                        msg.what = StaticField.PRICESUCCESS;
-                    msg.obj = result;
-                    mHandler.sendMessage(msg);
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.PRICESUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
 
             }
         });
     }
+
     private void initListener() {
         mShared.setOnClickListener(this);
         mBack.setOnClickListener(this);

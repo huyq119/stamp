@@ -102,6 +102,7 @@ public class StaticField {
     public static final String ML = "ML";
     public static final String SC_ZY = "SC_ZY";
     public static final String SC_DSF = "SC_DSF";
+    public static final String CATEGORY = "category";
 
 
     public static final String A = "A";//升序
@@ -203,6 +204,7 @@ public class StaticField {
     public static final String JPZ = "JPZ";
     // 回购订单List
     public static final String ORDERLIST = "cn.com.chinau.buyback.orderlist.query";
+    public static final String ORDERDETAIL = "cn.com.chinau.buyback.order.query";// 订详情
     public static final String BUYBACK_TYPE = "buyback_type"; //订单类型：SM：扫码回购；PT：普通回购
     public static final String SM = "SM";
     public static final String PT = "PT";

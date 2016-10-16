@@ -71,7 +71,7 @@ public class ThreeMallFilterFragment extends BaseDialogFragment implements SellM
             MyLog.LogShitou("第三方1级mTitle", mTitle[i]);
         }
         mCategorys = mTitle[0];
-        mYearses = mTitle[0];
+        mYearses = mTitle[1];
 
 
         CategoryDSFBean.Category SubCategory0 = CategoryList.get(0);
@@ -111,7 +111,7 @@ public class ThreeMallFilterFragment extends BaseDialogFragment implements SellM
     private void setPopupWindowData() {
         mCategory =(TextView) mSelfMall.findViewById(R.id.threemall_title_pop_category);
         mCategory.setText(mCategorys);
-      mYears =(TextView) mSelfMall.findViewById(R.id.threemall_title_pop_years);
+        mYears =(TextView) mSelfMall.findViewById(R.id.threemall_title_pop_years);
         mYears.setText(mYearses);
 
         //类别的GridView

@@ -18,6 +18,7 @@ import cn.com.chinau.bean.OrderSweepBean;
 
 /**
  * Created by Administrator on 2016/8/30.
+ * 扫码回购订单适配器
  */
 public class OrderSweepAdapter extends BaseAdapter {
     private Context context;
@@ -75,7 +76,7 @@ public class OrderSweepAdapter extends BaseAdapter {
             holder.ScanLinear.setVisibility(View.VISIBLE);
             holder.Scanstatus.setText("待寄送");
         } else if (ScanCodestatus.equals("CLOSE")) { // 订单关闭
-            holder.Scanstatus.setTextColor(Color.GRAY);
+            holder.Scanstatus.setTextColor(Color.parseColor("#666"));
             holder.ScanLinear.setVisibility(View.INVISIBLE);
             holder.Scanstatus.setText("订单关闭");
         } else if (ScanCodestatus.equals("AUDITING")) {// 审核中
@@ -86,7 +87,7 @@ public class OrderSweepAdapter extends BaseAdapter {
         } else if (ScanCodestatus.equals("FINISH")) { // 已完成
             holder.Earnings.setText("收益:");
             holder.ScanLinear.setVisibility(View.VISIBLE);
-            holder.Scanstatus.setTextColor(Color.GRAY);
+            holder.Scanstatus.setTextColor(Color.parseColor("#666"));
             holder.Scanstatus.setText("已完成");
         } else if (ScanCodestatus.equals("REFUSE")) { //订单驳回
             holder.Scanstatus.setTextColor(Color.parseColor("#e20000"));

@@ -41,7 +41,6 @@ public class SellMallPanStampGridViewOnItemClickListener implements AdapterView.
     public interface SelfMallItemClick {
         void GetClickItem();
     }
-
     public void setSelfMallItemClick(SelfMallItemClick selfMallItemClick) {
         mSelfMallItemClick = selfMallItemClick;
     }

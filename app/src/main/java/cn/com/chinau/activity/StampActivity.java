@@ -1,5 +1,6 @@
 package cn.com.chinau.activity;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -99,78 +100,12 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                         }
                     }
                     break;
-                case SUCCESS://类别查询
-
-                    String[] mArrTitle = (String[]) msg.obj;
-                    String title0 = mArrTitle[0];
-                    mNewChinese.setText(title0);
-                    String title1 = mArrTitle[1];
-                    mRepublicChina.setText(title1);
-                    String title2 = mArrTitle[2];
-                    mLiberatedArea.setText(title2);
-                    String title3 = mArrTitle[3];
-                    mQingDynasty.setText(title3);
-                    MyLog.LogShitou("邮市一级类别----->:", title0 + "--" + title1 + "--" + title2 + "--" + title3);
-                    break;
-                case 2:
-                    Drawable mTopDrawable0 = (Drawable) msg.obj;
-                    mNewChinese.setCompoundDrawables(null, mTopDrawable0, null, null);
-                    break;
-                case 3:
-                    Drawable mTopDrawable1 = (Drawable) msg.obj;
-                    mRepublicChina.setCompoundDrawables(null, mTopDrawable1, null, null);
-                    break;
-                case 4:
-                    Drawable mTopDrawable2 = (Drawable) msg.obj;
-                    mLiberatedArea.setCompoundDrawables(null, mTopDrawable2, null, null);
-                    break;
-                case 5:
-                    Drawable mTopDrawable3 = (Drawable) msg.obj;
-                    mQingDynasty.setCompoundDrawables(null, mTopDrawable3, null, null);
-                    break;
-                case 6:// 二级类别名字
-                    List<String[]> mArrList = (List<String[]>) msg.obj;
-                    // 获取
-                    string0 = mArrList.get(0);
-                    string1 = mArrList.get(1);
-                    string2 = mArrList.get(2);
-                    string3 = mArrList.get(3);
-
-                    // 横向的listView设置适配器
-                    hListViewAdapter = new StampHorizontalListViewAdapter(StampActivity.this, string0);
-                    hListView.setAdapter(hListViewAdapter);
-                    MyLog.LogShitou("邮市二级分类名字的个数-->:", mArrList.size() + "--" + string0.length + "----" + string1.length + "--" + string2.length + "--" + string3.length);
-
-                    break;
-
-                case 7:
-                    Drawable TopDrawable0 = (Drawable) msg.obj;
-                    mNewChinese.setCompoundDrawables(null, TopDrawable0, null, null);
-                    break;
-                case 8:
-                    Drawable TopDrawable1 = (Drawable) msg.obj;
-                    mRepublicChina.setCompoundDrawables(null, TopDrawable1, null, null);
-                    break;
-                case 9:
-                    Drawable TopDrawable2 = (Drawable) msg.obj;
-                    mLiberatedArea.setCompoundDrawables(null, TopDrawable2, null, null);
-                    break;
-                case 10:
-                    Drawable TopDrawable3 = (Drawable) msg.obj;
-                    mQingDynasty.setCompoundDrawables(null, TopDrawable3, null, null);
-                    break;
-                case 11:
-                    MyToast.showShort(StampActivity.this, "请检查网络连接");
-                    break;
-                case 12:
-                    MyToast.showShort(StampActivity.this, "请检查网络连接");
-                    break;
-
                 default:
                     break;
             }
         }
     };
+    private SharedPreferences sp;
 
 
     @Override
@@ -182,6 +117,8 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public View CreateSuccess() {
         mStampContent = View.inflate(this, R.layout.activity_stamp_content, null);
+
+        sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
         initView();
         initData();
         initListener();
@@ -190,6 +127,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
 
 
     private void initView() {
+
         mBack = (ImageView) mStampTitle.findViewById(R.id.base_title_back);
         mSearch = (ImageView) mStampTitle.findViewById(R.id.base_search);
         hListView = (HorizontalListView) mStampContent.findViewById(R.id.stamp_hl);
@@ -239,9 +177,117 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
      * 添加网络数据
      */
     private void initData() {
-        GetInitCategory();// 类别查询网络请求
+        GetCategoryData();// 获取保存在本地邮市类别数据
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
         RequestNet(StaticField.ZH, num, StaticField.A);
+    }
+
+    // 获取保存在本地邮市类别数据
+
+    private void GetCategoryData(){
+      String category5 = sp.getString("Category5","");
+        if(category5 != null){
+
+            Gson gson = new Gson();
+            CategoryBean mCategoryBean = gson.fromJson(category5, CategoryBean.class);
+            ArrayList<CategoryBean.Category> mCategory = mCategoryBean.getCategory();
+            CategoryBean.Category category = mCategory.get(0);
+            ArrayList<CategoryBean.Category.SubCategory> subCategory1 = category.getSubCategory();
+
+            int sub = subCategory1.size();// 获取subCategory1的个数
+            String[] mArrTitle = new String[sub];// 一级分类
+            String[] mImgUrl = new String[sub];// url
+            //二级分类
+            List<String[]> mArrList = new ArrayList<>();
+//        List<String[]> mImgUrlList = new ArrayList<>();
+            // 循环出一级分类的名字
+            for (int i = 0; i < subCategory1.size(); i++) {
+                mArrTitle[i] = subCategory1.get(i).getName();
+                mImgUrl[i] = subCategory1.get(i).getImg_url();// 图片的url
+                MyLog.LogShitou("邮市一级类别0001----->:", mArrTitle[i] + "--" + mImgUrl[i]);
+                ArrayList<CategoryBean.Category.SubCategory.SmllSubCategoryData> subCategory = subCategory1.get(i).getSubCategory();
+                String[] mArr = new String[subCategory.size()];
+                // 循环出二级分类名字
+                for (int j = 0; j < subCategory.size(); j++) {
+                    mArr[j] = subCategory.get(j).getName();
+//                        MyLog.LogShitou("竞拍二级类别0" + j + "----->:", mArr[j]);
+                }
+                mArrList.add(mArr);
+            }
+            // 获取单个的一级标题Title
+            String title0 = mArrTitle[0];
+            mNewChinese.setText(title0);
+            String title1 = mArrTitle[1];
+            mRepublicChina.setText(title1);
+            String title2 = mArrTitle[2];
+            mLiberatedArea.setText(title2);
+            String title3 = mArrTitle[3];
+            mQingDynasty.setText(title3);
+            MyLog.LogShitou("邮市一级类别----->:", title0 + "--" + title1 + "--" + title2 + "--" + title3);
+
+            // 获取二级分类title的list
+            string0 = mArrList.get(0);
+            string1 = mArrList.get(1);
+            string2 = mArrList.get(2);
+            string3 = mArrList.get(3);
+
+            // 横向的listView设置适配器
+            hListViewAdapter = new StampHorizontalListViewAdapter(StampActivity.this, string0);
+            hListView.setAdapter(hListViewAdapter);
+            MyLog.LogShitou("邮市二级分类title的个数-->:", mArrList.size() + "--" + string0.length + "----" + string1.length + "--" + string2.length + "--" + string3.length);
+
+            // 获取单个的一级标题url
+            String imgurl0 = mImgUrl[0];
+            String imgurl1 = mImgUrl[1];
+            String imgurl2 = mImgUrl[2];
+            String imgurl3 = mImgUrl[3];
+
+            // 如个url为空，设置默认图片
+            Drawable drawable = getResources().getDrawable(R.mipmap.weixin);
+            // 判断url是否为空
+            if (imgurl0.equals("")) {
+                // / 这一步必须要做,否则不会显示.
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, drawable, null, null);
+
+            } else {
+                Drawable topDrawable0 = BitmapHelper.getDrawable(imgurl0);
+                topDrawable0.setBounds(0, 0, topDrawable0.getMinimumWidth(), topDrawable0.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, topDrawable0, null, null);
+            }
+            if (imgurl1.equals("")) {
+                // / 这一步必须要做,否则不会显示.
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, drawable, null, null);
+
+            } else {
+
+                Drawable topDrawable1 = BitmapHelper.getDrawable(imgurl1);
+                topDrawable1.setBounds(0, 0, topDrawable1.getMinimumWidth(), topDrawable1.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, topDrawable1, null, null);
+            }
+            if (imgurl2.equals("")) {
+                // / 这一步必须要做,否则不会显示.
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, drawable, null, null);
+            } else {
+
+                Drawable topDrawable2 = BitmapHelper.getDrawable(imgurl2);
+                topDrawable2.setBounds(0, 0, topDrawable2.getMinimumWidth(), topDrawable2.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, topDrawable2, null, null);
+
+            }
+            if (imgurl3.equals("")) {
+                // / 这一步必须要做,否则不会显示.
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, drawable, null, null);
+            } else {
+
+                Drawable topDrawable3 = BitmapHelper.getDrawable(imgurl3);
+                topDrawable3.setBounds(0, 0, topDrawable3.getMinimumWidth(), topDrawable3.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, topDrawable3, null, null);
+            }
+        }
     }
 
     private void initListener() {
@@ -297,158 +343,6 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         initData();
     }
 
-
-    /**
-     * 邮市类别查询网络请求
-     */
-    private void GetInitCategory() {
-        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                HashMap<String, String> params = new HashMap<>();
-                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
-                params.put(StaticField.OP_TYPE, "YS");// 邮市
-                String mapSort = SortUtils.MapSort(params);
-                String md5code = Encrypt.MD5(mapSort);
-                params.put(StaticField.SIGN, md5code);
-
-                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-
-                MyLog.LogShitou("邮市类别查询--->", result);
-                if (result.equals("-1") | result.equals("-2")) {
-                    return;
-                }
-                Gson gsons = new Gson();
-                CategoryBean mCategoryBean = gsons.fromJson(result, CategoryBean.class);
-                String mRsp_code = mCategoryBean.getRsp_code();
-                // 判断code是否返回0000
-                if (mRsp_code.equals("0000")) {
-                    ArrayList<CategoryBean.Category> mCategory = mCategoryBean.getCategory();
-                    CategoryBean.Category category = mCategory.get(0);
-                    ArrayList<CategoryBean.Category.SubCategory> subCategory1 = category.getSubCategory();
-
-                    // 外分类
-                    int sub = subCategory1.size();// 获取subCategory1的个数
-                    String[] mArrTitle = new String[sub];// 一级分类
-                    String[] mImgUrl = new String[sub];// url
-                    Message msge = mHandler.obtainMessage();
-                    msge.what = SUCCESS;
-                    msge.obj = mArrTitle;
-                    mHandler.sendMessage(msge);
-
-                    //子分类
-                    List<String[]> mArrList = new ArrayList<>();
-                    List<String[]> mImgUrlList = new ArrayList<>();
-                    // 循环出一级分类的名字
-                    for (int i = 0; i < subCategory1.size(); i++) {
-                        mArrTitle[i] = subCategory1.get(i).getName();
-                        mImgUrl[i] = subCategory1.get(i).getImg_url();// 图片的url
-                        MyLog.LogShitou("邮市一级类别0001----->:", mArrTitle[i] + "--" + mImgUrl[i]);
-                        ArrayList<CategoryBean.Category.SubCategory.SmllSubCategoryData> subCategory = subCategory1.get(i).getSubCategory();
-                        String[] mArr = new String[subCategory.size()];
-                        // 循环出二级分类名字
-                        for (int j = 0; j < subCategory.size(); j++) {
-                            mArr[j] = subCategory.get(j).getName();
-//                        MyLog.LogShitou("竞拍二级类别0" + j + "----->:", mArr[j]);
-                        }
-                        mArrList.add(mArr);
-                    }
-
-//                String url = "http://test.chinau.com.cn:8081/chinau-imgserver/attachment//designer/20160429/20160429081b712e-ed1a-4341-839f-af6571109a03.png";
-                    // 获取单个的url
-                    String imgurl0 = mImgUrl[0];
-                    String imgurl1 = mImgUrl[1];
-                    String imgurl2 = mImgUrl[2];
-                    String imgurl3 = mImgUrl[3];
-
-                    Drawable drawable = getResources().getDrawable(R.mipmap.weixin); // 如个url为空，设置默认图片
-                    // 判断url是否为空
-                    if (imgurl0.equals("")) {
-                        // / 这一步必须要做,否则不会显示.
-                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 7;
-                        msg.obj = drawable;
-                        mHandler.sendMessage(msg);
-
-                    } else {
-
-                        Drawable topDrawable0 = BitmapHelper.getDrawable(imgurl0);
-                        topDrawable0.setBounds(0, 0, topDrawable0.getMinimumWidth(), topDrawable0.getMinimumHeight());
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 2;
-                        msg.obj = topDrawable0;
-                        mHandler.sendMessage(msg);
-                    }
-                    if (imgurl1.equals("")) {
-                        // / 这一步必须要做,否则不会显示.
-                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 8;
-                        msg.obj = drawable;
-                        mHandler.sendMessage(msg);
-
-                    } else {
-
-                        Drawable topDrawable1 = BitmapHelper.getDrawable(imgurl1);
-                        topDrawable1.setBounds(0, 0, topDrawable1.getMinimumWidth(), topDrawable1.getMinimumHeight());
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 3;
-                        msg.obj = topDrawable1;
-                        mHandler.sendMessage(msg);
-                    }
-                    if (imgurl2.equals("")) {
-                        // / 这一步必须要做,否则不会显示.
-                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 9;
-                        msg.obj = drawable;
-                        mHandler.sendMessage(msg);
-                    } else {
-
-                        Drawable topDrawable2 = BitmapHelper.getDrawable(imgurl2);
-                        topDrawable2.setBounds(0, 0, topDrawable2.getMinimumWidth(), topDrawable2.getMinimumHeight());
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 4;
-                        msg.obj = topDrawable2;
-                        mHandler.sendMessage(msg);
-                    }
-                    if (imgurl3.equals("")) {
-                        // / 这一步必须要做,否则不会显示.
-                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 10;
-                        msg.obj = drawable;
-                        mHandler.sendMessage(msg);
-
-                    } else {
-
-                        Drawable topDrawable3 = BitmapHelper.getDrawable(imgurl3);
-                        topDrawable3.setBounds(0, 0, topDrawable3.getMinimumWidth(), topDrawable3.getMinimumHeight());
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = 5;
-                        msg.obj = topDrawable3;
-                        mHandler.sendMessage(msg);
-                    }
-
-
-                    // 发送二级分类名字
-                    Message msg = mHandler.obtainMessage();
-                    msg.what = 6;
-                    msg.obj = mArrList;
-                    mHandler.sendMessage(msg);
-
-                } else {
-                    mHandler.sendEmptyMessage(11);
-                }
-
-
-            }
-        });
-    }
-
-
     /**
      * 邮市list网络请求
      *
@@ -474,7 +368,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.LogShitou("邮市List~~~~>", result);
+                MyLog.LogShitou("邮市List-->", result);
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
@@ -504,7 +398,6 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
 
                 break;
             case R.id.stamp_republicChina_btn:// 民国邮票
-
                 hListViewAdapter = new StampHorizontalListViewAdapter(this, string1);
                 hListView.setAdapter(hListViewAdapter);
                 hListViewAdapter.notifyDataSetChanged();

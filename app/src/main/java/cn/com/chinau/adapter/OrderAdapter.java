@@ -1,7 +1,6 @@
 package cn.com.chinau.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -57,16 +56,19 @@ public class OrderAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
+
         holder.OrderTime.setText(list.get(i).getCreate_time());
-        // holder.OrderStatus.setText(list.get(i).getOrderstatus());
         String status = list.get(i).getOrder_status();
-        holder.OrderStatus.setText(status);
-        if (status.equals("待确认")) {
-            holder.OrderStatus.setTextColor(Color.parseColor("#ff9900"));
-        } else if (status.equals("已完成")) {
-            holder.OrderStatus.setTextColor(Color.GRAY);
-        } else if (status.equals("订单驳回")) {
-            holder.OrderStatus.setTextColor(Color.parseColor("#e20000"));
+
+        if (status.equals("0")) {
+            holder.OrderStatus.setText("待确认");
+            holder.OrderStatus.setTextColor(context.getResources().getColor(R.color.refuse));
+        } else if (status.equals("1")) {
+            holder.OrderStatus.setText("订单驳回");
+            holder.OrderStatus.setTextColor(context.getResources().getColor(R.color.red_font));
+        } else if (status.equals("2")) {
+            holder.OrderStatus.setText("已完成");
+            holder.OrderStatus.setTextColor(context.getResources().getColor(R.color.font));
         }
         holder.OrderAbums.setText(list.get(i).getGoods_name());
         return view;

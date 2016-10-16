@@ -27,7 +27,6 @@ import cn.com.chinau.bean.MyStampGridViewBean;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
-import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 
@@ -71,9 +70,29 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                         mList = mOrderSweepBean.getStamp_list();
                         MyLog.LogShitou("我的邮集有几条-->:", mList.size() + "");
                         if (mList != null && mList.size() != 0) {
+                            //初始化GridView的集合
+                            mViewPagerList = new ArrayList<>();
+                            //获取Activity的LayoutInflater
+                            layoutInflater = getLayoutInflater();
+
+                            //计算每页最大显示个数，2行4列
+                            pageSize = getResources().getInteger(R.integer.PagerCount) * 2;
+                            //总共的页数 总数/每页数量，并取整。
+                            pageCount = (int) Math.ceil(mList.size() * 1.0 / pageSize);
+
+                            //使用For循环创建页面,并添加到集合中去
+                            for (int i = 0; i < pageCount; i++) {
+                                //每个页面都是inflate出一个新实例
+                                //这里面传的是GridView的布局
+                                GridView grid = (GridView) layoutInflater.inflate(R.layout.item_viewpager, myStampViewPager, false);
+                                //给GridView设置Adapter，传入index
+                                grid.setAdapter(new GridViewAdapter(MyStampActivity.this, mList, i, mBitmap, flag));
+                                //加入到ViewPager的View数据集中
+                                mViewPagerList.add(grid);
+                            }
+
                             initAdapter();
-                        }else {
-                            MyToast.showShort(MyStampActivity.this,"我的邮集为空。。。");
+
                         }
                     }
 
@@ -95,7 +114,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
         sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
         initView();
         initData();
-        initAdapter();
+//        initAdapter();
         initListener();
         return mMyStampContent;
     }
@@ -115,47 +134,44 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
         //初始化ViewPager
         myStampViewPager = (ViewPager) mMyStampContent.findViewById(R.id.my_content_Viewpager);
 
-
     }
 
     private void initData() {
+        GetInitNet(num);// 我的邮集列表网络请求方法
 //        mStampGV = (GridView) mMyStampContent.findViewById(R.id.myStamp_gv);
         //初始化数据的集合，一共20条
-        mList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            mList.add(new MyStampGridViewBean.StampList("庚申年", "" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-        }
+//        mList = new ArrayList<>();
+//        for (int i = 0; i < 20; i++) {
+//            mList.add(new MyStampGridViewBean.StampList("庚申年", "" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
+//        }
 
-        //初始化GridView的集合
-        mViewPagerList = new ArrayList<>();
-        //获取Activity的LayoutInflater
-        layoutInflater = getLayoutInflater();
+//        //初始化GridView的集合
+//        mViewPagerList = new ArrayList<>();
+//        //获取Activity的LayoutInflater
+//        layoutInflater = getLayoutInflater();
+//
+//        //计算每页最大显示个数，2行4列
+//        pageSize = getResources().getInteger(R.integer.PagerCount) * 2;
+//        //总共的页数 总数/每页数量，并取整。
+//        pageCount = (int) Math.ceil(mList.size() * 1.0 / pageSize);
+//
+//        //使用For循环创建页面,并添加到集合中去
+//        for (int i = 0; i < pageCount; i++) {
+//            //每个页面都是inflate出一个新实例
+//            //这里面传的是GridView的布局
+//            GridView grid = (GridView) layoutInflater.inflate(R.layout.item_viewpager, myStampViewPager, false);
+//            //给GridView设置Adapter，传入index
+//            grid.setAdapter(new GridViewAdapter(this, mList, i, mBitmap, flag));
+//
+//            //加入到ViewPager的View数据集中
+//            mViewPagerList.add(grid);
+//        }
 
-        //计算每页最大显示个数，2行4列
-        pageSize = getResources().getInteger(R.integer.PagerCount) * 2;
-        //总共的页数 总数/每页数量，并取整。
-        pageCount = (int) Math.ceil(mList.size() * 1.0 / pageSize);
 
 
-        //使用For循环创建页面,并添加到集合中去
-        for (int i = 0; i < pageCount; i++) {
-            //每个页面都是inflate出一个新实例
-            //这里面传的是GridView的布局
-            GridView grid = (GridView) layoutInflater.inflate(R.layout.item_viewpager, myStampViewPager, false);
-            //给GridView设置Adapter，传入index
-            grid.setAdapter(new GridViewAdapter(this, mList, i, mBitmap, flag));
-
-            //加入到ViewPager的View数据集中
-            mViewPagerList.add(grid);
-        }
-
-
-        GetInitNet(num);// 我的邮集列表网络请求方法
     }
 
     private void initAdapter() {
-//        MyStampGridViewAdapter mMyStampAdapter = new MyStampGridViewAdapter(this, mList, mBitmap);
-//        mStampGV.setAdapter(mMyStampAdapter);
 
         //设置翻页效果
                 myStampViewPager.setPageTransformer(true, new ViewPager.PageTransformer() {
