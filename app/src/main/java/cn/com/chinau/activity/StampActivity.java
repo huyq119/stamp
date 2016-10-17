@@ -77,12 +77,10 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     private GoodsStampBean mGoodsStampBean;
     public static final int SUCCESS = 1;
     private RadioGroup mRadioGroup;
-
+    private SharedPreferences sp;
     private String[] string0, string1, string2, string3;
 
     private Handler mHandler = new Handler() {
-
-
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -100,12 +98,28 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                         }
                     }
                     break;
+                case 1:
+                    Drawable mTopDrawable0 = (Drawable) msg.obj;
+                    mNewChinese.setCompoundDrawables(null, mTopDrawable0, null, null);
+                    break;
+                case 2:
+                    Drawable mTopDrawable2 = (Drawable) msg.obj;
+                    mRepublicChina.setCompoundDrawables(null, mTopDrawable2, null, null);
+                    break;
+                case 3:
+                    Drawable mTopDrawable3 = (Drawable) msg.obj;
+                    mLiberatedArea.setCompoundDrawables(null, mTopDrawable3, null, null);
+                    break;
+                case 4:
+                    Drawable mTopDrawable4 = (Drawable) msg.obj;
+                    mQingDynasty.setCompoundDrawables(null, mTopDrawable4, null, null);
+                    break;
                 default:
                     break;
             }
         }
     };
-    private SharedPreferences sp;
+
 
 
     @Override
@@ -177,17 +191,16 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
      * 添加网络数据
      */
     private void initData() {
-        GetCategoryData();// 获取保存在本地邮市类别数据
+//        GetCategoryData();// 获取保存在本地邮市类别数据
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
         RequestNet(StaticField.ZH, num, StaticField.A);
     }
 
     // 获取保存在本地邮市类别数据
-
     private void GetCategoryData(){
       String category5 = sp.getString("Category5","");
+        MyLog.LogShitou("获取本地邮市类别数据", category5);
         if(category5 != null){
-
             Gson gson = new Gson();
             CategoryBean mCategoryBean = gson.fromJson(category5, CategoryBean.class);
             ArrayList<CategoryBean.Category> mCategory = mCategoryBean.getCategory();
@@ -242,51 +255,42 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             String imgurl2 = mImgUrl[2];
             String imgurl3 = mImgUrl[3];
 
-            // 如个url为空，设置默认图片
-            Drawable drawable = getResources().getDrawable(R.mipmap.weixin);
             // 判断url是否为空
-            if (imgurl0.equals("")) {
-                // / 这一步必须要做,否则不会显示.
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                mNewChinese.setCompoundDrawables(null, drawable, null, null);
-
-            } else {
+            if (!imgurl0.equals("")) {
                 Drawable topDrawable0 = BitmapHelper.getDrawable(imgurl0);
                 topDrawable0.setBounds(0, 0, topDrawable0.getMinimumWidth(), topDrawable0.getMinimumHeight());
-                mNewChinese.setCompoundDrawables(null, topDrawable0, null, null);
+                Message msg = mHandler.obtainMessage();
+                msg.what = 1;
+                msg.obj = topDrawable0;
+                mHandler.sendMessage(msg);
             }
-            if (imgurl1.equals("")) {
-                // / 这一步必须要做,否则不会显示.
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                mNewChinese.setCompoundDrawables(null, drawable, null, null);
-
-            } else {
+            if (! imgurl1.equals("")) {
 
                 Drawable topDrawable1 = BitmapHelper.getDrawable(imgurl1);
                 topDrawable1.setBounds(0, 0, topDrawable1.getMinimumWidth(), topDrawable1.getMinimumHeight());
-                mNewChinese.setCompoundDrawables(null, topDrawable1, null, null);
+                Message msg = mHandler.obtainMessage();
+                msg.what = 2;
+                msg.obj = topDrawable1;
+                mHandler.sendMessage(msg);
             }
-            if (imgurl2.equals("")) {
-                // / 这一步必须要做,否则不会显示.
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                mNewChinese.setCompoundDrawables(null, drawable, null, null);
-            } else {
-
+            if (!imgurl2.equals("")) {
                 Drawable topDrawable2 = BitmapHelper.getDrawable(imgurl2);
                 topDrawable2.setBounds(0, 0, topDrawable2.getMinimumWidth(), topDrawable2.getMinimumHeight());
-                mNewChinese.setCompoundDrawables(null, topDrawable2, null, null);
-
+                Message msg = mHandler.obtainMessage();
+                msg.what = 3;
+                msg.obj = topDrawable2;
+                mHandler.sendMessage(msg);
             }
-            if (imgurl3.equals("")) {
-                // / 这一步必须要做,否则不会显示.
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                mNewChinese.setCompoundDrawables(null, drawable, null, null);
-            } else {
-
+            if (!imgurl3.equals("")) {
                 Drawable topDrawable3 = BitmapHelper.getDrawable(imgurl3);
                 topDrawable3.setBounds(0, 0, topDrawable3.getMinimumWidth(), topDrawable3.getMinimumHeight());
-                mNewChinese.setCompoundDrawables(null, topDrawable3, null, null);
+                Message msg = mHandler.obtainMessage();
+                msg.what = 4;
+                msg.obj = topDrawable3;
+                mHandler.sendMessage(msg);
             }
+
+
         }
     }
 

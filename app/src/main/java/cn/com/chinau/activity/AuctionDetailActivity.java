@@ -64,14 +64,14 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     private String[] small_images, big_images; // viewPager小图，大图
     private int lastY = 0;
     private int scrollY; // 标记上次滑动位置
-    private int intCount = 0;// 每次出价加减的值
-    private String count, mGoods_sn, mGoodsDetail, mVerifyInfo, mToken, mUser_id, mIsFavorite;// 获取出价的值
+    private double intCount;// 每次出价加减的值
+    private String count, mGoods_sn, mGoodsDetail, mVerifyInfo, mToken, mUser_id, mIsFavorite,mPrice;// 获取出价的值
     private int goods_storage = 1; //出价最低价
     private AuctionRegulationsAgreementDialog auctiondialog; // 协议dialog
-    private boolean bidFlag = false, addFlag;// 出价标识,加价标识
+    private boolean bidFlag =false ,addFlag;// 出价标识,加价标识
     private LinearLayout mRecordLl;
     private ListView mBidRecordLV;
-    private boolean bidRecordFlag = false;// 出价记录标识
+    private boolean bidRecordFlag = false;// 查看出价记录标识
     private FrameLayout mBidRecordFl;
     private ArrayList<StampDetailBean.OfferListData> mBidList;
     private SharedPreferences sp;
@@ -112,7 +112,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     String mGoods_name = mStampDetailBean.getGoods_name();
                     mTitle.setText(mGoods_name);
                     mGoodsName.setText(mGoods_name);
-                    String mPrice = mStampDetailBean.getCurrent_price();
+                     mPrice = mStampDetailBean.getCurrent_price();// 出价价格
                     mPrivce.setText("￥" + mPrice);
                     mCount.setText(mPrice);
                     String status = mStampDetailBean.getAuction_status();
@@ -122,8 +122,18 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                         mStatus.setText("竞拍中");
                     } else if (status.equals("JS")) {
                         mStatus.setText("已结束");
+                    }
+                    // 商品状态
+                   String mGoodesStatus = mStampDetailBean.getGoods_status();
+                    MyLog.LogShitou("商品状态是多少",mGoodesStatus);
+                    if (mGoodesStatus.equals("0")){
                         mOverTv.setVisibility(View.VISIBLE);
                         mOverTv.setText("已结束");
+                        mBid.setEnabled(false);// 出价按钮不可点击
+                        mBid.setBackgroundColor(getResources().getColor(R.color.gary));
+                        mBid.setTextColor(getResources().getColor(R.color.font));
+                        mSubtract.setEnabled(false);//减号不可点击
+                        mAdd.setEnabled(false);// 加号不可点击
                     }
 
                     String mFreights = mStampDetailBean.getFreight();
@@ -164,10 +174,20 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
                     MyLog.LogShitou("竞拍详情请求下来的H5url-->:", mGoodsDetail + "--" + mVerifyInfo);
 
-                    mBidList = mStampDetailBean.getOffer_list();// 出价list
-                    int count = mBidList.size();
+                    mBidList = mStampDetailBean.getOffer_list();// 出价记录list
+                    // 循环出User_id是否有自己的id，有addFlag = true;没有addFlag = false;
+                    for (int j = 0; j < mBidList.size(); j++) {
+                        String mUser_id =  mBidList.get(j).getUser_id();
+                        String myUser_id = sp.getString("userId", "");
+                        if (myUser_id.equals(mUser_id)){
+                            addFlag = true;// 出价加
+                            bidFlag = true; //
+                            MyLog.LogShitou(mUser_id+"到这了吗1",mUser_id);
+                        }
+                    }
+
                     if (mBidList != null && mBidList.size() != 0) {
-                        mBidCount.setText(count + "");// 出价次数
+                        mBidCount.setText(mBidList.size() + "");// 出价次数
                     } else {
                         mBidCount.setText("0");
                     }
@@ -196,6 +216,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     BaseBean mBaseBeanees = gsones.fromJson((String) msg.obj, BaseBean.class);
                     String mRsp_codees = mBaseBeanees.getRsp_code();
                     if (mRsp_codees.equals("0000")) {
+                        initData();// 再次请求网络的更新价格
                         MyToast.showShort(AuctionDetailActivity.this, "出价成功");
                     }
                     break;
@@ -216,7 +237,6 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         initView();
         initData();
-//        initAdapter();
         initListener();
         return mAuctionDetailContent;
     }
@@ -248,10 +268,9 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         mBidRecordLV = (ListView) mAuctionDetailContent.findViewById(R.id.bidRecord_listview);
 
         mCollect = (ImageView) mAuctionDetailContent.findViewById(R.id.auction_collect);
-        mSubtract = (TextView) mAuctionDetailContent.findViewById(R.id.auction_subtract);
-        mCount = (TextView) mAuctionDetailContent.findViewById(R.id.auction_count);
-//        mCount.setText("0"); // 初始化值为0
-        mAdd = (TextView) mAuctionDetailContent.findViewById(R.id.auction_add);
+        mSubtract = (TextView) mAuctionDetailContent.findViewById(R.id.auction_subtract);// 减号
+        mCount = (TextView) mAuctionDetailContent.findViewById(R.id.auction_count); // 金额
+        mAdd = (TextView) mAuctionDetailContent.findViewById(R.id.auction_add);// 加号
         mBid = (TextView) mAuctionDetailContent.findViewById(R.id.auction_bid);
 
         mGoodsName = (TextView) mAuctionDetailContent.findViewById(R.id.auction_detail_goods_name);// 邮票名称
@@ -265,7 +284,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         mGoodsSource = (TextView) mAuctionDetailContent.findViewById(R.id.auction_detail_goods_source);// 商家类型
         mSellerName = (TextView) mAuctionDetailContent.findViewById(R.id.auction_detail_seller_name);// 商家名称
         mNumber = (TextView) mAuctionDetailContent.findViewById(R.id.auction_detail_number);// 商家账号
-        mOverTv = (TextView) mAuctionDetailContent.findViewById(R.id.auction_deatail_over_tv);// 是否结束
+        mOverTv = (TextView) mAuctionDetailContent.findViewById(R.id.auction_deatail_over_tv);// 商品状态是否结束
 
         //顶部的ViewPager
         mTopVP = (ViewPager) mAuctionDetailContent.findViewById(R.id.base_viewpager);
@@ -395,7 +414,12 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         });
     }
 
-    private void AuctionGoodsPriceDate() {
+
+    /**
+     * 竞拍出价网络请求
+     * @param mPrice 出价价格
+     */
+    private void AuctionGoodsPriceDate(final String mPrice) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -404,8 +428,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
                 params.put(StaticField.GOODS_SN, mGoods_sn);//  邮票编号
-                String mPrice = mCount.getText().toString().trim();
-                params.put(StaticField.AUCTIONPRICE, mPrice);// 操作类型
+                params.put(StaticField.AUCTIONPRICE, mPrice);// 出价的价格
 
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
@@ -499,40 +522,75 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 }
                 break;
             case R.id.auction_subtract:// 出价减
-
-                if (intCount > 1) {
+                String counts = mCount.getText().toString().trim(); // 获取出价价格
+                String mCountes = counts.replace(",","");
+                intCount = Double.parseDouble(mCountes);
+                MyLog.LogShitou("减后当前价是多少",counts+"--"+intCount);
+                if (intCount<=50){
                     intCount--;
                     mCount.setText(String.valueOf(intCount));
-                } else {
-                    mCount.setEnabled(false);// 不可点击
+                }else if(intCount>50 && intCount<=100 ){
+                    intCount -= 2;
+                    mCount.setText(String.valueOf(intCount));
+                }else if(intCount>100 && intCount<=500 ){
+                    intCount -= 5;
+                    mCount.setText(String.valueOf(intCount));
+                }else if(intCount>500 && intCount<=10000000 ){
+                    intCount -= 10;
+                    mCount.setText(String.valueOf(intCount));
                 }
 
                 break;
             case R.id.auction_add:// 出价增加
-                // 是否是第一次加价
-                if (addFlag) {
-                    intCount++;
-                    mCount.setText(String.valueOf(intCount));
+                if (mToken.equals("") || mUser_id.equals("")) {
+                    openActivityWitchAnimation(LoginActivity.class);
                 } else {
-                    DialogAgreement();// 出价协议Dialog
-                    addFlag = true;
-                }
-                break;
-            case R.id.auction_bid:// 出价
-                if (count.equals("0")) {
-                    MyToast.showShort(this, "请先加价");
-                } else {
-                    // 是否是第一次出价
-                    if (bidFlag) {
-                        mBid.setEnabled(false);
-
-//                        MyToast.showShort(this, "出价成功");
+                    // 是否是第一次加价
+                    if (addFlag) {
+                        String countes = mCount.getText().toString().trim(); // 获取出价价格
+                        String mCountess = countes.replace(",","");
+                          intCount =   Double.parseDouble(mCountess);
+//                        intCount =Double.valueOf(counts).doubleValue();
+                        MyLog.LogShitou("增加后的当前价是多少",countes+"--"+intCount);
+                        if (intCount<=50){
+                            intCount++;
+                            mCount.setText(String.valueOf(intCount));
+                        }else if(intCount>50 && intCount<=100 ){
+                            intCount += 2;
+                            mCount.setText(String.valueOf(intCount));
+                        }else if(intCount>100 && intCount<=500 ){
+                            intCount += 5;
+                            mCount.setText(String.valueOf(intCount));
+                        }else if(intCount>500 && intCount<=10000000 ){
+                            intCount += 10;
+                            mCount.setText(String.valueOf(intCount));
+                        }
                     } else {
                         DialogAgreement();// 出价协议Dialog
-                        bidFlag = true;
-
                     }
                 }
+
+
+                break;
+            case R.id.auction_bid:// 出价
+                if (mToken.equals("") || mUser_id.equals("")) {
+                    openActivityWitchAnimation(LoginActivity.class);
+                } else {
+                    if (count.equals("0")) {
+                        MyToast.showShort(this, "请先加价");
+                    } else {
+                        // 是否是第一次出价
+                        if (bidFlag) {
+//                        mBid.setEnabled(false);
+                            AuctionGoodsPriceDate(String.valueOf(intCount));
+//                        MyToast.showShort(this, "出价成功");
+                        } else {
+                            DialogAgreement();// 出价协议Dialog
+                            bidFlag = true;
+                        }
+                    }
+                }
+
                 break;
         }
     }
@@ -592,13 +650,12 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         mKonwBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (bidFlag) {
+                    AuctionGoodsPriceDate(String.valueOf(intCount));
                     auctiondialog.dismiss();
-                    MyToast.showShort(AuctionDetailActivity.this, "出价成功");
-                    mSubtract.setEnabled(false);
-                    mAdd.setEnabled(false);
                 } else {
-                    bidFlag = false;
+                    addFlag = true;
                     auctiondialog.dismiss();
                 }
 

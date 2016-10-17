@@ -63,26 +63,20 @@ public class BidRecordListViewAdapter extends BaseAdapter {
         holder.mPrice.setText("￥" + mPrice);// 价格
 
         String mUser_id = mList.get(i).getUser_id();
-        MyLog.LogShitou("用户id-->:", mUser_id);
-
+//        MyLog.LogShitou("用户id", mUser_id);
         //用来存储价格的集合
-        List<String> mArrList = new ArrayList<>();
-
         SharedPreferences sp = context.getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         String myUser_id = sp.getString("userId", "");
 
+        List<String> mArrList = new ArrayList<>();
         for (int j = 0; j < mList.size(); j++) {
-            if (mList.get(j).getUser_id().equals("183")) {
+            if (mList.get(j).getUser_id().equals("myUser_id")) {
                 mArrList.add(mList.get(i).getPrice());
             }
         }
-
-//    String maxs = Collections.max(mArrList);
-
-        MyLog.e(mArrList.size()+"");
+        MyLog.LogShitou("添加到的list的price",mList.get(i).getPrice()+"");
 
 
-//        MyLog.LogShitou("用户id0001-->:",id.length+"");
 
 
 //        if(mUser_id != null|| !myUser_id.equals("")){

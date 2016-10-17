@@ -1,5 +1,6 @@
 package cn.com.chinau.activity;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -88,19 +89,38 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
                    String mRsp_msg =  mGoodsStampBean.getRsp_code();
                     if (mRsp_msg.equals("0000")){
-
                         mList = mGoodsStampBean.getGoods_list();
-                        MyLog.LogShitou("竞拍列表有几条-->:", mList.size() + "");
                         if (mList != null && mList.size() != 0) {
-                            //竖向ListView设置适配器
-                            initAdapter();
+                            initAdapter(); //竖向ListView设置适配器
                         }
-                    }else{
-                        MyToast.showShort(AuctionActivity.this,"请检查网络连接");
                     }
                     break;
-                case SUCCESS://一级类别名字
+//                case 1:
+//                   String url0 = (String) msg.obj;
+//                    Drawable topDrawable0 = BitmapHelper.getDrawable(url0);
+//                    topDrawable0.setBounds(0, 0, topDrawable0.getMinimumWidth(), topDrawable0.getMinimumHeight());
+//                    mNewChinese.setCompoundDrawables(null, topDrawable0, null, null);
+//                break;
+//                case 2:
+//                   String url2 = (String) msg.obj;
+//                    Drawable topDrawable2 = BitmapHelper.getDrawable(url2);
+//                    topDrawable0.setBounds(0, 0, topDrawable0.getMinimumWidth(), topDrawable0.getMinimumHeight());
+//                    mNewChinese.setCompoundDrawables(null, topDrawable0, null, null);
+//                break;
+//                case 3:
+//                   String url3 = (String) msg.obj;
+//                    Drawable topDrawable3 = BitmapHelper.getDrawable(url3);
+//                    topDrawable0.setBounds(0, 0, topDrawable0.getMinimumWidth(), topDrawable0.getMinimumHeight());
+//                    mNewChinese.setCompoundDrawables(null, topDrawable0, null, null);
+//                break;
+//                case 4:
+//                   String url4 = (String) msg.obj;
+//                    Drawable topDrawable4 = BitmapHelper.getDrawable(url4);
+//                    topDrawable0.setBounds(0, 0, topDrawable0.getMinimumWidth(), topDrawable0.getMinimumHeight());
+//                    mNewChinese.setCompoundDrawables(null, topDrawable0, null, null);
+//                break;
 
+                case SUCCESS://一级类别名字
                     String[] mArrTitle = (String[] ) msg.obj;
                     String title0 = mArrTitle[0];
                     mNewChinese.setText(title0);
@@ -135,14 +155,11 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     string2= mArrList.get(2);
                     string3 = mArrList.get(3);
                     string4 = mArrList.get(4);
-
-                // 横向的listView设置适配器
-                hListViewAdapter = new StampHorizontalListViewAdapter(AuctionActivity.this, string0);
-                hListView.setAdapter(hListViewAdapter);
-                MyLog.LogShitou("竞拍几个数-->:", mArrList.size() + "--" + string0.length + "----" + string2.length + "--" + string3.length + "--" + string4.length);
-
+                    // 横向的listView设置适配器
+                    hListViewAdapter = new StampHorizontalListViewAdapter(AuctionActivity.this, string0);
+                    hListView.setAdapter(hListViewAdapter);
+                    MyLog.LogShitou("竞拍几个数-->:", mArrList.size() + "--" + string0.length + "----" + string2.length + "--" + string3.length + "--" + string4.length);
                     break;
-
                 case 7:
                     Drawable TopDrawable0 = (Drawable) msg.obj;
                     mNewChinese.setCompoundDrawables(null, TopDrawable0, null, null);
@@ -164,10 +181,12 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     break;
                 default:
                     break;
+
             }
         }
     };
     private RadioGroup mRadioGroup;
+    private SharedPreferences sp;
 
     @Override
     public View CreateTitle() {
@@ -178,6 +197,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     @Override
     public View CreateSuccess() {
         mAuctionContent = View.inflate(this, R.layout.activity_auction_content, null);
+        sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
         initView();
         initData();
         initListener();
@@ -234,9 +254,132 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
      * 初始化第一个按钮
      */
     private void initData() {
-        GetInitCategory();
+        GetInitCategory(); //获取保存在本地竞拍类别数据
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
         RequestNet(StaticField.ZH, num, StaticField.A);
+    }
+
+    // 获取保存在本地竞拍类别数据
+    private void GetCategoryData(){
+        String Category6 = sp.getString("Category6","");
+        MyLog.LogShitou("获取本地竞拍类别数据", Category6);
+        if(Category6 != null){
+            Gson gson = new Gson();
+            CategoryBean mCategoryBean = gson.fromJson(Category6, CategoryBean.class);
+            ArrayList<CategoryBean.Category> mCategory = mCategoryBean.getCategory();
+            CategoryBean.Category category = mCategory.get(0);
+            ArrayList<CategoryBean.Category.SubCategory> subCategory1 = category.getSubCategory();
+
+            int sub = subCategory1.size();// 获取subCategory1的个数
+            String[] mArrTitle = new String[sub];// 一级分类
+            String[] mImgUrl = new String[sub];// url
+            //二级分类
+            List<String[]> mArrList = new ArrayList<>();
+//        List<String[]> mImgUrlList = new ArrayList<>();
+            // 循环出一级分类的名字
+            for (int i = 0; i < subCategory1.size(); i++) {
+                mArrTitle[i] = subCategory1.get(i).getName();
+                mImgUrl[i] = subCategory1.get(i).getImg_url();// 图片的url
+                MyLog.LogShitou("竞拍一级类别0001----->:", mArrTitle[i] + "--" + mImgUrl[i]);
+                ArrayList<CategoryBean.Category.SubCategory.SmllSubCategoryData> subCategory = subCategory1.get(i).getSubCategory();
+                String[] mArr = new String[subCategory.size()];
+                // 循环出二级分类名字
+                for (int j = 0; j < subCategory.size(); j++) {
+                    mArr[j] = subCategory.get(j).getName();
+//                        MyLog.LogShitou("竞拍二级类别0" + j + "----->:", mArr[j]);
+                }
+                mArrList.add(mArr);
+            }
+            // 获取单个的一级标题Title
+            String title0 = mArrTitle[0];
+            mNewChinese.setText(title0);
+            String title1 = mArrTitle[2];
+            mRepublicChina.setText(title1);
+            String title2 = mArrTitle[3];
+            mLiberatedArea.setText(title2);
+            String title3 = mArrTitle[4];
+            mQingDynasty.setText(title3);
+            MyLog.LogShitou("竞拍一级类别----->:", title0 + "--" + title1 + "--" + title2 + "--" + title3);
+
+            // 获取二级分类title的list
+            string0 = mArrList.get(0);
+            string2 = mArrList.get(2);
+            string3 = mArrList.get(3);
+            string4 = mArrList.get(4);
+
+            // 横向的listView设置适配器
+            hListViewAdapter = new StampHorizontalListViewAdapter(AuctionActivity.this, string0);
+            hListView.setAdapter(hListViewAdapter);
+            MyLog.LogShitou("竞拍二级分类title的个数-->:", mArrList.size() + "----" + string0.length + "--" + string2.length + "--" + string3.length + "--" + string4.length);
+
+            // 获取单个的一级标题url
+            String imgurl0 = mImgUrl[0];
+            String imgurl2 = mImgUrl[2];
+            String imgurl3 = mImgUrl[3];
+            String imgurl4 = mImgUrl[4];
+
+            // 如个url为空，设置默认图片
+            Drawable drawable = getResources().getDrawable(R.mipmap.weixin);
+            // 判断url是否为空
+            if (imgurl0.equals("")) {
+                // / 这一步必须要做,否则不会显示.
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, drawable, null, null);
+            } else {
+
+                Message msg = mHandler.obtainMessage();
+                msg.what = 1;
+                msg.obj = imgurl0;
+                mHandler.sendMessage(msg);
+
+            }
+            if (imgurl2.equals("")) {
+                // / 这一步必须要做,否则不会显示.
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, drawable, null, null);
+
+            } else {
+                Drawable topDrawable2 = BitmapHelper.getDrawable(imgurl2);
+                Message msg = mHandler.obtainMessage();
+                msg.what = 2;
+                msg.obj = topDrawable2;
+                mHandler.sendMessage(msg);
+
+                topDrawable2.setBounds(0, 0, topDrawable2.getMinimumWidth(), topDrawable2.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, topDrawable2, null, null);
+            }
+            if (imgurl3.equals("")) {
+                // / 这一步必须要做,否则不会显示.
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, drawable, null, null);
+            } else {
+                Drawable topDrawable3 = BitmapHelper.getDrawable(imgurl3);
+
+                Message msg = mHandler.obtainMessage();
+                msg.what = 3;
+                msg.obj = topDrawable3;
+                mHandler.sendMessage(msg);
+
+                topDrawable3.setBounds(0, 0, topDrawable3.getMinimumWidth(), topDrawable3.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, topDrawable3, null, null);
+
+            }
+            if (imgurl4.equals("")) {
+                // / 这一步必须要做,否则不会显示.
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, drawable, null, null);
+            } else {
+                Drawable topDrawable4 = BitmapHelper.getDrawable(imgurl4);
+
+                Message msg = mHandler.obtainMessage();
+                msg.what = 4;
+                msg.obj = topDrawable4;
+                mHandler.sendMessage(msg);
+
+                topDrawable4.setBounds(0, 0, topDrawable4.getMinimumWidth(), topDrawable4.getMinimumHeight());
+                mNewChinese.setCompoundDrawables(null, topDrawable4, null, null);
+            }
+        }
     }
 
     /**
@@ -290,7 +433,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     public void AgainRequest() {
         initData();
     }
-
     /**
      * 竞拍类别查询网络请求
      */
@@ -304,18 +446,15 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
-
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-
                 MyLog.LogShitou("竞拍类别查询--->", result);
                 if (result.equals("-1")|result.equals("-2")) {
                     GetInitCategory();
                     return;
                 }
-
                 Gson gsons = new Gson();
                 CategoryBean mCategoryBean = gsons.fromJson(result, CategoryBean.class);
-               String mRsp_code = mCategoryBean.getRsp_code();
+                String mRsp_code = mCategoryBean.getRsp_code();
                 // 判断code是否返回0000
                 if(mRsp_code.equals("0000")){
                     ArrayList<CategoryBean.Category> mCategory = mCategoryBean.getCategory();
@@ -329,7 +468,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     msge.what = SUCCESS;
                     msge.obj = mArrTitle;
                     mHandler.sendMessage(msge);
-
                     //子分类
                     List<String[]> mArrList = new ArrayList<>();
                     List<String[]> mImgUrlList = new ArrayList<>();
@@ -347,27 +485,22 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                         }
                         mArrList.add(mArr);
                     }
-
                     String url = "http://test.chinau.com.cn:8081/chinau-imgserver/attachment//designer/20160429/20160429081b712e-ed1a-4341-839f-af6571109a03.png";
                     // 获取单个的url
                     String imgurl0 = mImgUrl[0];
                     String imgurl2 = mImgUrl[2];
                     String imgurl3 = mImgUrl[3];
                     String imgurl4 = mImgUrl[4];
-
                     Drawable drawable = getResources().getDrawable(R.mipmap.weixin); // 如个url为空，设置默认图片
                     // 判断url是否为空
                     if (imgurl0.equals("")) {
                         // / 这一步必须要做,否则不会显示.
                         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-
                         Message msg = mHandler.obtainMessage();
                         msg.what = 7;
                         msg.obj = drawable;
                         mHandler.sendMessage(msg);
-
                     } else {
-
                         Drawable topDrawable0 = BitmapHelper.getDrawable(imgurl0);
                         topDrawable0.setBounds(0, 0, topDrawable0.getMinimumWidth(), topDrawable0.getMinimumHeight());
                         Message msg = mHandler.obtainMessage();
@@ -382,9 +515,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                         msg.what = 8;
                         msg.obj = drawable;
                         mHandler.sendMessage(msg);
-
                     } else {
-
                         Drawable topDrawable2 = BitmapHelper.getDrawable(imgurl2);
                         topDrawable2.setBounds(0, 0, topDrawable2.getMinimumWidth(), topDrawable2.getMinimumHeight());
                         Message msg = mHandler.obtainMessage();
@@ -400,7 +531,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                         msg.obj = drawable;
                         mHandler.sendMessage(msg);
                     } else {
-
                         Drawable topDrawable3 = BitmapHelper.getDrawable(imgurl3);
                         topDrawable3.setBounds(0, 0, topDrawable3.getMinimumWidth(), topDrawable3.getMinimumHeight());
                         Message msg = mHandler.obtainMessage();
@@ -415,9 +545,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                         msg.what = 10;
                         msg.obj = drawable;
                         mHandler.sendMessage(msg);
-
                     } else {
-
                         Drawable topDrawable4 = BitmapHelper.getDrawable(imgurl4);
                         topDrawable4.setBounds(0, 0, topDrawable4.getMinimumWidth(), topDrawable4.getMinimumHeight());
                         Message msg = mHandler.obtainMessage();
@@ -425,7 +553,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                         msg.obj = topDrawable4;
                         mHandler.sendMessage(msg);
                     }
-
                     // 发送二级分类名字
                     Message msg = mHandler.obtainMessage();
                     msg.what = 6;
@@ -462,7 +589,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 params.put(StaticField.SIGN, md5code); // 签名
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.LogShitou("result+竞拍~~~~>", result);
+                MyLog.LogShitou("result+竞拍List", result);
                 if (result.equals("-1") |result.equals("-2")) {
                     return;
                 }
