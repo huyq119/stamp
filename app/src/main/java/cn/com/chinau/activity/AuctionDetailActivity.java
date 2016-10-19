@@ -65,7 +65,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     private int lastY = 0;
     private int scrollY; // 标记上次滑动位置
     private double intCount;// 每次出价加减的值
-    private String count, mGoods_sn, mGoodsDetail, mVerifyInfo, mToken, mUser_id, mIsFavorite,mPrice;// 获取出价的值
+    private String count, mGoods_sn, mGoodsDetail, mVerifyInfo, mToken, mUser_id, mIsFavorite,mPrice,mAuctionRecord;// 获取出价的值
     private int goods_storage = 1; //出价最低价
     private AuctionRegulationsAgreementDialog auctiondialog; // 协议dialog
     private boolean bidFlag =false ,addFlag;// 出价标识,加价标识
@@ -246,8 +246,14 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         mUser_id = sp.getString("userId", "");
         // 获取竞拍页面传过来的的值
         Bundle bundle = getIntent().getExtras();
-        mGoods_sn = bundle.getString(StaticField.GOODS_SN);
-        MyLog.LogShitou("mGoods_sn编号001~~~~>", mGoods_sn);
+        mAuctionRecord = bundle.getString("AuctionRecord","");
+        if (mAuctionRecord.equals("AuctionRecord")){
+            mGoods_sn = bundle.getString(StaticField.GOODS_SN);
+            MyLog.LogShitou("竞拍记录传的编号001~~~~>", mGoods_sn);
+        }else {
+            mGoods_sn = bundle.getString(StaticField.GOODS_SN);
+            MyLog.LogShitou("竞拍传的编号002~~~~>", mGoods_sn);
+        }
 
         //初始化控件
         mBack = (ImageView) mAuctionDetailTitle.findViewById(R.id.base_title_back);

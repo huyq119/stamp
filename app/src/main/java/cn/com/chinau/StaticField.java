@@ -60,6 +60,19 @@ public class StaticField {
     public static final int YS_SUCCESS = 7;// Handler发送的结果码（邮市类别查询）
     public static final int JP_SUCCESS = 8;// Handler发送的结果码（竞拍类别查询）
 
+    public static final int QB_SUCCESS = 1;// Handler发送的结果码（查询竞拍记录全部）
+    public static final int JPZ_SUCCESS = 2;// Handler发送的结果码（查询竞拍记录竞拍中）
+    public static final int CJ_SUCCESS = 3;// Handler发送的结果码（查询竞拍记录出局）
+    public static final int CG_SUCCESS = 4;// Handler发送的结果码（查询竞拍记录成功）
+
+    public static final int DFK_SUCCESS = 1;// Handler发送的结果码（订单查询待付款）
+    public static final int DSH_SUCCESS = 2;// Handler发送的结果码（订单查询待收货）
+    public static final int WC_SUCCESS = 3;// Handler发送的结果码（订单查询已完成）
+    public static final int TK_SUCCESS = 4;// Handler发送的结果码（订单查询退款）
+
+
+
+
     //步长
     public final static int OFFSETNUM = 20;
 

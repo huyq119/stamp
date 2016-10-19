@@ -51,7 +51,6 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             switch (msg.what) {
                 case StaticField.SUCCESS:// 扫码回购
                     String msge = (String) msg.obj;
@@ -64,8 +63,7 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
                             mOederListview.setVisibility(View.VISIBLE);
                             initAdapter();
                         }else {
-                            mOederListview.setVisibility(View.GONE);
-                            mOederTv.setVisibility(View.VISIBLE);
+                            GoneOrVisibleView(); // ListView为空时显示的布局
                         }
                     }
                     break;
@@ -80,8 +78,7 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
                             mOederListview.setAdapter(adapters);
                             adapters.notifyDataSetChanged();
                         }else {
-                            mOederListview.setVisibility(View.GONE);
-                            mOederTv.setVisibility(View.VISIBLE);
+                            GoneOrVisibleView();
                         }
                     }
                     break;
@@ -141,14 +138,20 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
         mOederListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                 String mOrder_sn =  mList.get(i).getOrder_sn();
                 Bundle bundle = new Bundle();
                 bundle.putString("Order_sn",mOrder_sn);
-                MyLog.LogShitou("mOrder_sn回购订单的编号",mOrder_sn);
+//                MyLog.LogShitou("mOrder_sn回购订单的编号",mOrder_sn);
                 openActivityWitchAnimation(ScanOrderBuyDetailActivity.class,bundle);
             }
         });
+    }
+
+    // ListView为空时显示的布局
+    private void GoneOrVisibleView() {
+        mOederListview.setVisibility(View.GONE);
+        mOederTv.setVisibility(View.VISIBLE); // 无信息控件显示
+        mOederTv.setText("暂无订单信息~");
     }
 
     private void initAdapter() {

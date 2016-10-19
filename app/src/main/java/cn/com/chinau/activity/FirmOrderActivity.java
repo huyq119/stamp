@@ -31,6 +31,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private ExpandableListView mListView;//底部列表展示
     private ImageView mBack,mPayImg;
     private TextView mTitle,mOkPay,mDistributionTv,mDistributionPrice,mPayNmme;
+    private LinearLayout mAddress1;
+    private String mAuctionRecord;
 
     @Override
     public View CreateTitle() {
@@ -48,10 +50,14 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         return mFirmOrderContent;
     }
 
-
-
-
     private void initView() {
+
+//        Intent intent = getIntent();
+//        mAuctionRecord = intent.getStringExtra("AuctionRecord");
+//        if (mAuctionRecord.equals("AuctionRecord")) {
+//            MyLog.LogShitou("这是从竞拍记录跳过来的", mAuctionRecord);
+//        }
+
         mBack =(ImageView) mFirmOrderTitle.findViewById(R.id.base_title_back);
         mTitle =(TextView) mFirmOrderTitle.findViewById(R.id.base_title);
         mTitle.setText("确认订单");
@@ -74,7 +80,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //        mNoAddress.setVisibility(isAddress() ? View.GONE : View.VISIBLE);
         setFalseData();
     }
-
 
 
 //    private void initAdapter() {

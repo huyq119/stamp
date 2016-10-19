@@ -38,7 +38,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     private View mShopTitle;
     private ExpandableListView mContentListView;//主要的ListView
     private TextView mGoToPay;//结算按钮
-    private ArrayList<ShopNameBean.SellerBean> mSellerBean;
+//    private ArrayList<ShopNameBean.SellerBean> mSellerBean;
     private ArrayList<ShopNameBean.SellerBean> mSellerList;
     private ShopNameBean shopNameBean;
     private ImageView mAll;
@@ -123,7 +123,6 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             public void onSelectItem(boolean isSelectedAll) {
                 ShoppingCartBiz.checkItem(isSelectedAll, mAll);
             }
-
             @Override
             public void onDataChange(String selectCount, String selectMoney) {
                 mPrice.setText("￥"+selectMoney);

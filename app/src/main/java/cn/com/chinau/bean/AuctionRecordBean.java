@@ -24,29 +24,20 @@ public class AuctionRecordBean extends BaseBean{
 
     public static class Auction {
         public String auction_status;//竞拍状态
+        public String order_status;//订单状态
         public String auction_sn;//竞拍记录
         public String auction_end_time;//竞拍结束时间
         public String goods_name;//商品名称
+        public String goods_img;//商品图片
         public String goods_price;//商品价格
         public String create_time;//竞拍出价时间
-        public String goods_imag;
 
-        public Auction(String auction_status, String auction_sn, String goods_price, String create_time, String goods_name, String auction_end_time,String goods_imag) {
-            this.auction_status = auction_status;
-            this.auction_sn = auction_sn;
-            this.goods_price = goods_price;
-            this.create_time = create_time;
-            this.goods_name = goods_name;
-            this.auction_end_time = auction_end_time;
-            this.goods_imag =goods_imag;
+        public String getOrder_status() {
+            return order_status;
         }
 
-        public String getAuction_status() {
-            return auction_status;
-        }
-
-        public void setAuction_status(String auction_status) {
-            this.auction_status = auction_status;
+        public void setOrder_status(String order_status) {
+            this.order_status = order_status;
         }
 
         public String getAuction_sn() {
@@ -57,6 +48,22 @@ public class AuctionRecordBean extends BaseBean{
             this.auction_sn = auction_sn;
         }
 
+        public String getGoods_name() {
+            return goods_name;
+        }
+
+        public void setGoods_name(String goods_name) {
+            this.goods_name = goods_name;
+        }
+
+        public String getAuction_status() {
+            return auction_status;
+        }
+
+        public void setAuction_status(String auction_status) {
+            this.auction_status = auction_status;
+        }
+
         public String getAuction_end_time() {
             return auction_end_time;
         }
@@ -65,12 +72,12 @@ public class AuctionRecordBean extends BaseBean{
             this.auction_end_time = auction_end_time;
         }
 
-        public String getGoods_name() {
-            return goods_name;
+        public String getGoods_img() {
+            return goods_img;
         }
 
-        public void setGoods_name(String goods_name) {
-            this.goods_name = goods_name;
+        public void setGoods_img(String goods_img) {
+            this.goods_img = goods_img;
         }
 
         public String getGoods_price() {
@@ -87,14 +94,6 @@ public class AuctionRecordBean extends BaseBean{
 
         public void setCreate_time(String create_time) {
             this.create_time = create_time;
-        }
-
-        public String getGoods_imag() {
-            return goods_imag;
-        }
-
-        public void setGoods_imag(String goods_imag) {
-            this.goods_imag = goods_imag;
         }
     }
 }

@@ -337,7 +337,6 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 if (mToken.equals("") || mUser_id.equals("")) {
                     openActivityWitchAnimation(LoginActivity.class);
                 } else {
-
                     if (mIsFavorite.equals("0")) {
                         DeleteGetInitNet(StaticField.JR);// 修改收藏网络请求
                     } else if (mIsFavorite.equals("1")) {
@@ -442,7 +441,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 params.put(StaticField.SIGN, md5code);
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                MyLog.LogShitou("result收藏修改-->:", result);
+                MyLog.LogShitou(op_type+"-"+"收藏修改-->:", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;

@@ -24,8 +24,8 @@ import cn.com.chinau.utils.MyToast;
 public class OrderPaymentReceivingCompleteLsitViewAdapter extends BaseExpandableListAdapter{
 
     private Context context;
-    private List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList> groups ;
-    private Map<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>> goods;
+    private List<OrderAllListViewGoodsBean.Order_list.Seller_list> groups ;
+    private Map<String, List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list>> goods;
     private BitmapUtils bitmapUtils;
     /**
      * 构造函数
@@ -35,7 +35,7 @@ public class OrderPaymentReceivingCompleteLsitViewAdapter extends BaseExpandable
      * @param context  上下文
      */
 
-    public OrderPaymentReceivingCompleteLsitViewAdapter(Context context, BitmapUtils bitmapUtils, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList> groups, Map<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>> goods) {
+    public OrderPaymentReceivingCompleteLsitViewAdapter(Context context, BitmapUtils bitmapUtils, List<OrderAllListViewGoodsBean.Order_list.Seller_list> groups, Map<String, List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list>> goods) {
         this.context = context;
         this.groups = groups;
         this.goods = goods;
@@ -59,7 +59,7 @@ public class OrderPaymentReceivingCompleteLsitViewAdapter extends BaseExpandable
 
     @Override
     public Object getChild(int i, int i1) {
-        List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList> childs = goods.get(groups.get(i).getSeller_name());
+        List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list> childs = goods.get(groups.get(i).getSeller_name());
         return childs.get(i1);
     }
 
@@ -93,7 +93,7 @@ public class OrderPaymentReceivingCompleteLsitViewAdapter extends BaseExpandable
         } else {
             gholder = (GroupViewHolder) view.getTag();
         }
-        final OrderAllListViewGoodsBean.OrdersDataList.SellerDataList group = (OrderAllListViewGoodsBean.OrdersDataList.SellerDataList)getGroup(i);
+        final OrderAllListViewGoodsBean.Order_list.Seller_list group = (OrderAllListViewGoodsBean.Order_list.Seller_list)getGroup(i);
 //        String mName = group.getSeller_name();
 //        String mType = group.getSeller_type();
 
@@ -144,7 +144,7 @@ public class OrderPaymentReceivingCompleteLsitViewAdapter extends BaseExpandable
         }
 
         // 赋值
-        final OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList goodsBean = (OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList) getChild(i, i1);
+        final OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list goodsBean = (OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list) getChild(i, i1);
 
 //        bitmapUtils.display(goodsholder.img, goodsBean.getGoods_img());
         goodsholder.mNames.setText(goodsBean.getGoods_name());

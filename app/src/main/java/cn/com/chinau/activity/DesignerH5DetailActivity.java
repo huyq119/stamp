@@ -99,15 +99,16 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
         mBack.setOnClickListener(this);
 
     }
+
     /**
      * WEB页面赋值方法
-     *
      * @param H5Url url地址
      */
     private void initSetWebView(String H5Url) {
         if (mWB != null) {
             mWB.loadUrl(H5Url);
         }
+
     }
 
     @Override
@@ -123,7 +124,9 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
     }
 
     /**
-     * 设计家h5详情网络请求
+     * @param sn 编号
+     * @param op_type 操作类型
+     * @param zp_category 艺术作品类别
      */
     private void initData(final String sn, final String op_type, final String zp_category) {
 

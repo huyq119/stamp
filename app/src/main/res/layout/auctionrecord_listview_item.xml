@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -9,44 +8,79 @@
         android:id="@+id/record_out_icon"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center"
         android:layout_marginLeft="15dp"
-        android:background="#f00"
-        android:scaleType="center"/>
+        android:scaleType="center" />
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:orientation="vertical">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:orientation="vertical"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/auctionRecord_item_Name"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="庚申年"
-                android:textColor="#000"
-                android:textSize="15sp"/>
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+
+                >
+
+                <TextView
+                    android:id="@+id/auctionRecord_item_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:textColor="#000"
+                    android:textSize="15sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_marginRight="15dp"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:id="@+id/order_status_payment_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@mipmap/payment_btn_bg"
+                        android:gravity="center"
+                        android:visibility="invisible"
+                        android:textColor="@color/red_font"
+                        android:textSize="13sp" />
+                    <TextView
+                        android:id="@+id/order_status_over_close_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:textColor="@color/font"
+                        android:textSize="13sp" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/auctionRecord_item_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="已出局"
                 android:textColor="#999"
                 android:textSize="15sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
 
             <LinearLayout
@@ -54,23 +88,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:visibility="invisible"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/auctionRecord_item_current"
+                    android:id="@+id/auctionRecord_item_currentPrice_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="订单金额:"
                     android:textColor="#999"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/auctionRecord_item_currentPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
                     android:text="￥1000.00"
                     android:textColor="@color/red_font"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
@@ -82,35 +117,25 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/auctionRecord_item_time"
+                    android:id="@+id/auctionRecord_item_time_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/payment_time"
                     android:textColor="#999"
-                    android:textSize="13sp"/>
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/auctionRecord_item_spareTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="10dp"
                     android:text="11:22:24"
+                    android:visibility="visible"
                     android:textColor="#ff9900"
-                    android:textSize="13sp"/>
+                    android:textSize="12sp" />
 
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/auctionRecord_item_successStatus"
-            android:layout_width="40dp"
-            android:layout_height="21dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/distance"
-            android:layout_marginTop="@dimen/distance"
-            android:background="@mipmap/rectangle_red"
-            android:gravity="center"
-            android:text="付款"
-            android:visibility="gone"/>
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

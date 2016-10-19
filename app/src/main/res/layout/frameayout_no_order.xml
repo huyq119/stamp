@@ -3,7 +3,6 @@
         android:id="@+id/no_order_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="暂无订单信息~"
         android:drawableTop="@mipmap/no_order"
         android:drawablePadding="40dp"
         android:textSize="16sp"

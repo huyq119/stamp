@@ -33,7 +33,6 @@ import cn.com.chinau.adapter.StampMarketGridViewAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.CategoryBean;
 import cn.com.chinau.bean.GoodsStampBean;
-import cn.com.chinau.bitmap.BitmapHelper;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.listener.GestureListener;
 import cn.com.chinau.utils.Encrypt;
@@ -191,7 +190,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
      * 添加网络数据
      */
     private void initData() {
-//        GetCategoryData();// 获取保存在本地邮市类别数据
+        GetCategoryData();// 获取保存在本地邮市类别数据
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
         RequestNet(StaticField.ZH, num, StaticField.A);
     }
@@ -257,37 +256,37 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
 
             // 判断url是否为空
             if (!imgurl0.equals("")) {
-                Drawable topDrawable0 = BitmapHelper.getDrawable(imgurl0);
-                topDrawable0.setBounds(0, 0, topDrawable0.getMinimumWidth(), topDrawable0.getMinimumHeight());
-                Message msg = mHandler.obtainMessage();
-                msg.what = 1;
-                msg.obj = topDrawable0;
-                mHandler.sendMessage(msg);
+//                Drawable topDrawable0 = BitmapHelper.getDrawable(imgurl0);
+//                topDrawable0.setBounds(0, 0, topDrawable0.getMinimumWidth(), topDrawable0.getMinimumHeight());
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = 1;
+//                msg.obj = topDrawable0;
+//                mHandler.sendMessage(msg);
             }
             if (! imgurl1.equals("")) {
 
-                Drawable topDrawable1 = BitmapHelper.getDrawable(imgurl1);
-                topDrawable1.setBounds(0, 0, topDrawable1.getMinimumWidth(), topDrawable1.getMinimumHeight());
-                Message msg = mHandler.obtainMessage();
-                msg.what = 2;
-                msg.obj = topDrawable1;
-                mHandler.sendMessage(msg);
+//                Drawable topDrawable1 = BitmapHelper.getDrawable(imgurl1);
+//                topDrawable1.setBounds(0, 0, topDrawable1.getMinimumWidth(), topDrawable1.getMinimumHeight());
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = 2;
+//                msg.obj = topDrawable1;
+//                mHandler.sendMessage(msg);
             }
             if (!imgurl2.equals("")) {
-                Drawable topDrawable2 = BitmapHelper.getDrawable(imgurl2);
-                topDrawable2.setBounds(0, 0, topDrawable2.getMinimumWidth(), topDrawable2.getMinimumHeight());
-                Message msg = mHandler.obtainMessage();
-                msg.what = 3;
-                msg.obj = topDrawable2;
-                mHandler.sendMessage(msg);
+//                Drawable topDrawable2 = BitmapHelper.getDrawable(imgurl2);
+//                topDrawable2.setBounds(0, 0, topDrawable2.getMinimumWidth(), topDrawable2.getMinimumHeight());
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = 3;
+//                msg.obj = topDrawable2;
+//                mHandler.sendMessage(msg);
             }
             if (!imgurl3.equals("")) {
-                Drawable topDrawable3 = BitmapHelper.getDrawable(imgurl3);
-                topDrawable3.setBounds(0, 0, topDrawable3.getMinimumWidth(), topDrawable3.getMinimumHeight());
-                Message msg = mHandler.obtainMessage();
-                msg.what = 4;
-                msg.obj = topDrawable3;
-                mHandler.sendMessage(msg);
+//                Drawable topDrawable3 = BitmapHelper.getDrawable(imgurl3);
+//                topDrawable3.setBounds(0, 0, topDrawable3.getMinimumWidth(), topDrawable3.getMinimumHeight());
+//                Message msg = mHandler.obtainMessage();
+//                msg.what = 4;
+//                msg.obj = topDrawable3;
+//                mHandler.sendMessage(msg);
             }
 
 

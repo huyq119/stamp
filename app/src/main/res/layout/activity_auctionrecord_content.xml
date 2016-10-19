@@ -8,17 +8,17 @@
 
 
     <LinearLayout
-        android:id="@+id/record_radioGroup_ll"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RadioGroup
+            android:id="@+id/record_radioGroup"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="36dp"
             android:orientation="horizontal">
 
-            <Button
+            <RadioButton
                 android:id="@+id/record_all"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -27,7 +27,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="@string/recordAll"
-                android:textColor="#666"
+                android:textColor="@drawable/auction_record_text_bg"
                 android:textSize="12sp" />
 
             <View
@@ -37,7 +37,7 @@
                 android:layout_marginTop="3dp"
                 android:background="#dedfe3" />
 
-            <Button
+            <RadioButton
                 android:id="@+id/btn_recording"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -46,7 +46,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="@string/recording"
-                android:textColor="#666"
+                android:textColor="@drawable/auction_record_text_bg"
                 android:textSize="12sp" />
 
             <View
@@ -56,7 +56,7 @@
                 android:layout_marginTop="3dp"
                 android:background="#dedfe3" />
 
-            <Button
+            <RadioButton
                 android:id="@+id/btn_recordout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -65,7 +65,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="@string/recordOut"
-                android:textColor="#666"
+                android:textColor="@drawable/auction_record_text_bg"
                 android:textSize="12sp" />
 
             <View
@@ -75,7 +75,7 @@
                 android:layout_marginTop="3dp"
                 android:background="#dedfe3" />
 
-            <Button
+            <RadioButton
                 android:id="@+id/record_success"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -84,9 +84,9 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="@string/recordSuccess"
-                android:textColor="#666"
+                android:textColor="@drawable/auction_record_text_bg"
                 android:textSize="12sp" />
-        </LinearLayout>
+        </RadioGroup>
 
         <View style="@style/myline" />
 
@@ -98,8 +98,7 @@
         android:layout_height="wrap_content"
         android:listSelector="@android:color/transparent"
         android:overScrollMode="never"
-        android:scrollbars="none"
-      />
+        android:scrollbars="none" />
 
 
     <include layout="@layout/frameayout_no_order" />

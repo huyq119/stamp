@@ -1,14 +1,15 @@
 package cn.com.chinau.activity;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -36,41 +37,80 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
     private View mAuctionRecordTitle;
     private ImageView mRecordBack;//返回
     private ListView mRecordListView;
-    private Button mRecordAll, mRecording, mRecordOut, mRecordSuccess;//全部 竞拍中 已出局 竞拍成功
+    private RadioButton mRecordAll, mRecording, mRecordOut, mRecordSuccess;//全部 竞拍中 已出局 竞拍成功
     private AuctionRecordListViewAdapter mAdapter;
     private List<AuctionRecordBean.Auction> mList;
     private SharedPreferences sp;
-    private String mToken, mUser_id,result;
+    private String mToken, mUser_id, result;
     private int num = 0;//初始索引
+    private TextView mNoOrderTv;
+    private RadioGroup mRecordGroup;
 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case StaticField.SUCCESS:
+                case StaticField.QB_SUCCESS:// 全部
                     String msge = (String) msg.obj;
                     Gson gson = new Gson();
                     AuctionRecordBean mAuctionBean = gson.fromJson(msge, AuctionRecordBean.class);
                     String mRsp_code = mAuctionBean.getRsp_code();
                     if (mRsp_code.equals("0000")) {
                         mList = mAuctionBean.getAuction_rec_list();
-                        MyLog.LogShitou("竞拍列表有几条-->:", mList.size() + "");
                         if (mList != null && mList.size() != 0) {
-                            //竖向ListView设置适配器
                             initAdapter();
-                        }else {
-                            mRecordGroup_ll.setVisibility(View.GONE);// 标签栏
-                            mRecordListView.setVisibility(View.GONE);
-                            mNoOrderTv.setVisibility(View.VISIBLE); // 无信息控件显示
-                            mNoOrderTv.setText("暂无订单信息");
+                        } else {
+                            GoneOrVisibleView(); // ListView为空时显示的布局
+                        }
+                    }
+                    break;
+                case StaticField.JPZ_SUCCESS: // 竞拍中
+                    String msge1 = (String) msg.obj;
+                    Gson gson1 = new Gson();
+                    AuctionRecordBean mAuctionBean1 = gson1.fromJson(msge1, AuctionRecordBean.class);
+                    String mRsp_code1 = mAuctionBean1.getRsp_code();
+                    if (mRsp_code1.equals("0000")) {
+                        mList = mAuctionBean1.getAuction_rec_list();
+                        if (mList != null && mList.size() != 0) {
+                            initAdapter();
+                            mNoOrderTv.setVisibility(View.GONE); // 无信息控件显示
+                        } else {
+                            GoneOrVisibleView();// ListView为空时显示的布局
+                        }
+                    }
+                    break;
+                case StaticField.CJ_SUCCESS: // 已出局
+                    String msge2 = (String) msg.obj;
+                    Gson gson2 = new Gson();
+                    AuctionRecordBean mAuctionBean2 = gson2.fromJson(msge2, AuctionRecordBean.class);
+                    String mRsp_code2 = mAuctionBean2.getRsp_code();
+                    if (mRsp_code2.equals("0000")) {
+                        mList = mAuctionBean2.getAuction_rec_list();
+                        if (mList != null && mList.size() != 0) {
+                            initAdapter();
+                        } else {
+                            GoneOrVisibleView();// ListView为空时显示的布局
+                        }
+                    }
+                    break;
+                case StaticField.CG_SUCCESS: // 竞拍成功
+                    String msge3 = (String) msg.obj;
+                    Gson gson3 = new Gson();
+                    AuctionRecordBean mAuctionBean3 = gson3.fromJson(msge3, AuctionRecordBean.class);
+                    String mRsp_code3 = mAuctionBean3.getRsp_code();
+                    if (mRsp_code3.equals("0000")) {
+                        mList = mAuctionBean3.getAuction_rec_list();
+                        if (mList != null && mList.size() != 0) {
+                            initAdapter();
+                        } else {
+                            GoneOrVisibleView();// ListView为空时显示的布局
                         }
                     }
                     break;
             }
         }
     };
-    private LinearLayout mRecordGroup_ll;
-    private TextView mNoOrderTv;
+
 
     @Override
     public View CreateTitle() {
@@ -100,31 +140,37 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
                 finishWitchAnimation();
                 break;
             case R.id.record_all://全部
-                if (!(result.equals("-1") | result.equals("-2"))){
+                if (!(result.equals("-1") | result.equals("-2"))) {
                     GetIntenerNet(num, StaticField.QB);
                 }
                 break;
             case R.id.btn_recording://竞拍中
-                if (!(result.equals("-1") | result.equals("-2"))){
+                if (!(result.equals("-1") | result.equals("-2"))) {
                     GetIntenerNet(num, StaticField.JPZ);
                 }
                 break;
             case R.id.btn_recordout://已出局
-                if (!(result.equals("-1") | result.equals("-2"))){
+                if (!(result.equals("-1") | result.equals("-2"))) {
                     GetIntenerNet(num, StaticField.CJ);
                 }
                 break;
             case R.id.record_success:///竞拍成功
-                if (!(result.equals("-1") | result.equals("-2"))){
+                if (!(result.equals("-1") | result.equals("-2"))) {
                     GetIntenerNet(num, StaticField.CG);
                 }
                 break;
         }
     }
 
+    // 点击条目跳转
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        openActivityWitchAnimation(SelfMallDetailActivity.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(StaticField.GOODS_SN, mList.get(i).getAuction_sn());// 传过去的编号
+        bundle.putString("AuctionRecord", "AuctionRecord");
+        openActivityWitchAnimation(AuctionDetailActivity.class, bundle);
+
     }
 
     private void initView() {
@@ -135,24 +181,34 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
         mRecordBack = (ImageView) mAuctionRecordTitle.findViewById(R.id.base_title_back);
         TextView mTitle = (TextView) mAuctionRecordTitle.findViewById(R.id.base_title);
         mTitle.setText("竞拍记录");
+        mRecordGroup = (RadioGroup) mAuctionRecordContent.findViewById(R.id.record_radioGroup);
+        mRecordAll = (RadioButton) mAuctionRecordContent.findViewById(R.id.record_all);
+        mRecording = (RadioButton) mAuctionRecordContent.findViewById(R.id.btn_recording);
+        mRecordOut = (RadioButton) mAuctionRecordContent.findViewById(R.id.btn_recordout);
+        mRecordSuccess = (RadioButton) mAuctionRecordContent.findViewById(R.id.record_success);
+
+        mRecordGroup.check(R.id.record_all);// 默认选中
         mRecordListView = (ListView) mAuctionRecordContent.findViewById(R.id.record_auction_LV);
-        mRecordAll = (Button) mAuctionRecordContent.findViewById(R.id.record_all);
-        mRecording = (Button) mAuctionRecordContent.findViewById(R.id.btn_recording);
-        mRecordOut = (Button) mAuctionRecordContent.findViewById(R.id.btn_recordout);
-        mRecordSuccess = (Button) mAuctionRecordContent.findViewById(R.id.record_success);
-        mRecordGroup_ll = (LinearLayout) mAuctionRecordContent.findViewById(R.id.record_radioGroup_ll);
         mNoOrderTv = (TextView) mAuctionRecordContent.findViewById(R.id.no_order_tv);
     }
 
     private void initData() {
-
         GetIntenerNet(num, StaticField.QB);
     }
 
-    private void initAdapter(){
+    private void initAdapter() {
         mAdapter = new AuctionRecordListViewAdapter(this, mBitmap, mList);
+        mRecordListView.setVisibility(View.VISIBLE);
+        mNoOrderTv.setVisibility(View.GONE); // 无信息控件显示
         mRecordListView.setAdapter(mAdapter);//竞拍记录竞拍中适配器
         mAdapter.notifyDataSetChanged();
+    }
+
+    // ListView为空时显示的布局
+    private void GoneOrVisibleView() {
+        mRecordListView.setVisibility(View.GONE);
+        mNoOrderTv.setVisibility(View.VISIBLE); // 无信息控件显示
+        mNoOrderTv.setText("暂无竞拍记录信息~");
     }
 
     private void initListener() {
@@ -162,6 +218,7 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
         mRecordOut.setOnClickListener(this);
         mRecordSuccess.setOnClickListener(this);
         mRecordListView.setOnItemClickListener(this);
+
     }
 
     /**
@@ -182,16 +239,35 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
-                 result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                MyLog.LogShitou("竞拍记录List-->:", result);
+                result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                MyLog.LogShitou(status + "竞拍记录List-->:", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-                Message msg = mHandler.obtainMessage();
-                msg.what = StaticField.SUCCESS;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
+                // 判断是哪个状态下的请求
+                if (status.equals("QB")) {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.QB_SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else if (status.equals("JPZ")) {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.JPZ_SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else if (status.equals("CJ")) {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.CJ_SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else if (status.equals("CG")) {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.CG_SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
             }
         });
     }

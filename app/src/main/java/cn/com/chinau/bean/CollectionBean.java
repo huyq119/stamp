@@ -24,6 +24,7 @@ public class CollectionBean extends BaseBean {
     }
 
     public static class Collection {
+
         public String goods_name;// 商品名称
         public String goods_sn;//商品编号
         public String goods_img;// 商品图片
@@ -39,6 +40,7 @@ public class CollectionBean extends BaseBean {
             this.goods_sn = goods_sn;
             this.goods_img = goods_img;
         }
+
         public boolean isChoosed() {
             return isChoosed;
         }

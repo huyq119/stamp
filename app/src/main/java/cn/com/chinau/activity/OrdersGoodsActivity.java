@@ -55,38 +55,16 @@ public class OrdersGoodsActivity extends BaseActivity {
     private ExpandableListView all_edListview, payment_edListview, receiving_edListview, complete_edListview, refuse_edListview;
     private int position = 0;
     private int mPosition;
-    private String mToken,mUser_id;// 标识，用户ID
+    private String mToken, mUser_id;// 标识，用户ID
     private static final int num = 0; // 初始化索引
     private OrderAllLsitViewAdapter allLsitViewAdapter;
-    private List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList> groups = new ArrayList<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList>();// 组元素数据列表
-    private Map<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>> goods = new HashMap<String, List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>>();// 子元素数据列表
+    private List<OrderAllListViewGoodsBean.Order_list.Seller_list> groups = new ArrayList<OrderAllListViewGoodsBean.Order_list.Seller_list>();// 组元素数据列表
+    private Map<String, List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list>> goods = new HashMap<String, List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list>>();// 子元素数据列表
+
 
     private List<HashMap<String, String>> lists;
     private SharedPreferences sp;
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case StaticField.SUCCESS://
-                    String msge = (String) msg.obj;
-                    Gson gson = new Gson();
-//                    MyStampGridViewBean mOrderSweepBean = gson.fromJson(msge, MyStampGridViewBean.class);
-//                    String mRsp_code = mOrderSweepBean.getRsp_code();
-//                    if (mRsp_code.equals("0000")) {
-//                        mList = mOrderSweepBean.getStamp_list();
-//                        MyLog.LogShitou("我的邮集有几条-->:", mList.size() + "");
-//                        if (mList != null && mList.size() != 0) {
-//                            initAdapter();
-//                        }else {
-//                            MyToast.showShort(MyStampActivity.this,"我的邮集为空。。。");
-//                        }
-//                    }
-
-                    break;
-
-            }
-        }
-    };
+    private OrderAllListViewGoodsBean orderAllListViewGoodsBean;
 
     @Override
     public View CreateTitle() {
@@ -100,29 +78,7 @@ public class OrdersGoodsActivity extends BaseActivity {
         sp = getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         initViews();
         initDatas();
-        initAdapter();
         initstartview();
-        initListener();
-        mViewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    canscroll = true;
-                } else {
-                    canscroll = false;
-                }
-                return false;
-            }
-        });
-        all_edListview.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    canscroll = false;
-                }
-                return canscroll;
-            }
-        });
         return mOrderContent;
     }
 
@@ -156,14 +112,6 @@ public class OrdersGoodsActivity extends BaseActivity {
         mBack = (ImageView) mOrderTitle.findViewById(R.id.base_title_back);
         mTitle = (TextView) mOrderTitle.findViewById(R.id.base_title);
         mTitle.setText("商品订单");
-
-        mBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finishWitchAnimation();
-            }
-        });
-
         //初始化控件
         mRadioGroup = (RadioGroup) mOrderContent.findViewById(R.id.RG_choose);
         mViewPager = (OrderGoodsViewPager) mOrderContent.findViewById(R.id.order_viewpager);
@@ -172,8 +120,16 @@ public class OrdersGoodsActivity extends BaseActivity {
         mReceiving = (RadioButton) mOrderContent.findViewById(R.id.RBtn_Receiving);
         mComplete = (RadioButton) mOrderContent.findViewById(R.id.RBtn_Complete);
         mRefuse = (RadioButton) mOrderContent.findViewById(R.id.RBtn_Refuse);
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finishWitchAnimation();
+            }
+        });
+    }
 
-
+    private void initDatas() {
+        GetInitNet(num, StaticField.QB); // 商品订单列表网络请求
     }
 
     private void initAdapter() {
@@ -200,7 +156,7 @@ public class OrdersGoodsActivity extends BaseActivity {
         refuse_edListview = (ExpandableListView) v5.findViewById(R.id.all_expand_ListView);
 
         // (全部)适配器
-        OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap, groups, goods);// 全部适配器
+        OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap,groups,goods );// 全部适配器
         // （待付款，待收货，已完成）适配器
         OrderPaymentReceivingCompleteLsitViewAdapter PayRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(this, mBitmap, groups, goods);
         // （退款/退货）适配器
@@ -213,11 +169,23 @@ public class OrdersGoodsActivity extends BaseActivity {
         refuse_edListview.setAdapter(RefuseLsitViewAdapter);
         for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
             all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+        }
+        for (int i = 0; i < PayRecComLsitViewAdapter.getGroupCount(); i++) {
             payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
             receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
             complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+        }
+        for (int i = 0; i < RefuseLsitViewAdapter.getGroupCount(); i++) {
             refuse_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
         }
+
+
+    }
+
+    public void initListener() {
+        mRadioGroup.setOnCheckedChangeListener(new MyGroupListener());
+        mViewPager.setOnPageChangeListener(new MyPagerChangeListener());
+
         //ed_listview点击不收缩
         all_edListview.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -254,29 +222,10 @@ public class OrdersGoodsActivity extends BaseActivity {
             }
         });
 
-    }
-
-    private void initDatas() {
-        groups = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            groups.add(new OrderAllListViewGoodsBean.OrdersDataList.SellerDataList());
-            List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList> products = new ArrayList<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>();
-            for (int j = 0; j < 2; j++) {
-                products.add(new OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList("http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg", "庚申年", "100000.00", "1", "交易关闭"));
-            }
-            goods.put(groups.get(i).getSeller_name(), products);// 将组元素的一个唯一值，这里取Id，作为子元素List的Key
-
-        }
-
-        GetInitNet(num,StaticField.QB); // 商品订单列表网络请求
-
-    }
-
-
-    public void initListener() {
-        mRadioGroup.setOnCheckedChangeListener(new MyGroupListener());
-        mViewPager.setOnPageChangeListener(new MyPagerChangeListener());
-        //全部
+        /**
+         * 条目点击
+         */
+        // 全部
         all_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
@@ -285,6 +234,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                 return false;
             }
         });
+
         // 待付款
         payment_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -321,6 +271,27 @@ public class OrdersGoodsActivity extends BaseActivity {
             }
         });
 
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    canscroll = true;
+                } else {
+                    canscroll = false;
+                }
+                return false;
+            }
+        });
+        all_edListview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    canscroll = false;
+                }
+                return canscroll;
+            }
+        });
+
     }
 
     @Override
@@ -348,7 +319,6 @@ public class OrdersGoodsActivity extends BaseActivity {
             switch (position) {
                 case 0:
                     mRadioGroup.check(R.id.RBtn_All);
-
                     break;
                 case 1:
                     mRadioGroup.check(R.id.RBtn_Payment);
@@ -382,27 +352,27 @@ public class OrdersGoodsActivity extends BaseActivity {
                 case R.id.RBtn_All:// 全部
                     position = 0;
                     mViewPager.setCurrentItem(0);
-                    GetInitNet(num,StaticField.QB); // 商品订单列表网络请求
+                    GetInitNet(num, StaticField.QB); // 商品订单列表网络请求
                     break;
                 case R.id.RBtn_Payment:// 待付款
                     position = 1;
                     mViewPager.setCurrentItem(1);
-                    GetInitNet(num,StaticField.DFK);
+                    GetInitNet(num, StaticField.DFK);
                     break;
                 case R.id.RBtn_Receiving:// 待收货
                     position = 2;
                     mViewPager.setCurrentItem(2);
-                    GetInitNet(num,StaticField.DSH);
+                    GetInitNet(num, StaticField.DSH);
                     break;
                 case R.id.RBtn_Complete:// 已完成
                     position = 3;
                     mViewPager.setCurrentItem(3);
-                    GetInitNet(num,StaticField.WC);
+                    GetInitNet(num, StaticField.WC);
                     break;
                 case R.id.RBtn_Refuse://退款
                     position = 4;
                     mViewPager.setCurrentItem(4);
-                    GetInitNet(num,StaticField.TK);
+                    GetInitNet(num, StaticField.TK);
                     break;
 
                 default:
@@ -415,10 +385,11 @@ public class OrdersGoodsActivity extends BaseActivity {
 
     /**
      * 商品订单列表网络请求
-     * @param num 索引
+     *
+     * @param num         索引
      * @param orderStatus 订单状态
      */
-    private void GetInitNet(final int num,final String orderStatus){
+    private void GetInitNet(final int num, final String orderStatus) {
         ThreadManager.getInstance().createLongPool().execute(new Runnable() {
 
             @Override
@@ -436,21 +407,99 @@ public class OrdersGoodsActivity extends BaseActivity {
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou(orderStatus + "--" + "商品订单list", result);
 
-                MyLog.LogShitou(orderStatus+"商品订单list",result);
-                if (result.equals("-1")|result.equals("-2")) {
+                if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
 
-//                Message msgSuccess = handler.obtainMessage();
-//                msgSuccess.what = StaticField.SUCCESS;
-//                msgSuccess.obj = result;
-//                handler.sendMessage(msgSuccess);
+                if (orderStatus.equals("QB")) {// 全部
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                    MyLog.LogShitou("走这了吗", "走这了吗");
+                } else if (orderStatus.equals("DFK")) { // 待付款
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.DFK_SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else if (orderStatus.equals("DSH")) { // 待收货
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.DSH_SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else if (orderStatus.equals("WC")) { // 已完成
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.WC_SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else if (orderStatus.equals("TK")) { // 退款
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.TK_SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
 
 
             }
         });
     }
 
+    private Handler mHandler = new Handler() {
+
+        private ArrayList<OrderAllListViewGoodsBean.Order_list.Seller_list> seller_list;
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case StaticField.SUCCESS:// 全部
+                    Gson gson0 = new Gson();
+                    OrderAllListViewGoodsBean mOrderContentBean = gson0.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
+                    String code = mOrderContentBean.getRsp_code();
+                    if (code.equals("0000")) {
+
+//                        groups = new ArrayList<>();
+//                        ArrayList<OrderAllListViewGoodsBean.Order_list> order_list = mOrderContentBean.getOrder_list();
+//                        int sub = order_list.size();// 获取order_list的个数
+//                        ArrayList <OrderAllListViewGoodsBean.Order_list> mArrName = new ArrayList();// 卖家名称
+//                        for (int i = 0; i <order_list.size(); i++) {
+//                            mArrName[i] = order_list.get(i);
+//                            seller_list = order_list.get().getSeller_list();
+//                            groups.add(seller_list.get(i).getSeller_name());
+//
+//                            groups.add(new mOrderContentBean.getOrder_list());
+//                            List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList> products = new ArrayList<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>();
+//                            for (int j = 0; j < 2; j++) {
+//                                products.add(new OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList("http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg", "庚申年", "100000.00", "1", "交易关闭"));
+//                            }
+//                            goods.put(groups.get(i).getSeller_name(), products);// 将组元素的一个唯一值，这里取Id，作为子元素List的Key
+//                        }
+
+
+//                        orderAllListViewGoodsBean = new OrderAllListViewGoodsBean(order_list);
+                        MyLog.LogShitou("benan是啥数据", "" + orderAllListViewGoodsBean);
+                        initAdapter();
+                        initListener();
+                    }
+                    break;
+                case 1:// 待付款
+                    Gson gson1 = new Gson();
+
+                    break;
+                case 2:// 代收货
+                    Gson gson2 = new Gson();
+                    break;
+                case 3:// 已完成
+                    Gson gson3 = new Gson();
+                    break;
+                case 4:// 退款、退货
+                    Gson gson4 = new Gson();
+
+                    break;
+
+            }
+        }
+    };
 
 }
