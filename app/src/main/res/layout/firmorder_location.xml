@@ -1,17 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--地址的布局-->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!--地址的布局-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/FirmOrder_Address"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:minHeight="85dp"
         android:layout_height="wrap_content"
+        android:minHeight="85dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -32,35 +29,34 @@
                     android:layout_height="wrap_content"
                     android:text="@string/consignee"
                     android:textColor="#000"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/firmOrder_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
-                    android:text="大橙子"
                     android:textColor="#000"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/firmOrder_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
-                    android:text="13806352650"
                     android:textColor="#000"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <TextView
-
+                android:id="@+id/firmOrder_detail_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="13dp"
                 android:drawableLeft="@mipmap/location"
                 android:drawablePadding="10dp"
-                android:text="北京市海淀区上地三街时代小区六单元201"
                 android:textColor="#333"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -69,8 +65,8 @@
             android:layout_width="44dp"
             android:layout_height="match_parent"
             android:scaleType="center"
-            android:src="@mipmap/right_arrow"/>
+            android:src="@mipmap/right_arrow" />
     </LinearLayout>
 
-    <View style="@style/myline"/>
+    <View style="@style/myline" />
 </LinearLayout>

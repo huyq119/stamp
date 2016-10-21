@@ -74,9 +74,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         mBack = (ImageView) mSearchTitle.findViewById(R.id.search_title_back);
         mSearch = (ImageView) mSearchTitle.findViewById(R.id.search_title_search);
         mSearchText = (EditText) mSearchTitle.findViewById(R.id.search_title_scanContent);
-        // 强制隐藏Android输入法窗口
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mSearchText.getWindowToken(),0);
+        // 显示Android输入法窗口
+        InputMethodManager imm = ( InputMethodManager ) mSearchText.getContext( ).getSystemService( Context.INPUT_METHOD_SERVICE );
+        imm.showSoftInput(mSearchText,InputMethodManager.SHOW_FORCED);
         //内容的控件
         mClean = (TextView) mSearchContent.findViewById(R.id.search_clean);
         mFlowLayout = (FlowLayout) mSearchContent.findViewById(R.id.search_fl);

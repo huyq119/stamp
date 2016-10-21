@@ -106,6 +106,7 @@ public class DesignerActivity extends BaseActivity {
         mList = designerBean.getDesigner_list();
 
         DesignerListViewAdapter mLVAdapter = new DesignerListViewAdapter(this, mBitmap, mList);
+
         mDesignerLV.setAdapter(mLVAdapter, positionListener);
     }
 
@@ -132,12 +133,13 @@ public class DesignerActivity extends BaseActivity {
     private IndexListView.AlphabetPositionListener positionListener = new IndexListView.AlphabetPositionListener() {
         @Override
         public int getPosition(String letter) {
-            for (int i = 0, count = mList.size(); i < count; i++) {
-                Character firstLetter = mList.get(i).getEnglish_name().charAt(0);
-                if (firstLetter.toString().equals(letter)) {
-                    return i;
-                }
-            }
+            // 先注释
+//            for (int i = 0, count = mList.size(); i < count; i++) {
+//                Character firstLetter = mList.get(i).getEnglish_name().charAt(0);
+//                if (firstLetter.toString().equals(letter)) {
+//                    return i;
+//                }
+//            }
             return UNKNOW;
         }
     };

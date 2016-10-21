@@ -191,7 +191,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                         initData(); // 再次详情请求,获取收藏状态
                     }
                     break;
-                case StaticField.ADDSHOPPINGCARTSUCCESS:
+                case StaticField.ADDSHOPPINGCARTSUCCESS: // 加入购物车
                     Gson gsones = new Gson();
                     BaseBean mBasebean = gsones.fromJson((String) msg.obj,BaseBean.class);
                     if (mBasebean.getRsp_code().equals("0000")){
@@ -475,7 +475,6 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 params.put(StaticField.SERVICE_TYPE, StaticField.SHOPCARTMODIFY);// 接口名称
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
-                params.put(StaticField.GOODS_SN, mGoods_sn);//  邮票编号
                 params.put(StaticField.GOODESINFO, Goods_info);//  商品信息：所有商品的json字符串
                 params.put(StaticField.OP_TYPE, StaticField.JR);// 操作类型：SC删除；JR加入；XG修改
 

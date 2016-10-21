@@ -8,8 +8,6 @@ public class AddShopCartBean {
     private String goods_sn;// 商品编号
     private String goods_count; // 商品数量
 
-
-
     public String getGoods_sn() {
         return goods_sn;
     }
@@ -24,5 +22,13 @@ public class AddShopCartBean {
 
     public void setGoods_count(String goods_count) {
         this.goods_count = goods_count;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\""+"goods_sn\""+":" +"\""+ goods_sn  +"\""+","+
+                "\""+"goods_count\""+":"+"\""+ goods_count +"\"" +
+                "}";
     }
 }

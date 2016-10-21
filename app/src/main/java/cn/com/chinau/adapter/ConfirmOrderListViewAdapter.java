@@ -218,7 +218,8 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
         dialog_button_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GetInitNet(StaticField.XQ); // 地址详情网络请求
+//                GetInitNet(StaticField.XQ); // 地址详情网络请求
+                prodialog.dismiss();
             }
         });
     }

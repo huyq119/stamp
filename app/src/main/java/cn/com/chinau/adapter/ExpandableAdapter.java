@@ -1,22 +1,40 @@
 package cn.com.chinau.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.lidroid.xutils.BitmapUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import cn.com.chinau.R;
+import cn.com.chinau.StaticField;
+import cn.com.chinau.activity.FirmOrderActivity;
+import cn.com.chinau.bean.AddShopCartBean;
+import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.ShopNameBean;
+import cn.com.chinau.dialog.ProgressDialog;
+import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.listener.ShopListenerFace;
+import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
+import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.ShoppingCartBiz;
+import cn.com.chinau.utils.SortUtils;
+import cn.com.chinau.utils.ThreadManager;
 
 /**
  * 购物车的适配器
@@ -30,11 +48,28 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     private boolean isEditing;//是否处于编辑状态
     private ShopListenerFace mChangeListener;
     private boolean isSelectAll;//父控件是否处于选中状态默认状态为不显示
+    private LinearLayout layout;
+    private TextView tv1, tv2;
+    private ProgressDialog prodialog;
+    private TextView Title, title;
+    private Button dialog_button_cancel, dialog_button_ok;
+    private ArrayList<AddShopCartBean> info_list;
+    private String mToken, mUser_id;
+    private boolean isChildSelected;
 
-    public ExpandableAdapter(Context context, BitmapUtils bitmap, ShopNameBean shopNameBean) {
+    public ExpandableAdapter(Context context, BitmapUtils bitmap, ShopNameBean shopNameBean
+            , LinearLayout layout, TextView tv1, TextView tv2) {
         this.shopNameBean = shopNameBean;
         this.context = context;
         this.bitmap = bitmap;
+        this.layout = layout;
+        this.tv1 = tv1;
+        this.tv2 = tv2;
+        info_list = new ArrayList<>();
+
+        SharedPreferences sp = context.getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
+        mToken = sp.getString("token", "");
+        mUser_id = sp.getString("userId", "");
     }
 
     /**
@@ -84,12 +119,9 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     //外部展示的布局
     @Override
     public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
-
-
         GroupHolder groupHolder;
         if (view == null) {
             groupHolder = new GroupHolder();
-//            view = LayoutInflater.from(context).inflate(R.layout.shop_expandable_item_group, viewGroup, false);
             view = View.inflate(context, R.layout.shop_expandable_item_group, null);
             groupHolder.mName = (TextView) view.findViewById(R.id.group_name);
             groupHolder.mType = (TextView) view.findViewById(R.id.group_type);
@@ -101,13 +133,14 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         //父View的实体类
         ShopNameBean.SellerBean sellerBean = shopNameBean.getSeller_list().get(i);
-        groupHolder.mName.setText(sellerBean.getSeller_name()); //卖家名称
+        String mName = sellerBean.getSeller_name(); //卖家名称
+        groupHolder.mName.setText(mName);
         String mTypes = sellerBean.getSeller_type(); // 卖家类型
         if (mTypes.equals("SC_ZY")) {
             groupHolder.mType.setText("自营商城");
-        }else if (mTypes.equals("SC_DSF")) {
+        } else if (mTypes.equals("SC_DSF")) {
             groupHolder.mType.setText("第三方商家");
-        }else if (mTypes.equals("YS")) {
+        } else if (mTypes.equals("YS")) {
             groupHolder.mType.setText("邮市");
         }
 
@@ -115,7 +148,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         ShoppingCartBiz.checkItem(sellerBean.isGroupSelected(), groupHolder.selected);
 
         //记录选择的位置(设置标记),设置父View选中的标记
-        groupHolder.selected.setTag(i);
+        groupHolder.selected.setTag(i + "," + mName + "," + mTypes);
         //父控件的圆圈
         groupHolder.selected.setOnClickListener(listener);
 
@@ -159,15 +192,24 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         boolean isChildSelected = shopNameBean.getSeller_list().get(i).getGoods_list().get(i1).isChildSelected();
 
         ShopNameBean.GoodsBean goodsBean = shopNameBean.getSeller_list().get(i).getGoods_list().get(i1);
-        itemHolder.mName.setText(goodsBean.getGoods_name());
-        itemHolder.mPrice.setText("￥"+goodsBean.getGoods_price());
-        itemHolder.mCount.setText("x" + goodsBean.getGoods_count());
-        bitmap.display(itemHolder.mImg, goodsBean.getGoods_img());
+
+        String mGoods_name = goodsBean.getGoods_name();// 名称
+        itemHolder.mName.setText(mGoods_name);
+        String mGoods_price = goodsBean.getGoods_price(); // 价格
+        itemHolder.mPrice.setText("￥" + mGoods_price);
+
+        String Goods_count = goodsBean.getGoods_count();// 数量
+        itemHolder.mCount.setText("x" + Goods_count);
+
+        String mGoodes_img = goodsBean.getGoods_img();// 图片
+        bitmap.display(itemHolder.mImg, mGoodes_img);
+
         //这两个是编辑模式的数据
-        itemHolder.mEditPrice.setText(goodsBean.getGoods_price());
+        itemHolder.mEditPrice.setText("￥" + goodsBean.getGoods_price());
         itemHolder.mNum.setText(goodsBean.getGoods_count());
         //子View的checkBox
-        itemHolder.child_selected.setTag(i + "," + i1);
+        String mGoods_sn = goodsBean.getGoods_sn();// 商品编号
+        itemHolder.child_selected.setTag(i + "," + i1 + "," + mGoods_sn + "," + Goods_count);
         //子View的点击事件
         itemHolder.child_selected.setOnClickListener(listener);
 
@@ -211,26 +253,48 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 //        public TextView mName, mAdd, mSub, mPrice, mNum;//名字,增加,减少,价格
 //    }
 
-
     //内部的监听
     View.OnClickListener listener = new View.OnClickListener() {
+
+        private int group;
+
         @Override
         public void onClick(View v) {
-
             ArrayList<ShopNameBean.SellerBean> seller_list = shopNameBean.getSeller_list();
-
             switch (v.getId()) {
                 case R.id.image_selected://父控件的选择按钮
                     //获取当前点击View的标识,并强转成数字标识
-                    int groupPosition = Integer.parseInt(String.valueOf(v.getTag()));
+//                    int groupPosition = Integer.parseInt(String.valueOf(v.getTag()));
+                    String mGourp = String.valueOf(v.getTag());
+                    MyLog.LogShitou("父控件1", mGourp);
+                    if (mGourp.contains(",")) {
+                        String s[] = mGourp.split(",");
+                        //父View的角标和子View的角标
+                        group = Integer.parseInt(s[0]);
+                        String name = s[1];
+                        String mTypes = s[2];
+                        MyLog.LogShitou("父控件2", group + "--" + name + "--" + mTypes);
+
+//                        AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+//                        mAddShopCartBean.setGoods_count(goods_count);
+//                        mAddShopCartBean.setGoods_sn(goods_sn);
+//
+//                        info_list.add(mAddShopCartBean); // 添加到list
+//                        MyLog.LogShitou("添加的list数据",info_list.toString());
+
+
+                    }
+
                     //变更数据的显示,内部有取反的操作
-                    isSelectAll = ShoppingCartBiz.selectGroup(seller_list, groupPosition);
+                    isSelectAll = ShoppingCartBiz.selectGroup(seller_list, group);
                     selectAll();
                     setSettleInfo();
                     notifyDataSetChanged();
                     break;
 
                 case R.id.tv_add://增加的监听
+//                    UpDataShopCart(final String Goods_info,final String op_type)
+
                     ShoppingCartBiz.addOrReduceGoodsNum(seller_list, true, (String) v.getTag());
                     setSettleInfo();
                     notifyDataSetChanged();
@@ -244,12 +308,24 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
                 case R.id.child_image://子View的CheckBox点击事件
                     String tagEdit = String.valueOf(v.getTag());
-                    MyLog.e(tagEdit);
+                    MyLog.LogShitou("子控件1", tagEdit);
                     if (tagEdit.contains(",")) {
                         String s[] = tagEdit.split(",");
                         //父View的角标和子View的角标
                         int group = Integer.parseInt(s[0]);
                         int child = Integer.parseInt(s[1]);
+                        String goods_sn = s[2];
+                        String goods_count = s[3];
+                        MyLog.LogShitou("子控件2", group + "--" + child + "--" + goods_sn + "--" + goods_count);
+//                        MyLog.LogShitou("这是啥值", isChildSelected+"");
+                            AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+                            mAddShopCartBean.setGoods_count(goods_count);
+                            mAddShopCartBean.setGoods_sn(goods_sn);
+
+                            info_list.add(mAddShopCartBean); // 添加到list
+                            MyLog.LogShitou("添加的list数据", info_list.toString());
+
+
                         isSelectAll = ShoppingCartBiz.selectOne(seller_list, group, child);
                         selectAll();
                         setSettleInfo();
@@ -266,13 +342,27 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                     isEditing = !isEditing;
                     if (isEditing) {
                         mEditText.setText("完成");
+                        layout.setVisibility(View.INVISIBLE);// 隐藏合计Ll
+                        tv1.setVisibility(View.VISIBLE); // 显示删除按钮
+                        tv2.setVisibility(View.GONE); // 隐藏结算按钮
                     } else {
                         mEditText.setText("编辑");
+                        layout.setVisibility(View.VISIBLE);
+                        tv1.setVisibility(View.GONE);
+                        tv2.setVisibility(View.VISIBLE);
                     }
                     notifyDataSetChanged();
                     break;
-                case R.id.Shop_pay://结算按钮
 
+                case R.id.Shop_delete://删除
+                    DeleteDialog();// 删除弹出框
+                    break;
+                case R.id.Shop_pay://去结算
+
+                    Intent intent = new Intent(context, FirmOrderActivity.class);
+                    intent.putExtra("ShopGoodsJson", info_list.toString());
+                    context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
                     break;
 
@@ -281,8 +371,10 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         }
     };
 
+
     private void setSettleInfo() {
         String[] info = ShoppingCartBiz.getShoppingCount(shopNameBean.getSeller_list());
+//        MyLog.LogShitou("这里有数据吗", info[0] + "--" + info[1]);
         //删除或者选择商品之后，需要通知结算按钮，更新自己的数据；
         if (mChangeListener != null && info != null) {
             mChangeListener.onDataChange(info[0], info[1]);
@@ -298,6 +390,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         return listener;
     }
 
+
     /**
      * 选择所有
      */
@@ -306,6 +399,112 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
             mChangeListener.onSelectItem(isSelectAll);
         }
     }
+
+    /**
+     * 删除弹出框
+     */
+
+    private void DeleteDialog() {
+        prodialog = new ProgressDialog(context);
+        prodialog.show();
+        Title = (TextView) prodialog.findViewById(R.id.title_tv);
+        Title.setText("确定要删除吗？");
+        // 取消
+        dialog_button_cancel = (Button) prodialog
+                .findViewById(R.id.dialog_button_cancel);
+        // 确定
+        dialog_button_ok = (Button) prodialog
+                .findViewById(R.id.dialog_button_ok);// 取消
+        // 取消
+        dialog_button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prodialog.dismiss();
+            }
+        });
+        // 确定
+        dialog_button_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UpDataShopCart(info_list.toString(), StaticField.SC); // 修改购物车网络请求
+                prodialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * 修改购物车网络请求
+     *
+     * @param Goods_info 商品信息：所有商品的json字符串
+     * @param op_type    操作类型： SC删除；JR加入；XG修改
+     */
+    private void UpDataShopCart(final String Goods_info, final String op_type) {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.SHOPCARTMODIFY);// 接口名称
+
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.GOODESINFO, Goods_info);//  商品信息：所有商品的json字符串
+                params.put(StaticField.OP_TYPE, op_type);// 操作类型：
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("result加入购物车", result);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+                if (op_type.equals(StaticField.SC)) {// 删除
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.DeleteSUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else if (op_type.equals(StaticField.XG)) { // 修改
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+
+            }
+        });
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+
+                case StaticField.DeleteSUCCESS:// 删除
+                    Gson gsones = new Gson();
+                    BaseBean mBasebean = gsones.fromJson((String) msg.obj, BaseBean.class);
+                    if (mBasebean.getRsp_code().equals("0000")) {
+                        notifyDataSetChanged();
+                        MyToast.showShort(context, "刪除成功");
+                    } else {
+                        MyToast.showShort(context, mBasebean.getRsp_msg());
+                    }
+                    break;
+                case StaticField.SUCCESS:// 修改
+                    Gson gson = new Gson();
+                    BaseBean mBasebeans = gson.fromJson((String) msg.obj, BaseBean.class);
+                    if (mBasebeans.getRsp_code().equals("0000")) {
+
+                        MyToast.showShort(context, "修改成功");
+                    }
+                    break;
+            }
+
+
+        }
+    };
 
 
 }

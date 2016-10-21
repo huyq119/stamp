@@ -26,6 +26,7 @@ public class AuctionRecordBean extends BaseBean{
         public String auction_status;//竞拍状态
         public String order_status;//订单状态
         public String auction_sn;//竞拍记录
+        public String goods_sn;// 商品编号
         public String auction_end_time;//竞拍结束时间
         public String goods_name;//商品名称
         public String goods_img;//商品图片
@@ -46,6 +47,14 @@ public class AuctionRecordBean extends BaseBean{
 
         public void setAuction_sn(String auction_sn) {
             this.auction_sn = auction_sn;
+        }
+
+        public String getGoods_sn() {
+            return goods_sn;
+        }
+
+        public void setGoods_sn(String goods_sn) {
+            this.goods_sn = goods_sn;
         }
 
         public String getGoods_name() {

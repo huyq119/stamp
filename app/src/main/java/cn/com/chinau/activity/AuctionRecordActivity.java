@@ -167,7 +167,7 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
         Bundle bundle = new Bundle();
-        bundle.putString(StaticField.GOODS_SN, mList.get(i).getAuction_sn());// 传过去的编号
+        bundle.putString(StaticField.GOODS_SN, mList.get(i).getGoods_sn());// 传过去的编号
         bundle.putString("AuctionRecord", "AuctionRecord");
         openActivityWitchAnimation(AuctionDetailActivity.class, bundle);
 

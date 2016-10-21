@@ -2,6 +2,7 @@ package cn.com.chinau.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -18,7 +19,8 @@ import java.util.HashMap;
 
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
-import cn.com.chinau.activity.FirmOrderActivity;
+import cn.com.chinau.activity.SelfMallDetailActivity;
+import cn.com.chinau.activity.StampDetailActivity;
 import cn.com.chinau.adapter.ExpandableAdapter;
 import cn.com.chinau.base.BaseFragment;
 import cn.com.chinau.bean.ShopNameBean;
@@ -33,7 +35,8 @@ import cn.com.chinau.utils.ThreadManager;
 /**
  * 购物车页面
  */
-public class ShopFragment extends BaseFragment implements View.OnClickListener {
+
+public class ShopFragment extends BaseFragment {
     private View mShopContent;
     private View mShopTitle;
     private ExpandableListView mContentListView;//主要的ListView
@@ -43,11 +46,11 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     private ShopNameBean shopNameBean;
     private ImageView mAll;
     private ExpandableAdapter expandableAdapter;
-    private TextView mEdit, mPrice,mShopTv;//编辑按钮,总价格,总数量
+    private TextView mEdit, mPrice,mShopTv,mShopDelete;//编辑按钮,总价格,总数量
     private String  mToken, mUser_id;
-    private boolean mEditFlag = true;
+//    private boolean mEditFlag = true;// 点击编辑状态的标志
     private SharedPreferences sp;
-    private LinearLayout mShopLayout;
+    private LinearLayout mShopLayout,mShopLinear;
     private String mTotalAmount;
     @Override
     public View CreateTitle() {
@@ -66,15 +69,16 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
     private void initView() {
 
-        mGoToPay = (TextView) mShopContent.findViewById(R.id.Shop_pay);
+        mGoToPay = (TextView) mShopContent.findViewById(R.id.Shop_pay);// 去结算
         mContentListView = (ExpandableListView) mShopContent.findViewById(R.id.shop_ELV);
-        mAll = (ImageView) mShopContent.findViewById(R.id.shop_all);
-        mEdit = (TextView) mShopTitle.findViewById(R.id.base_search);
-        mPrice = (TextView) mShopContent.findViewById(R.id.tv_total_price);
-        mShopLayout = (LinearLayout) mShopContent.findViewById(R.id.linear_shop_layout);
+        mAll = (ImageView) mShopContent.findViewById(R.id.shop_all);// 全选
+        mEdit = (TextView) mShopTitle.findViewById(R.id.base_search); // 编辑
+        mPrice = (TextView) mShopContent.findViewById(R.id.tv_total_price); // 价格
+        mShopLayout = (LinearLayout) mShopContent.findViewById(R.id.linear_shop_layout);// 结算行
         mShopTv = (TextView) mShopContent.findViewById(R.id.shop_tv);
+        mShopLinear = (LinearLayout) mShopContent.findViewById(R.id.shop_linear);// 合计价格ll
+        mShopDelete = (TextView) mShopContent.findViewById(R.id.Shop_delete);// 删除
     }
-
 
     // shif
     private void initData() {
@@ -91,9 +95,35 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void initListener() {
-        mGoToPay.setOnClickListener(this);
-        mEdit.setOnClickListener(expandableAdapter.getAdapterListener());
-        mAll.setOnClickListener(expandableAdapter.getAdapterListener());
+
+        mGoToPay.setOnClickListener(expandableAdapter.getAdapterListener());// 去結算
+        mShopDelete.setOnClickListener(expandableAdapter.getAdapterListener()); // 刪除
+        mEdit.setOnClickListener(expandableAdapter.getAdapterListener()); // 编辑
+        mAll.setOnClickListener(expandableAdapter.getAdapterListener()); //  全选
+        mContentListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
+                  Bundle bundle = new Bundle();
+                  // 获取父控件卖家类型get(i)
+                  String mType = shopNameBean.getSeller_list().get(i).getSeller_type();
+                  // 获取父控件里的子控件商品编号get(i).get(i1)
+                  String mGoods_sn =  shopNameBean.getSeller_list().get(i).getGoods_list().get(i1).getGoods_sn();
+                  MyLog.LogShitou("商家--编号",mType+"--"+mGoods_sn);
+                  if (mType.equals("SC_ZY")){
+                      bundle.putString(StaticField.GOODS_SN,mGoods_sn);
+                      openActivityWitchAnimation(SelfMallDetailActivity.class,bundle);
+                  }else if(mType.equals("YS")){
+                      bundle.putString(StaticField.GOODS_SN,mGoods_sn);
+                      openActivityWitchAnimation(StampDetailActivity.class,bundle);
+                  }else if(mType.equals("SC_DSF")){
+                      bundle.putString(StaticField.GOODS_SN,mGoods_sn);
+                      openActivityWitchAnimation(SelfMallDetailActivity.class,bundle);
+                  }
+                return false;
+            }
+        });
+
+        // 点击不可回缩
         mContentListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -107,12 +137,13 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
      */
     private void initAdapter() {
         shopNameBean = new ShopNameBean(mSellerList, mTotalAmount);
-        expandableAdapter = new ExpandableAdapter(getActivity(), mBitmap, shopNameBean);
+        expandableAdapter = new ExpandableAdapter(getActivity(), mBitmap, shopNameBean,mShopLinear,mShopDelete,mGoToPay);
         mContentListView.setAdapter(expandableAdapter);
         //让子控件全部展开
         for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
             mContentListView.expandGroup(i);
         }
+
         //去掉自带按钮
         mContentListView.setGroupIndicator(null);
         /**
@@ -136,54 +167,6 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.Shop_pay://结算按钮
-                openActivityWitchAnimation(FirmOrderActivity.class);
-                break;
-//            case R.id.base_search://编辑按钮
-//                if (mEditFlag) {
-//                    mEdit.setText("完成");
-//                    mEditFlag = false;
-//                } else {
-//                    mEdit.setText("编辑");
-//                    mEditFlag = true;
-//                }
-//                MyLog.e(mEditFlag + "");
-//                expandableAdapter = new ExpandableAdapter(getActivity(), mBitmap, shopNameBean, mEditFlag);
-//                mContentListView.setAdapter(expandableAdapter);
-//                //让子控件全部展开
-//                for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
-//                    mContentListView.expandGroup(i);
-//                }
-//                //去掉自带按钮
-//                mContentListView.setGroupIndicator(null);
-//                break;
-            default:
-                break;
-        }
-    }
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case StaticField.SUCCESS:
-                    Gson gson = new Gson();
-                    ShopNameBean shopNameBean = gson.fromJson((String)msg.obj,ShopNameBean.class);
-                    String code = shopNameBean.getRsp_code();
-                    if(code.equals("0000")){
-                        // 总价
-                        mTotalAmount = shopNameBean.getGoods_total_amount();
-                        mSellerList =  shopNameBean.getSeller_list(); // 商品List
-                        initAdapter(); // 添加数据
-                        initListener();
-                    }
-                break;
-            }
-        }
-    };
 
     /**
      * 购物车List网络请求
@@ -214,6 +197,26 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             }
         });
     }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case StaticField.SUCCESS:
+                    Gson gson = new Gson();
+                    ShopNameBean shopNameBean = gson.fromJson((String)msg.obj,ShopNameBean.class);
+                    String code = shopNameBean.getRsp_code();
+                    if(code.equals("0000")){
+                        // 总价
+                        mTotalAmount = shopNameBean.getGoods_total_amount();
+                        mSellerList =  shopNameBean.getSeller_list(); // 商品List
+                        initAdapter(); // 添加数据
+                        initListener();
+                    }
+                    break;
+            }
+        }
+    };
 
 }
 

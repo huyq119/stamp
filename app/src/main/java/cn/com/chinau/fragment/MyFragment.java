@@ -101,10 +101,10 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     dialog.show();
                     handler.sendEmptyMessageDelayed(DELFAIL, 2000);
                     break;
-                case DELSHOWPROGRESS :// 关闭进度条对话框
-                    if (pd != null)
-                        pd.dismiss();
-                    break;
+//                case DELSHOWPROGRESS :// 关闭进度条对话框
+//                    if (pd != null)
+//                        pd.dismiss();
+//                    break;
                 case NONET :// 没有网络
                     dialog = new SussessDialog(getActivity());
                     dialog.setText("请连接网络");
@@ -187,8 +187,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
             mLogin.setVisibility(View.VISIBLE);
             mNoLogin.setVisibility(View.GONE);
             mQuite.setVisibility(View.VISIBLE);
-            pd = new SendProgressDialog(getActivity());
-            pd.show();
+//            pd = new SendProgressDialog(getActivity());
+//            pd.show();
             getNetData();
         } else {
             mNoLogin.setVisibility(View.VISIBLE);
@@ -227,11 +227,11 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_noLogin://没有登录
-
                     Intent intents = new Intent(getActivity(), LoginActivity.class);
                     intents.putExtra("WithDraw","myFragmentLogin");
                     startActivity(intents);
                     //跳转动画
+                    getActivity().finish();
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
                 break;
@@ -374,7 +374,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     return;
                 }
                 Log.e("登陆后的测试-->", result);
-                handler.sendEmptyMessage(DELSHOWPROGRESS);
+//                handler.sendEmptyMessage(DELSHOWPROGRESS);
                 Gson gson = new Gson();
                 BaseBean json = gson.fromJson(result, BaseBean.class);
                 String msg_Data = json.getRsp_msg();// 返回的内容

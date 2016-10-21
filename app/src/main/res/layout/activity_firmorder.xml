@@ -1,190 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/FirmOrder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical">
 
-    <!--收货地址-->
-    <include layout="@layout/firmorder_location"/>
-    <!--没有收获地址-->
-    <include layout="@layout/firmorder_nolocation"
-        />
-
-
-    <View
-        style="@style/myline"
-        android:layout_marginTop="15dp"/>
-
-    <LinearLayout
-        android:id="@+id/FirmOrder_distribution"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/distance"
-            android:text="@string/Distribution_mode"
-            android:textColor="#333"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:id="@+id/distribution_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/distance"
-            android:layout_weight="1"
-            android:text="EMS"
-            android:textColor="#333"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:id="@+id/distribution_price_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/distance"
-            android:text="￥10.00"
-            android:textColor="@color/red_font"
-            android:textSize="15sp"/>
-
-        <ImageView
-            android:layout_width="44dp"
-            android:layout_height="match_parent"
-            android:scaleType="center"
-            android:src="@mipmap/right_arrow"/>
-    </LinearLayout>
-
-
-    <View style="@style/myline"/>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/distance"
-            android:text="服务费(1%)"
-            android:textColor="#333"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="44dp"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="￥10.00"
-            android:textColor="@color/red_font"
-            android:textSize="15sp"/>
-
-    </LinearLayout>
-
-    <View style="@style/myline"/>
-
-    <LinearLayout
-        android:id="@+id/FirmOrder_pay"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/distance"
-            android:layout_weight="1"
-            android:text="支付方式"
-            android:textColor="#333"
-            android:textSize="15sp"/>
-
-        <ImageView
-            android:id="@+id/firmorder_pay_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/zhifubao"
-            android:layout_marginLeft="@dimen/distance"
-            android:layout_marginRight="10dp"
-            />
-        <TextView
-            android:id="@+id/firmorder_pay_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:gravity="right"
-            android:text="@string/mode_of_payment"
-            android:textColor="#333"
-            android:textSize="15sp"/>
-
-        <ImageView
-            android:layout_width="44dp"
-            android:layout_height="match_parent"
-            android:scaleType="center"
-            android:src="@mipmap/right_arrow"/>
-    </LinearLayout>
-
-    <View style="@style/myline"/>
-    <View style="@style/myline"
-        android:layout_marginTop="15dp"/>
-    <ExpandableListView
-        android:id="@+id/firmOrder_expandableLV"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:overScrollMode="never"
-        android:scrollbars="none"/>
+        android:orientation="vertical">
 
-    <View style="@style/myline"/>
+        <cn.com.chinau.view.VerticalScrollView
+            android:id="@+id/firmOrder_SV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--收货地址-->
+                <include layout="@layout/firmorder_location" />
+                <!--没有收获地址-->
+                <include layout="@layout/firmorder_nolocation" />
+
+
+                <View
+                    style="@style/myline"
+                    android:layout_marginTop="15dp" />
+
+                <LinearLayout
+                    android:id="@+id/FirmOrder_distribution"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/distance"
+                        android:text="@string/Distribution_mode"
+                        android:textColor="#333"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/distribution_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/distance"
+                        android:layout_weight="1"
+                        android:text="EMS"
+                        android:textColor="#333"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/distribution_price_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/distance"
+                        android:text="￥10.00"
+                        android:textColor="@color/red_font"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="44dp"
+                        android:layout_height="match_parent"
+                        android:scaleType="center"
+                        android:src="@mipmap/right_arrow" />
+                </LinearLayout>
+
+
+                <View style="@style/myline" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/distance"
+                        android:text="服务费(1%)"
+                        android:textColor="#333"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/firmOrder_fee_rate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="44dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:textColor="@color/red_font"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <View style="@style/myline" />
+
+                <LinearLayout
+                    android:id="@+id/FirmOrder_pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/distance"
+                        android:layout_weight="1"
+                        android:text="支付方式"
+                        android:textColor="#333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/firmorder_pay_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/distance"
+                        android:layout_marginRight="10dp"
+                        android:src="@mipmap/zhifubao" />
+
+                    <TextView
+                        android:id="@+id/firmorder_pay_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:gravity="right"
+                        android:text="@string/mode_of_payment"
+                        android:textColor="#333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="44dp"
+                        android:layout_height="match_parent"
+                        android:scaleType="center"
+                        android:src="@mipmap/right_arrow" />
+                </LinearLayout>
+
+                <View style="@style/myline" />
+
+                <View
+                    style="@style/myline"
+                    android:layout_marginTop="15dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <cn.com.chinau.view.CustExpandableListView
+                        android:id="@+id/firmOrder_expandableLV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:overScrollMode="never"
+                        android:scrollbars="none" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </cn.com.chinau.view.VerticalScrollView>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="@dimen/distance"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="共3件商品"
-            android:textColor="@color/black"
-            android:textSize="15sp"/>
+        <View style="@style/myline" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/distance"
-            android:text="合计"
-            android:textColor="@color/black"
-            android:textSize="15sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/distance"
-            android:layout_weight="1"
-            android:text="￥100000.00"
-            android:textColor="@color/red_font"
-            android:textSize="15sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance"
+                android:text="共3件商品"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/firmOrder_ok_pay"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/red_font"
-            android:gravity="center"
-            android:maxWidth="60dp"
-            android:text="确认并付款"
-            android:textColor="@color/white"
-            android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance"
+                android:text="合计"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance"
+                android:layout_weight="1"
+                android:text="￥100000.00"
+                android:textColor="@color/red_font"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/firmOrder_ok_pay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/red_font"
+                android:gravity="center"
+                android:maxWidth="60dp"
+                android:text="确认并付款"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

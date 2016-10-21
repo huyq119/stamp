@@ -160,4 +160,5 @@ public class StampTapFilterDialog extends BaseDialogFragment {
     public void setmJsonData(JsonData mJsonData) {
         this.mJsonData = mJsonData;
     }
+
 }

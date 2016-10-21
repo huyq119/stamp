@@ -166,8 +166,6 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-
-
                 <View style="@style/myline" />
                 <View
                     android:layout_width="match_parent"

@@ -58,13 +58,12 @@ public class OrdersGoodsActivity extends BaseActivity {
     private String mToken, mUser_id;// 标识，用户ID
     private static final int num = 0; // 初始化索引
     private OrderAllLsitViewAdapter allLsitViewAdapter;
-    private List<OrderAllListViewGoodsBean.Order_list.Seller_list> groups = new ArrayList<OrderAllListViewGoodsBean.Order_list.Seller_list>();// 组元素数据列表
-    private Map<String, List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list>> goods = new HashMap<String, List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list>>();// 子元素数据列表
-
-
+    private List<OrderAllListViewGoodsBean.Seller_list> groups = new ArrayList<OrderAllListViewGoodsBean.Seller_list>();// 组元素数据列表
+    private Map<String, List<OrderAllListViewGoodsBean.Order_detail_list>> goods = new HashMap<String, List<OrderAllListViewGoodsBean.Order_detail_list>>();// 子元素数据列表
     private List<HashMap<String, String>> lists;
     private SharedPreferences sp;
     private OrderAllListViewGoodsBean orderAllListViewGoodsBean;
+    private OrderAllListViewGoodsBean mOrderContentBean;
 
     @Override
     public View CreateTitle() {
@@ -156,7 +155,7 @@ public class OrdersGoodsActivity extends BaseActivity {
         refuse_edListview = (ExpandableListView) v5.findViewById(R.id.all_expand_ListView);
 
         // (全部)适配器
-        OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap,groups,goods );// 全部适配器
+        OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap,mOrderContentBean );// 全部适配器
         // （待付款，待收货，已完成）适配器
         OrderPaymentReceivingCompleteLsitViewAdapter PayRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(this, mBitmap, groups, goods);
         // （退款/退货）适配器
@@ -418,7 +417,6 @@ public class OrdersGoodsActivity extends BaseActivity {
                     msg.what = StaticField.SUCCESS;
                     msg.obj = result;
                     mHandler.sendMessage(msg);
-                    MyLog.LogShitou("走这了吗", "走这了吗");
                 } else if (orderStatus.equals("DFK")) { // 待付款
                     Message msg = mHandler.obtainMessage();
                     msg.what = StaticField.DFK_SUCCESS;
@@ -448,52 +446,32 @@ public class OrdersGoodsActivity extends BaseActivity {
 
     private Handler mHandler = new Handler() {
 
-        private ArrayList<OrderAllListViewGoodsBean.Order_list.Seller_list> seller_list;
-
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case StaticField.SUCCESS:// 全部
                     Gson gson0 = new Gson();
-                    OrderAllListViewGoodsBean mOrderContentBean = gson0.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
+                    mOrderContentBean = gson0.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
                     String code = mOrderContentBean.getRsp_code();
                     if (code.equals("0000")) {
-
-//                        groups = new ArrayList<>();
 //                        ArrayList<OrderAllListViewGoodsBean.Order_list> order_list = mOrderContentBean.getOrder_list();
-//                        int sub = order_list.size();// 获取order_list的个数
-//                        ArrayList <OrderAllListViewGoodsBean.Order_list> mArrName = new ArrayList();// 卖家名称
-//                        for (int i = 0; i <order_list.size(); i++) {
-//                            mArrName[i] = order_list.get(i);
-//                            seller_list = order_list.get().getSeller_list();
-//                            groups.add(seller_list.get(i).getSeller_name());
-//
-//                            groups.add(new mOrderContentBean.getOrder_list());
-//                            List<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList> products = new ArrayList<OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList>();
-//                            for (int j = 0; j < 2; j++) {
-//                                products.add(new OrderAllListViewGoodsBean.OrdersDataList.SellerDataList.OrderDetailList("http://pic29.nipic.com/20130602/7447430_191109497000_2.jpg", "庚申年", "100000.00", "1", "交易关闭"));
-//                            }
-//                            goods.put(groups.get(i).getSeller_name(), products);// 将组元素的一个唯一值，这里取Id，作为子元素List的Key
-//                        }
-
-
 //                        orderAllListViewGoodsBean = new OrderAllListViewGoodsBean(order_list);
-                        MyLog.LogShitou("benan是啥数据", "" + orderAllListViewGoodsBean);
-                        initAdapter();
+                        MyLog.LogShitou("benan是啥数据", "" + mOrderContentBean);
+//                        initAdapter();
                         initListener();
                     }
                     break;
-                case 1:// 待付款
+                case StaticField.DFK_SUCCESS:// 待付款
                     Gson gson1 = new Gson();
 
                     break;
-                case 2:// 代收货
+                case StaticField.DSH_SUCCESS:// 代收货
                     Gson gson2 = new Gson();
                     break;
-                case 3:// 已完成
+                case StaticField.WC_SUCCESS:// 已完成
                     Gson gson3 = new Gson();
                     break;
-                case 4:// 退款、退货
+                case StaticField.TK_SUCCESS:// 退款、退货
                     Gson gson4 = new Gson();
 
                     break;

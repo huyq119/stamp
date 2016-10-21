@@ -18,7 +18,7 @@ import cn.com.chinau.R;
  */
 public class SelectPayPopupWindow extends PopupWindow {
 
-    private  View mPayView;
+    private View mPayView;
     private ImageView mWechat;
     private ImageView mAlipay;
     private TextView mCancel;
@@ -31,7 +31,6 @@ public class SelectPayPopupWindow extends PopupWindow {
      */
     public SelectPayPopupWindow(Context context, View.OnClickListener onClickListener) {
         super(context);
-
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPayView = inflater.inflate(R.layout.firmorder_pay_popup, null);
 
@@ -85,9 +84,9 @@ public class SelectPayPopupWindow extends PopupWindow {
 
                 //判断整个控件的高度,如果按下的位置小于这个高度就关闭对话框
                 int height = mPayView.findViewById(R.id.firmOrder).getTop();
-                int y=(int) event.getY();
-                if(event.getAction()==MotionEvent.ACTION_UP){
-                    if(y<height){
+                int y = (int) event.getY();
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (y < height) {
                         dismiss();
                     }
                 }

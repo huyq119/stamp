@@ -226,7 +226,9 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
 
         switch (view.getId()) {
             case R.id.panstamp_title_scan://扫码
-                openActivityWitchAnimation(CaptureActivity.class);
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("SanFragment","PanStampFragment");
+                openActivityWitchAnimation(CaptureActivity.class,bundle1);
                 break;
             case R.id.panstamp_search://搜索
                 openActivityWitchAnimation(SearchActivity.class);

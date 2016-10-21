@@ -17,7 +17,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -46,7 +45,7 @@ import cn.com.chinau.zxing.view.ViewfinderView;
 /**
  * 立即扫码页面
  */
-public class CaptureActivity extends Activity implements Callback {
+public class CaptureActivity extends Activity implements Callback, View.OnClickListener {
     public static final String QR_RESULT = "RESULT";
 
     private CaptureActivityHandler handler;
@@ -64,6 +63,7 @@ public class CaptureActivity extends Activity implements Callback {
     private ImageView mBack;// 返回按钮
     private TextView mTitle;
     private SharedPreferences sp;
+    private String mHomeFragment;
 
     /**
      * Called when the activity is first created.
@@ -75,38 +75,41 @@ public class CaptureActivity extends Activity implements Callback {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 //          this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //		  WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
-		  RelativeLayout layout = new RelativeLayout(this);
-		 layout.setLayoutParams(new
-		  ViewGroup.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-		  LinearLayout.LayoutParams.FILL_PARENT));
+        RelativeLayout layout = new RelativeLayout(this);
+        layout.setLayoutParams(new
+                ViewGroup.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+                LinearLayout.LayoutParams.FILL_PARENT));
 
-		  this.surfaceView = new SurfaceView(this); this.surfaceView
-		  .setLayoutParams(new ViewGroup.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-		  LinearLayout.LayoutParams.FILL_PARENT));
+        this.surfaceView = new SurfaceView(this);
+        this.surfaceView
+                .setLayoutParams(new ViewGroup.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+                        LinearLayout.LayoutParams.FILL_PARENT));
+        layout.addView(this.surfaceView);
+        this.viewfinderView = new ViewfinderView(this);
+        this.viewfinderView.setBackgroundColor(0x00000000);
+        this.viewfinderView.setLayoutParams(new
+                ViewGroup.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+                LinearLayout.LayoutParams.FILL_PARENT));
+        layout.addView(this.viewfinderView);
 
-		  layout.addView(this.surfaceView);
+        TextView status = new TextView(this);
+        RelativeLayout.LayoutParams
+                params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        status.setLayoutParams(params);
+        status.setBackgroundColor(0x00000000);
+        status.setTextColor(0xFFFFFFFF);
+        status.setText("请将条码置于取景框内扫描。");
+        status.setTextSize(14.0f);
 
-		  this.viewfinderView = new ViewfinderView(this);
-		  this.viewfinderView.setBackgroundColor(0x00000000);
-		  this.viewfinderView.setLayoutParams(new
-		  ViewGroup.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-		  LinearLayout.LayoutParams.FILL_PARENT)); layout.addView(this.viewfinderView);
-
-		  TextView status = new TextView(this); RelativeLayout.LayoutParams
-		  params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-		  LinearLayout.LayoutParams.WRAP_CONTENT);
-		  params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		  params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-		  status.setLayoutParams(params);
-		  status.setBackgroundColor(0x00000000);
-		 status.setTextColor(0xFFFFFFFF); status.setText("请将条码置于取景框内扫描。");
-		  status.setTextSize(14.0f);
-
-		 layout.addView(status); setContentView(layout);
+        layout.addView(status);
+        setContentView(layout);
 
         setContentView(R.layout.activity_capture);
 
-        sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
+        sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         surfaceView = (SurfaceView) findViewById(R.id.surfaceview);
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinderview);
 
@@ -116,23 +119,35 @@ public class CaptureActivity extends Activity implements Callback {
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
 
+
         mBack = (ImageView) findViewById(R.id.base_title_back);
+        mBack.setOnClickListener(this);
         mTitle = (TextView) findViewById(R.id.base_title);
         mTitle.setText("立即扫码");
-        mBack.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
+        Bundle bundle1 = getIntent().getExtras();
+        mHomeFragment = bundle1.getString("SanFragment", "");
+        MyLog.LogShitou("扫码传过来的标志", mHomeFragment);
+    }
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.base_title_back) {
+            if (mHomeFragment!= null && mHomeFragment.equals("HomeFragment")) {
+                finish();
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+            } else if (mHomeFragment!= null &&mHomeFragment.equals("PanStampFragment")) {
+                finish();
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+            } else if (mHomeFragment!= null &&mHomeFragment.equals("StampTapFragment")) {
+                finish();
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+            } else {
                 Intent intent = new Intent(CaptureActivity.this, ScanActivity.class);
                 startActivity(intent);
                 //跳转动画
                 finish();
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-
-//                finish();
-//                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
             }
-        });
+        }
     }
 
     @Override
@@ -349,5 +364,6 @@ public class CaptureActivity extends Activity implements Callback {
         }
         return super.onKeyDown(keyCode, event);
     }
+
 
 }

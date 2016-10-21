@@ -263,7 +263,9 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                 stampTapFilterDialog.show(getFragmentManager(), StaticField.STAMPTAPFILTERDIALOG);
                 break;
             case R.id.stamptap_title_scan://扫码按钮
-                openActivityWitchAnimation(CaptureActivity.class);
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("SanFragment","StampTapFragment");
+                openActivityWitchAnimation(CaptureActivity.class,bundle1);
                 break;
             case R.id.stamptap_search://搜索按钮
                 openActivityWitchAnimation(SearchActivity.class);

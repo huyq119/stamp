@@ -10,9 +10,6 @@ import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
 
-import java.util.List;
-import java.util.Map;
-
 import cn.com.chinau.R;
 import cn.com.chinau.bean.OrderAllListViewGoodsBean;
 import cn.com.chinau.utils.MyLog;
@@ -25,45 +22,44 @@ import cn.com.chinau.utils.MyToast;
 public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-    private List<OrderAllListViewGoodsBean.Order_list.Seller_list> groups ;
-    private Map<String, List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list>> goods;
+//    private List<OrderAllListViewGoodsBean.Order_list.Seller_list> groups ;
+//    private Map<String, List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list>> goods;
+    private OrderAllListViewGoodsBean mOrderBean;
     private BitmapUtils bitmapUtils;
 
     /**
      *
      * @param context
      * @param bitmapUtils
-     * @param goods
      */
-    public OrderAllLsitViewAdapter(Context context,BitmapUtils bitmapUtils,List<OrderAllListViewGoodsBean.Order_list.Seller_list> groups,
-                                   Map<String, List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list>> goods) {
+    public OrderAllLsitViewAdapter(Context context,BitmapUtils bitmapUtils,OrderAllListViewGoodsBean mOrderBean) {
         this.context = context;
-        this.groups = groups;
-        this.goods = goods;
+        this.bitmapUtils = bitmapUtils;
+        this.mOrderBean = mOrderBean;
     }
 
     @Override
     public int getGroupCount() {
-        return groups.size();
+        return mOrderBean.getOrder_list().size();
     }
+
 
     @Override
     public int getChildrenCount(int i) {
-        String groupName = groups.get(i).getSeller_name();
-        return goods.get(groupName).size();
 
+        MyLog.LogShitou("这是多少",mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list().size()+"");
 
+        return mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list().size();
     }
 
     @Override
     public Object getGroup(int i) {
-        return groups.get(i);
+        return mOrderBean.getOrder_list().get(i).getSeller_list().get(i);
     }
 
     @Override
     public Object getChild(int i, int i1) {
-        List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list> childs = goods.get(groups.get(i).getSeller_name());
-        return childs.get(i1);
+        return mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list().get(i);
     }
     @Override
     public long getGroupId(int i) {
@@ -78,7 +74,7 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
     //表示孩子是否和组ID是跨基础数据的更改稳定
     @Override
     public boolean hasStableIds() {
-        return true;
+        return false;
     }
 
     @Override
@@ -95,10 +91,11 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
         } else {
             gholder = (GroupViewHolder) view.getTag();
         }
-        final OrderAllListViewGoodsBean.Order_list.Seller_list group = (OrderAllListViewGoodsBean.Order_list.Seller_list)getGroup(i);
-        String mName = group.getSeller_name();// 卖家名称
+
+        OrderAllListViewGoodsBean.Seller_list seller_list = mOrderBean.getOrder_list().get(i).getSeller_list().get(i);
+        String mName = seller_list.getSeller_name();// 卖家名称
         gholder.mName.setText(mName);
-        String mType = group.getSeller_type(); // 卖家类型
+        String mType = seller_list.getSeller_type(); // 卖家类型
         if (mType.equals("SC_ZY")) {
             gholder.mEntry.setText("自营");
 
@@ -145,16 +142,16 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
         }
 
         // 子控件List
-        final OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list goodsBean = (OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list) getChild(i, i1);
+        OrderAllListViewGoodsBean.Order_detail_list order_detail_list = mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list().get(i1);
 
         // 获取子控件的值
-        String mImg = goodsBean.getGoods_img();
-        String mName = goodsBean.getGoods_name();
-        String mGoodeSn = goodsBean.getGoods_sn();// 商品编号
-        String mPrice = goodsBean.getGoods_price();
-        String mCounts = goodsBean.getGoods_count();// 商品数量
-        String mStatues = goodsBean.getStatus(); // 订单状态
-        String mDetailSn = goodsBean.getOrder_detail_sn(); // 订单明细状态
+        String mImg = order_detail_list.getGoods_img();
+        String mName = order_detail_list.getGoods_name();
+        String mGoodeSn = order_detail_list.getGoods_sn();// 商品编号
+        String mPrice = order_detail_list.getGoods_price();
+        String mCounts = order_detail_list.getGoods_count();// 商品数量
+        String mStatues = order_detail_list.getStatus(); // 订单状态
+        String mDetailSn = order_detail_list.getOrder_detail_sn(); // 订单明细状态
         // 赋值
         bitmapUtils.display(goodsholder.img, mImg);
         goodsholder.mNames.setText(mName); // 名称

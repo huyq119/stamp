@@ -108,8 +108,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 //                        startActivity(new Intent(LoginActivity.this, OrderActivity.class));
                         finish();
                     } else if (flag == 8) {// 我的页面来的
-//                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("Login", "login");
+                        startActivity(intent);
+                        finishWitchAnimation();
+
                     } else {// 不是从提现页面来的
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("Login", "login");

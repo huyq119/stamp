@@ -11,14 +11,15 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/NoAddress_add"
         android:layout_width="wrap_content"
         android:layout_height="85dp"
         android:drawableLeft="@mipmap/add_white"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
-        android:text="添加收获地址"
+        android:text="@string/add_address"
         android:textColor="#333"
-        android:textSize="14dp"/>
+        android:textSize="14sp"/>
 
     <View style="@style/myline"/>
 </LinearLayout>

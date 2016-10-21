@@ -338,7 +338,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                     return;
                 }
                 if (goods_type.equals("QB")){// 全部
-                    initDataFlage = true;
+//                    initDataFlage = true;
                     if (initDataFlage) {
                         Message msg = mHandler.obtainMessage();
                         msg.what = StaticField.SUCCESS;
@@ -439,7 +439,6 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-
                 Message msg = mHandler.obtainMessage();
                 msg.what = StaticField.DeleteSUCCESS;
                 msg.obj = result;

@@ -80,7 +80,7 @@ public class ShoppingCartBiz {
         //父view的角标,子View的角标
         String groupNum = ChildFlag[0];
         String childNum = ChildFlag[1];
-        MyLog.e("父View和子view的标识" + groupNum + "_" + childNum);
+        MyLog.LogShitou("父View和子view的标识" + groupNum + "_" + childNum);
 
 
         String currentNum = mList.get(Integer.valueOf(groupNum)).getGoods_list().get(Integer.valueOf(childNum)).getGoods_count();
@@ -125,6 +125,7 @@ public class ShoppingCartBiz {
         list.get(groupPosition).setGroupSelected(isSelectCurrentGroup);
 
         isSelectAll = isSelectAllGroup(list);
+
         return isSelectAll;
     }
 
@@ -144,7 +145,6 @@ public class ShoppingCartBiz {
         }
         return true;
     }
-
 
     /**
      * 选择全部，点下全部按钮，改变所有商品选中状态
@@ -180,6 +180,8 @@ public class ShoppingCartBiz {
                     //价格,数量
                     String price = listGoods.get(i).getGoods_list().get(j).getGoods_price();
                     String num = listGoods.get(i).getGoods_list().get(j).getGoods_count();
+
+//                    MyLog.LogShitou("ShoppingCartBiz选中的商品数据",price+"--"+num);
                     //子View的总价格,数量
                     childMoney += Double.valueOf(price) * Integer.valueOf(num);
                     childCount++;
@@ -195,7 +197,7 @@ public class ShoppingCartBiz {
 
         info[0] = String.valueOf(selectedCount);
         info[1] = String.valueOf(selectedMoney);
-        MyLog.e(info[0] + "-" + info[1]);
+//        MyLog.LogShitou("ShoppingCartBiz赋值后的",info[0] + "-" + info[1]);
         return info;
     }
 }

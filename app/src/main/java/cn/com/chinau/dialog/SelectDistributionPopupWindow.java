@@ -10,7 +10,10 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import cn.com.chinau.R;
+import cn.com.chinau.bean.FirmOrderBean;
 
 
 /**
@@ -19,22 +22,26 @@ import cn.com.chinau.R;
  */
 public class SelectDistributionPopupWindow extends PopupWindow {
 
-    private  View mPayView;
-    private ImageView mWind;//顺丰速递
-    private ImageView mEMS;//EMS
-    private TextView mCancel;
+    private  View mExpreeView;
+    private ImageView mEMSImg,mSFImg;//顺丰速递
+    private TextView mName1,mName2,mValue1,mValue2,mCancel;
 
+    private ArrayList<FirmOrderBean.ExpreeComp> express_comp;
+    private ArrayList<FirmOrderBean.ExpreeFee> express_fee;
     /**
      * 这里的思想注意一下:这里直接把监听传入进来 这样便于外部实现
      *
      * @param context         上下文
      * @param onClickListener 监听
      */
-    public SelectDistributionPopupWindow(Context context, View.OnClickListener onClickListener) {
+    public SelectDistributionPopupWindow(Context context, View.OnClickListener onClickListener,
+                                         ArrayList<FirmOrderBean.ExpreeComp> express_comp
+            , ArrayList<FirmOrderBean.ExpreeFee> express_fee) {
         super(context);
-
+        this.express_comp = express_comp;
+        this.express_fee = express_fee;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mPayView = inflater.inflate(R.layout.firmorder_distribution_popup, null);
+        mExpreeView = inflater.inflate(R.layout.firmorder_distribution_popup, null);
 
         setView();
         initView();
@@ -46,7 +53,7 @@ public class SelectDistributionPopupWindow extends PopupWindow {
      */
     private void setView() {
         //设置SelectPicPopupWindow的View
-        this.setContentView(mPayView);
+        this.setContentView(mExpreeView);
         //设置SelectPicPopupWindow弹出窗体的宽
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         //设置SelectPicPopupWindow弹出窗体的高
@@ -63,14 +70,23 @@ public class SelectDistributionPopupWindow extends PopupWindow {
 
 
     private void initView() {
-        mEMS = (ImageView) mPayView.findViewById(R.id.EMS_click);
-        mWind = (ImageView) mPayView.findViewById(R.id.Wind_click);
-        mCancel = (TextView) mPayView.findViewById(R.id.popup_cancel);
+        mName1 = (TextView) mExpreeView.findViewById(R.id.expree_pop_name1);// 快公司
+        mName1.setText(express_comp.get(0).getValue());
+        mName2 = (TextView) mExpreeView.findViewById(R.id.expree_pop_name2);
+        mName2.setText(express_comp.get(1).getValue());
+        mValue1 = (TextView) mExpreeView.findViewById(R.id.expree_pop_value1);// 价格
+        mValue1.setText("￥"+express_fee.get(0).getValue());
+        mValue2 = (TextView) mExpreeView.findViewById(R.id.expree_pop_value2);
+        mValue2.setText("￥"+express_fee.get(1).getValue());
+
+        mEMSImg = (ImageView) mExpreeView.findViewById(R.id.EMS_click_image);
+        mSFImg = (ImageView) mExpreeView.findViewById(R.id.SF_click_image);
+        mCancel = (TextView) mExpreeView.findViewById(R.id.popup_cancel);
     }
 
     private void initListener(View.OnClickListener onClickListener) {
-        mEMS.setOnClickListener(onClickListener);
-        mWind.setOnClickListener(onClickListener);
+        mEMSImg.setOnClickListener(onClickListener);
+        mSFImg.setOnClickListener(onClickListener);
 
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,11 +96,11 @@ public class SelectDistributionPopupWindow extends PopupWindow {
         });
 
         //mMenuView添加OnTouchListener监听判断获取触屏位置如果在选择框外面则销毁弹出框
-        mPayView.setOnTouchListener(new View.OnTouchListener() {
+        mExpreeView.setOnTouchListener(new View.OnTouchListener() {
 
             public boolean onTouch(View v, MotionEvent event) {
 
-                int height = mPayView.findViewById(R.id.firmOrder).getTop();
+                int height = mExpreeView.findViewById(R.id.firmOrder).getTop();
                 int y=(int) event.getY();
                 if(event.getAction()==MotionEvent.ACTION_UP){
                     if(y<height){

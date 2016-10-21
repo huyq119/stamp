@@ -576,7 +576,6 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     }
                 }
 
-
                 break;
             case R.id.auction_bid:// 出价
                 if (mToken.equals("") || mUser_id.equals("")) {

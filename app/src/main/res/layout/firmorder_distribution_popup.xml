@@ -25,6 +25,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/expree_pop_name1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/distance"
@@ -42,19 +43,19 @@
                 android:textSize="14sp"/>
 
             <TextView
+                android:id="@+id/expree_pop_value1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/distance"
-                android:text="￥10.00"
                 android:textColor="@color/red_font"
                 android:textSize="14sp"/>
 
             <ImageView
-                android:id="@+id/EMS_click"
+                android:id="@+id/EMS_click_image"
                 android:layout_width="45dp"
                 android:layout_height="match_parent"
                 android:scaleType="center"
-                android:src="@drawable/circle_select_bg"/>
+                android:src="@mipmap/circle_select_click"/>
         </LinearLayout>
 
         <View style="@style/myline"/>
@@ -67,6 +68,7 @@
 
 
             <TextView
+                android:id="@+id/expree_pop_name2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/distance"
@@ -84,19 +86,19 @@
                 android:textSize="14sp"/>
 
             <TextView
+                android:id="@+id/expree_pop_value2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/distance"
-                android:text="￥10.00"
                 android:textColor="@color/red_font"
                 android:textSize="14sp"/>
 
             <ImageView
-                android:id="@+id/Wind_click"
+                android:id="@+id/SF_click_image"
                 android:layout_width="45dp"
                 android:layout_height="match_parent"
                 android:scaleType="center"
-                android:src="@drawable/circle_select_bg"/>
+                android:src="@mipmap/circle_select"/>
         </LinearLayout>
 
         <View style="@style/myline"/>

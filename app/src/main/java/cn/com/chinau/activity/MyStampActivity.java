@@ -58,6 +58,9 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     private String mToken,mUser_id,result;
     private int num = 0;//初始索引
     private Handler mHandler = new Handler() {
+
+        private String mTotal;
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -70,6 +73,9 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                         mList = mOrderSweepBean.getStamp_list();
                         MyLog.LogShitou("我的邮集有几条-->:", mList.size() + "");
                         if (mList != null && mList.size() != 0) {
+                            // 总价值
+                            mTotal = mOrderSweepBean.getTotal_amount();
+                            mContentTotal.setText("￥"+mTotal);
                             //初始化GridView的集合
                             mViewPagerList = new ArrayList<>();
                             //获取Activity的LayoutInflater
@@ -101,6 +107,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
             }
         }
     };
+    private TextView mContentTotal;
 
     @Override
     public View CreateTitle() {
@@ -133,6 +140,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
         mMore = (ImageView) mMyStampTitle.findViewById(R.id.base_more);
         //初始化ViewPager
         myStampViewPager = (ViewPager) mMyStampContent.findViewById(R.id.my_content_Viewpager);
+        mContentTotal = (TextView) mMyStampContent.findViewById(R.id.my_content_total);
 
     }
 

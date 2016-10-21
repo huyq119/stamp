@@ -125,8 +125,8 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
                 mPayPopupWindow.showAtLocation(this.findViewById(R.id.order_details), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
             case R.id.orderDetails_distribution://快递方式
-                mDistributionPopupWindow = new SelectDistributionPopupWindow(this, mDistributionWindow);
-                mDistributionPopupWindow.showAtLocation(this.findViewById(R.id.order_details), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+//                mDistributionPopupWindow = new SelectDistributionPopupWindow(this, mDistributionWindow);
+//                mDistributionPopupWindow.showAtLocation(this.findViewById(R.id.order_details), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
         }
     }

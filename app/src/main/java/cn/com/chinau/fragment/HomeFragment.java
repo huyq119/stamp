@@ -317,7 +317,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         List<HomeBean.Child> child_list;
         switch (view.getId()) {
             case R.id.home_title_scan://标题扫码按钮
-                openActivityWitchAnimation(CaptureActivity.class);
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("SanFragment","HomeFragment");
+                openActivityWitchAnimation(CaptureActivity.class,bundle1);
                 break;
             case R.id.home_search://标题搜索按钮
                 openActivityWitchAnimation(SearchActivity.class);
