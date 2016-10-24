@@ -20,6 +20,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
@@ -74,9 +76,15 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         mBack = (ImageView) mSearchTitle.findViewById(R.id.search_title_back);
         mSearch = (ImageView) mSearchTitle.findViewById(R.id.search_title_search);
         mSearchText = (EditText) mSearchTitle.findViewById(R.id.search_title_scanContent);
-        // 显示Android输入法窗口
-        InputMethodManager imm = ( InputMethodManager ) mSearchText.getContext( ).getSystemService( Context.INPUT_METHOD_SERVICE );
-        imm.showSoftInput(mSearchText,InputMethodManager.SHOW_FORCED);
+       // 延时弹出键盘
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+                           public void run() {
+                               InputMethodManager inputManager =
+                                       (InputMethodManager) mSearchText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                               inputManager.showSoftInput(mSearchText, 0);
+                           }
+                       },200);
         //内容的控件
         mClean = (TextView) mSearchContent.findViewById(R.id.search_clean);
         mFlowLayout = (FlowLayout) mSearchContent.findViewById(R.id.search_fl);
@@ -176,7 +184,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private void setFlowData(String[] data, FlowLayout layout) {
         LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 0; i < data.length; i++) {
-          final TextView  tv = (TextView) inflater.inflate(R.layout.flowlayout_tv_item, layout, false);
+            final TextView tv = (TextView) inflater.inflate(R.layout.flowlayout_tv_item, layout, false);
             tv.setText(data[i]);
             tv.setTag(data[i]);
             tv.setOnClickListener(new View.OnClickListener() {

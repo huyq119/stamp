@@ -69,6 +69,8 @@ public class StaticField {
     public static final int DSH_SUCCESS = 2;// Handler发送的结果码（订单查询待收货）
     public static final int WC_SUCCESS = 3;// Handler发送的结果码（订单查询已完成）
     public static final int TK_SUCCESS = 4;// Handler发送的结果码（订单查询退款）
+    public static final int WX_SUCCESS = 1;// Handler发送的结果码（微信支付）
+    public static final int ALI_SUCCESS = 2;// Handler发送的结果码（支付宝支付）
 
 
 
@@ -265,6 +267,20 @@ public class StaticField {
     public static final String GOODESINFO = "goods_info";
     // 购物车去接算（确认订单）
     public static final String SHOPCARTSETTLE = "cn.com.chinau.shopcart.settle";
+    // 订单支付
+    public static final String ORDERPAY = "cn.com.chinau.order.pay";
+    public static final String REQUESTID = "client_request_id"; //客户订单请求号
+    public static final String PAYAMOUNT = "pay_amount"; //支付金额
+    public static final String PAYTYPE= "pay_type"; //支付方式
+    public static final String ALIPAY= "ALIPAY"; //支付宝
+    public static final String WXPAY= "WXPAY"; // 微信
+    // APPID
+    public static final String APP_ID= "wxf9abf6e67f0caed4";
+    public static final String PACKAGE= "Sign=WXPay";
 
-
+    public static class ShowMsgActivity {
+        public static final String STitle = "showmsg_title";
+        public static final String SMessage = "showmsg_message";
+        public static final String BAThumbData = "showmsg_thumb_data";
+    }
 }

@@ -1,6 +1,7 @@
 package cn.com.chinau.fragment.stampfragment;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import cn.com.chinau.R;
 /**
  * 价格行情
  */
+@SuppressLint("ValidFragment")
 public class StampPriceFragment extends Fragment {
 
 

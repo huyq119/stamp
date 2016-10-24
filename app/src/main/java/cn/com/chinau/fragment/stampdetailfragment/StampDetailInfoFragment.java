@@ -1,5 +1,6 @@
 package cn.com.chinau.fragment.stampdetailfragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import cn.com.chinau.utils.MyLog;
 /**
  * 邮市详情页Fragment 邮票信息
  */
+@SuppressLint("ValidFragment")
 public class StampDetailInfoFragment extends Fragment {
 
     private Context context;

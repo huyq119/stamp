@@ -182,4 +182,5 @@ public abstract class BaseActivity extends FragmentActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

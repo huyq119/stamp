@@ -1,5 +1,6 @@
 package cn.com.chinau.fragment.scandetails;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -29,6 +30,7 @@ import cn.com.chinau.view.ChartView;
  * 扫码回购详情页展示的第一个View
  * Created by Administrator on 2016/8/17.
  */
+@SuppressLint("ValidFragment")
 public class ScanDetailFirstFragment extends Fragment{
 
     private View mScanDetailView;

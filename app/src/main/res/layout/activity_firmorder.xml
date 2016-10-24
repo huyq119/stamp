@@ -135,7 +135,6 @@
                         android:id="@+id/firmorder_pay_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:gravity="right"
                         android:text="@string/mode_of_payment"
                         android:textColor="#333"
@@ -158,7 +157,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <cn.com.chinau.view.CustExpandableListView
+                    <cn.com.chinau.view.CustomExpandableListView
                         android:id="@+id/firmOrder_expandableLV"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

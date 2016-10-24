@@ -1,6 +1,7 @@
 package cn.com.chinau.fragment.stampfragment;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import cn.com.chinau.utils.MyLog;
 /**
  * 邮票信息页面
  */
+@SuppressLint("ValidFragment")
 public class StampInfoFragment extends Fragment {
 
     public WebView mVB;

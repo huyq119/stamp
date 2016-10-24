@@ -1,9 +1,11 @@
 package cn.com.chinau.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ public class ChooseReceiverAddress extends BaseActivity implements View.OnClickL
     private String mToken, mUser_id;
     private SharedPreferences sp;
     private ArrayList<AddressBean.Address> mList;
+
     @Override
     public View CreateTitle() {
         mAddressTitle = View.inflate(this, R.layout.base_font_title, null);
@@ -73,6 +76,25 @@ public class ChooseReceiverAddress extends BaseActivity implements View.OnClickL
     private void initLintener() {
         mBack.setOnClickListener(this);
         mEdit.setOnClickListener(this);
+        mAddressLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = mList.get(position).getName();
+                String mobile = mList.get(position).getMobile();
+                String detail =  mList.get(position).getDetail();
+                String addressId = mList.get(position).getAddress_id();
+//                stringData.GetStringData(name,mobile,detail,addressId);
+                MyLog.LogShitou("获取地址详情信息",name+"--"+mobile+"--"+detail+"--"+addressId);
+                Intent intent = new Intent();
+                intent.putExtra("name", name);
+                intent.putExtra("mobile",mobile);
+                intent.putExtra("detail", detail);
+                intent.putExtra("addressId", addressId);
+                setResult(FirmOrderActivity.RESULT_OK, intent);
+
+                finishWitchAnimation();// 关闭页面
+            }
+        });
 
     }
 
@@ -156,4 +178,14 @@ public class ChooseReceiverAddress extends BaseActivity implements View.OnClickL
             }
         }
     };
+
+//    // 定义一个接口给FirmOrderActivity实现
+//    public interface StringData{
+//        void GetStringData(String name,String mobile,String detail,String address_id);
+//    }
+//
+//    public void SetStringData(StringData stringData) {
+//        this.stringData = stringData;
+//    }
+
 }

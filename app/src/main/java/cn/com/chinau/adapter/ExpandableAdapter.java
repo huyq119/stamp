@@ -318,12 +318,12 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                         String goods_count = s[3];
                         MyLog.LogShitou("子控件2", group + "--" + child + "--" + goods_sn + "--" + goods_count);
 //                        MyLog.LogShitou("这是啥值", isChildSelected+"");
-                            AddShopCartBean mAddShopCartBean = new AddShopCartBean();
-                            mAddShopCartBean.setGoods_count(goods_count);
-                            mAddShopCartBean.setGoods_sn(goods_sn);
+                        AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+                        mAddShopCartBean.setGoods_count(goods_count);
+                        mAddShopCartBean.setGoods_sn(goods_sn);
 
-                            info_list.add(mAddShopCartBean); // 添加到list
-                            MyLog.LogShitou("添加的list数据", info_list.toString());
+                        info_list.add(mAddShopCartBean); // 添加到list
+                        MyLog.LogShitou("添加的list数据", info_list.toString());
 
 
                         isSelectAll = ShoppingCartBiz.selectOne(seller_list, group, child);

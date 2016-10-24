@@ -261,6 +261,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         mCollect = (ImageView) mStampDetailContent.findViewById(R.id.stamp_details_collect);// 收藏
         mShoppingLl = (LinearLayout) mStampDetailContent.findViewById(R.id.stamp_details_shopping_ll);// 购物车
         mShoppingCount = (TextView) mStampDetailContent.findViewById(R.id.stamp_details_shoppingCart);// 购物车商品数量
+        mShoppingCount.setText("+0");
         mAddShoppingCart = (TextView) mStampDetailContent.findViewById(R.id.stamp_details_addShoppingCart);// 加入购物车
         mBuyNow = (TextView) mStampDetailContent.findViewById(R.id.stamp_details_buyNow);// 立即购买
 

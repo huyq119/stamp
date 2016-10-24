@@ -1,6 +1,7 @@
 package cn.com.chinau.activity;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -123,7 +124,9 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
                 finishWitchAnimation();
                 break;
             case R.id.scan_back_buy_now://立即扫码回购
-                openActivityWitchAnimation(CaptureActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("SanFragment","ScanActivity");
+                openActivityWitchAnimation(CaptureActivity.class,bundle);
                 finish();
                 break;
         }

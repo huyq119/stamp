@@ -140,7 +140,7 @@ public class CaptureActivity extends Activity implements Callback, View.OnClickL
             } else if (mHomeFragment!= null &&mHomeFragment.equals("StampTapFragment")) {
                 finish();
                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-            } else {
+            } else if (mHomeFragment!= null &&mHomeFragment.equals("ScanActivity")){
                 Intent intent = new Intent(CaptureActivity.this, ScanActivity.class);
                 startActivity(intent);
                 //跳转动画

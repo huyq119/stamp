@@ -1,5 +1,6 @@
 package cn.com.chinau.fragment.scandetails;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import cn.com.chinau.view.CustWebView;
  * 扫码回购底部的View
  * Created by Administrator on 2016/8/17.
  */
+@SuppressLint("ValidFragment")
 public class ScanDetailSecondFragment extends Fragment {
 
     private View mScanDetailView;

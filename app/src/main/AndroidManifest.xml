@@ -15,6 +15,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+    <!--微信支付需要的权限-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+
     <application
         android:name="cn.com.chinau.ui.MyApplication"
         android:allowBackup="true"
@@ -83,7 +91,19 @@
         <activity android:name="cn.com.chinau.activity.WithdrawPressWordActivity" />
         <activity android:name="cn.com.chinau.activity.ServiceProtocolActivity" />
         <activity android:name="cn.com.chinau.activity.MyStampActivity"></activity>
-        <activity android:name="cn.com.chinau.activity.FirmOrderActivity"></activity>
+        <!--确认订单页面-->
+        <activity android:name="cn.com.chinau.activity.FirmOrderActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            >
+            <!--这个intent-filter不要忘了-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="wxd930ea5d5a258f4f"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name="cn.com.chinau.activity.ManagerAddressActivity"></activity>
         <activity android:name="cn.com.chinau.activity.EditReceiptAddressActivity"></activity>
         <activity android:name="cn.com.chinau.activity.AuctionRecordActivity"></activity>
@@ -113,6 +133,19 @@
         <activity android:name="cn.com.chinau.activity.SuccessApplyForRefuseActivity" />
         <activity android:name="cn.com.chinau.activity.LookOrderDetailRefuseActivity" />
         <activity android:name="cn.com.chinau.activity.BigPhotoActivity" />
+        <!--微信支付成功后舔砖页面-->
+        <activity
+            android:name="cn.com.chinau.wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+        </activity>
+        <!--app注册到微信-->
+        <receiver android:name="cn.com.chinau.ui.AppRegister">
+            <intent-filter>
+                <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

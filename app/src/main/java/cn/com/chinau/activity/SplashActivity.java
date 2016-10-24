@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 
+import com.tencent.mm.sdk.openapi.IWXAPI;
+
 import cn.com.chinau.MainActivity;
 import cn.com.chinau.R;
 import cn.com.chinau.utils.MyHandler;
@@ -22,11 +24,13 @@ public class SplashActivity extends Activity {
             finish();
         }
     };
+    private IWXAPI api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        // 注册微信APPID
         handler.sendEmptyMessageDelayed(MAIN, 2000);
     }
 

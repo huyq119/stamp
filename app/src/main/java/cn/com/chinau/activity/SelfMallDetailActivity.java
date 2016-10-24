@@ -220,6 +220,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
         mCollection = (ImageView) mSelfMallDetailContent.findViewById(R.id.mall_detail_collection);// 收藏
         mShoppingLl = (LinearLayout) mSelfMallDetailContent.findViewById(R.id.mall_details_shopping_ll);// 购物车ll
         mShoppingCount = (TextView) mSelfMallDetailContent.findViewById(R.id.mall_details_shopping_count);// 购物车数量
+        mShoppingCount.setText("+0");
         mAddShopping = (TextView) mSelfMallDetailContent.findViewById(R.id.mall_detail_addshopping);// 加入购物车
         mGoBuy = (TextView) mSelfMallDetailContent.findViewById(R.id.mall_detail_gobuy);// 立即购买
 

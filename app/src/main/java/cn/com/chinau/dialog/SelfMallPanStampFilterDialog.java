@@ -1,5 +1,6 @@
 package cn.com.chinau.dialog;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -22,6 +23,7 @@ import cn.com.chinau.utils.MyLog;
  * Created by Administrator on 2016/9/23.
  * （商城，淘邮票）共用的筛选Dialog
  */
+@SuppressLint("ValidFragment")
 public class SelfMallPanStampFilterDialog extends BaseDialogFragment implements View.OnClickListener {
 
     private List<Fragment> mList;

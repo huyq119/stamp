@@ -133,13 +133,16 @@ public class DesignerActivity extends BaseActivity {
     private IndexListView.AlphabetPositionListener positionListener = new IndexListView.AlphabetPositionListener() {
         @Override
         public int getPosition(String letter) {
+//            mList.get(i).getEnglish_name().charAt(0);
             // 先注释
-//            for (int i = 0, count = mList.size(); i < count; i++) {
+            for (int i = 0, count = mList.size(); i < count; i++) {
 //                Character firstLetter = mList.get(i).getEnglish_name().charAt(0);
-//                if (firstLetter.toString().equals(letter)) {
-//                    return i;
+//                if (firstLetter != null){
+//                    if (firstLetter.toString().equals(letter)) {
+//                        return i;
+//                    }
 //                }
-//            }
+            }
             return UNKNOW;
         }
     };

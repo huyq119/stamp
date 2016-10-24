@@ -1,5 +1,6 @@
 package cn.com.chinau.dialog;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import cn.com.chinau.view.NoScrollGridView;
  * (邮票目录)筛选弹出框
  * Created by Administrator on 2016/8/2.
  */
+@SuppressLint("ValidFragment")
 public class StampTapFilterDialog extends BaseDialogFragment {
 
     private String[] title, arrYear,arrClass,arrPerson;
@@ -60,6 +62,7 @@ public class StampTapFilterDialog extends BaseDialogFragment {
         // 获取一级标题数据并赋值
         String title1 = title[0];
         mYears.setText(title1);
+
         String title2 = title[1];
         mCategory.setText(title2);
         String title3 = title[2];
