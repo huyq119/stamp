@@ -92,7 +92,8 @@
         android:text="@string/No_detailed_information"
         android:textColor="#000"
         android:textSize="15sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        />
 
     <ListView
         android:id="@+id/withdraw_lv"

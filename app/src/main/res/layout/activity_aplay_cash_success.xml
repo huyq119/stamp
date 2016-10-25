@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f8f8f8"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="24dp"
+        android:drawableLeft="@mipmap/success"
+        android:drawablePadding="10dp"
+        android:text="申请提现提交成功"
+        android:textColor="#000"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:maxLines="3"
+        android:text="工作人员将在3个工作日完成确认,预计7个工作日到帐."
+        android:textColor="#999"
+        android:textSize="12sp" />
+
+    <View style="@style/myline"
+        android:layout_marginTop="30dp"/>
+
+</LinearLayout>

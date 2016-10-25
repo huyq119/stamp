@@ -1,37 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?><!--添加银行卡页面-->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
-    <LinearLayout
-        android:id="@+id/card_noSetCard"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="#fff"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/addCard_add"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:height="50dp"
-            android:background="@drawable/empty_card"
-            android:gravity="center"
-            android:text="@string/AddCard"
-            android:textColor="#999" />
-    </LinearLayout>
-
+    android:background="#f8f8f8"
+    android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/card_SetCard"
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:background="#f8f8f8"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical" >
 
         <View
             style="@style/myline"
@@ -41,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:background="#fff"
-            android:orientation="horizontal">
+            android:orientation="horizontal" >
 
             <ImageView
                 android:id="@+id/ib_cash"
@@ -54,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
-                android:orientation="vertical">
+                android:orientation="vertical" >
 
                 <TextView
                     android:id="@+id/tv_name"
@@ -66,7 +45,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/card_num"
+                    android:id="@+id/tv_cadnum"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginTop="10dp"
@@ -80,30 +59,32 @@
         <View style="@style/myline" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="15dp"
             android:gravity="right"
-            android:orientation="horizontal">
+            android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/card_UnBundling"
+                android:id="@+id/tv_jiebang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="@string/UnBundling"
+                android:text="解绑"
                 android:textColor="#18a7dd"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/card_revise"
+                android:id="@+id/tv_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="@string/revise"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:text="修改"
                 android:textColor="#18a7dd"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

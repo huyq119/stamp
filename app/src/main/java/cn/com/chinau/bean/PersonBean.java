@@ -29,6 +29,7 @@ public class PersonBean {
         public String name;// 订单或商品名称
         public String trx_amount;// 交易金额
         public String trx_desc;// 交易详述
+
         public String getTrx_date() {
             return trx_date;
         }

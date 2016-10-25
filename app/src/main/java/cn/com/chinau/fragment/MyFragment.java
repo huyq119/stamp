@@ -101,10 +101,6 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     dialog.show();
                     handler.sendEmptyMessageDelayed(DELFAIL, 2000);
                     break;
-//                case DELSHOWPROGRESS :// 关闭进度条对话框
-//                    if (pd != null)
-//                        pd.dismiss();
-//                    break;
                 case NONET :// 没有网络
                     dialog = new SussessDialog(getActivity());
                     dialog.setText("请连接网络");
@@ -242,7 +238,16 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 DeleteDialog(); // 非强制更新弹出框
                 break;
             case R.id.my_withdraw://提现
-                openActivityWitchAnimation(WithdrawActivity.class);
+                if (personBean != null) {
+                    Intent WithdrawIntent = new Intent(getActivity(), WithdrawActivity.class);
+                    WithdrawIntent.putExtra("balance", personBean.getBalance());// 余额
+                    WithdrawIntent.putExtra("result", result);// 传递整个数据
+                    WithdrawIntent.putExtra("Unbalance", personBean.getUnusable_balance());// 不可用余额
+                    startActivity(WithdrawIntent);
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+//                    getActivity().finish();
+                }
+//                openActivityWitchAnimation(WithdrawActivity.class);
                 break;
             case R.id.my_PressWordManager://密码管理
                 if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
@@ -355,6 +360,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     }
 
     /**
+     * 个人信息
      * 访问网络获取数据
      */
     private void getNetData() {

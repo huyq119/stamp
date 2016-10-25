@@ -431,11 +431,12 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 
                     if (mCodes.equals("0000")) {
                         String mPayUrls = mOrderPayBean.getPay_url();// 支付请求地址
-                        String mRequestId = mOrderPayBean.getRequest_id();// 交易订单号
-                        String mPayRequestId = mOrderPayBean.getPay_request_id();// 平台支付请求号
+//                        String mRequestId = mOrderPayBean.getRequest_id();// 交易订单号
+//                        String mPayRequestId = mOrderPayBean.getPay_request_id();// 平台支付请求号
 
                         if (mPayUrls != null) {
                             String[] payurl = mPayUrls.split("&");
+                            // 获取各个字符串
                             String signs = payurl[0];
                             String timestamps = payurl[1];
                             String noncestrs = payurl[2];
@@ -446,6 +447,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 
                             MyLog.LogShitou("payurl详细信息", signs + "--" + timestamps + "--" + noncestrs + "--" +
                                     partnerids + "--" + prepayids + "--" + packages + "--" + appids);
+                           // 截取字符串
                             String[] mSign = signs.split("=");
                             String[] mTimestamp = timestamps.split("=");
                             String[] mNoncestr = noncestrs.split("=");
@@ -453,6 +455,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                             String[] mPrepayid = prepayids.split("=");
                             String[] mAppid = appids.split("=");
 
+                            // 获取需要的字段
                             String sign = mSign[1];
                             String timestamp = mTimestamp[1];
                             String noncestr = mNoncestr[1];
@@ -461,10 +464,11 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                             String appid = mAppid[1];
 
                             MyLog.LogShitou("微信支付需要的值", sign + "--" + timestamp + "--" + noncestr + "--" + partnerid + "--" + prepayid + "--" + appid);
-
+                            // app注册微信
                             api = WXAPIFactory.createWXAPI(FirmOrderActivity.this, StaticField.APP_ID);
                             api.registerApp(StaticField.APP_ID);
                             if (api != null) {
+                                // 微信支付请求
                                 PayReq req = new PayReq();
                                 req.appId = appid; // 应用ID
                                 req.partnerId = partnerid; // 商户号
@@ -498,6 +502,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //                        String mRequestId = mOrderPayBeans.getRequest_id();// 交易订单号
 //                        String mPayRequestId = mOrderPayBeans.getPay_request_id();// 平台支付请求号
                         MyLog.LogShitou("mPayUrl+支付宝请求需要的串", mPayUrl);
+                       // 发起支付宝支付
                         Runnable payRunnable = new Runnable() {
                             @Override
                             public void run() {
@@ -548,7 +553,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                             Toast.makeText(FirmOrderActivity.this, "支付失败",
                                     Toast.LENGTH_LONG).show();
                         }
-
                     }
                     break;
             }

@@ -15,6 +15,21 @@ public class StaticField {
     public static final String SMS_TYPE = "sms_type";
     public static final int CODE_SUCCESS = 10;
     public static final long GIVENTIME = 1000 * 60 * 10;// 设定时间
+    // 提现
+    public static final String REMIT = "cn.com.chinau.remit";
+    public static final String REMIT_PWD = "remit_pwd";
+    public static final String REMIT_AMOUNT = "remit_amount";
+    public static final String TX = "TX";// 提现
+    // 绑定银行卡
+    public static final String BIND = "cn.com.chinau.bankcard.bind";
+    public static final String CX = "CX";// 查询
+    // 银行卡接口
+    public static final String CARDBIN = "cn.com.chinau.cardbin.query";
+    // 卡号
+    public static final String CARD_NO = "card_no";
+    public static final String BK = "BK";
+    public static final String BD = "BD";
+    public static final String JB = "JB";
 
     // 登录、注册
     public static final String LOGIN_REGISTER = "cn.com.chinau.user.login.register";

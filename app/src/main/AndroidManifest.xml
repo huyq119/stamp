@@ -76,11 +76,14 @@
         <activity android:name="cn.com.chinau.activity.ResettingPassWordActivity" />
         <activity android:name="cn.com.chinau.activity.RegisterActivity" />
         <activity android:name="cn.com.chinau.activity.WithdrawActivity" />
-        <activity android:name="cn.com.chinau.activity.CardActivity" />
         <activity
             android:name="cn.com.chinau.activity.ReviseCardActivity"
             android:label="@string/title_activity_revise" />
+
+        <activity android:name="cn.com.chinau.activity.CashNotemptyActivity" />
+        <activity android:name="cn.com.chinau.activity.CashEmptyActivity" />
         <activity android:name="cn.com.chinau.activity.ApplyWithdrawActivity" />
+        <activity android:name="cn.com.chinau.activity.ActivityAplayCashSuccessActivity" />
         <activity android:name="cn.com.chinau.activity.UnBundlingActivity" />
         <activity android:name="cn.com.chinau.activity.ScanDetailsActivity" />
         <activity android:name="cn.com.chinau.activity.AffirmBuyBackActivity" />

@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f8f8f8"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:background="#fff"
-        android:gravity="center">
+        android:gravity="center" >
 
         <ImageView
             android:id="@+id/ib_cash"
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
-            android:orientation="vertical">
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/tv_name"
@@ -36,7 +36,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/UnBundling_cadNum"
+                android:id="@+id/tv_cadnum"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
@@ -60,13 +60,13 @@
         android:layout_gravity="center_vertical"
         android:background="#ffff"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:text="@string/Present_password"
+            android:text="提现密码"
             android:textColor="#000"
             android:textSize="14sp" />
 
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
             android:background="@null"
-            android:text="@string/Forget_password_"
+            android:text="忘记密码？"
             android:textColor="#18a7dd"
             android:textSize="12sp" />
     </LinearLayout>
@@ -101,13 +101,13 @@
         android:layout_gravity="center_vertical"
         android:background="#ffff"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:text="@string/Phone"
+            android:text="手机号"
             android:textColor="#000"
             android:textSize="14sp" />
 
@@ -131,13 +131,13 @@
         android:layout_gravity="center_vertical"
         android:background="#ffff"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:text="@string/Code"
+            android:text="验证码"
             android:textColor="#000"
             android:textSize="14sp" />
 
@@ -159,7 +159,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
             android:background="@mipmap/code"
-            android:text="@string/getCode"
+            android:text="获取验证码"
             android:textColor="#fff"
             android:textSize="12sp" />
     </LinearLayout>
@@ -177,7 +177,7 @@
         android:background="@mipmap/login_normal"
         android:enabled="false"
         android:gravity="center"
-        android:text="@string/ensure"
+        android:text="确定"
         android:textColor="#fff"
         android:textSize="18sp" />
 

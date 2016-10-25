@@ -81,7 +81,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     if (dialog != null)
                         dialog.dismiss();
                     if (flag == 1) {// 从提现页面来的
-//                        startActivity(new Intent(LoginActivity.this, WithdrawPassWordActivity.class));
+                        startActivity(new Intent(LoginActivity.this, WithdrawPressWordActivity.class));
                         finish();
                     } else if (flag == 2) {// 从重置登陆密码页面
 //                        startActivity(new Intent(LoginActivity.this, ResettingPassWordActivity.class));
