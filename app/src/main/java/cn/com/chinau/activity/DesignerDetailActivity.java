@@ -81,6 +81,9 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     private TextView mTitle;
     private DesignerDetailsBean mDetailsBean;
     private WebView mResumeWeb;
+    private String mShareUrl;
+    private String mCHName;
+    private String mSharedImage;
     private Handler mHandler = new Handler() {
 
         @Override
@@ -92,15 +95,17 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     mDetailsBean = gson.fromJson((String) msg.obj, DesignerDetailsBean.class);
                     String mImages = mDetailsBean.getDesigner_images();
                     arrImage = mImages.split(",");
-                    String mCHName = mDetailsBean.getChinese_name();
+                    mSharedImage = arrImage[0];
+                    mCHName = mDetailsBean.getChinese_name();
                     String mENName = mDetailsBean.getEnglish_name();
 
-                    mTitle.setText(mCHName + mENName);//赋值中英文名
+                    mTitle.setText(mCHName +"  "+mENName);//赋值中英文名
                     mResume = mDetailsBean.getResume();// 简历H5地址
                     if (mResume!=null){
                         mResumeWeb.loadUrl(mResume);
                     }
-                    String mShareUrl = mDetailsBean.getShare_url();// 分享url
+                    // 分享url
+                    mShareUrl = mDetailsBean.getShare_url();
                     mListStory = mDetailsBean.getDesign_story_list();// 设计故事
                     mListWorks = mDetailsBean.getWorks_list();// 艺术作品
                     mListView = mDetailsBean.getView_list(); // 名家访谈
@@ -125,7 +130,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
             }
         }
     };
-
 
 
     @Override
@@ -214,7 +218,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
      *  设计家详情网络请求
      */
     private void initData() {
-
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -339,7 +342,11 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.base_shared://分享按钮
-                openActivity(SharedActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("SharedImage", mSharedImage);// 分享显示的图片
+                bundle.putString("Goods_name",mCHName);// 分享显示的名称
+                bundle.putString("Share_url",mShareUrl);// 分享后点击查看的url
+                openActivity(SharedActivity.class,bundle);
                 break;
             case R.id.base_title_back://返回
                 finishWitchAnimation();

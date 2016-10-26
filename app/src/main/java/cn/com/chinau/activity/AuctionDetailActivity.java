@@ -79,8 +79,12 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     private TabPageIndicator mIndicator;
     private StampInfoFragment stampInfoFragment;
     private StampPracticeFragment stampPracticeFragment;
-
+    private String mShare_url,mSharedImage;
+    private String mGoods_name;
     private Handler mHandler = new Handler() {
+
+
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -107,9 +111,12 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                             small_images[i] = image[0];// 小图集合
                             big_images[i] = image[1];// 大图集合
                         }
+
+                        mSharedImage = small_images[0];
+                        MyLog.LogShitou("需要分享显示图片url",mSharedImage);
                     }
 
-                    String mGoods_name = mStampDetailBean.getGoods_name();
+                    mGoods_name = mStampDetailBean.getGoods_name();
                     mTitle.setText(mGoods_name);
                     mGoodsName.setText(mGoods_name);
                      mPrice = mStampDetailBean.getCurrent_price();// 出价价格
@@ -169,7 +176,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     } else if (mIsFavorite.equals("1")) { // 已收藏
                         mCollect.setImageResource(R.mipmap.collections);
                     }
-
+                    mShare_url = mStampDetailBean.getShare_url(); // 分享地址url
                     mGoodsDetail = mStampDetailBean.getGoods_detail();  // 商家信息H5url
                     mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
                     MyLog.LogShitou("竞拍详情请求下来的H5url-->:", mGoodsDetail + "--" + mVerifyInfo);
@@ -223,6 +230,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
             }
         }
     };
+
 
 
     @Override
@@ -483,7 +491,11 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 finishWitchAnimation();
                 break;
             case R.id.base_shared:// 分享
-                openActivity(SharedActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("SharedImage",mSharedImage); // 分享显示的图片
+                bundle.putString("Goods_name",mGoods_name); // 分享显示的名称
+                bundle.putString("Share_url",mShare_url); // 分享后点击查看的url
+                openActivity(SharedActivity.class,bundle);
                 break;
             case R.id.base_top_btn:// 置顶
                 home_SV.post(new Runnable() {

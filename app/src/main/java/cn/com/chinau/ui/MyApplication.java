@@ -12,6 +12,8 @@ import android.os.Handler;
 
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -46,13 +48,21 @@ public class MyApplication extends Application {
         application = this;
         MainID = android.os.Process.myTid();
         handler = new Handler();
+        // app注册微信
         api = WXAPIFactory.createWXAPI(this, StaticField.APP_ID);
         api.registerApp(StaticField.APP_ID);
+
+        UMShareAPI.get(this); // 初始化友盟sdk
 
         MyLog.LogShitou("什么时候执行-------------->>001", "执行了001");
         SharedPreferences sp = getSharedPreferences("stamp", MODE_PRIVATE);
         sp.edit().putBoolean("isSetup", true).commit();
     }
+
+    {
+        PlatformConfig.setWeixin("wxd37d120cce012c94", "d4ff5f4137ba5b386a611979929d8f44");
+    }
+
     public static Context getApplication() {
         return application;
     }

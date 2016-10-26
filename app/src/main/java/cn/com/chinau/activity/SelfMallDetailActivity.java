@@ -51,9 +51,9 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
     private WebView mWeb; // 邮票信息url
     private LinearLayout mShoppingLl; // 购物车
 
+    private String mSharedImage;
+    private String mShare_url;
     private Handler mHandler = new Handler() {
-
-
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -72,9 +72,11 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                                 small_images[i] = image[0];// 小图集合
                                 big_images[i] = image[1];// 大图集合
                             }
+                            mSharedImage = small_images[0];
+                            MyLog.LogShitou("需要分享显示图片url", mSharedImage);
                         }
 
-                        String mGoods_name = mStampDetailBean.getGoods_name();
+                        mGoods_name = mStampDetailBean.getGoods_name();
                         mTitle.setText(mGoods_name); // 标题
                         mGoodsName.setText(mGoods_name);// 商品名称
                         String mPrice = mStampDetailBean.getCurrent_price();
@@ -95,6 +97,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                         } else if (mGoodsSources.equals("SC_DSF")) {
                             mGoodsSource.setText("第三方");
                         }
+                        mShare_url = mStampDetailBean.getShare_url(); // 分享地址url
                         mGoodsDetai = mStampDetailBean.getGoods_detail();  // 商家信息H5url
                         MyLog.LogShitou("商城详情H5url-->:", mGoodsDetai);
                         if (mGoodsDetai != null) {
@@ -171,6 +174,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
         }
     };
     private SharedPreferences sp;
+    private String mGoods_name;
 
 
     @Override
@@ -255,7 +259,11 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                 finishWitchAnimation();
                 break;
             case R.id.base_shared://分享按钮
-                openActivity(SharedActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("SharedImage", mSharedImage); // 分享显示的图片
+                bundle.putString("Goods_name",mGoods_name); // 分享显示的名称
+                bundle.putString("Share_url", mShare_url); // 分享后点击查看的url
+                openActivity(SharedActivity.class,bundle);
                 break;
             case R.id.mall_detail_collection://收藏
 

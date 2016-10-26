@@ -55,23 +55,26 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private List<Fragment> mList;
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
-    private String[] small_images,big_images; // viewPager小图，大图
+    private String[] small_images, big_images; // viewPager小图，大图
     private ImageView mBack, mShared, mCollect;// 返回，分享，收藏
-    private TextView mTitle, mSellerNo,mGoodsName,mCurrentPrice,mFreight,mSaleCount,mFeeRate,mFee,
-            mGoodsSource,mSellerName,mGoodsStatus,mShoppingCart, mShoppingCount, mAddShoppingCart, mBuyNow;// 标题，商家账号，加入购物车，立即购买
+    private TextView mTitle, mSellerNo, mGoodsName, mCurrentPrice, mFreight, mSaleCount, mFeeRate, mFee,
+            mGoodsSource, mSellerName, mGoodsStatus, mShoppingCart, mShoppingCount, mAddShoppingCart, mBuyNow;// 标题，商家账号，加入购物车，立即购买
     private Button mTopBtn;
     private VerticalScrollView home_SV;
     private View contentView;
     private int lastY = 0;
     private int scrollY; // 标记上次滑动位置
-    private String mGoods_sn,mGoodsDetail,mVerifyInfo,mToken,mUser_id,mIsFavorite,mCartGoodsCount;
+    private String mGoods_sn, mGoodsDetail, mVerifyInfo, mToken, mUser_id, mIsFavorite, mCartGoodsCount;
     private TabPageIndicator mIndicator;
     private StampInfoFragment stampInfoFragment;// 邮票信息
     private StampPracticeFragment stampPracticeFragment;// 鉴定信息
-
-
-
+    private String mSharedImage;
+    private String mGoods_name;
+    private String mShare_url;
     private Handler mHandler = new Handler() {
+
+
+
 
         @Override
         public void handleMessage(Message msg) {
@@ -88,57 +91,59 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case StaticField.SUCCESS:// 详情数据
                     Gson gson = new Gson();
-                    StampDetailBean mStampDetailBean = gson.fromJson((String)msg.obj, StampDetailBean.class);
-                   // 赋值头布局显示的图片
-                    if (mStampDetailBean.getGoods_images() != null){
-                       String [] mGoods_images = mStampDetailBean.getGoods_images();
+                    StampDetailBean mStampDetailBean = gson.fromJson((String) msg.obj, StampDetailBean.class);
+                    // 赋值头布局显示的图片
+                    if (mStampDetailBean.getGoods_images() != null) {
+                        String[] mGoods_images = mStampDetailBean.getGoods_images();
 //                       MyLog.LogShitou("mGoods_images商品图片001-->:", mGoods_images.length + "");
-                      small_images = new String[mGoods_images.length];
+                        small_images = new String[mGoods_images.length];
                         big_images = new String[mGoods_images.length];
-                       for (int i = 0; i < mGoods_images.length; i++) {
-                           String[] image = mGoods_images[i].split(",");
-                           small_images[i] = image[0];// 小图集合
-                           big_images[i] = image[1];// 大图集合
-                       }
-                   }
+                        for (int i = 0; i < mGoods_images.length; i++) {
+                            String[] image = mGoods_images[i].split(",");
+                            small_images[i] = image[0];// 小图集合
+                            big_images[i] = image[1];// 大图集合
+                        }
+                        mSharedImage = small_images[0];
+                        MyLog.LogShitou("需要分享显示图片url",mSharedImage);
+                    }
 
-                    String mGoods_name = mStampDetailBean.getGoods_name();
+                    mGoods_name = mStampDetailBean.getGoods_name();
                     mTitle.setText(mGoods_name);
                     mGoodsName.setText(mGoods_name);
-                   String mPrice = mStampDetailBean.getCurrent_price();
-                    mCurrentPrice.setText("￥"+mPrice);
+                    String mPrice = mStampDetailBean.getCurrent_price();
+                    mCurrentPrice.setText("￥" + mPrice);
                     String mFreights = mStampDetailBean.getFreight();
-                    mFreight.setText("￥"+mFreights);
+                    mFreight.setText("￥" + mFreights);
                     String mSaleCounts = mStampDetailBean.getSale_count();
                     mSaleCount.setText(mSaleCounts);
                     String mFeeRates = mStampDetailBean.getService_fee_rate();
-                    mFeeRate.setText("("+mFeeRates+"):");
+                    mFeeRate.setText("(" + mFeeRates + "):");
                     String mFees = mStampDetailBean.getService_fee();
-                    mFee.setText("￥"+mFees);
+                    mFee.setText("￥" + mFees);
                     String mGoodsSources = mStampDetailBean.getGoods_source();
-                    MyLog.LogShitou("邮票类型-->:",mGoodsSources);
-                    if (mGoodsSources.equals("YS")){
+                    MyLog.LogShitou("邮票类型-->:", mGoodsSources);
+                    if (mGoodsSources.equals("YS")) {
                         mGoodsSource.setText("邮市");
-                    }else if(mGoodsSources.equals("JP")){
+                    } else if (mGoodsSources.equals("JP")) {
                         mGoodsSource.setText("竞拍");
-                    }else if(mGoodsSources.equals("SC_ZY")){
+                    } else if (mGoodsSources.equals("SC_ZY")) {
                         mGoodsSource.setText("自营");
-                    }else if(mGoodsSources.equals("SC_DSF")){
+                    } else if (mGoodsSources.equals("SC_DSF")) {
                         mGoodsSource.setText("第三方");
                     }
                     String mSellerNames = mStampDetailBean.getSeller_name();
                     mSellerName.setText(mSellerNames);
                     String mSellerNos = mStampDetailBean.getSeller_no();
-                    if (mSellerNos.length()<11){
+                    if (mSellerNos.length() < 11) {
                         mSellerNo.setText(mSellerNos);
-                    }else{
+                    } else {
                         String mPhone = mSellerNos.substring(0, 3) + "****" + mSellerNos.substring(7, mSellerNos.length());
                         mSellerNo.setText(mPhone);
                     }
-
+                    mShare_url = mStampDetailBean.getShare_url();// 分享地址url
                     mGoodsDetail = mStampDetailBean.getGoods_detail();  // 邮票信息H5url
                     mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
-                    MyLog.LogShitou("请求下来的H5url-->:",mGoodsDetail+"--"+mVerifyInfo);
+                    MyLog.LogShitou("请求下来的H5url-->:", mGoodsDetail + "--" + mVerifyInfo);
 
                     mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
                     MyLog.LogShitou("商品收藏状态-->:", mIsFavorite);
@@ -148,13 +153,13 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                         mCollect.setImageResource(R.mipmap.collections);
                     }
 
-                     mCartGoodsCount = mStampDetailBean.getCart_goods_count();// 购物车里的商品数量
+                    mCartGoodsCount = mStampDetailBean.getCart_goods_count();// 购物车里的商品数量
 
                     MyLog.LogShitou("商品数量-->:", mCartGoodsCount);
-                    if (!mCartGoodsCount.equals("0")&& !mCartGoodsCount.equals("")) {
+                    if (!mCartGoodsCount.equals("0") && !mCartGoodsCount.equals("")) {
                         mShoppingCount.setVisibility(View.VISIBLE);
-                        mShoppingCount.setText("+"+ mCartGoodsCount);
-                        MyLog.LogShitou("商品数量---002>","走了吗。。。。。。。。。。");
+                        mShoppingCount.setText("+" + mCartGoodsCount);
+                        MyLog.LogShitou("商品数量---002>", "走了吗。。。。。。。。。。");
                     }
 
                     String mGoodsStatuss = mStampDetailBean.getGoods_status();// 商品状态
@@ -193,18 +198,18 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case StaticField.ADDSHOPPINGCARTSUCCESS: // 加入购物车
                     Gson gsones = new Gson();
-                    BaseBean mBasebean = gsones.fromJson((String) msg.obj,BaseBean.class);
-                    if (mBasebean.getRsp_code().equals("0000")){
-                       String mCount = mShoppingCount.getText().toString().trim();
+                    BaseBean mBasebean = gsones.fromJson((String) msg.obj, BaseBean.class);
+                    if (mBasebean.getRsp_code().equals("0000")) {
+                        String mCount = mShoppingCount.getText().toString().trim();
                         String count = mCount.substring(1);// 去掉"+"号
-                        MyLog.LogShitou("请求下来的数量","--->:"+mCount);
-                       int mShopCount=Integer.valueOf(count).intValue();// 转int
+                        MyLog.LogShitou("请求下来的数量", "--->:" + mCount);
+                        int mShopCount = Integer.valueOf(count).intValue();// 转int
                         mShopCount++; // 数量自增
                         mShoppingCount.setVisibility(View.VISIBLE);// 加入购物车成功后显示数量
                         mShoppingCount.setText("+" + String.valueOf(mShopCount));
-                            MyLog.LogShitou("加入后的数量","--->:"+mShopCount);
+                        MyLog.LogShitou("加入后的数量", "--->:" + mShopCount);
                     }
-                break ;
+                    break;
 
                 default:
                     break;
@@ -247,12 +252,12 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         mShared = (ImageView) mStampDetailTitle.findViewById(R.id.base_shared);
         mTopBtn = (Button) mStampDetailContent.findViewById(R.id.base_top_btn);
 
-        mGoodsName= (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_goods_name);// 商品名称
-        mCurrentPrice= (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_current_price);// 商品售价
-        mFreight= (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_freight);// 运费
-        mSaleCount= (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_sale_count);// 销量
-        mFeeRate= (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_service_fee_rate);// 服务费率
-        mFee= (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_service_fee);// 服务费
+        mGoodsName = (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_goods_name);// 商品名称
+        mCurrentPrice = (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_current_price);// 商品售价
+        mFreight = (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_freight);// 运费
+        mSaleCount = (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_sale_count);// 销量
+        mFeeRate = (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_service_fee_rate);// 服务费率
+        mFee = (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_service_fee);// 服务费
         mGoodsSource = (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_goods_source);// 商品类型
         mSellerName = (TextView) mStampDetailContent.findViewById(R.id.stamp_detail_seller_name);// 商家名称
         mSellerNo = (TextView) mStampDetailContent.findViewById(R.id.stamp_details_seller_no);// 商家账号
@@ -271,7 +276,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         mTopVP = (ViewPager) mStampDetailContent.findViewById(R.id.base_viewpager);
         mTopVPI = (CirclePageIndicator) mStampDetailContent.findViewById(R.id.base_viewpagerIndicator);
         //底部ViewPager的页面
-         mViewPager = (CustomViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
+        mViewPager = (CustomViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
         mViewPager.setVisibility(View.VISIBLE);
         mIndicator = (TabPageIndicator) mStampDetailContent.findViewById(R.id.stampdetail_indicator);
     }
@@ -332,7 +337,11 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 finishWitchAnimation();
                 break;
             case R.id.base_shared:// 分享
-                openActivity(SharedActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("SharedImage",mSharedImage);// 分享显示的图片
+                bundle.putString("Goods_name",mGoods_name);// 分享显示的名称
+                bundle.putString("Share_url",mShare_url);// 分享后点击查看的url
+                openActivity(SharedActivity.class,bundle);
                 break;
             case R.id.stamp_details_collect:// 收藏
                 if (mToken.equals("") || mUser_id.equals("")) {
@@ -361,9 +370,9 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                     mAddShopCartBean.setGoods_count("1");
                     mAddShopCartBean.setGoods_sn(mGoods_sn);
                     String mSnJson = new Gson().toJson(mAddShopCartBean); // 转json串
-                    String toJson = "["+mSnJson+"]"; // 转数组
+                    String toJson = "[" + mSnJson + "]"; // 转数组
                     AddShopCart(toJson); // 加入购物车网络请求
-                    MyLog.LogShitou("加入购物车转换的Json",toJson);
+                    MyLog.LogShitou("加入购物车转换的Json", toJson);
 
                 }
 
@@ -388,6 +397,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
     }
+
 
     /**
      * 商品邮市详情网络请求
@@ -442,7 +452,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 params.put(StaticField.SIGN, md5code);
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                MyLog.LogShitou(op_type+"-"+"收藏修改-->:", result);
+                MyLog.LogShitou(op_type + "-" + "收藏修改-->:", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
@@ -466,7 +476,8 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
 
     /**
      * 加入购物车网络请求
-     * @param Goods_info  商品信息：所有商品的json字符串
+     *
+     * @param Goods_info 商品信息：所有商品的json字符串
      */
     private void AddShopCart(final String Goods_info) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
@@ -490,10 +501,10 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
 
-                    Message msg = mHandler.obtainMessage();
-                    msg.what = StaticField.ADDSHOPPINGCARTSUCCESS;
-                    msg.obj = result;
-                    mHandler.sendMessage(msg);
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.ADDSHOPPINGCARTSUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
 
             }
         });

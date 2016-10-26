@@ -1,6 +1,5 @@
 package cn.com.chinau.wxapi;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -10,9 +9,15 @@ import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.weixin.view.WXCallbackActivity;
+
+import java.util.Map;
 
 import cn.com.chinau.MainActivity;
 import cn.com.chinau.StaticField;
+import cn.com.chinau.utils.MyLog;
 
 /**
  * Date: 2016/10/23 12:06
@@ -21,7 +26,7 @@ import cn.com.chinau.StaticField;
  * 微信分享发起的回调
  */
 
-public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
+public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHandler {
 
     private IWXAPI api;
 
@@ -32,12 +37,14 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         api.registerApp(StaticField.APP_ID);
         api.handleIntent(getIntent(), this);
     }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
         api.handleIntent(intent, this);
     }
+
     @Override
     public void onReq(BaseReq baseReq) {
 
@@ -48,6 +55,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         int result = 0;
         switch (baseResp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
+
 //                result = R.string.errcode_success;
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
@@ -65,4 +73,25 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 //        Log.d(TAG, "onPayFinish, errCode = " + baseReq.errCode);
         finish();
     }
+
+    @Override
+    protected void handleIntent(Intent intent) {
+        mWxHandler.setAuthListener(new UMAuthListener() {
+            @Override
+            public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+                MyLog.e("UMWXHandler fsdfsdfs");
+            }
+
+            @Override
+            public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+            }
+
+            @Override
+            public void onCancel(SHARE_MEDIA platform, int action) {
+            }
+        });
+        super.handleIntent(intent);
+    }
+
+
 }

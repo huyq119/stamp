@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class StampTapDetailBean extends BaseBean {
 
     public ArrayList<StampTapDetail> stamp_info_list;
+    public String share_url;// 分享地址url
 
     public ArrayList<StampTapDetail> getStamp_info_list() {
         return stamp_info_list;
@@ -16,6 +17,14 @@ public class StampTapDetailBean extends BaseBean {
 
     public void setStamp_info_list(ArrayList<StampTapDetail> stamp_info_list) {
         this.stamp_info_list = stamp_info_list;
+    }
+
+    public String getShare_url() {
+        return share_url;
+    }
+
+    public void setShare_url(String share_url) {
+        this.share_url = share_url;
     }
 
     public class StampTapDetail {

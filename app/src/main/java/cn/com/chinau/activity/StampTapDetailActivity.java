@@ -83,8 +83,12 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     private AddStampDialog mAdd;
     private int intStampCount = 0;// 初始化邮集数
     private boolean CountFlag = false;
-
-
+    private SharedPreferences sp;
+    private LinearLayout mAddStampLl;
+    private String mShare_url;
+    private String[] small_images, big_images;
+    private String mSharedImage;
+    private int count;// 页面数
     private Handler mHandler = new Handler() {
 
         @Override
@@ -94,7 +98,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
                     Gson gson = new Gson();
                     StampTapDetailBean fromJson = gson.fromJson((String) msg.obj, StampTapDetailBean.class);
                     ArrayList<StampTapDetailBean.StampTapDetail> mStampTapDetail = fromJson.getStamp_info_list();
-
+                    mShare_url = fromJson.getShare_url();// 分享地址url
                     initAdapter(mStampTapDetail);
                     break;
                 case StaticField.TOUCH_EVENT_ID:// SrcollView滑动监听
@@ -128,8 +132,6 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
             }
         }
     };
-    private SharedPreferences sp;
-    private LinearLayout mAddStampLl;
 
 
     @Override
@@ -262,7 +264,19 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
      */
     private void initAdapter(ArrayList<StampTapDetailBean.StampTapDetail> mStampTapDetail) {
         //获取轮播图的数组
-        String[] imageBanner = getBannerData(mStampTapDetail);
+        String[] bannerDate = new String[mStampTapDetail.size()];
+        for (int i = 0; i < mStampTapDetail.size(); i++) {
+            bannerDate[i] = mStampTapDetail.get(i).getStamp_image();
+        }
+        // 大小图片装入数组中
+        small_images = new String[bannerDate.length];
+        big_images = new String[bannerDate.length];
+        // 循环出大小图片，以逗号分开分别装入数组，
+        for (int j = 0; j < bannerDate.length; j++) {
+            String[] image = bannerDate[j].split(",");
+            small_images[j] = image[0];// 小图集合
+            big_images[j] = image[1];// 大图集合
+        }
 
         //获取其他数据的数组
         name = new String[mStampTapDetail.size()];
@@ -295,7 +309,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         mPrice.setText("￥" + current_price[0]);
 
         //顶部导航的View
-        HomeViewPagerAdapter mViewPagerAdapter = new HomeViewPagerAdapter(mBitmap, imageBanner, this);
+        HomeViewPagerAdapter mViewPagerAdapter = new HomeViewPagerAdapter(mBitmap, small_images, this);
         mTopVP.setAdapter(mViewPagerAdapter);
         mTopVPI.setVisibility(View.VISIBLE);
         mTopVPI.setViewPager(mTopVP);
@@ -329,7 +343,20 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.base_shared://分享按钮
-                openActivity(SharedActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("Share_url", mShare_url); //  分享后点击查看的url
+                if (count == 1) {
+                    bundle.putString("Goods_name", name[1]); // 分享显示的名称
+                    bundle.putString("SharedImage", small_images[1]); // 分享显示的图片
+                } else if (count == 2) {
+                    bundle.putString("Goods_name", name[2]);
+                    bundle.putString("SharedImage", small_images[2]);
+                } else {
+                    bundle.putString("Goods_name", name[0]);
+                    bundle.putString("SharedImage", small_images[0]);
+
+                }
+                openActivity(SharedActivity.class, bundle);
                 break;
             case R.id.base_title_back://返回
                 finishWitchAnimation();
@@ -404,12 +431,13 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        MyLog.LogShitou(position + "这是第几页"+position );
     }
 
     @Override
     public void onPageSelected(int position) {
-        MyLog.e(position + "页面改变了");
+        count = position;
+        MyLog.LogShitou("这是第"+position+"页");
 
         MyLog.e(stamp_detail[position] + "-" + stamp_story[position]);
         //这里应该把三个页面的数据全部改变
@@ -425,19 +453,5 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void onPageScrollStateChanged(int state) {
 
-    }
-
-    /**
-     * 轮播图
-     *
-     * @param mStampTapDetail 数据源
-     * @return 轮播图数组
-     */
-    public String[] getBannerData(ArrayList<StampTapDetailBean.StampTapDetail> mStampTapDetail) {
-        String[] bannerDate = new String[mStampTapDetail.size()];
-        for (int i = 0; i < mStampTapDetail.size(); i++) {
-            bannerDate[i] = mStampTapDetail.get(i).getStamp_image();
-        }
-        return bannerDate;
     }
 }
