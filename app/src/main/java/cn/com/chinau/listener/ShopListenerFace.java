@@ -14,8 +14,8 @@ public interface ShopListenerFace {
 
     /**
      * 内容发生改变是回调的方法
-     * @param selectCount
-     * @param selectMoney
+     * @param selectCount 数量
+     * @param selectMoney 总价钱
      */
     void onDataChange(String selectCount, String selectMoney);
 }

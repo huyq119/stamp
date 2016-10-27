@@ -5,9 +5,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -18,8 +20,13 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -35,6 +42,7 @@ import cn.com.chinau.adapter.DesignerDetailsStoryAdapter;
 import cn.com.chinau.adapter.HomeViewPagerAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.DesignerDetailsBean;
+import cn.com.chinau.dialog.SharedDialog;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.listener.GestureListener;
 import cn.com.chinau.utils.Encrypt;
@@ -48,10 +56,10 @@ import cn.com.chinau.view.VerticalScrollView;
 /**
  * 设计家详情页面
  */
-public class DesignerDetailActivity extends BaseActivity implements View.OnClickListener {
+public class DesignerDetailActivity extends BaseActivity implements View.OnClickListener ,UMShareListener{
 
     private View mDesignerDetailTitle, mDesignerDetailContent, vResume, vStory, vWorks, vView;
-    private ImageView mBack, mShared;//返回按钮,分享按钮
+    private ImageView mBack, mShared,mWeiXin,mPengYouQuan;//返回按钮,分享按钮
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
     private TabPageIndicator mIndicator;
@@ -78,7 +86,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     private int mCount;
     private int mPosition;
     private String mDesigner_sn,mResume;// 设计家编号，简历
-    private TextView mTitle;
+    private TextView mTitle,tv_cancel;
     private DesignerDetailsBean mDetailsBean;
     private WebView mResumeWeb;
     private String mShareUrl;
@@ -130,6 +138,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
             }
         }
     };
+    private SharedDialog dialog;
 
 
     @Override
@@ -267,9 +276,14 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String mStory_sn = mDetailsBean.getDesign_story_list().get(i).getStory_sn();
+                String mName = mDetailsBean.getDesign_story_list().get(i).getName();
+                String mImg= mDetailsBean.getDesign_story_list().get(i).getStory_img();
                 Bundle bundle = new Bundle();
                 bundle.putString(StaticField.DTEAIL, "GS");
                 bundle.putString(StaticField.DESIGNER_STORY_SN, mStory_sn);
+                bundle.putString("DesignerName", mName);
+                bundle.putString("DesignerImg", mImg);
+                MyLog.LogShitou("-------------11111分享需要的名字+图片url",mName+"--"+mImg);
                 openActivityWitchAnimation(DesignerH5DetailActivity.class,bundle);// 跳转详情页
             }
         });
@@ -278,10 +292,15 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String mWorks_sn = mDetailsBean.getWorks_list().get(i).getWorks_sn();
                 String mCategory= mDetailsBean.getWorks_list().get(i).getCategory();
+                String mName = mDetailsBean.getWorks_list().get(i).getWorks_name();
+                String mImg= mDetailsBean.getWorks_list().get(i).getWorks_img();
                 Bundle bundle = new Bundle();
                 bundle.putString(StaticField.DTEAIL, "ZP");
                 bundle.putString(StaticField.DESIGNER_WORKS_SN, mWorks_sn);
                 bundle.putString(StaticField.DESIGNER_ZP_CATEGORY, mCategory);
+                bundle.putString("DesignerName", mName);
+                bundle.putString("DesignerImg", mImg);
+                MyLog.LogShitou("-------------2222222分享需要的名字+图片url",mName+"--"+mImg);
                 openActivityWitchAnimation(DesignerH5DetailActivity.class,bundle);// 跳转详情页
             }
         });
@@ -289,9 +308,14 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String mView_sn = mDetailsBean.getView_list().get(i).getView_sn();
+                String mName = mDetailsBean.getView_list().get(i).getView_title();
+                String mImg= mDetailsBean.getView_list().get(i).getView_image();
                 Bundle bundle = new Bundle();
                 bundle.putString(StaticField.DTEAIL, "FT");
                 bundle.putString(StaticField.DESIGNER_VIEW_SN, mView_sn);
+                bundle.putString("DesignerName", mName);
+                bundle.putString("DesignerImg", mImg);
+                MyLog.LogShitou("-------------3333333分享需要的名字+图片url",mName+"--"+mImg);
                 openActivityWitchAnimation(DesignerH5DetailActivity.class,bundle);// 跳转详情页
             }
         });
@@ -342,11 +366,7 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.base_shared://分享按钮
-                Bundle bundle = new Bundle();
-                bundle.putString("SharedImage", mSharedImage);// 分享显示的图片
-                bundle.putString("Goods_name",mCHName);// 分享显示的名称
-                bundle.putString("Share_url",mShareUrl);// 分享后点击查看的url
-                openActivity(SharedActivity.class,bundle);
+                SharedDialog(); //分享弹出Dialog
                 break;
             case R.id.base_title_back://返回
                 finishWitchAnimation();
@@ -661,4 +681,82 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
             mViewList.setSelection(pos);
         }
     }
+
+    /**
+     * 分享弹出Dialog
+     */
+    private void SharedDialog(){
+        dialog = new SharedDialog(this);
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        dialog.show();
+        mWeiXin = (ImageView) dialog.findViewById(R.id.weixin);
+        mPengYouQuan = (ImageView) dialog.findViewById(R.id.pengyouquan);
+        // 取消
+        tv_cancel = (TextView) dialog.findViewById(R.id.shared_cancel);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        // 微信
+        mWeiXin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN);
+                dialog.dismiss();
+            }
+        });
+        // 朋友圈
+        mPengYouQuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN_CIRCLE);
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    /**
+     * 调起微信分享的方法
+     * @param share_media // 分享类型
+     */
+    private void SharedDes(SHARE_MEDIA share_media ){
+        UMImage image = new UMImage(this.getApplicationContext(), mSharedImage);
+        ShareAction shareAction = new ShareAction(this);
+        shareAction.withText("微信分享"); // 显示的内容
+        shareAction.withMedia(image);// 显示图片的url
+        shareAction.withTitle(mCHName);// 标题
+        shareAction.withTargetUrl(mShareUrl); // 分享后点击查看的地址url
+        shareAction.setPlatform(share_media); // 分享类型
+        shareAction.setCallback(this);// 回调监听
+        shareAction.share();
+    }
+
+
+    /**
+     * 友盟微信分享回调 (成功，失败，取消)
+     * @param share_media 分享类型
+     */
+    @Override
+    public void onResult(SHARE_MEDIA share_media) {
+        Toast.makeText(DesignerDetailActivity.this, "已分享", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享11", "" + share_media);
+    }
+
+    @Override
+    public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+//        Toast.makeText(DesignerDetailActivity.this, " 分享失败" , Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享22", share_media + "----" + throwable.getMessage());
+
+    }
+
+    @Override
+    public void onCancel(SHARE_MEDIA share_media) {
+//        Toast.makeText(DesignerDetailActivity.this, " 分享取消了", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享33", share_media + "");
+    }
+
 }

@@ -19,6 +19,9 @@ import com.lidroid.xutils.BitmapUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
@@ -53,9 +56,18 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     private ProgressDialog prodialog;
     private TextView Title, title;
     private Button dialog_button_cancel, dialog_button_ok;
+    private ArrayList<ShopNameBean.SellerBean> mGoodsList;
+    private int temp;
+
+    private HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet;
+    private Set<ShopNameBean.GoodsBean> childSet;//相当于一个Map结合被
+
     private ArrayList<AddShopCartBean> info_list;
     private String mToken, mUser_id;
     private boolean isChildSelected;
+    private String goods_sn;
+    private String goods_count;
+    private boolean isChild;
 
     public ExpandableAdapter(Context context, BitmapUtils bitmap, ShopNameBean shopNameBean
             , LinearLayout layout, TextView tv1, TextView tv2) {
@@ -70,6 +82,11 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         SharedPreferences sp = context.getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         mToken = sp.getString("token", "");
         mUser_id = sp.getString("userId", "");
+
+        //子控件的存放集合
+        childSet = new HashSet<>();
+        //父控件的存放集合
+        groupSet = new HashMap<>();
     }
 
     /**
@@ -148,7 +165,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         ShoppingCartBiz.checkItem(sellerBean.isGroupSelected(), groupHolder.selected);
 
         //记录选择的位置(设置标记),设置父View选中的标记
-        groupHolder.selected.setTag(i + "," + mName + "," + mTypes);
+        groupHolder.selected.setTag(i);
         //父控件的圆圈
         groupHolder.selected.setOnClickListener(listener);
 
@@ -209,7 +226,8 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         itemHolder.mNum.setText(goodsBean.getGoods_count());
         //子View的checkBox
         String mGoods_sn = goodsBean.getGoods_sn();// 商品编号
-        itemHolder.child_selected.setTag(i + "," + i1 + "," + mGoods_sn + "," + Goods_count);
+        itemHolder.child_selected.setTag(i + "," + i1);
+
         //子View的点击事件
         itemHolder.child_selected.setOnClickListener(listener);
 
@@ -253,10 +271,15 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 //        public TextView mName, mAdd, mSub, mPrice, mNum;//名字,增加,减少,价格
 //    }
 
+
+    private Integer key;
+    private Set<ShopNameBean.GoodsBean> value;
+
     //内部的监听
     View.OnClickListener listener = new View.OnClickListener() {
 
-        private int group;
+        private String sn;
+        private String[] array;
 
         @Override
         public void onClick(View v) {
@@ -264,16 +287,15 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
             switch (v.getId()) {
                 case R.id.image_selected://父控件的选择按钮
                     //获取当前点击View的标识,并强转成数字标识
-//                    int groupPosition = Integer.parseInt(String.valueOf(v.getTag()));
-                    String mGourp = String.valueOf(v.getTag());
-                    MyLog.LogShitou("父控件1", mGourp);
-                    if (mGourp.contains(",")) {
-                        String s[] = mGourp.split(",");
-                        //父View的角标和子View的角标
-                        group = Integer.parseInt(s[0]);
-                        String name = s[1];
-                        String mTypes = s[2];
-                        MyLog.LogShitou("父控件2", group + "--" + name + "--" + mTypes);
+                    int groupPosition = Integer.parseInt(String.valueOf(v.getTag()));
+//                    String mGourp = String.valueOf(v.getTag());
+//                    MyLog.LogShitou("父控件1", groupPosition);
+//                    if (mGourp.contains(",")) {
+//                        String s[] = mGourp.split(",");
+                    //父View的角标和子View的角标
+//                        group = Integer.parseInt(s[0]);
+//                        String name = s[1];
+//                        String mTypes = s[2];
 
 //                        AddShopCartBean mAddShopCartBean = new AddShopCartBean();
 //                        mAddShopCartBean.setGoods_count(goods_count);
@@ -282,14 +304,40 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 //                        info_list.add(mAddShopCartBean); // 添加到list
 //                        MyLog.LogShitou("添加的list数据",info_list.toString());
 
-
-                    }
+//                    }
 
                     //变更数据的显示,内部有取反的操作
-                    isSelectAll = ShoppingCartBiz.selectGroup(seller_list, group);
+                    isSelectAll = ShoppingCartBiz.selectGroup(seller_list, groupPosition);
+
+                    //子控件的存放集合
+                    childSet = new HashSet<>();
+
+                    //这里获取的是选择父控件的内容,如果为真的话应该把数据存起来，否则的话应该把数据删除
+                    ShopNameBean.SellerBean sellerBean = shopNameBean.getSeller_list().get(groupPosition);
+                    if (sellerBean.isGroupSelected) {//如果为真的情况下是选中
+                        String seller_name = sellerBean.getSeller_name();
+                        String seller_type = sellerBean.getSeller_type();
+                        MyLog.LogShitou("父控件内容", groupPosition + "--" + seller_name + "--" + seller_type);
+
+                        //选中的所有子空间
+                        ArrayList<ShopNameBean.GoodsBean> goods_list = sellerBean.getGoods_list();
+
+                        //这里遍历所有子控件并且把所有内容都存起来
+                        for (int i = 0; i < goods_list.size(); i++) {
+                            ShopNameBean.GoodsBean goodsBean = goods_list.get(i);
+                            childSet.add(goodsBean);
+                        }
+                        groupSet.put(groupPosition, childSet);
+
+                    } else {
+                        groupSet.remove(groupPosition);
+                    }
+                    //这个是全选回调
                     selectAll();
                     setSettleInfo();
                     notifyDataSetChanged();
+
+                    MyLog.LogShitou("父控件添加的数据", groupSet.toString());
                     break;
 
                 case R.id.tv_add://增加的监听
@@ -314,26 +362,89 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                         //父View的角标和子View的角标
                         int group = Integer.parseInt(s[0]);
                         int child = Integer.parseInt(s[1]);
-                        String goods_sn = s[2];
-                        String goods_count = s[3];
-                        MyLog.LogShitou("子控件2", group + "--" + child + "--" + goods_sn + "--" + goods_count);
-//                        MyLog.LogShitou("这是啥值", isChildSelected+"");
-                        AddShopCartBean mAddShopCartBean = new AddShopCartBean();
-                        mAddShopCartBean.setGoods_count(goods_count);
-                        mAddShopCartBean.setGoods_sn(goods_sn);
-
-                        info_list.add(mAddShopCartBean); // 添加到list
-                        MyLog.LogShitou("添加的list数据", info_list.toString());
-
 
                         isSelectAll = ShoppingCartBiz.selectOne(seller_list, group, child);
-                        selectAll();
-                        setSettleInfo();
-                        notifyDataSetChanged();
+                        //这里获取的是选择父控件的内容,如果为真的话应该把数据存起来，否则的话应该把数据删除
+                        ShopNameBean.GoodsBean goodsBean = shopNameBean.getSeller_list().get(group).getGoods_list().get(child);
+
+                        String name = shopNameBean.getSeller_list().get(group).getSeller_name();
+                        String type = shopNameBean.getSeller_list().get(group).getSeller_type();
+
+                        ArrayList<String> arrayList = new ArrayList<>();
+                        arrayList.add(name);
+                        arrayList.add(type);
+
+                        MyLog.LogShitou("选中子控件的父控件的name+type", name + "--" + type);
+
+                        MyLog.LogShitou(goodsBean.isChildSelected + "");
+                        //取出集合
+                        Set<ShopNameBean.GoodsBean> goodsBeen = groupSet.get(group);
+                        AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+                        if (goodsBean.isChildSelected) {
+                            if (goodsBeen == null) {
+                                goodsBeen = new HashSet<>();
+                            }
+                            goodsBeen.add(goodsBean);
+//                            MyLog.LogShitou("-----子控件单个添加的数据", goodsBeen.toString());
+                            groupSet.put(group, goodsBeen);
+                            MyLog.LogShitou("子控件总共添加的数据", groupSet + "");
+
+
+                            for (HashMap.Entry<Integer, Set<ShopNameBean.GoodsBean>> entry : groupSet.entrySet()) {
+                                key = entry.getKey();
+                                value = entry.getValue();
+
+                                for (int i = 0; i < value.size(); i++) {
+                                    Iterator<ShopNameBean.GoodsBean> iterator = value.iterator();
+                                    ShopNameBean.GoodsBean next = iterator.next();
+                                    goods_sn = next.getGoods_sn();
+                                    goods_count = next.getGoods_count();
+                                    isChild = next.isChildSelected();
+//                                    MyLog.LogShitou("-----子选中的编号+数量", price + "--" + goods_count);
+                                }
+                            }
+
+                            mAddShopCartBean.setGoods_count(goods_count);
+                            mAddShopCartBean.setGoods_sn(goods_sn);
+                            info_list.add(mAddShopCartBean); // 添加到list
+                            MyLog.LogShitou("添加的list数据", info_list.toString());
+
+//                            MyLog.LogShitou("循环出的key", key.toString());
+//                            MyLog.LogShitou("循环出的values", value.toString());
+
+                        } else {
+
+                            goodsBeen.remove(goodsBean);
+                            MyLog.LogShitou("-----子控件反选的数据goodsBeen", goodsBeen.toString());
+
+                            info_list.remove(mAddShopCartBean); // 删除
+
+                            MyLog.LogShitou("-----子反选的数据后info_list", info_list.toString());
+                            groupSet.put(group, goodsBeen);
+                            MyLog.LogShitou("子反选后总添加的数据groupSet", groupSet.toString());
+                        }
                     }
+
+                    selectAll();
+                    setSettleInfo();
+                    notifyDataSetChanged();
+
+
+                    MyLog.e("***************" + temp + "*****************child" + groupSet.toString());
                     break;
                 case R.id.shop_all://全选按钮
                     isSelectAll = ShoppingCartBiz.selectAll(seller_list, isSelectAll, (ImageView) v);
+                    MyLog.LogShitou("全选是否选中", isSelectAll + "");
+
+                    mGoodsList = shopNameBean.getSeller_list(); // list数据
+                    MyLog.LogShitou("全选的数据11", mGoodsList.toString());
+
+                    if (!isSelectAll) {
+                        mGoodsList.remove(shopNameBean);
+                    }
+                    MyLog.LogShitou("全选的数据22", mGoodsList.toString());
+
+                    String mTotalAount = shopNameBean.getGoods_total_amount();// 总价
                     setSettleInfo();
                     notifyDataSetChanged();
                     break;
@@ -359,10 +470,24 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                     break;
                 case R.id.Shop_pay://去结算
 
-                    Intent intent = new Intent(context, FirmOrderActivity.class);
-                    intent.putExtra("ShopGoodsJson", info_list.toString());
-                    context.startActivity(intent);
-                    ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+//                    Intent intent = new Intent(context, FirmOrderActivity.class);
+                    //这里只要是把集合遍历一下传过去就行了
+//                    MyApplication.setGroupSet(groupSet);
+//                    MyLog.LogShitou("那到值了吗", "" + groupSet);
+//                    context.startActivity(intent);
+//                    ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anm.slide_left_out);
+                    if (groupSet.size()!=0){
+                        Intent intent = new Intent(context, FirmOrderActivity.class);
+                        intent.putExtra("ShopGoodsJson", info_list.toString());
+                        intent.putExtra("GroupSet", groupSet.toString());
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                    }else{
+                        MyToast.showShort(context,"你还未选择要结算的商品");
+                    }
+
+
+
 
                     break;
 
@@ -426,7 +551,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         dialog_button_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UpDataShopCart(info_list.toString(), StaticField.SC); // 修改购物车网络请求
+//                UpDataShopCart(info_list.toString(), StaticField.SC); // 修改购物车网络请求
                 prodialog.dismiss();
             }
         });

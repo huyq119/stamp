@@ -7,15 +7,22 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -32,6 +39,7 @@ import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.AddShopCartBean;
 import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.StampDetailBean;
+import cn.com.chinau.dialog.SharedDialog;
 import cn.com.chinau.fragment.stampfragment.StampInfoFragment;
 import cn.com.chinau.fragment.stampfragment.StampPracticeFragment;
 import cn.com.chinau.http.HttpUtils;
@@ -47,7 +55,7 @@ import cn.com.chinau.view.VerticalScrollView;
 /**
  * 邮市详情页
  */
-public class StampDetailActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener {
+public class StampDetailActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener,UMShareListener {
 
 
     private View mStampDetailTitle, mStampDetailContent;
@@ -57,9 +65,10 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private CirclePageIndicator mTopVPI;
     private String[] small_images, big_images; // viewPager小图，大图
     private ImageView mBack, mShared, mCollect;// 返回，分享，收藏
-    private TextView mTitle, mSellerNo, mGoodsName, mCurrentPrice, mFreight, mSaleCount, mFeeRate, mFee,
-            mGoodsSource, mSellerName, mGoodsStatus, mShoppingCart, mShoppingCount, mAddShoppingCart, mBuyNow;// 标题，商家账号，加入购物车，立即购买
     private Button mTopBtn;
+    // 标题，商家账号，加入购物车，立即购买
+    private TextView mTitle, mSellerNo, mGoodsName, mCurrentPrice, mFreight, mSaleCount, mFeeRate, mFee,
+    mGoodsSource, mSellerName, mGoodsStatus, mShoppingCart, mShoppingCount, mAddShoppingCart, mBuyNow,tv_cancel;
     private VerticalScrollView home_SV;
     private View contentView;
     private int lastY = 0;
@@ -71,11 +80,11 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private String mSharedImage;
     private String mGoods_name;
     private String mShare_url;
+    private CustomViewPager mViewPager;
+    private LinearLayout mShoppingLl;
+    private SharedPreferences sp;
+    private SharedDialog dialog;
     private Handler mHandler = new Handler() {
-
-
-
-
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -216,9 +225,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
             }
         }
     };
-    private CustomViewPager mViewPager;
-    private LinearLayout mShoppingLl;
-    private SharedPreferences sp;
+    private ImageView mWeiXin,mPengYouQuan;
 
 
     @Override
@@ -337,11 +344,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 finishWitchAnimation();
                 break;
             case R.id.base_shared:// 分享
-                Bundle bundle = new Bundle();
-                bundle.putString("SharedImage",mSharedImage);// 分享显示的图片
-                bundle.putString("Goods_name",mGoods_name);// 分享显示的名称
-                bundle.putString("Share_url",mShare_url);// 分享后点击查看的url
-                openActivity(SharedActivity.class,bundle);
+                SharedDialog(); // 分享弹出Dialog
                 break;
             case R.id.stamp_details_collect:// 收藏
                 if (mToken.equals("") || mUser_id.equals("")) {
@@ -555,5 +558,82 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
             mTopBtn.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    /**
+     * 分享弹出Dialog
+     */
+    private void SharedDialog(){
+        dialog = new SharedDialog(this);
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        dialog.show();
+        mWeiXin = (ImageView) dialog.findViewById(R.id.weixin);
+        mPengYouQuan = (ImageView) dialog.findViewById(R.id.pengyouquan);
+        // 取消
+        tv_cancel = (TextView) dialog.findViewById(R.id.shared_cancel);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        // 微信
+        mWeiXin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN);
+                dialog.dismiss();
+            }
+        });
+        // 朋友圈
+        mPengYouQuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN_CIRCLE);
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    /**
+     * 调起微信分享的方法
+     * @param share_media // 分享类型
+     */
+    private void SharedDes(SHARE_MEDIA share_media ){
+        UMImage  image = new UMImage(this.getApplicationContext(), mSharedImage);
+        ShareAction shareAction = new ShareAction(this);
+        shareAction.withText("微信分享"); // 显示的内容
+        shareAction.withMedia(image);// 显示图片的url
+        shareAction.withTitle(mGoods_name);// 标题
+        shareAction.withTargetUrl(mShare_url); // 分享后点击查看的地址url
+        shareAction.setPlatform(share_media); // 分享类型
+        shareAction.setCallback(this);// 回调监听
+        shareAction.share();
+    }
+
+
+    /**
+     * 友盟微信分享回调 (成功，失败，取消)
+     * @param share_media 分享类型
+     */
+    @Override
+    public void onResult(SHARE_MEDIA share_media) {
+        Toast.makeText(StampDetailActivity.this, "已分享", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享11", "" + share_media);
+    }
+
+    @Override
+    public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+//        Toast.makeText(StampDetailActivity.this, " 分享失败" , Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享22", share_media + "----" + throwable.getMessage());
+
+    }
+
+    @Override
+    public void onCancel(SHARE_MEDIA share_media) {
+//        Toast.makeText(StampDetailActivity.this, " 分享取消了", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享33", share_media + "");
     }
 }

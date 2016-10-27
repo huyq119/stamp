@@ -78,6 +78,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private String payNmae;
     private IWXAPI api;
     private String address_id;
+    private String mGroupSet;
 
     @Override
     public View CreateTitle() {
@@ -102,6 +103,9 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         MyLog.LogShitou("时间毫秒级+4位随机数", date + count);
         Intent intent = getIntent();
         mShopGoodsJson = intent.getStringExtra("ShopGoodsJson");//商品Json串
+        mGroupSet = intent.getStringExtra("GroupSet");//商品数据
+        MyLog.LogShitou("GroupSet传过来的商品数据",mGroupSet);
+
 
         sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         mToken = sp.getString("token", "");

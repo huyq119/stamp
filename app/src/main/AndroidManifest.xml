@@ -61,23 +61,26 @@
         <activity
             android:name="cn.com.chinau.activity.StampTapDetailActivity"
             android:theme="@style/Theme.PageIndicatorDefaults" />
-        <!-- 分享弹出页面 -->
-        <activity
-            android:name="cn.com.chinau.activity.SharedActivity"
-            android:theme="@style/MyDialogStyleBottom" />
+        <!-- 分享弹出页面 --><![CDATA[
         />
+        ]]>
         <activity android:name="cn.com.chinau.activity.StampActivity" />
 
         <!-- 商城 -->
         <activity android:name="cn.com.chinau.activity.SelfMallActivity" />
         <!--商城详情-->
         <activity android:name="cn.com.chinau.activity.SelfMallDetailActivity" />
+        <!--邮市详情-->
         <activity
             android:name="cn.com.chinau.activity.StampDetailActivity"
-            android:theme="@style/Theme.PageIndicatorDefaults" />
+
+            android:theme="@style/Theme.PageIndicatorDefaults" >
+
+        </activity>
 
         <activity android:name="cn.com.chinau.activity.AuctionActivity" />
         <activity android:name="cn.com.chinau.activity.ScanActivity" />
+       <!--竞拍详情-->
         <activity
             android:name="cn.com.chinau.activity.AuctionDetailActivity"
             android:theme="@style/Theme.PageIndicatorDefaults" />
@@ -122,6 +125,8 @@
         <activity android:name="cn.com.chinau.activity.EditReceiptAddressActivity"></activity>
         <activity android:name="cn.com.chinau.activity.AuctionRecordActivity"></activity>
         <activity android:name="cn.com.chinau.activity.MyCollectionActivity"></activity>
+
+        <!--设计家详情-->
         <activity
             android:name="cn.com.chinau.activity.DesignerDetailActivity"
             android:theme="@style/Theme.PageIndicatorDefaults"></activity>

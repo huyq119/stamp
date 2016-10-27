@@ -170,9 +170,9 @@ public class ShoppingCartBiz {
     public static String[] getShoppingCount(List<ShopNameBean.SellerBean> listGoods) {
         String[] info = new String[2];
         int selectedCount = 0;
-        int selectedMoney = 0;
+        double selectedMoney = 0;
         for (int i = 0; i < listGoods.size(); i++) {
-            int childMoney = 0;
+            double childMoney = 0;
             int childCount = 0;
             for (int j = 0; j < listGoods.get(i).getGoods_list().size(); j++) {
                 boolean isSelected = listGoods.get(i).getGoods_list().get(j).isChildSelected();

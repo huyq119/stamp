@@ -5,15 +5,21 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +30,7 @@ import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.MyStampViewPagerAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.MyStampGridViewBean;
+import cn.com.chinau.dialog.SharedDialog;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
@@ -33,15 +40,15 @@ import cn.com.chinau.utils.ThreadManager;
 /**
  * 我的邮集页面
  */
-public class MyStampActivity extends BaseActivity implements View.OnClickListener {
+public class MyStampActivity extends BaseActivity implements View.OnClickListener, UMShareListener {
 
     private View mMyStampTitle, mMyStampContent;
-    private ImageView mBack, mMore;
+    private ImageView mBack, mMore,mWeiXin,mPengYouQuan;
     private GridView mStampGV;
     private ArrayList<MyStampGridViewBean.StampList> mList;
     private View MorePopView;
     private PopupWindow mMorePop;
-    private TextView mEdit, mShared;// 编辑，分享
+    private TextView mEdit, mShared,tv_cancel;// 编辑，分享
     //这个标记是编辑状态下的标记
     private boolean flag;
 
@@ -55,8 +62,10 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     private int pageCount;//总共的页数
     private LayoutInflater layoutInflater;
     private SharedPreferences sp;
-    private String mToken,mUser_id,result;
+    private String mToken, mUser_id, result;
     private int num = 0;//初始索引
+    private SharedDialog dialog;
+    private String mShare_url;
     private Handler mHandler = new Handler() {
 
         private String mTotal;
@@ -69,13 +78,15 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                     Gson gson = new Gson();
                     MyStampGridViewBean mOrderSweepBean = gson.fromJson(msge, MyStampGridViewBean.class);
                     String mRsp_code = mOrderSweepBean.getRsp_code();
+                    mShare_url = mOrderSweepBean.getShare_url();// 分享地址url
                     if (mRsp_code.equals("0000")) {
                         mList = mOrderSweepBean.getStamp_list();
                         MyLog.LogShitou("我的邮集有几条-->:", mList.size() + "");
                         if (mList != null && mList.size() != 0) {
+
                             // 总价值
                             mTotal = mOrderSweepBean.getTotal_amount();
-                            mContentTotal.setText("￥"+mTotal);
+                            mContentTotal.setText("￥" + mTotal);
                             //初始化GridView的集合
                             mViewPagerList = new ArrayList<>();
                             //获取Activity的LayoutInflater
@@ -118,7 +129,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     @Override
     public View CreateSuccess() {
         mMyStampContent = View.inflate(this, R.layout.activity_mystamp_content, null);
-        sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
+        sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         initView();
         initData();
 //        initAdapter();
@@ -176,13 +187,12 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
 //        }
 
 
-
     }
 
     private void initAdapter() {
 
         //设置翻页效果
-                myStampViewPager.setPageTransformer(true, new ViewPager.PageTransformer() {
+        myStampViewPager.setPageTransformer(true, new ViewPager.PageTransformer() {
             @Override
             public void transformPage(View page, float position) {
                 if (position <= 0) {
@@ -249,7 +259,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
         mShared.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivity(SharedActivity.class);
+                SharedDialog(); // 分享弹出Dialog
                 mMorePop.dismiss();
             }
         });
@@ -283,9 +293,10 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
 
     /**
      * 我的邮集列表网络请求
+     *
      * @param num 初始化索引
      */
-    private void GetInitNet(final int num){
+    private void GetInitNet(final int num) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -318,7 +329,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     /**
      * 修改邮集网络请求
      */
-    private void UpDateGetInitNet(final String stamp_count,final String op_type){
+    private void UpDateGetInitNet(final String stamp_count, final String op_type) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -350,5 +361,86 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
             }
         });
     }
+
+    /**
+     * 分享弹出Dialog
+     */
+
+    private void SharedDialog() {
+        dialog = new SharedDialog(this);
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        dialog.show();
+        mWeiXin = (ImageView) dialog.findViewById(R.id.weixin);
+        mPengYouQuan = (ImageView) dialog.findViewById(R.id.pengyouquan);
+        // 取消
+        tv_cancel = (TextView) dialog.findViewById(R.id.shared_cancel);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        // 微信
+        mWeiXin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN);
+                dialog.dismiss();
+            }
+        });
+        // 朋友圈
+        mPengYouQuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN_CIRCLE);
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    /**
+     * 调起微信分享的方法
+     *
+     * @param share_media // 分享类型
+     */
+    private void SharedDes(SHARE_MEDIA share_media) {
+//        UMImage image = new UMImage(this.getApplicationContext(), mSharedImage);
+        ShareAction shareAction = new ShareAction(this);
+        shareAction.withText("微信分享"); // 显示的内容
+//        shareAction.withMedia(image);// 显示图片的url
+        shareAction.withTitle("我的邮集");// 标题
+        shareAction.withTargetUrl(mShare_url); // 分享后点击查看的地址url
+        shareAction.setPlatform(share_media); // 分享类型
+        shareAction.setCallback(this);// 回调监听
+        shareAction.share();
+    }
+
+
+    /**
+     * 友盟微信分享回调 (成功，失败，取消)
+     *
+     * @param share_media 分享类型
+     */
+    @Override
+    public void onResult(SHARE_MEDIA share_media) {
+        Toast.makeText(MyStampActivity.this, "已分享", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享11", "" + share_media);
+    }
+
+    @Override
+    public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+//        Toast.makeText(MyStampActivity.this, " 分享失败" , Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享22", share_media + "----" + throwable.getMessage());
+
+    }
+
+    @Override
+    public void onCancel(SHARE_MEDIA share_media) {
+//        Toast.makeText(MyStampActivity.this, " 分享取消了", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享33", share_media + "");
+    }
+
 
 }

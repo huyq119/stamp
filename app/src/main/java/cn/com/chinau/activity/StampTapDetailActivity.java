@@ -7,15 +7,22 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -31,6 +38,7 @@ import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.StampTapDetailBean;
 import cn.com.chinau.dialog.AddStampDialog;
+import cn.com.chinau.dialog.SharedDialog;
 import cn.com.chinau.fragment.stampfragment.StampInfoFragment;
 import cn.com.chinau.fragment.stampfragment.StampPracticeFragment;
 import cn.com.chinau.fragment.stampfragment.StampPriceFragment;
@@ -47,12 +55,12 @@ import cn.com.chinau.view.VerticalScrollView;
  * 邮票目录详情页
  */
 public class StampTapDetailActivity extends BaseActivity implements View.OnClickListener,
-        View.OnTouchListener, ViewPager.OnPageChangeListener {
+        View.OnTouchListener, ViewPager.OnPageChangeListener,UMShareListener{
 
     private View mStampTapDetailContent;//内容页面
     private View mStampTapDetailTitle;//标题页面
     private ImageView mShared;//分享按钮
-    private ImageView mBack;//返回
+    private ImageView mBack,mWeiXin,mPengYouQuan;//返回
     private CustomViewPager mViewPager;
     private TabPageIndicator mIndicator;
     private ViewPager mTopVP;
@@ -65,7 +73,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     private StampInfoFragment stampInfoFragment;
     private StampPracticeFragment stampPracticeFragment;
     //    private StampTapDetailBean stampTapDetailBean;
-    private TextView mPrice, mAddAlbum, mTitle, mAddStampCount;
+    private TextView mPrice, mAddAlbum, mTitle, mAddStampCount,tv_cancel;
     private Button mTopBtn;
     private VerticalScrollView home_SV;
     private View contentView;
@@ -132,6 +140,8 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
             }
         }
     };
+    private SharedDialog dialog;
+    private UMImage image;
 
 
     @Override
@@ -343,20 +353,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.base_shared://分享按钮
-                Bundle bundle = new Bundle();
-                bundle.putString("Share_url", mShare_url); //  分享后点击查看的url
-                if (count == 1) {
-                    bundle.putString("Goods_name", name[1]); // 分享显示的名称
-                    bundle.putString("SharedImage", small_images[1]); // 分享显示的图片
-                } else if (count == 2) {
-                    bundle.putString("Goods_name", name[2]);
-                    bundle.putString("SharedImage", small_images[2]);
-                } else {
-                    bundle.putString("Goods_name", name[0]);
-                    bundle.putString("SharedImage", small_images[0]);
-
-                }
-                openActivity(SharedActivity.class, bundle);
+               SharedDialog(); //分享弹出Dialog
                 break;
             case R.id.base_title_back://返回
                 finishWitchAnimation();
@@ -453,5 +450,94 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    /**
+     * 分享弹出Dialog
+     */
+    private void SharedDialog(){
+        dialog = new SharedDialog(this);
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        dialog.show();
+        mWeiXin = (ImageView) dialog.findViewById(R.id.weixin);
+        mPengYouQuan = (ImageView) dialog.findViewById(R.id.pengyouquan);
+        // 取消
+        tv_cancel = (TextView) dialog.findViewById(R.id.shared_cancel);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        // 微信
+        mWeiXin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN);
+               dialog.dismiss();
+            }
+        });
+        // 朋友圈
+        mPengYouQuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN_CIRCLE);
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    /**
+     * 调起微信分享的方法
+     * @param share_media // 分享类型
+     */
+    private void SharedDes(SHARE_MEDIA share_media ){
+
+        ShareAction shareAction = new ShareAction(this);
+        shareAction.withText("微信分享"); // 显示的内容
+        if (count == 1) {
+            image = new UMImage(this.getApplicationContext(),  small_images[1]);
+            shareAction.withMedia(image);// 显示图片的url
+            shareAction.withTitle(name[1]);// 标题
+        } else if (count == 2) {
+            image = new UMImage(this.getApplicationContext(),  small_images[2]);
+            shareAction.withMedia(image);// 显示图片的url
+            shareAction.withTitle(name[2]);// 标题
+        } else {
+            image = new UMImage(this.getApplicationContext(),  small_images[0]);
+            shareAction.withMedia(image);// 显示图片的url
+            shareAction.withTitle(name[0]);// 标题
+        }
+
+        shareAction.withTargetUrl(mShare_url); // 分享后点击查看的地址url
+        shareAction.setPlatform(share_media); // 分享类型
+        shareAction.setCallback(this);// 回调监听
+        shareAction.share();
+    }
+
+
+    /**
+     * 友盟微信分享回调 (成功，失败，取消)
+     * @param share_media 分享类型
+     */
+    @Override
+    public void onResult(SHARE_MEDIA share_media) {
+        Toast.makeText(StampTapDetailActivity.this, "已分享", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享11", "" + share_media);
+    }
+
+    @Override
+    public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+//        Toast.makeText(StampTapDetailActivity.this, " 分享失败" , Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享22", share_media + "----" + throwable.getMessage());
+
+    }
+
+    @Override
+    public void onCancel(SHARE_MEDIA share_media) {
+//        Toast.makeText(StampTapDetailActivity.this, " 分享取消了", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享33", share_media + "");
     }
 }

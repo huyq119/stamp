@@ -31,7 +31,7 @@ public class ProgressDialog extends Dialog{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dialog_progress);
 
-		this.setCanceledOnTouchOutside(false);
+		this.setCanceledOnTouchOutside(false);// 点击外部关闭
 	}
 
 }

@@ -23,7 +23,6 @@ import cn.com.chinau.StaticField;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.ScanBean;
-import cn.com.chinau.dialog.SendProgressDialog;
 import cn.com.chinau.dialog.SussessDialog;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
@@ -52,7 +51,6 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
             mBackPrice;
     private EditText mBuyPhone;
     private SharedPreferences sp;
-    private SendProgressDialog pd;
     private String mGoodsSn,mDetailSn,mToken,mUserId,mPhone;
     private SussessDialog dialog;
     private String result;

@@ -7,13 +7,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.HashMap;
@@ -26,6 +33,7 @@ import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.AddShopCartBean;
 import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.StampDetailBean;
+import cn.com.chinau.dialog.SharedDialog;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
@@ -36,14 +44,14 @@ import cn.com.chinau.utils.ThreadManager;
 /**
  * 商城详情页
  */
-public class SelfMallDetailActivity extends BaseActivity implements View.OnClickListener {
+public class SelfMallDetailActivity extends BaseActivity implements View.OnClickListener ,UMShareListener{
 
     private View mSelfMallDetailTitle;
     private View mSelfMallDetailContent;
     private TextView mTitle, mGoodsName, mCurrentPrice, mMarketPrice, mFreight, mSaleCount, mGoodsSource,
-            mGoodsStatus, mAddShopping, mGoBuy, mShoppingCount;
+            mGoodsStatus, mAddShopping, mGoBuy, mShoppingCount,tv_cancel;
 
-    private ImageView mBack, mShared, mCollection, mShopping;
+    private ImageView mBack, mShared, mCollection, mShopping,mWeiXin,mPengYouQuan;
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
     private String mGoods_sn, mGoodsDetai, mToken, mUser_id, mIsFavorite;
@@ -175,6 +183,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
     };
     private SharedPreferences sp;
     private String mGoods_name;
+    private SharedDialog dialog;
 
 
     @Override
@@ -259,11 +268,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                 finishWitchAnimation();
                 break;
             case R.id.base_shared://分享按钮
-                Bundle bundle = new Bundle();
-                bundle.putString("SharedImage", mSharedImage); // 分享显示的图片
-                bundle.putString("Goods_name",mGoods_name); // 分享显示的名称
-                bundle.putString("Share_url", mShare_url); // 分享后点击查看的url
-                openActivity(SharedActivity.class,bundle);
+            SharedDialog(); // 分享弹出Dialog
                 break;
             case R.id.mall_detail_collection://收藏
 
@@ -428,6 +433,83 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
 
             }
         });
+    }
+
+    /**
+     * 分享弹出Dialog
+     */
+    private void SharedDialog(){
+        dialog = new SharedDialog(this);
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        dialog.show();
+        mWeiXin = (ImageView) dialog.findViewById(R.id.weixin);
+        mPengYouQuan = (ImageView) dialog.findViewById(R.id.pengyouquan);
+        // 取消
+        tv_cancel = (TextView) dialog.findViewById(R.id.shared_cancel);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        // 微信
+        mWeiXin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN);
+                dialog.dismiss();
+            }
+        });
+        // 朋友圈
+        mPengYouQuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN_CIRCLE);
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    /**
+     * 调起微信分享的方法
+     * @param share_media // 分享类型
+     */
+    private void SharedDes(SHARE_MEDIA share_media ){
+        UMImage image = new UMImage(this.getApplicationContext(), mSharedImage);
+        ShareAction shareAction = new ShareAction(this);
+        shareAction.withText("微信分享"); // 显示的内容
+        shareAction.withMedia(image);// 显示图片的url
+        shareAction.withTitle(mGoods_name);// 标题
+        shareAction.withTargetUrl(mShare_url); // 分享后点击查看的地址url
+        shareAction.setPlatform(share_media); // 分享类型
+        shareAction.setCallback(this);// 回调监听
+        shareAction.share();
+    }
+
+
+    /**
+     * 友盟微信分享回调 (成功，失败，取消)
+     * @param share_media 分享类型
+     */
+    @Override
+    public void onResult(SHARE_MEDIA share_media) {
+        Toast.makeText(SelfMallDetailActivity.this, "已分享", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享11", "" + share_media);
+    }
+
+    @Override
+    public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+//        Toast.makeText(SelfMallDetailActivity.this, " 分享失败" , Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享22", share_media + "----" + throwable.getMessage());
+
+    }
+
+    @Override
+    public void onCancel(SHARE_MEDIA share_media) {
+//        Toast.makeText(SelfMallDetailActivity.this, " 分享取消了", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享33", share_media + "");
     }
 
 }

@@ -3,12 +3,19 @@ package cn.com.chinau.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 
 import java.util.HashMap;
 
@@ -16,6 +23,7 @@ import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.DesignerDetailsH5Bean;
+import cn.com.chinau.dialog.SharedDialog;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
@@ -26,15 +34,16 @@ import cn.com.chinau.utils.ThreadManager;
  * Created by Administrator on 2016/8/19.
  * (设计故事,艺术作品，名家访谈)H5详情页面
  */
-public class DesignerH5DetailActivity extends BaseActivity implements View.OnClickListener {
+public class DesignerH5DetailActivity extends BaseActivity implements View.OnClickListener,UMShareListener {
 
     private View mStoryDetails;
     private View mStampTapDetailTitle;
     private ImageView mBack;
-    private ImageView mShared;
-    private TextView mTitle;
+    private ImageView mShared,mWeiXin,mPengYouQuan;
+    private TextView mTitle,tv_cancel;
     private WebView mWB;
-    private String mDetail, mStory_sn, mWorks_sn, mView_sn, mDetailH5, mCategory;
+    private SharedDialog dialog;
+    private String mDetail, mStory_sn, mWorks_sn, mView_sn, mDetailH5, mCategory,mShare_url,mDesignerName,mDesignerImg;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -42,10 +51,11 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
             switch (msg.what) {
                 case StaticField.SUCCESS://详情数据
                     Gson gson = new Gson();
-                    String mStr = (String) msg.obj;
-                    DesignerDetailsH5Bean mDetailsH5Bean = gson.fromJson(mStr, DesignerDetailsH5Bean.class);
+                    DesignerDetailsH5Bean mDetailsH5Bean = gson.fromJson((String) msg.obj, DesignerDetailsH5Bean.class);
+                    mShare_url = mDetailsH5Bean.getShare_url(); // 分享地址url
                     mDetailH5 = mDetailsH5Bean.getDetail(); // 获取H5url
                     initSetWebView(mDetailH5);// WEB页面赋值方法
+                    MyLog.LogShitou("----------分享地址url",mShare_url+"--"+mDetailH5);
                     break;
             }
         }
@@ -78,6 +88,12 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
         mCategory = bundle.getString(StaticField.DESIGNER_ZP_CATEGORY);// 类型
         mView_sn = bundle.getString(StaticField.DESIGNER_VIEW_SN);// 名家访谈编号
 
+        mDesignerName = bundle.getString("DesignerName");// 分享需要的名称
+        mDesignerImg = bundle.getString("DesignerImg");// 分享需要的图片
+
+        MyLog.LogShitou("-------------1111111111111111传过来的名字+图片url",mDesignerName+"--"+mDesignerImg);
+        mView_sn = bundle.getString(StaticField.DESIGNER_VIEW_SN);// 名家访谈编号
+
         mBack = (ImageView) mStampTapDetailTitle.findViewById(R.id.base_title_back);
         mShared = (ImageView) mStampTapDetailTitle.findViewById(R.id.base_shared);
         mTitle = (TextView) mStampTapDetailTitle.findViewById(R.id.base_title);
@@ -86,12 +102,15 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
             if (mDetail.equals("GS")) {
                 mTitle.setText("设计故事");
                 initData(mStory_sn, mDetail, null);
+                MyLog.LogShitou("-----------111","111111");
             } else if (mDetail.equals("ZP")) {
                 mTitle.setText("艺术作品");
                 initData(mWorks_sn, mDetail, mCategory);
+                MyLog.LogShitou("-----------222","2222222");
             } else if (mDetail.equals("FT")) {
                 mTitle.setText("名家访谈");
                 initData(mView_sn, mDetail, null);
+                MyLog.LogShitou("-----------3333","3333333");
             }
 
         }
@@ -118,7 +137,7 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
                 finishWitchAnimation();
                 break;
             case R.id.base_shared://分享按钮
-                openActivity(SharedActivity.class);
+               SharedDialog(); // 分享弹出Dialog
                 break;
         }
     }
@@ -145,7 +164,7 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
                 params.put(StaticField.SIGN, md5code);
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                if (result.equals("-1")) {
+                if (result.equals("-1") | result.equals("-2") ) {
                     return;
                 }
 
@@ -160,4 +179,84 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
 
 
     }
+
+    /**
+     * 分享弹出Dialog
+     */
+    private void SharedDialog(){
+        dialog = new SharedDialog(this);
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        dialog.show();
+        mWeiXin = (ImageView) dialog.findViewById(R.id.weixin);
+        mPengYouQuan = (ImageView) dialog.findViewById(R.id.pengyouquan);
+        // 取消
+        tv_cancel = (TextView) dialog.findViewById(R.id.shared_cancel);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        // 微信
+        mWeiXin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN);
+                dialog.dismiss();
+            }
+        });
+        // 朋友圈
+        mPengYouQuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedDes(SHARE_MEDIA.WEIXIN_CIRCLE);
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    /**
+     * 调起微信分享的方法
+     * @param share_media // 分享类型
+     */
+    private void SharedDes(SHARE_MEDIA share_media ){
+        MyLog.LogShitou("-----222222传过来的名字+图片url",mDesignerName+"--"+mDesignerImg);
+        UMImage image = new UMImage(this.getApplicationContext(), mDesignerImg);
+        ShareAction shareAction = new ShareAction(this);
+        shareAction.withText("微信分享"); // 显示的内容
+        shareAction.withMedia(image);// 显示图片的url
+        shareAction.withTitle("设计家作品");// 标题
+//        shareAction.withTargetUrl(mShare_url); // 分享后点击查看的地址url
+        shareAction.setPlatform(share_media); // 分享类型
+        shareAction.setCallback(this);// 回调监听
+        shareAction.share();
+    }
+
+
+    /**
+     * 友盟微信分享回调 (成功，失败，取消)
+     * @param share_media 分享类型
+     */
+    @Override
+    public void onResult(SHARE_MEDIA share_media) {
+        Toast.makeText(DesignerH5DetailActivity.this, "已分享", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享11", "" + share_media);
+    }
+
+    @Override
+    public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+//        Toast.makeText(DesignerH5DetailActivity.this, " 分享失败" , Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享22", share_media + "----" + throwable.getMessage());
+
+    }
+
+    @Override
+    public void onCancel(SHARE_MEDIA share_media) {
+//        Toast.makeText(DesignerH5DetailActivity.this, " 分享取消了", Toast.LENGTH_SHORT).show();
+        MyLog.LogShitou("platform分享33", share_media + "");
+    }
+
+
 }

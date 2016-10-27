@@ -193,5 +193,28 @@ public class ShopNameBean extends BaseBean {
                     ", isChildSelected=" + isChildSelected +
                     '}';
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            // 地址相等，则肯定是同一个对象
+            if (this == obj) {
+                return true;
+            }
+            // 类型不同，则肯定不是同一类对象
+            if (!(obj instanceof GoodsBean)) {
+                return false;
+            }
+            // 类型相同，向下转型
+            GoodsBean per = (GoodsBean) obj;
+            // 如果两个对象的姓名和性别相同，则是同一个人
+            if (this.goods_name.equals(per.goods_name) && this.goods_sn.equals(per.goods_sn))
+                return true;
+            return false;
+        }
+
+        // 覆写hashCode方法
+        public int hashCode(){
+            return this.goods_sn.hashCode();
+        }
     }
 }

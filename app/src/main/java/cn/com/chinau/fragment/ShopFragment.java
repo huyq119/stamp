@@ -143,7 +143,6 @@ public class ShopFragment extends BaseFragment {
         for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
             mContentListView.expandGroup(i);
         }
-
         //去掉自带按钮
         mContentListView.setGroupIndicator(null);
         /**
