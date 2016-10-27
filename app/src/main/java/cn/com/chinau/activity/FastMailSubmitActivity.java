@@ -58,9 +58,8 @@ public class FastMailSubmitActivity extends BaseActivity implements View.OnClick
                 finishWitchAnimation();
                 break;
             case R.id.commit_sumbit://查看订单按钮
-                openActivityWitchAnimation(OrderBuyBackActivity.class);
+                openActivityWitchAnimation(OrderBuyBackActivity.class);// 跳转扫码回购列表页面
                 finish();
-//                MyToast.showShort(this,"点击了查看订单");
                 break;
         }
     }

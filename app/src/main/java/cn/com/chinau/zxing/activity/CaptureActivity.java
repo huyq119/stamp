@@ -144,8 +144,9 @@ public class CaptureActivity extends Activity implements Callback, View.OnClickL
                 Intent intent = new Intent(CaptureActivity.this, ScanActivity.class);
                 startActivity(intent);
                 //跳转动画
-                finish();
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                finish();
+
             }
         }
     }
@@ -156,6 +157,7 @@ public class CaptureActivity extends Activity implements Callback, View.OnClickL
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+
         // CameraManager.init(getApplication());
         cameraManager = new CameraManager(getApplication());
 
@@ -257,7 +259,7 @@ public class CaptureActivity extends Activity implements Callback, View.OnClickL
 
         // 获取二维码的信息,并且把数据传到商品详情界面
 //         ShowDialog.showTextDialog(this, "扫码成功");
-        Intent intent = new Intent(this, ScanDetailsActivity.class);
+        Intent intent = new Intent(this, ScanDetailsActivity.class); // 跳转扫码详情页
         sp.edit().putString("result", rawResult.getText()).commit();
         startActivity(intent);
         finish();

@@ -2,7 +2,6 @@ package cn.com.chinau.activity;
 
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.os.Message;
 import android.text.Editable;
 import android.text.InputType;
@@ -78,15 +77,12 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SUCCESS:// 成功
-                    // 跳转
-//                    startActivity(new Intent(FastMailInfoActivity.this, FastMailSubmitActivity.class));
-
                     String Result = (String) msg.obj;
                     try {
                         JSONObject json = new JSONObject(Result);
                         String order_sn = json.getString("order_sn");
                         sp.edit().putString("order_sn",order_sn).commit();
-                        openActivityWitchAnimation(FastMailSubmitActivity.class);
+                        openActivityWitchAnimation(FastMailSubmitActivity.class);// 跳转快递提交成功页面
                         finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -100,7 +96,6 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
                     try {
                         JSONObject json = new JSONObject(str);
                         String rsg_msg = json.getString("rsg_msg");
-//                        String order_sn = json.getString("order_sn");
                         dialog.setText(rsg_msg);
                         dialog.show();
                         handler.sendEmptyMessageDelayed(DELSUSSESS, 2000);
@@ -109,19 +104,11 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
                     }
 
                     break;
-                case DELPROGRESS:// 关闭对话框
-//                    if ( pd != null)
-//                        pd.dismiss();
-                    break;
                 case DELSUSSESS:// 网络不好关闭成功对话框
                     if (dialog != null) {
                         dialog.dismiss();
                     }
                     break;
-//                case DELPRESSAGE :
-//                    if (pd != null)
-//                        pd.dismiss();
-//                    break;
                 case NOFAIL:// 没有网络
                     dialog = new SussessDialog(FastMailInfoActivity.this);
                     dialog.setText("请检查您的网络");
@@ -159,8 +146,8 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
 
     private void initView() {
 
-        Bundle bundle = getIntent().getExtras();
-        mDetail = bundle.getString("ScanOrderBuyDetail", "");
+//        Bundle bundle = getIntent().getExtras();
+//        mDetail = bundle.getString("ScanOrderBuyDetail", "");
 
         mBack = (ImageView) mFastMailInfoTitle.findViewById(R.id.base_title_back);
         mTitle = (TextView) mFastMailInfoTitle.findViewById(R.id.base_title);
@@ -247,12 +234,9 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.base_title_back://返回
-                if(mDetail.equals("ScanOrderBuyDetail")){
-                    finishWitchAnimation();
-                }else{
                     openActivityWitchAnimation(AffirmBuyBackActivity.class);
                     finish();
-                }
+//                finishWitchAnimation();
                 break;
             case R.id.express_kuaidi://选择快递公司
                 if (mPopup == null) {
@@ -268,8 +252,7 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
                 Log.e("快递单号-->:", express);
 //                pd = new ProgressDialog(this);
 //                pd.show();
-                buyback(express);
-                // openActivityWitchAnimation(FastMailSubmitActivity.class);
+                Buyback(express); // 提交网络请求
                 break;
             default:
                 break;
@@ -317,7 +300,7 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
      *
      * @param express 单号
      */
-    private void buyback(final String express) {
+    private void Buyback(final String express) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -343,14 +326,12 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
                 String mResult = HttpUtils.submitPostData(StaticField.ROOT, params);
 //                handler.sendEmptyMessage(DELPRESSAGE);
 
-                MyLog.LogShitou("快递信息-->", mResult);
+                MyLog.LogShitou("快递信息", mResult);
 
-                if (mResult.equals("-1")) {
+                if (mResult.equals("-1") | mResult.equals("-2") ) {
                     handler.sendEmptyMessage(NOFAIL);
                     return;
                 }
-
-
                 Gson gson = new Gson();
                 BaseBean codeBean = gson.fromJson(mResult, BaseBean.class);
                 String rsp_coode = codeBean.getRsp_code();

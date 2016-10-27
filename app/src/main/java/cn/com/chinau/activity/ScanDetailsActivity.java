@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -127,15 +126,11 @@ public class ScanDetailsActivity extends BaseActivity implements View.OnClickLis
      * 获取上个页面传过来的数据
      */
     private void getIntentData() {
-//        introduction = getIntent().getExtras().getString("result");
          introduction = sp.getString("result","");
-
         MyLog.e("获取在本地的url-->", introduction);
         // 判断返回结果的
         if (introduction != null) {
-//         pd = new SendProgressDialog(this);
-//            pd.show();
-            Log.e("扫描结果-->", introduction);
+            MyLog.LogShitou("扫描结果", introduction);
             getNetData(introduction);
         }
     }
@@ -169,16 +164,13 @@ public class ScanDetailsActivity extends BaseActivity implements View.OnClickLis
             case R.id.base_title_back://返回
                 openActivityWitchAnimation(ScanActivity.class);
                 finish();
-//                finishWitchAnimation();
                 break;
             case R.id.scan_buyBack://申请回购
                 token = sp.getString("token", "");
                 userId = sp.getString("userId", "");
+
                 if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(userId)) {// 已经登录进入下一页面
-//                    Bundle mBundle = new Bundle();
-//                    mBundle.putString("RESULT",result);
-//                    openActivityWitchAnimation(AffirmBuyBackActivity.class,mBundle);// 确认回购
-                    openActivityWitchAnimation(AffirmBuyBackActivity.class);// 确认回购
+                    openActivityWitchAnimation(AffirmBuyBackActivity.class);// 跳转确认回购页面
                     finish();
 
                 } else {// 进入登录界面

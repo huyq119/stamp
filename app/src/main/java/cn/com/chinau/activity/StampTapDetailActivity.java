@@ -268,10 +268,10 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         for (int i = 0; i < mStampTapDetail.size(); i++) {
             bannerDate[i] = mStampTapDetail.get(i).getStamp_image();
         }
-        // 大小图片装入数组中
+        // 大小图片装入集合中
         small_images = new String[bannerDate.length];
         big_images = new String[bannerDate.length];
-        // 循环出大小图片，以逗号分开分别装入数组，
+        // 循环出大小图片，以逗号分开分别装入集合
         for (int j = 0; j < bannerDate.length; j++) {
             String[] image = bannerDate[j].split(",");
             small_images[j] = image[0];// 小图集合

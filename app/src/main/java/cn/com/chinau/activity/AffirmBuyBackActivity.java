@@ -72,7 +72,7 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
 //                        mBundle.putString("Result",result);
 //                        mBundle.putString("phone",mPhone);
 //                        mBundle.putString("order_sn",order_sn);
-                        openActivityWitchAnimation(FastMailInfoActivity.class);
+                        openActivityWitchAnimation(FastMailInfoActivity.class);// 跳转快递信息页面
                         finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -168,7 +168,7 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
 //        result = bundle.getString("RESULT");
 
         result = sp.getString("ScanBack","");
-        MyLog.LogShitou("mResult商品详情传过来的--->", result);
+        MyLog.LogShitou("mResult+获取本地商品详情", result);
         if (result != null) {
             Gson gson = new Gson();
             ScanBean scanBean = gson.fromJson(result, ScanBean.class);
@@ -199,7 +199,6 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
             case R.id.base_title_back://返回
                 openActivityWitchAnimation(ScanDetailsActivity.class);
                 finish();
-//                finishWitchAnimation();
                 break;
             case R.id.Affirm_buyBack://确认回购按钮
                 mToken = sp.getString("token", "");
