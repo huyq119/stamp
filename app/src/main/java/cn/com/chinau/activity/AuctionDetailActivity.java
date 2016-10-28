@@ -241,6 +241,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     };
     private ImageView mWeiXin,mPengYouQuan;
     private SharedDialog dialog;
+    private View dialog_finsih;
 
 
     @Override
@@ -708,6 +709,14 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         dialog.show();
         mWeiXin = (ImageView) dialog.findViewById(R.id.weixin);
         mPengYouQuan = (ImageView) dialog.findViewById(R.id.pengyouquan);
+        // 外部View 点击关闭dialog
+        dialog_finsih = dialog.findViewById(R.id.shared_finish);
+        dialog_finsih.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         // 取消
         tv_cancel = (TextView) dialog.findViewById(R.id.shared_cancel);
         tv_cancel.setOnClickListener(new View.OnClickListener() {

@@ -24,6 +24,6 @@ public class SharedDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_shared);
 
-        this.setCanceledOnTouchOutside(true); // 点击外部关闭
+        this.setCanceledOnTouchOutside(false); // 点击外部关闭
     }
 }

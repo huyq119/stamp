@@ -3,51 +3,141 @@ package cn.com.chinau.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import cn.com.chinau.R;
 import cn.com.chinau.bean.ShopNameBean;
+import cn.com.chinau.utils.MyLog;
 
 /**
  * 确认订单的适配器
  * Created by Administrator on 2016/8/15.
  */
-public class FirmOrderExpandableAdapter extends BaseExpandableListAdapter {
+public class FirmOrderExpandableAdapter extends BaseAdapter {
 
-    private ShopNameBean shopNameBean;
+//    private ShopNameBean shopNameBean;
+private HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet;
     private Context context;
     private BitmapUtils bitmap;
+    private String goods_count,goods_img,goods_name,goods_price;
+    private Set<ShopNameBean.GoodsBean> goodsBeen;
 
-    public FirmOrderExpandableAdapter(Context context, BitmapUtils bitmap, ShopNameBean shopNameBean) {
-        this.shopNameBean = shopNameBean;
+    public FirmOrderExpandableAdapter(Context context, BitmapUtils bitmap,HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet) {
+        this.groupSet = groupSet;
         this.context = context;
         this.bitmap = bitmap;
     }
 
     @Override
+    public int getCount() {
+        return groupSet.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return groupSet.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ItemHolder itemHolder;
+        if (convertView == null) {
+            itemHolder = new ItemHolder();
+            convertView = View.inflate(context, R.layout.firmorder_expandable_item_child, null);
+            itemHolder.mCount = (TextView) convertView.findViewById(R.id.child_count);
+            itemHolder.mName = (TextView) convertView.findViewById(R.id.child_name);
+            itemHolder.mPrice = (TextView) convertView.findViewById(R.id.child_price);
+            itemHolder.mImg = (ImageView) convertView.findViewById(R.id.child_icon);
+            convertView.setTag(itemHolder);
+        } else {
+            itemHolder = (ItemHolder) convertView.getTag();
+        }
+
+
+        // 循环出空间数据
+
+//        goodsBeen = groupSet.get(position);
+//        ShopNameBean.GoodsBean list = iterator.next();
+//        goods_count = list.getGoods_count();// 商品数量
+//        goods_img = list.getGoods_img();// 商品图片url
+//        goods_name = list.getGoods_name();// 商品名字
+//        goods_price = list.getGoods_price();// 商品价格
+//        MyLog.LogShitou("传过来选中的编号+数量", goods_count + "--" + goods_img+"--"+goods_name+"--"+goods_price);
+//
+//        itemHolder.mCount.setText("x"+goods_count);
+//        itemHolder.mName.setText(goods_name);
+//        itemHolder.mPrice.setText("￥"+goods_price);
+//        bitmap.display(itemHolder.mImg, goods_img);
+
+
+
+        for (HashMap.Entry<Integer, Set<ShopNameBean.GoodsBean>> entry : groupSet.entrySet()) {
+            Set<ShopNameBean.GoodsBean>  value = entry.getValue(); // 拿到循环后的value值
+            for (int i = 0; i < value.size(); i++) {
+                Iterator<ShopNameBean.GoodsBean> iterator = value.iterator();
+                ShopNameBean.GoodsBean next = iterator.next();
+                goods_count = next.getGoods_count();// 商品数量
+                goods_img = next.getGoods_img();// 商品图片url
+                goods_name = next.getGoods_name();// 商品名字
+                goods_price = next.getGoods_price();// 商品价格
+                MyLog.LogShitou("传过来选中的编号+数量", goods_count + "--" + goods_img+"--"+goods_name+"--"+goods_price);
+
+                itemHolder.mCount.setText("x"+goods_count);
+                itemHolder.mName.setText(goods_name);
+                itemHolder.mPrice.setText("￥"+goods_price);
+                bitmap.display(itemHolder.mImg, goods_img);
+
+            }
+        }
+
+        itemHolder.mCount.setText(goods_count);
+        itemHolder.mName.setText(goods_name);
+        itemHolder.mPrice.setText("￥"+goods_price);
+        bitmap.display(itemHolder.mImg, goods_img);
+
+        return convertView;
+    }
+
+    public class ItemHolder {
+        public TextView mName, mPrice, mCount;//名称,单价,数量
+        public ImageView mImg;//图片
+
+    }
+
+
+
+
+    /*@Override
     public int getGroupCount() {
-        return shopNameBean.getSeller_list().size();
+        return groupSet.size();
     }
 
     @Override
     public int getChildrenCount(int i) {
-        return shopNameBean.getSeller_list().get(i).getGoods_list().size();
+        return groupSet.get(i).size();
     }
 
     @Override
     public Object getGroup(int i) {
-        return shopNameBean.getSeller_list().get(i);
+        return groupSet.get(i);
     }
 
     @Override
     public Object getChild(int i, int i1) {
-        return shopNameBean.getSeller_list().get(i).getGoods_list().get(i);
+        return groupSet.get(i1).;
     }
 
     @Override
@@ -124,9 +214,9 @@ public class FirmOrderExpandableAdapter extends BaseExpandableListAdapter {
 
 
     public class GroupHolder {
-        /**
+        *//**//**
          * 卖家类型：SC_ZY自营商城；SC_DSF第三方商家；YS邮市
-         */
+         *//**//*
         public TextView mName, mType;//商城名称,类型
         public View mTop;//顶部间隔
 
@@ -137,5 +227,8 @@ public class FirmOrderExpandableAdapter extends BaseExpandableListAdapter {
         public ImageView mImg;//图片
 
 
-    }
+    }*/
+
+
+
 }

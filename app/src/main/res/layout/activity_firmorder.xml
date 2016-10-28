@@ -157,12 +157,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <cn.com.chinau.view.CustomExpandableListView
+                    <ListView
                         android:id="@+id/firmOrder_expandableLV"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:overScrollMode="never"
                         android:scrollbars="none" />
+                    <!--<cn.com.chinau.view.CustomExpandableListView
+                        android:id="@+id/firmOrder_expandableLV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:overScrollMode="never"
+                        android:scrollbars="none" />-->
                 </LinearLayout>
 
             </LinearLayout>
@@ -182,10 +188,10 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/goods_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/distance"
-                android:text="共3件商品"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
@@ -199,11 +205,11 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/totl_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/distance"
                 android:layout_weight="1"
-                android:text="￥100000.00"
                 android:textColor="@color/red_font"
                 android:textSize="15sp" />
 

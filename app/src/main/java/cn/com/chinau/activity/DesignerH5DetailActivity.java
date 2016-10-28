@@ -60,6 +60,7 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
             }
         }
     };
+    private View dialog_finsih;
 
     @Override
     public View CreateTitle() {
@@ -190,6 +191,14 @@ public class DesignerH5DetailActivity extends BaseActivity implements View.OnCli
         dialog.show();
         mWeiXin = (ImageView) dialog.findViewById(R.id.weixin);
         mPengYouQuan = (ImageView) dialog.findViewById(R.id.pengyouquan);
+        // 外部View 点击关闭dialog
+        dialog_finsih = dialog.findViewById(R.id.shared_finish);
+        dialog_finsih.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         // 取消
         tv_cancel = (TextView) dialog.findViewById(R.id.shared_cancel);
         tv_cancel.setOnClickListener(new View.OnClickListener() {

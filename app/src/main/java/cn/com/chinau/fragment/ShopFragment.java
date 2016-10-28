@@ -156,6 +156,7 @@ public class ShopFragment extends BaseFragment {
 
             @Override
             public void onDataChange(String selectCount, String selectMoney) {
+
                 mPrice.setText("￥" + selectMoney);
                 mGoToPay.setText("结算(" + selectCount + ")");
             }

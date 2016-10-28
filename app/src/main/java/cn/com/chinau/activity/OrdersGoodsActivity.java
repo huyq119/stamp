@@ -155,18 +155,18 @@ public class OrdersGoodsActivity extends BaseActivity {
         refuse_edListview = (ExpandableListView) v5.findViewById(R.id.all_expand_ListView);
 
         // (全部)适配器
-        OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap,mOrderContentBean );// 全部适配器
+//        OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap,mOrderContentBean );// 全部适配器
         // （待付款，待收货，已完成）适配器
         OrderPaymentReceivingCompleteLsitViewAdapter PayRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(this, mBitmap, groups, goods);
         // （退款/退货）适配器
         OrderRefuseLsitViewAdapter RefuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(this, mBitmap, groups, goods);// 退货/ 退款适配器
 
-        all_edListview.setAdapter(allLsitViewAdapter);
+        all_edListview.setAdapter(PayRecComLsitViewAdapter);
         payment_edListview.setAdapter(PayRecComLsitViewAdapter);
         receiving_edListview.setAdapter(PayRecComLsitViewAdapter);
         complete_edListview.setAdapter(PayRecComLsitViewAdapter);
         refuse_edListview.setAdapter(RefuseLsitViewAdapter);
-        for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
+        for (int i = 0; i < PayRecComLsitViewAdapter.getGroupCount(); i++) {
             all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
         }
         for (int i = 0; i < PayRecComLsitViewAdapter.getGroupCount(); i++) {
@@ -457,7 +457,7 @@ public class OrdersGoodsActivity extends BaseActivity {
 //                        ArrayList<OrderAllListViewGoodsBean.Order_list> order_list = mOrderContentBean.getOrder_list();
 //                        orderAllListViewGoodsBean = new OrderAllListViewGoodsBean(order_list);
                         MyLog.LogShitou("benan是啥数据", "" + mOrderContentBean);
-//                        initAdapter();
+                        initAdapter();
                         initListener();
                     }
                     break;
@@ -473,9 +473,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                     break;
                 case StaticField.TK_SUCCESS:// 退款、退货
                     Gson gson4 = new Gson();
-
                     break;
-
             }
         }
     };

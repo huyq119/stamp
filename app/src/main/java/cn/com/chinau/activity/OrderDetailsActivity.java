@@ -10,7 +10,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cn.com.chinau.R;
-import cn.com.chinau.adapter.FirmOrderExpandableAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.ShopNameBean;
 import cn.com.chinau.dialog.SelectDistributionPopupWindow;
@@ -88,13 +87,13 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
         }
 
         ShopNameBean shopNameBean = new ShopNameBean(mSellerBean, "35000");
-
-        FirmOrderExpandableAdapter expandableAdapter = new FirmOrderExpandableAdapter(this, mBitmap, shopNameBean);
-        mListView.setAdapter(expandableAdapter);
+//
+//        FirmOrderExpandableAdapter expandableAdapter = new FirmOrderExpandableAdapter(this, mBitmap, shopNameBean);
+//        mListView.setAdapter(expandableAdapter);
         //让子控件全部展开
-        for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
-            mListView.expandGroup(i);
-        }
+//        for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
+//            mListView.expandGroup(i);
+//        }
         //去掉自带按钮
         mListView.setGroupIndicator(null);
 

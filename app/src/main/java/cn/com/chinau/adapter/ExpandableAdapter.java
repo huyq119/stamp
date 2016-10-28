@@ -20,7 +20,6 @@ import com.lidroid.xutils.BitmapUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import cn.com.chinau.R;
@@ -32,6 +31,7 @@ import cn.com.chinau.bean.ShopNameBean;
 import cn.com.chinau.dialog.ProgressDialog;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.listener.ShopListenerFace;
+import cn.com.chinau.ui.MyApplication;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyToast;
@@ -68,6 +68,8 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     private String goods_sn;
     private String goods_count;
     private boolean isChild;
+    private String price;
+    private String count;
 
     public ExpandableAdapter(Context context, BitmapUtils bitmap, ShopNameBean shopNameBean
             , LinearLayout layout, TextView tv1, TextView tv2) {
@@ -207,7 +209,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         //是否选中
         boolean isChildSelected = shopNameBean.getSeller_list().get(i).getGoods_list().get(i1).isChildSelected();
-
         ShopNameBean.GoodsBean goodsBean = shopNameBean.getSeller_list().get(i).getGoods_list().get(i1);
 
         String mGoods_name = goodsBean.getGoods_name();// 名称
@@ -288,23 +289,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                 case R.id.image_selected://父控件的选择按钮
                     //获取当前点击View的标识,并强转成数字标识
                     int groupPosition = Integer.parseInt(String.valueOf(v.getTag()));
-//                    String mGourp = String.valueOf(v.getTag());
-//                    MyLog.LogShitou("父控件1", groupPosition);
-//                    if (mGourp.contains(",")) {
-//                        String s[] = mGourp.split(",");
-                    //父View的角标和子View的角标
-//                        group = Integer.parseInt(s[0]);
-//                        String name = s[1];
-//                        String mTypes = s[2];
-
-//                        AddShopCartBean mAddShopCartBean = new AddShopCartBean();
-//                        mAddShopCartBean.setGoods_count(goods_count);
-//                        mAddShopCartBean.setGoods_sn(goods_sn);
-//
-//                        info_list.add(mAddShopCartBean); // 添加到list
-//                        MyLog.LogShitou("添加的list数据",info_list.toString());
-
-//                    }
 
                     //变更数据的显示,内部有取反的操作
                     isSelectAll = ShoppingCartBiz.selectGroup(seller_list, groupPosition);
@@ -389,39 +373,12 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                             groupSet.put(group, goodsBeen);
                             MyLog.LogShitou("子控件总共添加的数据", groupSet + "");
 
-
-                            for (HashMap.Entry<Integer, Set<ShopNameBean.GoodsBean>> entry : groupSet.entrySet()) {
-                                key = entry.getKey();
-                                value = entry.getValue();
-
-                                for (int i = 0; i < value.size(); i++) {
-                                    Iterator<ShopNameBean.GoodsBean> iterator = value.iterator();
-                                    ShopNameBean.GoodsBean next = iterator.next();
-                                    goods_sn = next.getGoods_sn();
-                                    goods_count = next.getGoods_count();
-                                    isChild = next.isChildSelected();
-//                                    MyLog.LogShitou("-----子选中的编号+数量", price + "--" + goods_count);
-                                }
-                            }
-
-                            mAddShopCartBean.setGoods_count(goods_count);
-                            mAddShopCartBean.setGoods_sn(goods_sn);
-                            info_list.add(mAddShopCartBean); // 添加到list
-                            MyLog.LogShitou("添加的list数据", info_list.toString());
-
-//                            MyLog.LogShitou("循环出的key", key.toString());
-//                            MyLog.LogShitou("循环出的values", value.toString());
-
                         } else {
 
                             goodsBeen.remove(goodsBean);
                             MyLog.LogShitou("-----子控件反选的数据goodsBeen", goodsBeen.toString());
-
-                            info_list.remove(mAddShopCartBean); // 删除
-
-                            MyLog.LogShitou("-----子反选的数据后info_list", info_list.toString());
                             groupSet.put(group, goodsBeen);
-                            MyLog.LogShitou("子反选后总添加的数据groupSet", groupSet.toString());
+                            MyLog.LogShitou("子反选后总添加的数据goodsBean", goodsBeen.toString());
                         }
                     }
 
@@ -470,21 +427,27 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                     break;
                 case R.id.Shop_pay://去结算
 
-//                    Intent intent = new Intent(context, FirmOrderActivity.class);
+                    Intent intent = new Intent(context, FirmOrderActivity.class);
+                    intent.putExtra("Count", count);// 传数量
+                    intent.putExtra("Price", price);// 传总价钱
+
                     //这里只要是把集合遍历一下传过去就行了
-//                    MyApplication.setGroupSet(groupSet);
-//                    MyLog.LogShitou("那到值了吗", "" + groupSet);
-//                    context.startActivity(intent);
-//                    ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anm.slide_left_out);
-                    if (groupSet.size()!=0){
-                        Intent intent = new Intent(context, FirmOrderActivity.class);
-                        intent.putExtra("ShopGoodsJson", info_list.toString());
-                        intent.putExtra("GroupSet", groupSet.toString());
-                        context.startActivity(intent);
-                        ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-                    }else{
-                        MyToast.showShort(context,"你还未选择要结算的商品");
-                    }
+                    MyApplication.setGroupSet(groupSet);
+                    MyLog.LogShitou("去结算传的数据", "" + groupSet);
+                    context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+
+
+
+//                    if (groupSet.size()!=0){
+//                        Intent intent = new Intent(context, FirmOrderActivity.class);
+////                        intent.putExtra("ShopGoodsJson", info_list.toString());
+//                        intent.putExtra("GroupSet", groupSet.toString());
+//                        context.startActivity(intent);
+//                        ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+//                    }else{
+//                        MyToast.showShort(context,"你还未选择要结算的商品");
+//                    }
 
 
 
@@ -499,10 +462,13 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
     private void setSettleInfo() {
         String[] info = ShoppingCartBiz.getShoppingCount(shopNameBean.getSeller_list());
+        count = info[0];
+        price = info[1];
 //        MyLog.LogShitou("这里有数据吗", info[0] + "--" + info[1]);
         //删除或者选择商品之后，需要通知结算按钮，更新自己的数据；
         if (mChangeListener != null && info != null) {
-            mChangeListener.onDataChange(info[0], info[1]);
+            mChangeListener.onDataChange(count, price);
+
         }
     }
 
@@ -551,7 +517,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         dialog_button_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                UpDataShopCart(info_list.toString(), StaticField.SC); // 修改购物车网络请求
+                UpDataShopCart(info_list.toString(), StaticField.SC); // 修改购物车网络请求
                 prodialog.dismiss();
             }
         });
@@ -630,6 +596,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         }
     };
+
 
 
 }

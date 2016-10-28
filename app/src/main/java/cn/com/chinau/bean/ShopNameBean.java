@@ -35,10 +35,10 @@ public class ShopNameBean extends BaseBean {
 
     @Override
     public String toString() {
-        return "ShopNameBean{" +
+        return "\""+"ShopNameBean\""+":"+"{" +
                 "seller_list=" + seller_list +
                 ", goods_total_amount='" + goods_total_amount + '\'' +
-                '}';
+                "}";
     }
 
     /**
@@ -103,13 +103,13 @@ public class ShopNameBean extends BaseBean {
 
         @Override
         public String toString() {
-            return "SellerBean{" +
-                    "seller_name='" + seller_name + '\'' +
-                    ", seller_type='" + seller_type + '\'' +
-                    ", seller_no='" + seller_no + '\'' +
-                    ", goods_list=" + goods_list +
-                    ", isGroupSelected=" + isGroupSelected +
-                    '}';
+            return "\""+"SellerBean\""+":"+"["+"{" +
+                    "\""+"seller_name\""+":"+"\""+ seller_name+"\""+","
+                    +"\""+"seller_type\""+":"+"\""+ seller_type+"\""+","
+                    +"\""+"seller_no\""+":"+"\""+ seller_no +"\""+","
+                    +"\""+"goods_list\""+":"+"\""+goods_list  +"\""+","
+                    +"\""+"isGroupSelected\""+":"+"\""+isGroupSelected  +"\""+
+                    "}"+"]";
         }
     }
 
@@ -184,14 +184,14 @@ public class ShopNameBean extends BaseBean {
 
         @Override
         public String toString() {
-            return "GoodsBean{" +
-                    "goods_img='" + goods_img + '\'' +
-                    ", goods_name='" + goods_name + '\'' +
-                    ", goods_sn='" + goods_sn + '\'' +
-                    ", goods_price='" + goods_price + '\'' +
-                    ", goods_count=" + goods_count +
-                    ", isChildSelected=" + isChildSelected +
-                    '}';
+            return "\""+"GoodsBean\""+":"+"["+"{" +
+                    "\""+"goods_img\""+":"+"\""+ goods_img+"\""+","
+                    +"\""+"goods_name\""+":"+"\""+goods_name+"\""+","
+                    +"\""+"goods_sn\""+":"+"\""+goods_sn +"\""+","
+                    +"\""+"goods_price\""+":"+"\""+goods_price +"\""+","
+                    +"\""+"goods_count\""+":"+"\""+goods_count +"\""+","
+                    +"\""+"isChildSelected\""+":"+"\""+isChildSelected +"\""+
+                    "}"+"]";
         }
 
         @Override
