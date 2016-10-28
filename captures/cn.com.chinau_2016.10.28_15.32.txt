@@ -1,0 +1,243 @@
+TASK cn.com.chinau id=1446
+  ACTIVITY cn.com.chinau/.MainActivity 4180def0 pid=11790
+    Local FragmentActivity 418aacd8 State:
+      mCreated=truemResumed=true mStopped=false mReallyStopped=false
+      mLoadersStarted=true
+    Active Fragments in 41774168:
+      #0: HomeFragment{418a6350 #0 id=0x7f0b00f3 android:switcher:2131427571:0}
+        mFragmentId=#7f0b00f3 mContainerId=#7f0b00f3 mTag=android:switcher:2131427571:0
+        mState=5 mIndex=0 mWho=android:fragment:0 mBackStackNesting=0
+        mAdded=true mRemoving=false mFromLayout=false mInLayout=false
+        mHidden=false mDetached=false mMenuVisible=true mHasMenu=false
+        mRetainInstance=false mRetaining=false mUserVisibleHint=true
+        mFragmentManager=FragmentManager{41774168 in HostCallbacks{41772598}}
+        mHost=android.support.v4.app.FragmentActivity$HostCallbacks@41772598
+        mContainer=cn.com.chinau.view.NoScrollViewpager@41779018
+        mView=android.widget.LinearLayout@4181b548
+        mInnerView=android.widget.LinearLayout@4181b548
+        Child FragmentManager{417a2520 in HomeFragment{418a6350}}:
+          FragmentManager misc state:
+            mHost=android.support.v4.app.FragmentActivity$HostCallbacks@41772598
+            mContainer=android.support.v4.app.Fragment$1@417a2b98
+            mParent=HomeFragment{418a6350 #0 id=0x7f0b00f3 android:switcher:2131427571:0}
+            mCurState=5 mStateSaved=false mDestroyed=false
+    Added Fragments:
+      #0: HomeFragment{418a6350 #0 id=0x7f0b00f3 android:switcher:2131427571:0}
+    FragmentManager misc state:
+      mHost=android.support.v4.app.FragmentActivity$HostCallbacks@41772598
+      mContainer=android.support.v4.app.FragmentActivity$HostCallbacks@41772598
+      mCurState=5 mStateSaved=false mDestroyed=false
+    View Hierarchy:
+      com.android.internal.policy.impl.PhoneWindow$DecorView{41778898 V.E..... ... 0,0-720,1280}
+        android.widget.LinearLayout{41779c70 V.E..... ... 0,0-720,1280}
+          android.view.ViewStub{41779e78 G.E..... ... 0,0-0,0 #10202e3}
+          android.widget.FrameLayout{4177a010 V.E..... ... 0,50-720,1280 #1020002 android:id/content}
+            android.widget.LinearLayout{4177bdc8 V.E..... ... 0,0-720,1230}
+              cn.com.chinau.view.NoScrollViewpager{41779018 VFED.... ... 0,0-720,1131 #7f0b00f3 app:id/Main_ViewPager}
+                android.widget.LinearLayout{4181b548 V.E..... ... 0,0-720,1131}
+                  android.widget.FrameLayout{4181bcf8 V.E..... ... 0,0-720,88 #7f0b010a app:id/base_title}
+                    android.widget.LinearLayout{417b5fb8 V.E..... ... 0,0-720,88}
+                      android.widget.ImageView{417b72d0 V.ED..C. ... 24,22-68,66 #7f0b0221 app:id/home_title_scan}
+                      android.widget.LinearLayout{41800310 V.E...C. ... 126,19-702,69 #7f0b0222 app:id/home_search}
+                        android.widget.ImageView{4182c610 V.ED.... ... 18,10-48,40}
+                        android.widget.TextView{417f6570 V.ED.... ... 66,8-282,41}
+                  android.widget.FrameLayout{4181c270 V.E..... ... 0,88-720,1131 #7f0b0218 app:id/fragment_fl}
+                    android.widget.LinearLayout{417adb58 I.E...C. ... 0,0-720,1043 #7f0b02f9 app:id/base_errorLL}
+                      android.widget.ImageView{417ade70 V.ED.... ... 304,437-415,548}
+                      android.widget.TextView{417aeb78 V.ED.... ... 105,568-615,606 #7f0b02fa app:id/base_errorTV}
+                    com.handmark.pulltorefresh.library.PullToRefreshScrollView{417c3060 V.E..... ... 0,0-720,1043 #7f0b0082 app:id/home_SV}
+                      android.widget.FrameLayout{41783d30 V.E..... ... 0,0-720,1043}
+                        com.handmark.pulltorefresh.library.PullToRefreshScrollView$InternalScrollViewSDK9{41781db8 VFED.... ... 0,0-720,1043 #7f0b0008 app:id/scrollview}
+                          android.widget.LinearLayout{417f78c0 V.E..... ... 0,0-720,7221}
+                            android.widget.RelativeLayout{417f7f98 V.E..... ... 0,0-720,240}
+                              android.support.v4.view.ViewPager{418d8620 VFED.... ... 0,0-720,240 #7f0b0219 app:id/home_viewpager}
+                                android.widget.ImageView{41c48560 V.ED.... ... 0,0-720,240}
+                                android.widget.ImageView{41c4bb80 V.ED.... ... 720,0-1440,240}
+                              com.viewpagerindicator.CirclePageIndicator{4181eb98 V.ED.... ... 0,211-720,224 #7f0b021a app:id/home_viewpagerIndicator}
+                            android.view.View{417bdf90 V.ED.... ... 0,240-720,241}
+                            android.widget.LinearLayout{417be3f8 V.E..... ... 0,241-720,397 #7f0b00f4 app:id/Main_RadioGroup}
+                              android.widget.Button{417be8b8 VFED..C. ... 0,0-144,156 #7f0b021b app:id/home_stampshop}
+                              android.widget.Button{418d3360 VFED..C. ... 144,0-288,156 #7f0b021c app:id/home_auction}
+                              android.widget.Button{41705b18 VFED..C. ... 288,0-432,156 #7f0b021d app:id/home_mall}
+                              android.widget.Button{41708a60 VFED..C. ... 432,0-576,156 #7f0b021e app:id/home_scan}
+                              android.widget.Button{41709360 VFED..C. ... 576,0-720,156 #7f0b021f app:id/home_designer}
+                            android.view.View{418a13b8 V.ED.... ... 0,397-720,398}
+                            android.widget.LinearLayout{418a1a08 V.E..... ... 0,418-720,929}
+                              android.widget.TextView{418eafa0 V.ED.... ... 0,0-720,80 #7f0b026e app:id/home_first_title}
+                              android.widget.LinearLayout{418ec9b8 V.E..... ... 0,80-720,510}
+                                android.widget.ImageView{418ed078 V.ED..C. ... 0,0-305,430 #7f0b026f app:id/home_chinese_image1}
+                                android.view.View{418ed478 V.ED.... ... 305,0-306,430}
+                                android.widget.LinearLayout{418edb58 V.E..... ... 306,0-720,430}
+                                  android.widget.ImageView{418ee170 V.ED..C. ... 0,0-414,214 #7f0b0270 app:id/home_chinese_image2}
+                                  android.view.View{418ee568 V.ED.... ... 0,214-414,215}
+                                  android.widget.LinearLayout{418ee7e8 V.E..... ... 0,215-414,430}
+                                    android.widget.ImageView{418eeb08 V.ED..C. ... 0,0-206,215 #7f0b0271 app:id/home_chinese_image3}
+                                    android.view.View{418ef338 V.ED.... ... 206,0-207,215}
+                                    android.widget.ImageView{418efb10 V.ED..C. ... 207,0-414,215 #7f0b0272 app:id/home_chinese_image4}
+                              android.view.View{418f0278 V.ED.... ... 0,510-720,511}
+                            android.widget.LinearLayout{418f1070 V.E..... ... 0,949-720,1460}
+                              android.widget.TextView{418f1e70 V.ED.... ... 0,0-720,80 #7f0b0273 app:id/home_second_title}
+                              android.widget.LinearLayout{41799240 V.E..... ... 0,80-720,510}
+                                android.widget.LinearLayout{41799b18 V.E..... ... 0,0-359,430}
+                                  android.widget.ImageView{41799f20 V.ED..C. ... 0,0-359,214 #7f0b0274 app:id/home_classical_image1}
+                                  android.view.View{4179a1c0 V.ED.... ... 0,214-359,215}
+                                  android.widget.ImageView{4179a830 V.ED..C. ... 0,215-359,430 #7f0b0275 app:id/home_classical_image3}
+                                android.view.View{4179ae80 V.ED.... ... 359,0-360,430}
+                                android.widget.LinearLayout{4179b0e8 V.E..... ... 360,0-720,430}
+                                  android.widget.ImageView{4179b3e8 V.ED..C. ... 0,0-360,214 #7f0b0276 app:id/home_classical_image2}
+                                  android.view.View{4179b828 V.ED.... ... 0,214-360,215}
+                                  android.widget.ImageView{4179baf0 V.ED..C. ... 0,215-360,430 #7f0b0277 app:id/home_classical_image4}
+                              android.view.View{4179bd68 V.ED.... ... 0,510-720,511}
+                            android.widget.LinearLayout{4179c460 V.E..... ... 0,1480-720,1991}
+                              android.widget.TextView{4179cdc8 V.ED.... ... 0,0-720,80 #7f0b0278 app:id/home_three_title}
+                              android.widget.LinearLayout{4179e6a8 V.E..... ... 0,80-720,510}
+                                android.widget.LinearLayout{4179ea78 V.E..... ... 0,0-720,214}
+                                  android.widget.ImageView{4179ee68 V.ED..C. ... 0,0-359,214 #7f0b0279 app:id/home_folk_image1}
+                                  android.view.View{4179f140 V.ED.... ... 359,0-360,214}
+                                  android.widget.ImageView{4179f3a8 V.ED..C. ... 360,0-720,214 #7f0b027a app:id/home_folk_image2}
+                                android.view.View{4179f608 V.ED.... ... 0,214-720,215}
+                                android.widget.LinearLayout{4179f870 V.E..... ... 0,215-720,430}
+                                  android.widget.ImageView{4179fb70 V.ED..C. ... 0,0-239,215 #7f0b027b app:id/home_folk_image3}
+                                  android.view.View{4179fdd0 V.ED.... ... 239,0-240,215}
+                                  android.widget.ImageView{417a0038 V.ED..C. ... 240,0-479,215 #7f0b027c app:id/home_folk_image4}
+                                  android.view.View{417a0320 V.ED.... ... 479,0-480,215}
+                                  android.widget.ImageView{417a0720 V.ED..C. ... 480,0-720,215 #7f0b027d app:id/home_folk_image5}
+                              android.view.View{417a0980 V.ED.... ... 0,510-720,511}
+                            android.widget.RelativeLayout{417a0be8 V.E..... ... 0,2011-720,2091}
+                              android.widget.TextView{417a1260 V.ED.... ... 264,18-456,61}
+                            cn.com.chinau.view.WrapGridView{4180eb20 VFED..C. ... 0,2091-720,7221 #7f0b0220 app:id/home_WGV}
+                              android.widget.LinearLayout{41c63548 V.E..... ... 0,0-350,495}
+                                cn.com.chinau.view.SquareView{41c63d28 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c6b5b8 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c75fb0 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c762f8 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c76850 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c7acf0 V.E..... ... 370,0-720,495}
+                                cn.com.chinau.view.SquareView{41c7afb8 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c7b490 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c7b7e0 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c7bae0 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c7bfa8 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c7d8c8 V.E..... ... 0,515-350,1010}
+                                cn.com.chinau.view.SquareView{41c7db90 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c7e068 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c7e3b8 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c7e6b8 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c7eb80 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c804a0 V.E..... ... 370,515-720,1010}
+                                cn.com.chinau.view.SquareView{41c80768 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c80c40 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c81170 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c81470 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c81938 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c84790 V.E..... ... 0,1030-350,1525}
+                                cn.com.chinau.view.SquareView{41c84a58 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c84f30 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c85280 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c85580 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c85a48 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c87368 V.E..... ... 370,1030-720,1525}
+                                cn.com.chinau.view.SquareView{41c87630 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c87b08 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c87e58 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c88158 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c88620 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c89f40 V.E..... ... 0,1545-350,2040}
+                                cn.com.chinau.view.SquareView{41c8a208 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c8a6e0 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c8aa30 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c8ad30 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c8b1f8 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c8cb18 V.E..... ... 370,1545-720,2040}
+                                cn.com.chinau.view.SquareView{41c8cde0 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c8d2b8 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c8d608 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c8d908 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c8ddd0 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c901a8 V.E..... ... 0,2060-350,2555}
+                                cn.com.chinau.view.SquareView{41c90470 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c90948 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c90c98 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c90f98 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c91460 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c93a28 V.E..... ... 370,2060-720,2555}
+                                cn.com.chinau.view.SquareView{41c93cf0 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c941c8 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c94518 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c94818 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c94ce0 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c965e0 V.E..... ... 0,2575-350,3070}
+                                cn.com.chinau.view.SquareView{41c968a8 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c96d80 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c970d0 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c973d0 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c97898 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c99210 V.E..... ... 370,2575-720,3070}
+                                cn.com.chinau.view.SquareView{41c994d8 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c999b0 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c99d00 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c9a000 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c9a4c8 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c9bfb8 V.E..... ... 0,3090-350,3585}
+                                cn.com.chinau.view.SquareView{41c9c280 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c9c758 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c9caa8 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c9cda8 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c9d270 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41c9ec00 V.E..... ... 370,3090-720,3585}
+                                cn.com.chinau.view.SquareView{41c9eec8 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41c9f3a0 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41c9f6f0 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41c9f9f0 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41c9feb8 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41ca17d0 V.E..... ... 0,3605-350,4100}
+                                cn.com.chinau.view.SquareView{41ca1a98 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41ca1f70 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41ca22c0 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41ca25c0 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41ca2a88 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41ca4e58 V.E..... ... 370,3605-720,4100}
+                                cn.com.chinau.view.SquareView{41ca5120 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41ca55f8 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41ca5948 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41ca5c48 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41ca6110 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41ca86c8 V.E..... ... 0,4120-350,4615}
+                                cn.com.chinau.view.SquareView{41ca8990 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41ca8e68 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41ca91b8 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41ca94b8 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41ca9980 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41cab320 V.E..... ... 370,4120-720,4615}
+                                cn.com.chinau.view.SquareView{41cab5e8 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41cabac0 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41cabe10 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41cac110 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41cac5d8 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41cadef0 V.E..... ... 0,4635-350,5130}
+                                cn.com.chinau.view.SquareView{41cae1b8 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41cae690 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41cae9e0 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41caece0 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41caf1a8 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                              android.widget.LinearLayout{41cb0ac0 V.E..... ... 370,4635-720,5130}
+                                cn.com.chinau.view.SquareView{41cb0d88 V.E..... ... 2,10-348,356}
+                                  android.widget.ImageView{41cb1260 V.ED.... ... 42,42-304,304 #7f0b027e app:id/home_item_icon}
+                                android.widget.LinearLayout{41cb15b0 V.E..... ... 0,366-350,495}
+                                  android.widget.TextView{41cb18b0 V.ED.... ... 24,20-350,61 #7f0b027f app:id/home_item_title}
+                                  android.widget.TextView{41cb1d78 V.ED.... ... 24,81-350,119 #7f0b0280 app:id/home_item_money}
+                      com.handmark.pulltorefresh.library.internal.RotateLoadingLayout{418f4930 I.E..... ... 0,1043-720,1669}
+                        android.widget.FrameLayout{418f4e80 V.E..... ... 0,0-720,97 #7f0b02cd app:id/fl_inner}
+                          android.widget.FrameLayout{418f52b0 V.E..... ... 48,24-91,73}
+                            android.widget.ImageView{418f56d8 V.ED.... ... 0,0-43,49 #7f0b02ce app:id/pull_to_refresh_image}
+                            android.widget.ProgressBar{418f5cc8 G.ED.... ... 0,0-0,0 #7f0b02cf app:id/pull_to_refresh_progress}
+                          android.widget.LinearLayout{418f6428 V.E..... ... 282,27-437,70}
+                            android.widget.TextView{418f69b8 V.ED.... ... 0,0-155,43 #7f0b02d0 app:id/pull_to_refresh_text}
+                            android.widget.TextView{418f6f28 G.ED.... ... 0,0-0,0 #7f0b02d1 app:id/pull_to_refresh_sub_text}
+              android.view.View{418e7578 V.ED.... ... 0,1131-720,1132}
+              android.widget.RadioGroup{418e7970 V.E..... ... 0,1132-720,1230 #7f0b00f4 app:id/Main_RadioGroup}
+                android.widget.RadioButton{4180b5c0 VFED..C. ... 0,0-144,98 #7f0b00f5 app:id/Radio_home}
+                android.widget.RadioButton{41766178 VFED..C. ... 144,0-288,98 #7f0b00f6 app:id/Radio_stamptap}
+                android.widget.RadioButton{418df0f0 VFED..C. ... 288,0-432,98 #7f0b00f7 app:id/Radio_panstamp}
+                android.widget.RadioButton{417b01c8 VFED..C. ... 432,0-576,98 #7f0b00f8 app:id/Radio_shop}
+                android.widget.RadioButton{41786338 VFED..C. ... 576,0-720,98 #7f0b00f9 app:id/Radio_my}
