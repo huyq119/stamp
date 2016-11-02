@@ -128,6 +128,11 @@ public class PullToRefreshWebView extends PullToRefreshBase<WebView> {
 		mRefreshableView.saveState(saveState);
 	}
 
+	@Override
+	public void fullScroll(int focusUp) {
+
+	}
+
 	@TargetApi(9)
 	final class InternalWebViewSDK9 extends WebView {
 

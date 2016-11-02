@@ -99,6 +99,7 @@ public class HomeBean extends BaseBean {
     public class Child {
         public String h5_url;//h5地址
         public String img_url;//图片\
+        public String title;//标题
 
         public String getH5_url() {
             return h5_url;
@@ -114,6 +115,14 @@ public class HomeBean extends BaseBean {
 
         public void setImg_url(String img_url) {
             this.img_url = img_url;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
         }
     }
 }

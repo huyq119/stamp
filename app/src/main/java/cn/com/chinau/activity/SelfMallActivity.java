@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +48,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     private TextView mMarketPrice;//市场价
     private ImageView mBack, mSearch;
     private Button mSynthesize, mSales, mPrice, mFilter, mTopBtn;// 综合，销量，价格，筛选,置顶
-    private GridView mGridView;
+    private PullToRefreshGridView gridView;
     private StampMarketGridViewAdapter mStampMarAdapter;
     private ArrayList<GoodsStampBean.GoodsList> mList;
     private List<Fragment> mPopupList;//展示PopupWindow页面的Fragment的集合
@@ -66,8 +68,15 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 case StaticField.SUCCESS://商城Lsit
                     Gson gson = new Gson();
                      mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
-                    mList = mGoodsStampBean.getGoods_list();
-                    initAdapter();
+                   String mCode = mGoodsStampBean.getRsp_code();
+                    if (mCode.equals("0000")){
+                        if (num == 0) {
+                            initAdapter();
+                        } else {
+                            //设置GridView的适配器
+                            setGridViewAdapter();
+                        }
+                    }
                     break;
             }
         }
@@ -75,6 +84,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     private SelfMallPanStampFilterDialog mSelfPanDialog;
     private SelfMallFilterFragment mallFragment;
     private ThreeMallFilterFragment mThreeFragment;
+    private GridView mGridView;
 
 
     @Override
@@ -103,13 +113,12 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
         mSales = (Button) mSelfMallContent.findViewById(R.id.self_sales);
         mPrice = (Button) mSelfMallContent.findViewById(R.id.self_price);
         mFilter = (Button) mSelfMallContent.findViewById(R.id.self_filter);
-        mGridView = (GridView) mSelfMallContent.findViewById(R.id.selfMall_gl);
+        gridView = (PullToRefreshGridView) mSelfMallContent.findViewById(R.id.selfMall_gl);
         mTopBtn = (Button) mSelfMallContent.findViewById(R.id.base_top_btn);
 
     }
 
     private void initListener() {
-        mGridView.setOnScrollListener(this);
         mBack.setOnClickListener(this);
         mSearch.setOnClickListener(this);
         mSynthesize.setOnClickListener(this);
@@ -117,9 +126,10 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
         mPrice.setOnClickListener(this);
         mFilter.setOnClickListener(this);
         mTopBtn.setOnClickListener(this);
-
+        mGridView = gridView.getRefreshableView();
+        mGridView.setOnScrollListener(this);
         // GridView条目监听事件
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
@@ -128,46 +138,59 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 openActivityWitchAnimation(SelfMallDetailActivity.class,bundle);
             }
         });
-    }
-
-    private void initAdapter() {
-        if (mStampMarAdapter == null) {
-        //为GridView设置适配器
-        mStampMarAdapter = new StampMarketGridViewAdapter(this, mList, mBitmap);
-        }
-        //内容GridView设置适配器
-        mGridView.setAdapter(mStampMarAdapter);
-        mStampMarAdapter.notifyDataSetChanged();
-
+        gridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<GridView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<GridView> refreshView) {
+                num++;
+                RequestNet(StaticField.ZH, num, StaticField.A);
+                MyLog.LogShitou("num===2====",""+num);
+            }
+        });
     }
 
     private void initData() {
-        // 以下注释的网络请求别删数据正确后要用
-//        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                HashMap<String, String> params = new HashMap<>();
-//                params.put(StaticField.SERVICE_TYPE, StaticField.STAMPCATEGORY);
-//                params.put(StaticField.OP_TYPE, "SC_ZY");
-//                String mapSort = SortUtils.MapSort(params);
-//                String md5code = Encrypt.MD5(mapSort);
-//                params.put(StaticField.SIGN, md5code);
-//
-//                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-//                Log.e("有数据吗~~~>",result);
-//
-//            }
-//        });
-
-
-
-        if (mList != null) {
+        if (num == 0) {
             mList = new ArrayList<>();
         }
-
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
         RequestNet(StaticField.ZH, num, StaticField.A);
+        MyLog.LogShitou("num=====1=======", "" + num);
     }
+
+    private void initAdapter() {
+        setGridViewAdapter();
+    }
+    /**
+     * 设置GridView的适配器
+     */
+    private void setGridViewAdapter() {
+        if (mGoodsStampBean != null) {
+            List<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean.getGoods_list();
+            mList.addAll(goods_list);
+            //为GridView设置适配器
+            mStampMarAdapter = new StampMarketGridViewAdapter(this, mList, mBitmap);
+            //内容GridView设置适配器
+            mGridView.setAdapter(mStampMarAdapter);
+            mStampMarAdapter.notifyDataSetChanged();
+
+            //这句是为了防止展示到GridView处
+//            gridView.requestChildFocus(mHeartll, null);
+            MyLog.LogShitou("num=====3=======",""+num);
+            if (num != 0) {
+                MyLog.LogShitou("===1=====到这一部了吗",mList.size()+"======="+num);
+                mGridView.setSelection(mStampMarAdapter.getCount()-20);
+                //解决调用onRefreshComplete方法去停止刷新操作,无法取消刷新的bug
+                gridView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        gridView.onRefreshComplete();
+                    }
+                }, 800);
+            }
+        }
+    }
+
+
 
 
     @Override

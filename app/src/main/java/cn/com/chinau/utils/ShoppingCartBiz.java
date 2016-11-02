@@ -136,7 +136,7 @@ public class ShoppingCartBiz {
      * @param list
      * @return
      */
-    private static boolean isSelectAllChild(List<ShopNameBean.GoodsBean> list) {
+    private static boolean isSelectAllChild(List<ShopNameBean.SellerBean.GoodsBean> list) {
         for (int i = 0; i < list.size(); i++) {
             boolean isSelectGroup = list.get(i).isChildSelected();
             if (!isSelectGroup) {

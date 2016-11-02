@@ -40,9 +40,10 @@
 
                 <ImageView
                     android:id="@+id/shop_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/distance"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="center"
+                    android:layout_marginLeft="12dp"
                     android:gravity="center"
                     android:minHeight="44dp"
                     android:src="@drawable/select_bg" />
@@ -51,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="12dp"
                     android:textSize="15sp"
                     android:textColor="@color/geay_font"
                     android:text="全选" />
@@ -145,7 +146,7 @@
         android:drawablePadding="30dp"
         android:drawableTop="@mipmap/shop_gray"
         android:gravity="center"
-        android:text="您的购物车为空"
+        android:text="购物车空空也！"
         android:textColor="@color/font"
         android:textSize="18sp"
         android:visibility="gone" />

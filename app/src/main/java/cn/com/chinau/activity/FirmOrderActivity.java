@@ -91,9 +91,9 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private String goods_count;
 
     private boolean isChild;
-    private String mPrice,mCount;// 价钱，数量
+    private String mPrice,mCount,mSellerList;// 价钱，数量
 //    private String groupSet;
-  private HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet;
+  private HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
     private String groupSet1;
 
     @Override
@@ -105,6 +105,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     @Override
     public View CreateSuccess() {
         mFirmOrderContent = View.inflate(this, R.layout.activity_firmorder, null);
+        sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         initView();
         initData();
         initListener();
@@ -120,7 +121,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 
         GetStringData(); // 获取传过来的数据
 
-        sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
+
         mToken = sp.getString("token", "");
         mUser_id = sp.getString("userId", "");
 
@@ -163,13 +164,14 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         mCount = intent.getStringExtra("Count");// 获取传过来的数量
         mPrice = intent.getStringExtra("Price");// 获取传过来的总价钱
 
+        String  mSellerList = sp.getString("SellerList","");// 获取保存在本地的购物车总数据
+
+        MyLog.LogShitou("获取保存在本地的总数据", mSellerList );
+
+
 //        groupSet1 = intent.getStringExtra("GroupSet");// 获取传过来的总价钱
-//
-//
 //        ArrayList<String> noJsonToList = getNoJsonToList(groupSet1);
-//
 //        MyLog.LogShitou("传过来选中List", noJsonToList.toString());
-//
 //        StringBuffer  strb=new StringBuffer();
 //        strb.append("\"aaa\":{");
 //        for(int i=0;i<noJsonToList.size();i++){
@@ -177,36 +179,30 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //            strb.append(noJsonToList.get(i));
 //            strb.append(",");
 //        }
-//
 //        String returnStr=strb.toString().trim().substring(0,strb.toString().trim().length()-1);
-//
 //        returnStr="{"+returnStr+"}}";
-//
-//
 //        MyLog.LogShitou("传过来选中的编号+数量", returnStr);
 
 
-      groupSet = MyApplication.getGroupSet();// 传过来的集合数据
-        for (HashMap.Entry<Integer, Set<ShopNameBean.GoodsBean>> entry : groupSet.entrySet()) {
+        groupSet = MyApplication.getGroupSet();// 传过来的集合数据
+        for (HashMap.Entry<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
 //            key = entry.getKey();
-            Set<ShopNameBean.GoodsBean>  value = entry.getValue(); // 拿到循环后的value值
+            Set<ShopNameBean.SellerBean.GoodsBean>  value = entry.getValue(); // 拿到循环后的value值
             for (int i = 0; i < value.size(); i++) {
-                Iterator<ShopNameBean.GoodsBean> iterator = value.iterator();
-                ShopNameBean.GoodsBean next = iterator.next();
+                Iterator<ShopNameBean.SellerBean.GoodsBean> iterator = value.iterator();
+                ShopNameBean.SellerBean.GoodsBean next = iterator.next();
                 goods_sn = next.getGoods_sn();// 商品编号
                 goods_count = next.getGoods_count();// 商品数量
                 isChild = next.isChildSelected();
-                MyLog.LogShitou("传过来选中的编号+数量", goods_sn + "--" + goods_count);
-
-                // 添加数据到AddShopCartBean生成Json
-                AddShopCartBean mAddShopCartBean = new AddShopCartBean();
-                mAddShopCartBean.setGoods_sn(goods_sn);
-                mAddShopCartBean.setGoods_count(goods_count);
-                info_list.add(mAddShopCartBean); // 添加到list
-                MyLog.LogShitou("传过来组装添加的list数据", info_list.toString());
+                MyLog.LogShitou("---1---编号+数量Json", goods_sn + "--" + goods_count);
             }
+            // 添加数据到AddShopCartBean生成Json
+            AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+            mAddShopCartBean.setGoods_sn(goods_sn);
+            mAddShopCartBean.setGoods_count(goods_count);
+            info_list.add(mAddShopCartBean); // 添加到list
+            MyLog.LogShitou("==2===最后需要的编号+数量Json", info_list.toString());
         }
-
     }
 
     /**
@@ -328,7 +324,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 mExCompName = mDistributionTv.getText().toString().trim();
                 payNmae = mPayNmme.getText().toString().trim();
                 OrderPayNet(); // 订单支付网络请求
-//                MyToast.showShort(this, "调取微信或者支付宝页面。。。");
                 break;
             case R.id.FirmOrder_Address: // 选择收货地址
                 Intent intent = new Intent();
@@ -489,7 +484,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     mHandler.sendMessage(msg);
                     MyLog.LogShitou("支付宝", "支付宝-----------------------");
                 }
-
             }
         });
     }

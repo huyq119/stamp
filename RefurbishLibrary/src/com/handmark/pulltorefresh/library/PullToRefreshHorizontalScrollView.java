@@ -66,6 +66,11 @@ public class PullToRefreshHorizontalScrollView extends PullToRefreshBase<Horizon
 	}
 
 	@Override
+	public void fullScroll(int focusUp) {
+
+	}
+
+	@Override
 	protected boolean isReadyForPullEnd() {
 		View scrollViewChild = mRefreshableView.getChildAt(0);
 		if (null != scrollViewChild) {

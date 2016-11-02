@@ -74,9 +74,9 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
 
 
     private void initAdapter() {
-        ArrayList<ShopNameBean.GoodsBean> mGoodsBean = new ArrayList<>();
+        ArrayList<ShopNameBean.SellerBean.GoodsBean> mGoodsBean = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            ShopNameBean.GoodsBean goodsBean = new ShopNameBean.GoodsBean("http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg", "38596", "庚申年" + i,"1500", "1");
+            ShopNameBean.SellerBean.GoodsBean goodsBean = new ShopNameBean.SellerBean.GoodsBean("http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg", "38596", "庚申年" + i,"1500", "1");
             mGoodsBean.add(goodsBean);
         }
 

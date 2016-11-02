@@ -165,12 +165,14 @@
 
         <View style="@style/myline" />
 
-        <ListView
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
             android:id="@+id/auction_lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="#dadada"
             android:dividerHeight="1px"
+            ptr:ptrMode="pullFromEnd"
             android:listSelector="@android:color/transparent"
             android:overScrollMode="never"
             android:scrollbars="none"

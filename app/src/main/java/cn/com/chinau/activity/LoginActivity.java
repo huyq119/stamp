@@ -31,6 +31,7 @@ import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Des3Encode;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyHandler;
+import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyNumberKeyListener;
 import cn.com.chinau.utils.PhoneUtile;
 import cn.com.chinau.utils.ShowPassWord;
@@ -132,7 +133,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     if (dialog != null) {
                         dialog.dismiss();
                     }
-
                     break;
                 case LOGIN :
                     if (pd != null) {
@@ -349,19 +349,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 String PWBase64 = new String(Base64.encode(PWByte, Base64.DEFAULT));
                 params.put(StaticField.PASSWORD, PWBase64);// 密码
                 params.put(StaticField.OP_TYPE, StaticField.DL);// 操作类型(登录)
+
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
                 handler.sendEmptyMessage(LOGIN);
-                Log.e("登录--->", result);
-                if (result.equals("-1") |result.equals("-1")) {
+                MyLog.LogShitou("登录--->", result);
+                if (result.equals("-1") |result.equals("-2")) {
                     handler.sendEmptyMessage(NONET);
                     return;
                 }
                 Gson gson = new Gson();
                 LoginRegisterBean mLogRegBean = gson.fromJson(result, LoginRegisterBean.class);
-                if (mLogRegBean.getRsp_msg().equals("成功")) {
+                String mCode = mLogRegBean.getRsp_code();
+                if (mCode.equals("0000")) {
                     // 保存手机号，token和用户ID
                     sp.edit().putString("phone", mAccount).commit();
                     sp.edit().putString("token", mLogRegBean.getToken()).commit();

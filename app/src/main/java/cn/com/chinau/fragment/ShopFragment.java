@@ -36,7 +36,7 @@ import cn.com.chinau.utils.ThreadManager;
  * 购物车页面
  */
 
-public class ShopFragment extends BaseFragment {
+public class ShopFragment extends BaseFragment implements ExpandableAdapter.SellerList{
     private View mShopContent;
     private View mShopTitle;
     private ExpandableListView mContentListView;//主要的ListView
@@ -97,6 +97,7 @@ public class ShopFragment extends BaseFragment {
     private void initListener() {
 
         mGoToPay.setOnClickListener(expandableAdapter.getAdapterListener());// 去結算
+
         mShopDelete.setOnClickListener(expandableAdapter.getAdapterListener()); // 刪除
         mEdit.setOnClickListener(expandableAdapter.getAdapterListener()); // 编辑
         mAll.setOnClickListener(expandableAdapter.getAdapterListener()); //  全选
@@ -159,8 +160,14 @@ public class ShopFragment extends BaseFragment {
 
                 mPrice.setText("￥" + selectMoney);
                 mGoToPay.setText("结算(" + selectCount + ")");
+//                initAdapter(); // 添加数据
+//                initListener();
+
             }
         });
+        expandableAdapter.setSellerList(this);
+
+
     }
 
     @Override
@@ -211,6 +218,7 @@ public class ShopFragment extends BaseFragment {
                         // 总价
                         mTotalAmount = shopNameBean.getGoods_total_amount();
                         mSellerList = shopNameBean.getSeller_list(); // 商品List
+                        MyLog.LogShitou("mSellerList=================",""+mSellerList);
                         initAdapter(); // 添加数据
                         initListener();
                     }
@@ -219,6 +227,14 @@ public class ShopFragment extends BaseFragment {
         }
     };
 
+
+    // 回调删除后刷新的List
+    @Override
+    public void GetSellerList(ArrayList<ShopNameBean.SellerBean> seller_list) {
+        mSellerList = seller_list;
+        initAdapter(); // 添加数据
+        initListener();
+    }
 }
 
 

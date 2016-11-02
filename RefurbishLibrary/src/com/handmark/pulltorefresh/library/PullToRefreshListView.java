@@ -185,6 +185,11 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 	}
 
 	@Override
+	public void fullScroll(int focusUp) {
+
+	}
+
+	@Override
 	protected LoadingLayoutProxy createLoadingLayoutProxy(final boolean includeStart, final boolean includeEnd) {
 		LoadingLayoutProxy proxy = super.createLoadingLayoutProxy(includeStart, includeEnd);
 

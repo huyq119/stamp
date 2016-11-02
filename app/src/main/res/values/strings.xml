@@ -237,4 +237,5 @@
     <string name="apply_for_reason">申请原因:</string>
     <string name="add_address">添加收获地址</string>
     <string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
+    <string name="no_search_des">对不起，没有找到“邮票”的相关内容，\n请您修改关键字后重新搜索。</string>
 </resources>

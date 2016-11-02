@@ -170,7 +170,10 @@ public class ScanDetailsActivity extends BaseActivity implements View.OnClickLis
                 userId = sp.getString("userId", "");
 
                 if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(userId)) {// 已经登录进入下一页面
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("ScanDetails","ScanDetails");
                     openActivityWitchAnimation(AffirmBuyBackActivity.class);// 跳转确认回购页面
+
                     finish();
 
                 } else {// 进入登录界面

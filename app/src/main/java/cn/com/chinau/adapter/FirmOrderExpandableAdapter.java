@@ -24,13 +24,13 @@ import cn.com.chinau.utils.MyLog;
 public class FirmOrderExpandableAdapter extends BaseAdapter {
 
 //    private ShopNameBean shopNameBean;
-private HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet;
+private HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
     private Context context;
     private BitmapUtils bitmap;
     private String goods_count,goods_img,goods_name,goods_price;
-    private Set<ShopNameBean.GoodsBean> goodsBeen;
+    private Set<ShopNameBean.SellerBean.GoodsBean> goodsBeen;
 
-    public FirmOrderExpandableAdapter(Context context, BitmapUtils bitmap,HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet) {
+    public FirmOrderExpandableAdapter(Context context, BitmapUtils bitmap,HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet) {
         this.groupSet = groupSet;
         this.context = context;
         this.bitmap = bitmap;
@@ -83,19 +83,19 @@ private HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet;
 //        bitmap.display(itemHolder.mImg, goods_img);
 
 
-
-        for (HashMap.Entry<Integer, Set<ShopNameBean.GoodsBean>> entry : groupSet.entrySet()) {
-            Set<ShopNameBean.GoodsBean>  value = entry.getValue(); // 拿到循环后的value值
+        // 循环出组件数据
+        for (HashMap.Entry<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
+            Set<ShopNameBean.SellerBean.GoodsBean>  value = entry.getValue(); // 拿到循环后的value值
             for (int i = 0; i < value.size(); i++) {
-                Iterator<ShopNameBean.GoodsBean> iterator = value.iterator();
-                ShopNameBean.GoodsBean next = iterator.next();
+                Iterator<ShopNameBean.SellerBean.GoodsBean> iterator = value.iterator();
+                ShopNameBean.SellerBean.GoodsBean next = iterator.next();
                 goods_count = next.getGoods_count();// 商品数量
                 goods_img = next.getGoods_img();// 商品图片url
                 goods_name = next.getGoods_name();// 商品名字
                 goods_price = next.getGoods_price();// 商品价格
                 MyLog.LogShitou("传过来选中的编号+数量", goods_count + "--" + goods_img+"--"+goods_name+"--"+goods_price);
 
-                itemHolder.mCount.setText("x"+goods_count);
+                itemHolder.mCount.setText("x"+ goods_count);
                 itemHolder.mName.setText(goods_name);
                 itemHolder.mPrice.setText("￥"+goods_price);
                 bitmap.display(itemHolder.mImg, goods_img);
@@ -103,10 +103,6 @@ private HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet;
             }
         }
 
-        itemHolder.mCount.setText(goods_count);
-        itemHolder.mName.setText(goods_name);
-        itemHolder.mPrice.setText("￥"+goods_price);
-        bitmap.display(itemHolder.mImg, goods_img);
 
         return convertView;
     }

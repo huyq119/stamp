@@ -16,6 +16,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,7 +59,8 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
     private List<Fragment> mPopupList;//展示PopupWindow页面的Fragment的集合
     private String[] arr = {"自营商城", "第三方商家", "邮市", "竞拍"};
     private GridView mPanStampGV;//本页的GridView
-
+    private PullToRefreshGridView gridView;//本页的GridView
+    private GoodsStampBean mGoodsStampBean;
     private ArrayList<GoodsStampBean.GoodsList> mList;//存放数据的集合
     private ImageView mScan,mSearch;// 扫码，搜索
     private int lastVisibleItemPosition = 0;// 标记上次滑动位置
@@ -75,10 +78,16 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
             switch (msg.what) {
                 case StaticField.SUCCESS://套邮票Lsit
                     Gson gson = new Gson();
-                    GoodsStampBean mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
-                    mList = mGoodsStampBean.getGoods_list();
-                    initAdapter();
-
+                    mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
+                    String code = mGoodsStampBean.getRsp_code();
+                    if (code.equals("0000")) {
+                        if (num == 0) {
+                            initAdapter();
+                        } else {
+                            //设置GridView的适配器
+                            setGridViewAdapter();
+                        }
+                    }
                     break;
             }
         }
@@ -104,7 +113,6 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
         return mPanStampContent;
     }
 
-
     private void initView() {
         mScan = (ImageView) mPanStampTitle.findViewById(R.id.panstamp_title_scan);
         mSearch = (ImageView) mPanStampTitle.findViewById(R.id.panstamp_search);
@@ -114,18 +122,52 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
         mValue= (Button) mPanStampContent.findViewById(R.id.panStamp_value);
         mFilter = (Button) mPanStampContent.findViewById(R.id.panStamp_filter);
 
-        mPanStampGV = (GridView) mPanStampContent.findViewById(R.id.panstamp_gl);
+        gridView = (PullToRefreshGridView) mPanStampContent.findViewById(R.id.panstamp_gl);
         mTopBtn = (Button) mPanStampContent.findViewById(R.id.stamp_top_btn);
     }
 
+    /**
+     * 添加数据
+     */
+    private void initData() {
+        if (num == 0) {
+            mList = new ArrayList<>();
+        }
+        // 初始化第一个按钮
+        setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
+        RequestNet(StaticField.ZH, num, StaticField.D);
+    }
 
     /**
      * 装载适配器
      */
     private void initAdapter() {
-        PanStampGridViewAdapter mPanStampAdapter = new PanStampGridViewAdapter(getActivity(), mList, mBitmap);
-        mPanStampGV.setAdapter(mPanStampAdapter);
-        mPanStampAdapter.notifyDataSetChanged();
+        setGridViewAdapter();
+    }
+    /**
+     * 设置GridView的适配器
+     */
+    private void setGridViewAdapter() {
+        if (mGoodsStampBean != null) {
+            List<GoodsStampBean.GoodsList> stamp_list = mGoodsStampBean.getGoods_list();;
+            mList.addAll(stamp_list);
+            //为GridView设置适配器
+            PanStampGridViewAdapter mPanStampAdapter = new PanStampGridViewAdapter(getActivity(), mList, mBitmap);
+            gridView.setAdapter(mPanStampAdapter);
+            mPanStampAdapter.notifyDataSetChanged();
+//            MyLog.LogShitou("num=====3=======",""+num);
+            if (num != 0) {
+//                MyLog.LogShitou("===1=====到这一部了吗",mList.size()+"======="+num);
+                mPanStampGV.setSelection(mPanStampAdapter.getCount()-20);
+                //解决调用onRefreshComplete方法去停止刷新操作,无法取消刷新的bug
+                gridView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        gridView.onRefreshComplete();
+                    }
+                }, 800);
+            }
+        }
     }
 
 
@@ -140,11 +182,11 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
         mSales.setOnClickListener(this);
         mValue.setOnClickListener(this);
         mFilter.setOnClickListener(this);
-
         mTopBtn.setOnClickListener(this);
+        // 获取需要刷新的mPanStampGV
+        mPanStampGV = gridView.getRefreshableView();
         mPanStampGV.setOnScrollListener(this);
-
-        mPanStampGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                String mSource = mList.get(i).getGoods_source();
@@ -166,6 +208,16 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
+
+        // 上拉加载更多
+        gridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<GridView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<GridView> refreshView) {
+                num++;
+                RequestNet(StaticField.ZH, num, StaticField.D);
+                MyLog.LogShitou("num===2====", "" + num);
+            }
+        });
     }
 
     @Override
@@ -173,17 +225,6 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-    /**
-     * 添加数据
-     */
-    private void initData() {
-        if (mList != null) {
-            mList = new ArrayList<>();
-        }
-        // 初始化第一个按钮
-        setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-        RequestNet(StaticField.ZH, num, StaticField.D);
-    }
 
     /**
      *  套邮票list网络请求

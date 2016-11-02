@@ -1,15 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?><!--无竞拍记录，无商品订单-->
+<?xml version="1.0" encoding="utf-8"?><!--无竞拍记录，无商品订单，无搜索内容-->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/no_order_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableTop="@mipmap/no_order"
-        android:drawablePadding="40dp"
-        android:textSize="16sp"
-        android:visibility="gone"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
-        android:textColor="#989898"
-        />
+    android:id="@+id/no_order_tv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="100dp"
+    android:drawablePadding="40dp"
+    android:drawableTop="@mipmap/no_order"
+    android:text="@string/no_search_des"
+    android:textColor="#989898"
+    android:textSize="16sp"
+    android:gravity="center"
+    android:visibility="gone"
+    android:lineSpacingExtra="8dp"
+    />
 
 

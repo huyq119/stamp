@@ -164,7 +164,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                         initData(); // 再次详情请求,获取收藏状态
                     }
                     break;
-                case StaticField.ADDSHOPPINGCARTSUCCESS:
+                case StaticField.ADDSHOPPINGCARTSUCCESS://  加入购物车
                     Gson gsones = new Gson();
                     BaseBean mBasebean = gsones.fromJson((String) msg.obj,BaseBean.class);
                     if (mBasebean.getRsp_code().equals("0000")){
@@ -176,8 +176,12 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                         mShoppingCount.setVisibility(View.VISIBLE);// 加入购物车成功后显示数量
                         mShoppingCount.setText("+" + String.valueOf(mShopCount));
                         MyLog.LogShitou("加入后的数量","--->:"+mShopCount);
+                        mHandler.sendEmptyMessage(5);// 发送提示添加成功
                     }
                     break ;
+                case 5:
+                    MyToast.showShort(SelfMallDetailActivity.this,"添加成功");
+                    break;
             }
         }
     };

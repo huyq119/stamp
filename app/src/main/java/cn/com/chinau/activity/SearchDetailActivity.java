@@ -13,8 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -58,6 +60,9 @@ public class SearchDetailActivity extends BaseActivity implements View.OnClickLi
     private boolean Synthesizeflag;// 综合的标记->升序还是降序false升序,true是降序
     private boolean Salesflag;// 价格的标记->升序还是降序false升序,true是降序
     private boolean Classifyflag;// 分类的标记->升序还是降序false升序,true是降序
+    private TextView mNoOrderTv;
+    private LinearLayout mTitleTabLl;
+
     @Override
     public View CreateTitle() {
         mSearchDetail_title = View.inflate(this, R.layout.activity_searchdetail_title, null);
@@ -88,6 +93,8 @@ public class SearchDetailActivity extends BaseActivity implements View.OnClickLi
         mClassify = (Button) mSearchDetail_content.findViewById(R.id.searchDetail_value);
 
         mTopItem = mSearchDetail_content.findViewById(R.id.searchDetail_tab);
+        mNoOrderTv =(TextView) mSearchDetail_content.findViewById(R.id.no_order_tv);// 搜索无内容显示的布局
+        mTitleTabLl =(LinearLayout) mSearchDetail_content.findViewById(R.id.title_tab_ll);// 搜索无内容隐藏的布局
     }
 
 
@@ -301,9 +308,7 @@ public class SearchDetailActivity extends BaseActivity implements View.OnClickLi
                 params.put(StaticField.CONDITION, search);//搜索条件
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.LogShitou("查询范围",scope);
-                MyLog.LogShitou(scope+"-"+"搜索内容List",result);
-
+                MyLog.LogShitou(scope+"-"+"list搜索内容",result);
                 if (result.equals("-1") |result.equals("-2")) {
                     return;
                 }
@@ -311,7 +316,6 @@ public class SearchDetailActivity extends BaseActivity implements View.OnClickLi
                 msg.what = StaticField.SUCCESS;
                 msg.obj = result;
                 handler.sendMessage(msg);
-
             }
         });
     }
@@ -328,7 +332,17 @@ public class SearchDetailActivity extends BaseActivity implements View.OnClickLi
                     if(code.equals("0000")){
                         mList = mSearchFristListBean.getResult_list();
                         if(mList !=null && mList.size() != 0){
+                            mTitleTabLl.setVisibility(View.VISIBLE);
+                            mTopItem.setVisibility(View.VISIBLE);
+                            mGridView.setVisibility(View.VISIBLE);
+                            mNoOrderTv.setVisibility(View.GONE);
                             initAdapter();
+                        }else{
+                            mTitleTabLl.setVisibility(View.GONE);// 隐藏筛选栏
+                            mTopItem.setVisibility(View.GONE); // 隐藏筛选栏下的View
+                            mGridView.setVisibility(View.GONE);
+                            mNoOrderTv.setVisibility(View.VISIBLE); // 无信息控件显示
+                            mNoOrderTv.setText(R.string.no_search_des);// 显示无搜索内信息的内容
                         }
                     }
                     break;

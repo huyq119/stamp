@@ -18,9 +18,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
@@ -45,12 +48,11 @@ import cn.com.chinau.zxing.activity.CaptureActivity;
 public class StampTapFragment extends BaseFragment implements View.OnClickListener,
         AdapterView.OnItemClickListener, AbsListView.OnScrollListener,StampTapFilterDialog.JsonData {
 
-
     private static final int STAMPCONTENT = 0;
-
     private View mStampTitle;//标题
     private ImageView mScan;//扫码按钮
     private ImageView mSearch;//搜索按钮
+    private PullToRefreshGridView gridView;
     private GridView mGrid;
     private View mStampTapContent;
     private Button mSynthesize, mRelease, mPrice, mFilter, mTop;
@@ -68,28 +70,33 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
     private int mCount;
     private SharedPreferences sp;
     private String[] mTitle, mArrTitle0, mArrTitle1, mArrTitle2;
-
+    private StampTapBean stampTapBean;
     private Handler mHandler = new Handler() {
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
             switch (msg.what) {
                 case STAMPCONTENT://邮票信息内容
-                    String result = (String) msg.obj;
                     Gson gson = new Gson();
-                    StampTapBean stampTapBean = gson.fromJson(result, StampTapBean.class);
+                    stampTapBean = gson.fromJson((String) msg.obj, StampTapBean.class);
                     String code = stampTapBean.getRsp_code();
+
                     if (code.equals("0000")) {
-//                        if (mList.size() !=0){
-                            mList = stampTapBean.getStamp_list();
+
+                        if (num == 0) {
                             initAdapter();
-//                        }
+                        } else {
+                            //设置GridView的适配器
+                            setGridViewAdapter();
+                        }
                     }
                     break;
             }
         }
     };
+
 
     @Override
     public View CreateTitle() {
@@ -110,10 +117,9 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
 
     private void initView() {
-
         mScan = (ImageView) mStampTitle.findViewById(R.id.stamptap_title_scan);
         mSearch = (ImageView) mStampTitle.findViewById(R.id.stamptap_search);
-        mGrid = (GridView) mStampTapContent.findViewById(R.id.stamptap_gl);
+        gridView = (PullToRefreshGridView) mStampTapContent.findViewById(R.id.stamptap_gl);
         mFilter = (Button) mStampTapContent.findViewById(R.id.stamptap_filter);
         mSynthesize = (Button) mStampTapContent.findViewById(R.id.stampTap_synthesize);
         mRelease = (Button) mStampTapContent.findViewById(R.id.stampTap_sales);
@@ -122,16 +128,70 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-
     private void initData() {
         GetCategory(); // 获取在本地的邮票目录类别数据
-
-        if (mList != null) {
+        if (num == 0) {
             mList = new ArrayList<>();
         }
         // 初始化第一个按钮
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
         RequestNet(StaticField.ZH, num, StaticField.D,""); // 邮票目录请求网络的方法
+//        MyLog.LogShitou("num=====1=======", "" + num);
+    }
+
+
+    private void initAdapter() {
+        setGridViewAdapter();
+    }
+    /**
+     * 设置GridView的适配器
+     */
+    private void setGridViewAdapter() {
+        if (stampTapBean != null) {
+            List<StampTapBean.StampList> stamp_list = stampTapBean.getStamp_list();;
+            mList.addAll(stamp_list);
+            //为GridView设置适配器
+            StampTapGridViewAdapter gvAdapter = new StampTapGridViewAdapter(getActivity(), mList, mBitmap);
+            gridView.setAdapter(gvAdapter);
+            gvAdapter.notifyDataSetChanged();
+
+//            MyLog.LogShitou("num=====3=======",""+num);
+            if (num != 0) {
+//                MyLog.LogShitou("===1=====到这一部了吗",mList.size()+"======="+num);
+                mGrid.setSelection(gvAdapter.getCount()-20);
+                //解决调用onRefreshComplete方法去停止刷新操作,无法取消刷新的bug
+                gridView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        gridView.onRefreshComplete();
+                    }
+                }, 800);
+            }
+        }
+    }
+
+    private void initListener() {
+
+        mFilter.setOnClickListener(this);
+        mScan.setOnClickListener(this);
+        mSearch.setOnClickListener(this);
+        mSynthesize.setOnClickListener(this);
+        mRelease.setOnClickListener(this);
+        mPrice.setOnClickListener(this);
+        mTop.setOnClickListener(this);
+        // 获取需要刷新的mGrid
+        mGrid = gridView.getRefreshableView();
+        mGrid.setOnScrollListener(this);
+        gridView.setOnItemClickListener(this);
+        // 上拉加载更多
+        gridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<GridView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<GridView> refreshView) {
+                num++;
+                RequestNet(StaticField.ZH, num, StaticField.D,""); // 邮票目录请求网络的方法
+//                MyLog.LogShitou("num===2====", "" + num);
+            }
+        });
     }
 
     /**
@@ -139,44 +199,44 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
      */
     private void GetCategory() {
         String mCategory = sp.getString("Category2", "");
-        Gson gson = new Gson();
-        CategoryRMBean mCategoryRMBean = gson.fromJson(mCategory, CategoryRMBean.class);
-        ArrayList<CategoryRMBean.Category> list = mCategoryRMBean.getCategory();
 
-        mTitle = new String[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            mTitle[i] = list.get(i).getName();
-            MyLog.LogShitou("1级mTitle", mTitle[i]);
+        if (!mCategory.equals("")){
+            Gson gson = new Gson();
+            CategoryRMBean mCategoryRMBean = gson.fromJson(mCategory, CategoryRMBean.class);
+            ArrayList<CategoryRMBean.Category> list = mCategoryRMBean.getCategory();
 
+            mTitle = new String[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                mTitle[i] = list.get(i).getName();
+                MyLog.LogShitou("1级mTitle", mTitle[i]);
+            }
+            CategoryRMBean.Category SubCategory0 = list.get(0);
+            CategoryRMBean.Category SubCategory1 = list.get(1);
+            CategoryRMBean.Category SubCategory2 = list.get(2);
+            ArrayList<CategoryRMBean.Category.SubCategory> subCategory0 = SubCategory0.getSubCategory();
+            ArrayList<CategoryRMBean.Category.SubCategory> subCategory1 = SubCategory1.getSubCategory();
+            ArrayList<CategoryRMBean.Category.SubCategory> subCategory2 = SubCategory2.getSubCategory();
+
+            int sub0 = subCategory0.size();// 获取subCategory0的个数
+            int sub1 = subCategory1.size();// 获取subCategory1的个数
+            int sub2 = subCategory2.size();// 获取subCategory2的个数
+            mArrTitle0 = new String[sub0];// 一级分类
+            mArrTitle1 = new String[sub1];// 一级分类
+            mArrTitle2 = new String[sub2];// 一级分类
+
+            for (int i = 0; i < subCategory0.size(); i++) {
+                mArrTitle0[i] = subCategory0.get(i).getName();
+                MyLog.LogShitou("2级Title0", mArrTitle0[i]);
+            }
+            for (int i = 0; i < subCategory1.size(); i++) {
+                mArrTitle1[i] = subCategory1.get(i).getName();
+                MyLog.LogShitou("2级Title1", mArrTitle1[i]);
+            }
+            for (int i = 0; i < subCategory2.size(); i++) {
+                mArrTitle2[i] = subCategory2.get(i).getName();
+                MyLog.LogShitou("2级Title2", mArrTitle2[i]);
+            }
         }
-
-        CategoryRMBean.Category SubCategory0 = list.get(0);
-        CategoryRMBean.Category SubCategory1 = list.get(1);
-        CategoryRMBean.Category SubCategory2 = list.get(2);
-        ArrayList<CategoryRMBean.Category.SubCategory> subCategory0 = SubCategory0.getSubCategory();
-        ArrayList<CategoryRMBean.Category.SubCategory> subCategory1 = SubCategory1.getSubCategory();
-        ArrayList<CategoryRMBean.Category.SubCategory> subCategory2 = SubCategory2.getSubCategory();
-
-        int sub0 = subCategory0.size();// 获取subCategory0的个数
-        int sub1 = subCategory1.size();// 获取subCategory1的个数
-        int sub2 = subCategory2.size();// 获取subCategory2的个数
-        mArrTitle0 = new String[sub0];// 一级分类
-        mArrTitle1 = new String[sub1];// 一级分类
-        mArrTitle2 = new String[sub2];// 一级分类
-
-        for (int i = 0; i < subCategory0.size(); i++) {
-            mArrTitle0[i] = subCategory0.get(i).getName();
-            MyLog.LogShitou("2级Title0", mArrTitle0[i]);
-        }
-        for (int i = 0; i < subCategory1.size(); i++) {
-            mArrTitle1[i] = subCategory1.get(i).getName();
-            MyLog.LogShitou("2级Title1", mArrTitle1[i]);
-        }
-        for (int i = 0; i < subCategory2.size(); i++) {
-            mArrTitle2[i] = subCategory2.get(i).getName();
-            MyLog.LogShitou("2级Title2", mArrTitle2[i]);
-        }
-
     }
 
     /**
@@ -218,26 +278,6 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                 mHandler.sendMessage(msg);
             }
         });
-    }
-
-    private void initAdapter() {
-        //为GridView设置适配器
-        gvAdapter = new StampTapGridViewAdapter(getActivity(), mList, mBitmap);
-        mGrid.setAdapter(gvAdapter);
-        gvAdapter.notifyDataSetChanged();
-
-    }
-
-    private void initListener() {
-        mGrid.setOnItemClickListener(this);
-        mGrid.setOnScrollListener(this);
-        mFilter.setOnClickListener(this);
-        mScan.setOnClickListener(this);
-        mSearch.setOnClickListener(this);
-        mSynthesize.setOnClickListener(this);
-        mRelease.setOnClickListener(this);
-        mPrice.setOnClickListener(this);
-        mTop.setOnClickListener(this);
     }
 
     @Override

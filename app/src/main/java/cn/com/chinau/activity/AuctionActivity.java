@@ -20,6 +20,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +55,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private StampHorizontalListViewAdapter hListViewAdapter;//筛选横向花的listView的适配器
     private ArrayList<GoodsStampBean.GoodsList> mList;
     private ListView mListView;
+    private PullToRefreshListView listView;
     private ImageView mBack, mSearch;//返回按钮,搜索
 
     private String[] mArrTitle = {"新中国邮票", "民国邮票", "解放区邮票", "清代邮票"};
@@ -77,7 +80,8 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     public static final int SUCCESS = 1;
     private GoodsStampBean mGoodsStampBean;
     private String[] string0, string2, string3, string4;
-
+    private RadioGroup mRadioGroup;
+    private SharedPreferences sp;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -87,11 +91,13 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 case StaticField.SUCCESS://竞拍Lsit
                     Gson gson = new Gson();
                     mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
-                   String mRsp_msg =  mGoodsStampBean.getRsp_code();
-                    if (mRsp_msg.equals("0000")){
-                        mList = mGoodsStampBean.getGoods_list();
-                        if (mList != null && mList.size() != 0) {
-                            initAdapter(); //竖向ListView设置适配器
+                   String mRsp_code =  mGoodsStampBean.getRsp_code();
+                    if (mRsp_code.equals("0000")){
+                        if (num == 0) {
+                            initAdapter();
+                        } else {
+                            //设置GridView的适配器
+                            setGridViewAdapter();
                         }
                     }
                     break;
@@ -185,8 +191,8 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
             }
         }
     };
-    private RadioGroup mRadioGroup;
-    private SharedPreferences sp;
+
+
 
     @Override
     public View CreateTitle() {
@@ -212,7 +218,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mTitle.setText("竞拍");
         mTopBtn = (Button) mAuctionContent.findViewById(R.id.base_top_btn);// 置顶
         hListView = (HorizontalListView) mAuctionContent.findViewById(R.id.stamp_hl);//横向ListView
-        mListView = (ListView) mAuctionContent.findViewById(R.id.auction_lv);// 竖向ListView
+        listView = (PullToRefreshListView) mAuctionContent.findViewById(R.id.auction_lv);// 竖向ListView
         mRadioGroup = (RadioGroup) mAuctionContent.findViewById(R.id.stamp_RadioGroup);
 
         mNewChinese = (RadioButton) mAuctionContent.findViewById(R.id.auction_newchinese_btn);
@@ -227,6 +233,50 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         initGestureListener();// 滑动lsitview隐藏导航栏的方法
 
     }
+    /**
+     * 初始化第一个按钮
+     */
+    private void initData() {
+        GetInitCategory(); //获取保存在本地竞拍类别数据
+        if (num == 0) {
+            mList = new ArrayList<>();
+        }
+        setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
+        RequestNet(StaticField.ZH, num, StaticField.A);
+    }
+
+    private void initAdapter() {
+        setGridViewAdapter(); // 设置GridView的适配器
+    }
+
+    /**
+     * 设置GridView的适配器
+     */
+    private void setGridViewAdapter() {
+        if (mGoodsStampBean != null) {
+            List<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean.getGoods_list();
+            mList.addAll(goods_list);
+            AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, mList);
+            mListView.setAdapter(mListAdapter);
+            mListAdapter.notifyDataSetChanged();
+
+            //这句是为了防止展示到listView处
+            listView.requestChildFocus(mHeartll, null);
+            MyLog.LogShitou("num=====3=======", "" + num);
+            if (num != 0) {
+                MyLog.LogShitou("===1=====到这一部了吗", mList.size() + "=======" + num);
+                mListView.setSelection(mListAdapter.getCount() - 20);
+
+                //解决调用onRefreshComplete方法去停止刷新操作,无法取消刷新的bug
+                listView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        listView.onRefreshComplete();
+                    }
+                }, 800);
+            }
+        }
+    }
 
     /**
      * 滑动lsitview隐藏导航栏的方法
@@ -240,23 +290,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         MyLog.e(height + "");
         GestureListener gestureListener = new GestureListener(mHeartll, height);
         mGestureDetector = new GestureDetector(this, gestureListener);
-    }
-
-
-    private void initAdapter() {
-        //竖向ListView设置适配器
-        AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, mList);
-        mListView.setAdapter(mListAdapter);
-        mListAdapter.notifyDataSetChanged();
-    }
-
-    /**
-     * 初始化第一个按钮
-     */
-    private void initData() {
-        GetInitCategory(); //获取保存在本地竞拍类别数据
-        setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-        RequestNet(StaticField.ZH, num, StaticField.A);
     }
 
     // 获取保存在本地竞拍类别数据
@@ -396,7 +429,17 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mSynthesize.setOnClickListener(this);
         mOver.setOnClickListener(this);
         mCamera.setOnClickListener(this);
+        mListView = listView.getRefreshableView();
         mListView.setOnScrollListener(this);
+        // 上拉加载更多
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                num++;
+                RequestNet(StaticField.ZH, num, StaticField.A);
+                MyLog.LogShitou("num===2====", "" + num);
+            }
+        });
 
         //横向ListView的点击事件
         hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -409,7 +452,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
             }
         });
         // mListView的条目监听
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //去往竞拍详情页

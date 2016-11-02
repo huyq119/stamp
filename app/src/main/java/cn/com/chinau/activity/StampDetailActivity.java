@@ -218,8 +218,13 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                         mShopCount++; // 数量自增
                         mShoppingCount.setVisibility(View.VISIBLE);// 加入购物车成功后显示数量
                         mShoppingCount.setText("+" + String.valueOf(mShopCount));
+
                         MyLog.LogShitou("加入后的数量", "--->:" + mShopCount);
+                        mHandler.sendEmptyMessage(5); // 发送提示添加成功
                     }
+                    break;
+                case 5:
+                    MyToast.showShort(StampDetailActivity.this,"添加成功");
                     break;
 
                 default:
@@ -388,7 +393,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 startActivity(intents);
                 finish();
                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-                MyToast.showShort(this, "点击了立即购买");
+//                MyToast.showShort(this, "点击了立即购买");
 
                 break;
             case R.id.base_top_btn:// 置顶

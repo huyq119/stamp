@@ -6,17 +6,18 @@
 
     <ImageView
         android:id="@+id/child_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="center"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="12dp"
         android:src="@mipmap/select_white" />
 
 
     <RelativeLayout
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_margin="@dimen/distance"
+        android:layout_margin="12dp"
         android:background="@drawable/roct_bg">
 
         <ImageView

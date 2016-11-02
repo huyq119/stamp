@@ -1286,6 +1286,9 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		});
 	}
 
+	public abstract void fullScroll(int focusUp);
+
+
 	public static enum AnimationStyle {
 		/**
 		 * This is the default for Android-PullToRefresh. Allows you to use any

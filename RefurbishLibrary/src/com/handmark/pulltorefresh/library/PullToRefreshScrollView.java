@@ -65,6 +65,11 @@ public class PullToRefreshScrollView extends PullToRefreshBase<ScrollView> {
 	}
 
 	@Override
+	public void fullScroll(int focusUp) {
+
+	}
+
+	@Override
 	protected boolean isReadyForPullEnd() {
 		View scrollViewChild = mRefreshableView.getChildAt(0);
 		if (null != scrollViewChild) {
@@ -82,7 +87,7 @@ public class PullToRefreshScrollView extends PullToRefreshBase<ScrollView> {
 
 		@Override
 		protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
-				int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
+									   int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
 
 			final boolean returnValue = super.overScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,
 					scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);

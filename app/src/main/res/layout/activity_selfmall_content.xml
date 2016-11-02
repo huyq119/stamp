@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--商城页面-->
+<?xml version="1.0" encoding="utf-8"?><!--商城页面-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -113,7 +112,8 @@
             android:layout_height="1dp"
             android:background="#dddfe3" />
 
-        <GridView
+        <com.handmark.pulltorefresh.library.PullToRefreshGridView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
             android:id="@+id/selfMall_gl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -124,9 +124,10 @@
             android:overScrollMode="never"
             android:scrollbars="none"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp" />
+            android:verticalSpacing="10dp"
+            ptr:ptrMode="pullFromEnd" />
     </LinearLayout>
 
     <!--置顶按钮-->
-    <include layout="@layout/top_btn"/>
+    <include layout="@layout/top_btn" />
 </RelativeLayout>

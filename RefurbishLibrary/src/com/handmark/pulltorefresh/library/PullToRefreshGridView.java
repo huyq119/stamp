@@ -62,6 +62,11 @@ public class PullToRefreshGridView extends PullToRefreshAdapterViewBase<GridView
 		return gv;
 	}
 
+	@Override
+	public void fullScroll(int focusUp) {
+
+	}
+
 	class InternalGridView extends GridView implements EmptyViewMethodAccessor {
 
 		public InternalGridView(Context context, AttributeSet attrs) {

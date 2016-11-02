@@ -62,6 +62,11 @@ public class PullToRefreshExpandableListView extends PullToRefreshAdapterViewBas
 		return lv;
 	}
 
+	@Override
+	public void fullScroll(int focusUp) {
+
+	}
+
 	class InternalExpandableListView extends ExpandableListView implements EmptyViewMethodAccessor {
 
 		public InternalExpandableListView(Context context, AttributeSet attrs) {

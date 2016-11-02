@@ -29,55 +29,58 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/tab_choose_bg"
                     android:button="@null"
                     android:drawablePadding="3dp"
                     android:drawableTop="@mipmap/ic_launcher"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:background="@drawable/tab_choose_bg"
                     android:text="新中国邮票"
                     android:textColor="#666"
                     android:textSize="13sp" />
+
                 <RadioButton
                     android:id="@+id/stamp_republicChina_btn"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/tab_choose_bg"
                     android:button="@null"
                     android:drawablePadding="3dp"
                     android:drawableTop="@mipmap/ic_launcher"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:background="@drawable/tab_choose_bg"
                     android:text="民国邮票"
                     android:textColor="#666"
                     android:textSize="13sp" />
+
                 <RadioButton
                     android:id="@+id/stamp_liberatedArea_btn"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/tab_choose_bg"
                     android:button="@null"
                     android:drawablePadding="3dp"
                     android:drawableTop="@mipmap/ic_launcher"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:background="@drawable/tab_choose_bg"
                     android:text="解放区邮票"
                     android:textColor="#666"
                     android:textSize="13sp" />
+
                 <RadioButton
                     android:id="@+id/stamp_qingDynasty_btn"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/tab_choose_bg"
                     android:button="@null"
                     android:drawablePadding="3dp"
                     android:drawableTop="@mipmap/ic_launcher"
                     android:gravity="center"
-                    android:padding="5dp"
 
-                    android:background="@drawable/tab_choose_bg"
+                    android:padding="5dp"
                     android:text="清代邮票"
                     android:textColor="#666"
                     android:textSize="13sp" />
@@ -194,7 +197,8 @@
 
         <View style="@style/myline" />
 
-        <GridView
+        <com.handmark.pulltorefresh.library.PullToRefreshGridView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
             android:id="@+id/stamp_gl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -205,10 +209,11 @@
             android:overScrollMode="never"
             android:scrollbars="none"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp" />
+            android:verticalSpacing="10dp"
+            ptr:ptrMode="pullFromEnd" />
     </LinearLayout>
 
     <!--置顶按钮-->
-    <include layout="@layout/top_btn"/>
+    <include layout="@layout/top_btn" />
 
 </RelativeLayout>

@@ -624,6 +624,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
      */
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
+//        MyLog.LogShitou("motionEvent值是几=======",motionEvent+"");
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             mHandler.sendMessageDelayed(
                     mHandler.obtainMessage(StaticField.TOUCH_EVENT_ID, view), StaticField.HOME_SV_COUNT);

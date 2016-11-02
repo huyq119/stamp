@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -41,24 +41,29 @@ import cn.com.chinau.bean.CategoryRMBean;
 import cn.com.chinau.bean.HomeBean;
 import cn.com.chinau.bean.SysParamQueryBean;
 import cn.com.chinau.http.HttpUtils;
+import cn.com.chinau.utils.AutoScrollViewPager;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
+import cn.com.chinau.view.ToTopImageView;
 import cn.com.chinau.view.WrapGridView;
 import cn.com.chinau.zxing.activity.CaptureActivity;
+
+import static cn.com.chinau.R.id.home_SV;
 
 /**
  * 首页
  */
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener ,View.OnTouchListener{
     private String mImage, mSummary;// 扫码页面的显示的图片,业务介绍
     private ArrayList<String> mProcess;
     private View mHomeView;//内容页面
     private ImageView mScan;//扫码页面
     private LinearLayout mSearch;//搜索页面
-    private Button mStampShop, mMall, mAuction, mScanBTN, mDesigner;//邮市,商城,竞拍,扫码,设计家
-    private ViewPager mHomeVP;//主页导航轮播条
+    private Button mStampShop, mMall, mAuction, mScanBTN, mDesigner;//邮市,商城,竞拍,扫码,设计家,置顶
+    private ToTopImageView mTopBtn;
+    private AutoScrollViewPager mHomeVP;//主页导航轮播条
     private HomeBean mHomeBean;//实体类
     private WrapGridView mGridView;//下面的GridView
     private PullToRefreshScrollView mScrollView;
@@ -68,6 +73,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private List<HomeBean.Good> mList;//接收
     private int num = 0;//网络请求的角标
     private final static int SYSPARAM = 1;//系统参数请求成功标识
+    protected static final int AUTO = 10;// 自动轮训
     //第一个小布局的图片
     private ImageView mFirstImage1;
     private ImageView mFirstImage2;
@@ -85,6 +91,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private ImageView mThreeImage4;
     private ImageView mThreeImage5;
     private SharedPreferences sp;
+    private int lastY = 0;
+    private int scrollY; // 标记上次滑动位置
+    private View contentView;
+    private ScrollView scrollView;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -194,6 +204,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     };
 
 
+
     @Override
     public View CreateTitle() {
         View HomeTitle = View.inflate(getActivity(), R.layout.fragment_home_title, null);
@@ -226,11 +237,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mStampShop = (Button) mHomeView.findViewById(R.id.home_stampshop);
         mMall = (Button) mHomeView.findViewById(R.id.home_mall);
         mAuction = (Button) mHomeView.findViewById(R.id.home_auction);
-        mHomeVP = (ViewPager) mHomeView.findViewById(R.id.home_viewpager);
+        mHomeVP = (AutoScrollViewPager) mHomeView.findViewById(R.id.home_viewpager);
         mScanBTN = (Button) mHomeView.findViewById(R.id.home_scan);
         mDesigner = (Button) mHomeView.findViewById(R.id.home_designer);
         mGridView = (WrapGridView) mHomeView.findViewById(R.id.home_WGV);
-        mScrollView = (PullToRefreshScrollView) mHomeView.findViewById(R.id.home_SV);
+        mScrollView = (PullToRefreshScrollView) mHomeView.findViewById(home_SV);
+        mTopBtn= (ToTopImageView) mHomeView.findViewById(R.id.stamp_top_btn);// 置顶按钮
         //三个小布局的题目
         mFirstTitle = (TextView) mHomeView.findViewById(R.id.home_first_title);
         mSecondTitle = (TextView) mHomeView.findViewById(R.id.home_second_title);
@@ -266,6 +278,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         //设置轮播图
         HomeViewPagerAdapter mViewPagerAdapter = new HomeViewPagerAdapter(mBitmap, banners, getActivity());
         mHomeVP.setAdapter(mViewPagerAdapter);
+        mHomeVP.startAutoScroll();// 设置轮播图自动轮播,千万别忘记这一步。。。
         CirclePageIndicator mHomeVPI = (CirclePageIndicator) mHomeView.findViewById(R.id.home_viewpagerIndicator);
         //关联两个控件,但是这个必须在设置适配器之后使用
         mHomeVPI.setViewPager(mHomeVP);
@@ -287,6 +300,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mAuction.setOnClickListener(this);
         mScanBTN.setOnClickListener(this);
         mDesigner.setOnClickListener(this);
+
+        //mScrollView他只提供了顶部和底部的上拉、下拉刷新监听，毛用。
+        // 于是查看其源码，发现把事件拦截了。而且pullToRefreshScrollView根本就不是scrollview
+        // mScrollView他里面提供了一个方法可以或得到Scrollview
+        scrollView = mScrollView.getRefreshableView();
+        scrollView.setOnTouchListener(this);
         //图片的点击事件
         mFirstImage1.setOnClickListener(this);
         mFirstImage2.setOnClickListener(this);
@@ -343,28 +362,28 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             case R.id.home_chinese_image1:
                 child_list = mHomeBean.getGroup_list().get(0).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(0).getGroup_name());
-                bundle.putString(StaticField.HOMEURL, child_list.get(0).getH5_url());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(0).getTitle());// 标题
+                bundle.putString(StaticField.HOMEURL, child_list.get(0).getH5_url()); // 显示页面的url
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
             case R.id.home_chinese_image2:
                 child_list = mHomeBean.getGroup_list().get(0).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(0).getGroup_name());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(1).getTitle());
                 bundle.putString(StaticField.HOMEURL, child_list.get(1).getH5_url());
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
             case R.id.home_chinese_image3:
                 child_list = mHomeBean.getGroup_list().get(0).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(0).getGroup_name());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(2).getTitle());
                 bundle.putString(StaticField.HOMEURL, child_list.get(2).getH5_url());
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
             case R.id.home_chinese_image4:
                 child_list = mHomeBean.getGroup_list().get(0).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(0).getGroup_name());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(3).getTitle());
                 bundle.putString(StaticField.HOMEURL, child_list.get(3).getH5_url());
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
@@ -372,28 +391,28 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             case R.id.home_classical_image1:
                 child_list = mHomeBean.getGroup_list().get(1).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(1).getGroup_name());
-                bundle.putString(StaticField.HOMEURL, child_list.get(0).getH5_url());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(0).getTitle());//标题
+                bundle.putString(StaticField.HOMEURL, child_list.get(0).getH5_url()); // 显示页面url
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
             case R.id.home_classical_image2:
                 child_list = mHomeBean.getGroup_list().get(1).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(1).getGroup_name());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(1).getTitle());
                 bundle.putString(StaticField.HOMEURL, child_list.get(1).getH5_url());
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
             case R.id.home_classical_image3:
                 child_list = mHomeBean.getGroup_list().get(1).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(1).getGroup_name());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(2).getTitle());
                 bundle.putString(StaticField.HOMEURL, child_list.get(2).getH5_url());
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
             case R.id.home_classical_image4:
                 child_list = mHomeBean.getGroup_list().get(1).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(1).getGroup_name());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(3).getTitle());
                 bundle.putString(StaticField.HOMEURL, child_list.get(3).getH5_url());
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
@@ -401,35 +420,35 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             case R.id.home_folk_image1:
                 child_list = mHomeBean.getGroup_list().get(2).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(2).getGroup_name());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(0).getTitle());
                 bundle.putString(StaticField.HOMEURL, child_list.get(0).getH5_url());
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
             case R.id.home_folk_image2:
                 child_list = mHomeBean.getGroup_list().get(2).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(2).getGroup_name());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(1).getTitle());
                 bundle.putString(StaticField.HOMEURL, child_list.get(1).getH5_url());
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
             case R.id.home_folk_image3:
                 child_list = mHomeBean.getGroup_list().get(2).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(2).getGroup_name());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(2).getTitle());
                 bundle.putString(StaticField.HOMEURL, child_list.get(2).getH5_url());
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
             case R.id.home_folk_image4:
                 child_list = mHomeBean.getGroup_list().get(2).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(2).getGroup_name());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(3).getTitle());
                 bundle.putString(StaticField.HOMEURL, child_list.get(3).getH5_url());
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
             case R.id.home_folk_image5:
                 child_list = mHomeBean.getGroup_list().get(2).getChild_list();
                 bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, mHomeBean.getGroup_list().get(2).getGroup_name());
+                bundle.putString(StaticField.HOMETITLE, child_list.get(4).getTitle());
                 bundle.putString(StaticField.HOMEURL, child_list.get(4).getH5_url());
                 openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
                 break;
@@ -455,7 +474,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 params.put(StaticField.SIGN, md5code);
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-//                MyLog.LogShitou("首页数据", result);
+                MyLog.LogShitou("首页数据", result);
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
@@ -496,7 +515,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
         //设置第一个View的图片
         List<HomeBean.Child> child_list = mHomeBean.getGroup_list().get(0).getChild_list();
-        MyLog.e(child_list.get(0).getImg_url());
+//        MyLog.e(child_list.get(0).getImg_url());
         mBitmap.display(mFirstImage1, child_list.get(0).getImg_url());
         mBitmap.display(mFirstImage2, child_list.get(1).getImg_url());
         mBitmap.display(mFirstImage3, child_list.get(2).getImg_url());
@@ -530,11 +549,41 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             //这句是为了防止展示到GridView处
             mGridView.requestChildFocus(mHomeVP, null);
             if (num != 0) {
-                mScrollView.onRefreshComplete();
+                mScrollView.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mScrollView.onRefreshComplete();
+                    }
+                }, 800);
             }
         }
     }
 
+    /**
+     * 滑动ScrollView监听事件
+     * 获取待监控的view对象（scrollView）
+     * 实时调起线程，监控是否scroll停止，来判断是否需要显示imageView
+     * @param view
+     * @param motionEvent
+     * @return
+     */
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+            mTopBtn.tellMe(scrollView);
+        }
+        return false;
+    }
+
+    /**
+     * 退出，终止扫描线程
+     */
+    @Override
+    public void onDestroy() {
+        mTopBtn.clearCallBacks();
+        super.onDestroy();
+    }
 
     /**
      * 获取系统参数网络请求
@@ -648,5 +697,4 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             }
         });
     }
-
 }

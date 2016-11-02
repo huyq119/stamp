@@ -21,6 +21,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +54,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     private HorizontalListView hListView;//横向滑动的listView
     private StampHorizontalListViewAdapter hListViewAdapter;//横向花的listView的适配器
     private ArrayList<GoodsStampBean.GoodsList> mList;
+    private PullToRefreshGridView gridView;
     private GridView mGridView;
     private ImageView mBack, mSearch; // 返回按钮,搜索
     private TextView mTitle;
@@ -88,12 +91,14 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 case StaticField.SUCCESS://套邮票Lsit
                     Gson gson = new Gson();
                     mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
-                    String mRsp_msg = mGoodsStampBean.getRsp_code();
-                    if (mRsp_msg.equals("0000")) {
-                        mList = mGoodsStampBean.getGoods_list();
-                        if (mList != null && mList.size() != 0) {
-                            //竖向ListView设置适配器
+                    String mRsp_code = mGoodsStampBean.getRsp_code();
+                    if (mRsp_code.equals("0000")) {
+
+                        if (num == 0) {
                             initAdapter();
+                        } else {
+                            //设置GridView的适配器
+                            setGridViewAdapter();
                         }
                     }
                     break;
@@ -119,8 +124,6 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         }
     };
 
-
-
     @Override
     public View CreateTitle() {
         mStampTitle = View.inflate(this, R.layout.base_search_title, null);
@@ -131,7 +134,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     public View CreateSuccess() {
         mStampContent = View.inflate(this, R.layout.activity_stamp_content, null);
 
-        sp = getSharedPreferences(StaticField.NAME,MODE_PRIVATE);
+        sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         initView();
         initData();
         initListener();
@@ -144,7 +147,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         mBack = (ImageView) mStampTitle.findViewById(R.id.base_title_back);
         mSearch = (ImageView) mStampTitle.findViewById(R.id.base_search);
         hListView = (HorizontalListView) mStampContent.findViewById(R.id.stamp_hl);
-        mGridView = (GridView) mStampContent.findViewById(R.id.stamp_gl);
+        gridView = (PullToRefreshGridView) mStampContent.findViewById(R.id.stamp_gl);
 
         mTopBtn = (Button) mStampContent.findViewById(R.id.base_top_btn);// 置顶
 
@@ -179,27 +182,58 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         mGestureDetector = new GestureDetector(this, gestureListener);
     }
 
-    private void initAdapter() {
-        //内容GridView设置适配器
-        mStampMarAdapter = new StampMarketGridViewAdapter(this, mList, mBitmap);
-        mGridView.setAdapter(mStampMarAdapter);
-        mStampMarAdapter.notifyDataSetChanged();
-    }
-
     /**
      * 添加网络数据
      */
     private void initData() {
         GetCategoryData();// 获取保存在本地邮市类别数据
+        if (num == 0) {
+            mList = new ArrayList<>();
+        }
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
         RequestNet(StaticField.ZH, num, StaticField.A);
+//        MyLog.LogShitou("num=====1=======", "" + num);
     }
 
+    private void initAdapter() {
+        setGridViewAdapter();
+    }
+
+    /**
+     * 设置GridView的适配器
+     */
+    private void setGridViewAdapter() {
+        if (mGoodsStampBean != null) {
+            List<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean.getGoods_list();
+            mList.addAll(goods_list);
+            StampMarketGridViewAdapter mStampMarAdapter = new StampMarketGridViewAdapter(this, mList, mBitmap);
+            gridView.setAdapter(mStampMarAdapter);
+            mStampMarAdapter.notifyDataSetChanged();
+
+            //这句是为了防止展示到GridView处
+            gridView.requestChildFocus(mHeartll, null);
+            MyLog.LogShitou("num=====3=======", "" + num);
+            if (num != 0) {
+                MyLog.LogShitou("===1=====到这一部了吗", mList.size() + "=======" + num);
+                mGridView.setSelection(mStampMarAdapter.getCount() - 20);
+
+                //解决调用onRefreshComplete方法去停止刷新操作,无法取消刷新的bug
+                gridView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        gridView.onRefreshComplete();
+                    }
+                }, 800);
+            }
+        }
+    }
+
+
     // 获取保存在本地邮市类别数据
-    private void GetCategoryData(){
-      String category5 = sp.getString("Category5","");
+    private void GetCategoryData() {
+        String category5 = sp.getString("Category5", "");
         MyLog.LogShitou("获取本地邮市类别数据", category5);
-        if(category5 != null){
+        if (category5 != null) {
             Gson gson = new Gson();
             CategoryBean mCategoryBean = gson.fromJson(category5, CategoryBean.class);
             ArrayList<CategoryBean.Category> mCategory = mCategoryBean.getCategory();
@@ -263,7 +297,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
 //                msg.obj = topDrawable0;
 //                mHandler.sendMessage(msg);
             }
-            if (! imgurl1.equals("")) {
+            if (!imgurl1.equals("")) {
 
 //                Drawable topDrawable1 = BitmapHelper.getDrawable(imgurl1);
 //                topDrawable1.setBounds(0, 0, topDrawable1.getMinimumWidth(), topDrawable1.getMinimumHeight());
@@ -306,8 +340,37 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         mSynthesize.setOnClickListener(this);
         mSales.setOnClickListener(this);
         mPrice.setOnClickListener(this);
-
+        mGridView = gridView.getRefreshableView();
         mGridView.setOnScrollListener(this);
+        // 上拉加载更多
+        gridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<GridView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<GridView> refreshView) {
+                num++;
+                RequestNet(StaticField.ZH, num, StaticField.A);
+                MyLog.LogShitou("num===2====", "" + num);
+            }
+        });
+
+        //GridView的条目点击事件
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //去往邮市详情页
+                Bundle bundle = new Bundle();
+                String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
+                bundle.putString(StaticField.GOODS_SN, mGoods_sn);// 传入商品编号
+                openActivityWitchAnimation(StampDetailActivity.class, bundle);
+            }
+        });
+
+        mGridView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mGestureDetector.onTouchEvent(motionEvent);
+                return false;
+            }
+        });
         //横向ListView的点击事件
         hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -319,24 +382,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             }
         });
 
-        //GridView的条目点击事件
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //去往邮市详情页
-                Bundle bundle = new Bundle();
-                String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
-                bundle.putString(StaticField.GOODS_SN, mGoods_sn);// 传入商品编号
-                openActivityWitchAnimation(StampDetailActivity.class, bundle);
-            }
-        });
-        mGridView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                mGestureDetector.onTouchEvent(motionEvent);
-                return false;
-            }
-        });
+
 
     }
 
@@ -524,8 +570,6 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             } else {
                 return;
             }
-
-
             lastVisibleItemPosition = firstVisibleItem;
         }
     }

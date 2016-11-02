@@ -32,7 +32,7 @@ public class MyApplication extends Application {
     private static MyApplication application = new MyApplication();
     private static int MainID;// 主线程的id
     private static Handler handler;// 获取主线程的handler
-    private static HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet;
+    private static HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
     private IWXAPI api;
 
     public MyApplication() {
@@ -83,11 +83,11 @@ public class MyApplication extends Application {
         sp.edit().putBoolean("isSetup", true).commit();
     }
 
-    public static HashMap<Integer, Set<ShopNameBean.GoodsBean>> getGroupSet() {
+    public static HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> getGroupSet() {
         return groupSet;
     }
 
-    public static void setGroupSet(HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet) {
+    public static void setGroupSet(HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet) {
         MyApplication.groupSet = groupSet;
     }
 }

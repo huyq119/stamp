@@ -65,10 +65,10 @@ public class StaticField {
     public static final int PRICESUCCESS = 3;// Handler发送的结果码（出价）
     public static final int QUERYSUCCESS = 1;// Handler发送的结果码（地址查询）
     public static final int DETAILSUCCESS = 2;// Handler发送的结果码（编辑地址查询）
-    public static final int ADDRESSSUCCESS = 2;// Handler发送的结果码（获取地址省市区）
+    public static final int ADDRESSSUCCESS = 3;// Handler发送的结果码（获取地址省市区）
     public static final int SelectSUCCESS = 2;// Handler发送的结果码（点击的是默认按钮还是编辑按钮）
 
-    public static final int CLASS_SUCCESS = 3;// Handler发送的结果码（热搜类别查询）
+    public static final int CLASS_SUCCESS = 10;// Handler发送的结果码（热搜类别查询）
     public static final int ML_SUCCESS = 4;// Handler发送的结果码（邮票目录类别查询）
     public static final int SC_SUCCESS = 5;// Handler发送的结果码（商城类别查询）
     public static final int DSF_SUCCESS = 6;// Handler发送的结果码（第三方类别查询）
