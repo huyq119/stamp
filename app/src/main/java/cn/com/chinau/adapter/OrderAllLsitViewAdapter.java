@@ -51,7 +51,7 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int i) {
 
-        MyLog.LogShitou("这是多少",mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list().size()+"");
+//        MyLog.LogShitou("这是多少",mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list().size()+"");
         return mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list().size();
 
     }
