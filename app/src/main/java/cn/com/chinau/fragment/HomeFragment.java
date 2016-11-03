@@ -550,7 +550,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
             mGridView.requestChildFocus(mHomeVP, null);
             if (num != 0) {
                 mScrollView.postDelayed(new Runnable() {
-
                     @Override
                     public void run() {
                         mScrollView.onRefreshComplete();

@@ -23,16 +23,21 @@ public class OrderAllListViewGoodsBean extends BaseBean {
         this.order_list = order_list;
     }
 
+    @Override
+    public String toString() {
+        return "OrderAllListViewGoodsBean{" +
+                "order_list=" + order_list +
+                '}';
+    }
+
     // 订单列表
     public static class Order_list {
-        private String order_sn;
-
-        private ArrayList<Seller_list> seller_list;
-
-        private String pay_time;
-        private String process_status;
-        private String create_time;
-        private String order_status;
+        private String order_sn; //交易订单号
+        private ArrayList<Seller_list> seller_list; //卖家列表
+        private String pay_time;//支付时间
+        private String process_status; //处理状态
+        private String create_time; //订单创建时间
+        private String order_status; //订单状态
 
         public Order_list(String order_sn, String pay_time, ArrayList<Seller_list> seller_list, String create_time, String process_status, String order_status) {
             this.order_sn = order_sn;
@@ -91,6 +96,17 @@ public class OrderAllListViewGoodsBean extends BaseBean {
             return this.order_status;
         }
 
+        @Override
+        public String toString() {
+            return "Order_list{" +
+                    "order_sn='" + order_sn + '\'' +
+                    ", seller_list=" + seller_list +
+                    ", pay_time='" + pay_time + '\'' +
+                    ", process_status='" + process_status + '\'' +
+                    ", create_time='" + create_time + '\'' +
+                    ", order_status='" + order_status + '\'' +
+                    '}';
+        }
     }
 
     //卖家列表
@@ -98,7 +114,8 @@ public class OrderAllListViewGoodsBean extends BaseBean {
         public String seller_name;// 卖家名称
         public String seller_no; // 卖家编号
         public String seller_type; // 卖家类型
-        public ArrayList<Order_detail_list> order_detail_list;
+        public ArrayList<Order_detail_list> order_detail_list; //订单明细列表
+
         public Seller_list(String seller_name, String seller_no, String seller_type, ArrayList<Order_detail_list> order_detail_list) {
             this.seller_name = seller_name;
             this.seller_no = seller_no;
@@ -138,17 +155,26 @@ public class OrderAllListViewGoodsBean extends BaseBean {
             return this.order_detail_list;
         }
 
+        @Override
+        public String toString() {
+            return "Seller_list{" +
+                    "seller_name='" + seller_name + '\'' +
+                    ", seller_no='" + seller_no + '\'' +
+                    ", seller_type='" + seller_type + '\'' +
+                    ", order_detail_list=" + order_detail_list +
+                    '}';
+        }
     }
 
     //订单明细列表
     public static class Order_detail_list {
-        private String goods_img;
-        private String goods_name;
-        private String goods_sn;
-        private String goods_price;
-        private String goods_count;
-        private String status;
-        private String order_detail_sn;
+        private String goods_img; //商品图片
+        private String goods_name; //商品名称
+        private String goods_sn; //商品编号
+        private String goods_price; //商品价格
+        private String goods_count; //商品数量
+        private String status; //订单明细状态
+        private String order_detail_sn;//订单明细编号
 
         public Order_detail_list(String goods_img, String goods_name, String goods_sn, String goods_price, String goods_count, String status, String order_detail_sn) {
             this.goods_img = goods_img;
@@ -214,6 +240,20 @@ public class OrderAllListViewGoodsBean extends BaseBean {
 
         public String getOrder_detail_sn() {
             return this.order_detail_sn;
+        }
+
+        
+        @Override
+        public String toString() {
+            return "Order_detail_list{" +
+                    "goods_img='" + goods_img + '\'' +
+                    ", goods_name='" + goods_name + '\'' +
+                    ", goods_sn='" + goods_sn + '\'' +
+                    ", goods_price='" + goods_price + '\'' +
+                    ", goods_count='" + goods_count + '\'' +
+                    ", status='" + status + '\'' +
+                    ", order_detail_sn='" + order_detail_sn + '\'' +
+                    '}';
         }
     }
 }

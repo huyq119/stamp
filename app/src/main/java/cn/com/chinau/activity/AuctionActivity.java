@@ -452,14 +452,14 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
             }
         });
         // mListView的条目监听
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //去往竞拍详情页
                 Bundle bundle = new Bundle();
-                String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
+                String mGoods_sn = mList.get(i-1).getGoods_sn();
                 bundle.putString(StaticField.GOODS_SN, mGoods_sn);// 传入商品编号
-                MyLog.LogShitou("mGoods_sn竞拍商品编号-->", mGoods_sn);
+//                MyLog.LogShitou("mGoods_sn竞拍商品编号-->", mGoods_sn);
                 openActivityWitchAnimation(AuctionDetailActivity.class, bundle);
             }
         });

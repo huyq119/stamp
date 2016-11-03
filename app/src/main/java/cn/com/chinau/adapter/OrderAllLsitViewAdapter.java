@@ -38,6 +38,10 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
         this.mOrderBean = mOrderBean;
     }
 
+    private void GetmOrderBean(){
+//        mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list();
+    }
+
     @Override
     public int getGroupCount() {
         return mOrderBean.getOrder_list().size();
@@ -48,18 +52,18 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
     public int getChildrenCount(int i) {
 
         MyLog.LogShitou("这是多少",mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list().size()+"");
-
         return mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list().size();
+
     }
 
     @Override
     public Object getGroup(int i) {
-        return mOrderBean.getOrder_list().get(i).getSeller_list().get(i);
+        return mOrderBean.getOrder_list().get(i);
     }
 
     @Override
     public Object getChild(int i, int i1) {
-        return mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list().get(i);
+        return mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getOrder_detail_list().get(i1);
     }
     @Override
     public long getGroupId(int i) {
@@ -92,10 +96,12 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
             gholder = (GroupViewHolder) view.getTag();
         }
 
-        OrderAllListViewGoodsBean.Seller_list seller_list = mOrderBean.getOrder_list().get(i).getSeller_list().get(i);
-        String mName = seller_list.getSeller_name();// 卖家名称
+        String mName = mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getSeller_name();// 卖家名称
+
         gholder.mName.setText(mName);
-        String mType = seller_list.getSeller_type(); // 卖家类型
+
+        String mType = mOrderBean.getOrder_list().get(i).getSeller_list().get(i).getSeller_type(); // 卖家类型
+
         if (mType.equals("SC_ZY")) {
             gholder.mEntry.setText("自营");
 
@@ -113,10 +119,7 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
         } else {
             gholder.mView.setVisibility(View.VISIBLE);
         }
-
         return view;
-
-
     }
 
     @Override

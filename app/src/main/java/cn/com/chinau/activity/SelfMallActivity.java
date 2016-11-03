@@ -129,10 +129,10 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
         mGridView = gridView.getRefreshableView();
         mGridView.setOnScrollListener(this);
         // GridView条目监听事件
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
+                String mGoods_sn = mList.get(i).getGoods_sn();
                 Bundle bundle = new Bundle();
                 bundle.putString(StaticField.GOODS_SN, mGoods_sn);
                 openActivityWitchAnimation(SelfMallDetailActivity.class,bundle);

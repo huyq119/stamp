@@ -62,7 +62,7 @@ public class StampMarketGridViewAdapter extends BaseAdapter {
         //设置数据
         GoodsStampBean.GoodsList mGoodsList = list.get(i);
         viewHolder.mName.setText(mGoodsList.getGoods_name());
-        viewHolder.mPrice.setText(mGoodsList.getCurrent_price());
+        viewHolder.mPrice.setText("￥"+mGoodsList.getCurrent_price());
         bitmap.display(viewHolder.mImg, mGoodsList.getGoods_img());
         //设置图片
 

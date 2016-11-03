@@ -113,7 +113,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         intent.putExtra("Login", "login");
                         startActivity(intent);
                         finishWitchAnimation();
-
+                    } else if (flag == 12) {// 邮票目录来的
+                       finish();
                     } else {// 不是从提现页面来的
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("Login", "login");
@@ -198,6 +199,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         } else if (WithDraw != null && WithDraw.equals("register")) {// 注册页面是否显示电话号码
             phone = intent.getStringExtra("phone");
             flag = 11;
+        }else if (WithDraw != null && WithDraw.equals("StampTap")) {// 邮票目录
+            flag = 12;
         }
 
     }

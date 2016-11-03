@@ -61,9 +61,7 @@
         <activity
             android:name="cn.com.chinau.activity.StampTapDetailActivity"
             android:theme="@style/Theme.PageIndicatorDefaults" />
-        <!-- 分享弹出页面 --><![CDATA[
-        />
-        ]]>
+        <!-- 分享弹出页面 -->
         <activity android:name="cn.com.chinau.activity.StampActivity" />
 
         <!-- 商城 -->
@@ -152,7 +150,7 @@
         <activity android:name="cn.com.chinau.activity.SuccessApplyForRefuseActivity" />
         <activity android:name="cn.com.chinau.activity.LookOrderDetailRefuseActivity" />
         <activity android:name="cn.com.chinau.activity.BigPhotoActivity" />
-        <!--微信支付成功后舔砖页面-->
+        <!--回调微信支付成功后跳转页面-->
         <activity
             android:name="cn.com.chinau.wxapi.WXPayEntryActivity"
             android:exported="true"
@@ -173,7 +171,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <!--设置友盟appkey-->
+        <!--设置你注册的友盟appkey-->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="580f2166a40fa337f20002ca">

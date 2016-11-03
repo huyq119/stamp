@@ -445,8 +445,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 if (payNmae.equals("微信")) {
                     params.put(StaticField.PAYTYPE, StaticField.WXPAY);// 支付方式
                     params.put(StaticField.GOODESINFO, info_list.toString());//  商品信息：所有商品的json字符串
-                    MyLog.LogShitou("生成订单参数", mToken + "--" + mUser_id + "--" + mAddressId +
-                            "--" + mNoAddressId + "--" + mTimeId + "--" + info_list.toString());
 
                     String mapSort = SortUtils.MapSort(params);
                     String md5code = Encrypt.MD5(mapSort);
@@ -586,15 +584,10 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                                 req.nonceStr = noncestr; // 随机字符串
                                 req.timeStamp = timestamp; // 时间戳
                                 req.sign = sign; // 签名
-//                                req.sign = "85CD6C21B0EF74747900315B44166E91"; // 签名 (暂时用)
                                 req.extData = "app data";
-//                                MyLog.LogShitou("微信支付请求的字段", sign + "--" + timestamp + "--" + noncestr + "--" + StaticField.PACKAGE + "--" + partnerid + "--" + prepayid + "--" + appid);
-//                                MyLog.LogShitou("这值是啥api",api+"");
                                 api.sendReq(req);
                                 MyLog.LogShitou("这值是啥00req", api.sendReq(req) + "");
-
                             }
-
                         }
                     } else {
                         MyToast.showShort(FirmOrderActivity.this, mMsg);

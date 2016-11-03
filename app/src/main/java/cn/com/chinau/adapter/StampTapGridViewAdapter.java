@@ -1,9 +1,12 @@
 package cn.com.chinau.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,6 +21,7 @@ import java.util.HashMap;
 
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
+import cn.com.chinau.activity.LoginActivity;
 import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.StampTapBean;
 import cn.com.chinau.dialog.AddStampDialog;
@@ -34,18 +38,12 @@ import cn.com.chinau.utils.ThreadManager;
  */
 public class StampTapGridViewAdapter extends BaseAdapter {
 
-    private static final int DELDIALOG = 0;
+    private static final int DELDIALOG = 1;
     private ArrayList<StampTapBean.StampList> mList;//填入的集合
     private Context context;
     private BitmapUtils bitmap;
     private AddStampDialog mAdd;
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            mAdd.dismiss();
-        }
-    };
+
     private String mToken,mUser_id,mStampSn;
 
 
@@ -89,7 +87,7 @@ public class StampTapGridViewAdapter extends BaseAdapter {
         StampTapBean.StampList stampList = mList.get(i);
         mStampSn = stampList.getStamp_sn();// 邮票编号
         viewHolder.mTitle.setText(stampList.getStamp_name());
-        viewHolder.mMoney.setText(stampList.getCurrent_price());
+        viewHolder.mMoney.setText("￥"+stampList.getCurrent_price());
         //设置图片
         bitmap.display(viewHolder.mIcon, stampList.getStamp_img());
         //添加收藏的点击按钮
@@ -97,8 +95,17 @@ public class StampTapGridViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 GetTokenUserID();// 获取标识，用户ID
-                MyLog.LogShitou("邮票编号-->:",mStampSn);
-                UpDateGetInitNet(null,StaticField.JR); //加入邮集网络请求
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)){
+                    MyLog.LogShitou("邮票编号-->:",mStampSn);
+                    UpDateGetInitNet("1",StaticField.JR); //加入邮集网络请求
+                }else{
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    intent.putExtra("WithDraw","StampTap");
+                    context.startActivity(intent);
+                    //跳转动画
+                    ((Activity)context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
+
             }
         });
 
@@ -132,7 +139,7 @@ public class StampTapGridViewAdapter extends BaseAdapter {
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
                 params.put(StaticField.STAMP_SN, mStampSn);//  邮票编号 （暂时为空）
-//                params.put(StaticField.STAMP_COUNT, stamp_count);//  邮票数量
+                params.put(StaticField.STAMP_COUNT, stamp_count);//  邮票数量
                 params.put(StaticField.OP_TYPE, op_type);//  操作类型：SC：删除；JR加入；XG修改
 
                 String mapSort = SortUtils.MapSort(params);
@@ -149,7 +156,6 @@ public class StampTapGridViewAdapter extends BaseAdapter {
                 msg.what = StaticField.SUCCESS;
                 msg.obj = result;
                 mHandler.sendMessage(msg);
-
             }
         });
     }
@@ -167,8 +173,15 @@ public class StampTapGridViewAdapter extends BaseAdapter {
                     if (code.equals("0000")){
                         mAdd = new AddStampDialog(context);
                         mAdd.show();
-                        handler.sendEmptyMessageDelayed(DELDIALOG,1000);
+                        mHandler.sendEmptyMessageDelayed(DELDIALOG,1000);
                     }
+                    break;
+                case  DELDIALOG://加入邮集
+                    if (mAdd != null){
+                        mAdd.dismiss();
+                    }
+                    break;
+                default:
                     break;
             }
         }

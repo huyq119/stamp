@@ -155,13 +155,13 @@ public class OrdersGoodsActivity extends BaseActivity {
         refuse_edListview = (ExpandableListView) v5.findViewById(R.id.all_expand_ListView);
 
         // (全部)适配器
-//        OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap,mOrderContentBean );// 全部适配器
+        OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap,mOrderContentBean );// 全部适配器
         // （待付款，待收货，已完成）适配器
         OrderPaymentReceivingCompleteLsitViewAdapter PayRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(this, mBitmap, groups, goods);
         // （退款/退货）适配器
         OrderRefuseLsitViewAdapter RefuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(this, mBitmap, groups, goods);// 退货/ 退款适配器
 
-        all_edListview.setAdapter(PayRecComLsitViewAdapter);
+        all_edListview.setAdapter(allLsitViewAdapter);
         payment_edListview.setAdapter(PayRecComLsitViewAdapter);
         receiving_edListview.setAdapter(PayRecComLsitViewAdapter);
         complete_edListview.setAdapter(PayRecComLsitViewAdapter);
@@ -454,8 +454,8 @@ public class OrdersGoodsActivity extends BaseActivity {
                     mOrderContentBean = gson0.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
                     String code = mOrderContentBean.getRsp_code();
                     if (code.equals("0000")) {
-//                        ArrayList<OrderAllListViewGoodsBean.Order_list> order_list = mOrderContentBean.getOrder_list();
-//                        orderAllListViewGoodsBean = new OrderAllListViewGoodsBean(order_list);
+                        ArrayList<OrderAllListViewGoodsBean.Order_list> order_list = mOrderContentBean.getOrder_list();
+                        orderAllListViewGoodsBean = new OrderAllListViewGoodsBean(order_list);
                         MyLog.LogShitou("benan是啥数据", "" + mOrderContentBean);
                         initAdapter();
                         initListener();

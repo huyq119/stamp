@@ -59,10 +59,10 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     protected static final int VERSIONSUCCESS = 9;// 获取版本内容成功
 
     private View myContentView;//内容页面
-    private LinearLayout mLogin, mNoLogin, mQuite, mPressWord, mUsMe, mStamp, mRecord, mCollection, mAddress,mOrderBack;//登录成功页面,没有登录页面,退出登录,密码管理,关于我们,我的邮集,竞拍记录,我的收藏.收获地址,回购订单
-    private TextView mWithdraw,mPayment,mReceive,mComplete,mRefused,mPhone,mBalance,mNotBalance,Title;//提现
+    private LinearLayout mLogin, mNoLogin, mQuite, mPressWord, mUsMe, mStamp, mRecord, mCollection, mAddress, mOrderBack;//登录成功页面,没有登录页面,退出登录,密码管理,关于我们,我的邮集,竞拍记录,我的收藏.收获地址,回购订单
+    private TextView mWithdraw, mPayment, mReceive, mComplete, mRefused, mPhone, mBalance, mNotBalance, Title;//提现
     private LinearLayout mOrderGoods;
-    private String phone,mToken,mUser_id;// 手机号，标识，用户ID
+    private String phone, mToken, mUser_id;// 手机号，标识，用户ID
     public SharedPreferences sp;
     private SendProgressDialog pd;
     private String result;
@@ -75,44 +75,44 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case DELFAIL :// 关闭对话框
+                case DELFAIL:// 关闭对话框
                     if (dialog != null)
                         dialog.dismiss();
                     break;
-                case AGAINLOGIN :// 需要重新登录
+                case AGAINLOGIN:// 需要重新登录
                     dialog = new SussessDialog(getActivity());
                     dialog.setText("需要重新登录");
                     dialog.show();
                     handler.sendEmptyMessageDelayed(DELAGAINLOGIN, 2000);
                     break;
-                case DELAGAINLOGIN :// 关闭提示对话框
+                case DELAGAINLOGIN:// 关闭提示对话框
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     intent.putExtra("WithDraw", "myFragment");
                     startActivity(intent);
                     break;
-                case SUCCESS :// 返回成功
+                case SUCCESS:// 返回成功
                     result = (String) msg.obj;
                     setData(result);
                     break;
-                case DATAFAIL :// 返回其他内容
+                case DATAFAIL:// 返回其他内容
                     String Data = (String) msg.obj;
                     dialog = new SussessDialog(getActivity());
                     dialog.setText(Data);
                     dialog.show();
                     handler.sendEmptyMessageDelayed(DELFAIL, 2000);
                     break;
-                case NONET :// 没有网络
+                case NONET:// 没有网络
                     dialog = new SussessDialog(getActivity());
                     dialog.setText("请连接网络");
                     dialog.show();
                     handler.sendEmptyMessageDelayed(DELAGAINLOGIN, 2000);
                     break;
-                case VERSIONSUCCESS :// 获取版本成功
+                case VERSIONSUCCESS:// 获取版本成功
 //                    String result = (String) msg.obj;
 //                    setVersion(result);
 
                     break;
-                default :
+                default:
                     break;
             }
         }
@@ -120,7 +120,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     };
     private LinearLayout mUpdate;
     private ProgressDialog prodialog;
-    private Button dialog_button_cancel,dialog_button_ok;
+    private Button dialog_button_cancel, dialog_button_ok;
 
     @Override
     public View CreateTitle() {
@@ -131,7 +131,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     public View CreateSuccess() {
         myContentView = View.inflate(getActivity(), R.layout.fragment_my_content, null);
         sp = getActivity().getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
-        Log.e("跳转后的--->", mToken+"-->"+mUser_id+"-->"+phone);
+        Log.e("跳转后的--->", mToken + "-->" + mUser_id + "-->" + phone);
         initView();
         judgeView();// 判断view的方法(判断页面是否显示)
         initListener();
@@ -146,7 +146,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         mUser_id = sp.getString("userId", "");
         phone = sp.getString("phone", "");
 
-        Log.e("跳转后的--->", mToken+"-->"+mUser_id+"-->"+phone);
+        Log.e("跳转后的--->", mToken + "-->" + mUser_id + "-->" + phone);
         mLogin = (LinearLayout) myContentView.findViewById(R.id.my_login);
         mPhone = (TextView) myContentView.findViewById(R.id.my_phone);
         mNoLogin = (LinearLayout) myContentView.findViewById(R.id.my_noLogin);
@@ -160,14 +160,14 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         mAddress = (LinearLayout) myContentView.findViewById(R.id.my_Address);
         mOrderBack = (LinearLayout) myContentView.findViewById(R.id.my_order_buy_back);
         mOrderGoods = (LinearLayout) myContentView.findViewById(R.id.my_orders_goods);
-        mPayment = (TextView)myContentView.findViewById(R.id.text_payment);
-        mReceive =(TextView)myContentView.findViewById(R.id.receive);
-        mComplete =(TextView)myContentView.findViewById(R.id.complete);
-        mRefused = (TextView)myContentView.findViewById(R.id.refuse);
-        mBalance = (TextView)myContentView.findViewById(R.id.my_balance);// 余额
-        mNotBalance = (TextView)myContentView.findViewById(R.id.my_notbalance);// 不可用余额
+        mPayment = (TextView) myContentView.findViewById(R.id.text_payment);
+        mReceive = (TextView) myContentView.findViewById(R.id.receive);
+        mComplete = (TextView) myContentView.findViewById(R.id.complete);
+        mRefused = (TextView) myContentView.findViewById(R.id.refuse);
+        mBalance = (TextView) myContentView.findViewById(R.id.my_balance);// 余额
+        mNotBalance = (TextView) myContentView.findViewById(R.id.my_notbalance);// 不可用余额
 
-        mUpdate = (LinearLayout)myContentView.findViewById(R.id.my_update);// 版本更新
+        mUpdate = (LinearLayout) myContentView.findViewById(R.id.my_update);// 版本更新
 
 
     }
@@ -223,12 +223,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_noLogin://没有登录
-                    Intent intents = new Intent(getActivity(), LoginActivity.class);
-                    intents.putExtra("WithDraw","myFragmentLogin");
-                    startActivity(intents);
-                    //跳转动画
-                    getActivity().finish();
-                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                Intent intents = new Intent(getActivity(), LoginActivity.class);
+                intents.putExtra("WithDraw", "myFragmentLogin");
+                startActivity(intents);
+                //跳转动画
+                getActivity().finish();
+                getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
                 break;
             case R.id.my_usMe://关于我们
@@ -254,7 +254,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     openActivityWitchAnimation(PressWordManagerActivity.class);
                 } else {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    intent.putExtra("WithDraw","myFragmentLogin");
+                    intent.putExtra("WithDraw", "myFragmentLogin");
                     startActivity(intent);
                     //跳转动画
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
@@ -266,7 +266,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     openActivityWitchAnimation(MyStampActivity.class);
                 } else {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    intent.putExtra("WithDraw","myFragmentLogin");
+                    intent.putExtra("WithDraw", "myFragmentLogin");
                     startActivity(intent);
                     //跳转动画
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
@@ -277,7 +277,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     openActivityWitchAnimation(AuctionRecordActivity.class);
                 } else {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    intent.putExtra("WithDraw","myFragmentLogin");
+                    intent.putExtra("WithDraw", "myFragmentLogin");
                     startActivity(intent);
                     //跳转动画
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
@@ -288,7 +288,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     openActivityWitchAnimation(MyCollectionActivity.class);
                 } else {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    intent.putExtra("WithDraw","myFragmentLogin");
+                    intent.putExtra("WithDraw", "myFragmentLogin");
                     startActivity(intent);
                     //跳转动画
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
@@ -299,7 +299,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     openActivityWitchAnimation(ManagerAddressActivity.class);
                 } else {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    intent.putExtra("WithDraw","myFragmentLogin");
+                    intent.putExtra("WithDraw", "myFragmentLogin");
                     startActivity(intent);
                     //跳转动画
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
@@ -310,36 +310,76 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     openActivityWitchAnimation(OrderBuyBackActivity.class);
                 } else {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    intent.putExtra("WithDraw","myFragmentLogin");
+                    intent.putExtra("WithDraw", "myFragmentLogin");
                     startActivity(intent);
                     //跳转动画
                     getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 }
                 break;
             case R.id.my_orders_goods:// 商品订单
-                Bundle bundle = new Bundle();
-                bundle.putString(StaticField.ORDERS, "all");
-                openActivityWitchAnimation(OrdersGoodsActivity.class,bundle);
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(StaticField.ORDERS, "all");
+                    openActivityWitchAnimation(OrdersGoodsActivity.class, bundle);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("WithDraw", "myFragmentLogin");
+                    startActivity(intent);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
                 break;
             case R.id.text_payment: // 待付款
-                Bundle bundle1 = new Bundle();
-                bundle1.putString(StaticField.ORDERS, "payment");
-                openActivityWitchAnimation(OrdersGoodsActivity.class,bundle1);
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
+                    Bundle bundle1 = new Bundle();
+                    bundle1.putString(StaticField.ORDERS, "payment");
+                    openActivityWitchAnimation(OrdersGoodsActivity.class, bundle1);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("WithDraw", "myFragmentLogin");
+                    startActivity(intent);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
                 break;
             case R.id.receive:  // 待收货
-                Bundle bundle2 = new Bundle();
-                bundle2.putString(StaticField.ORDERS, "receiving");
-                openActivityWitchAnimation(OrdersGoodsActivity.class,bundle2);
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
+                    Bundle bundle2 = new Bundle();
+                    bundle2.putString(StaticField.ORDERS, "receiving");
+                    openActivityWitchAnimation(OrdersGoodsActivity.class, bundle2);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("WithDraw", "myFragmentLogin");
+                    startActivity(intent);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
                 break;
             case R.id.complete: // 已完成
-                Bundle bundle3 = new Bundle();
-                bundle3.putString(StaticField.ORDERS, "completed");
-                openActivityWitchAnimation(OrdersGoodsActivity.class,bundle3);
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
+                    Bundle bundle3 = new Bundle();
+                    bundle3.putString(StaticField.ORDERS, "completed");
+                    openActivityWitchAnimation(OrdersGoodsActivity.class, bundle3);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("WithDraw", "myFragmentLogin");
+                    startActivity(intent);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
                 break;
             case R.id.refuse: // 退款/退货
-                Bundle bundle4 = new Bundle();
-                bundle4.putString(StaticField.ORDERS, "refused");
-                openActivityWitchAnimation(OrdersGoodsActivity.class,bundle4);
+                if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
+                    Bundle bundle4 = new Bundle();
+                    bundle4.putString(StaticField.ORDERS, "refused");
+                    openActivityWitchAnimation(OrdersGoodsActivity.class, bundle4);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("WithDraw", "myFragmentLogin");
+                    startActivity(intent);
+                    //跳转动画
+                    getActivity().overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
                 break;
             case R.id.my_quit_login: // 退出登录
                 showDialog(getActivity());
@@ -376,7 +416,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                if (result.equals("-1")|result.equals("-2")) {
+                if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
                 Log.e("登陆后的测试-->", result);
@@ -431,8 +471,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     /**
      * 设置数据的方法
      *
-     * @param result
-     *            返回成功的结果
+     * @param result 返回成功的结果
      */
     private void setData(String result) {
         Gson gson = new Gson();
@@ -481,7 +520,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 //                }
 //                MyToast.showShort(ManagerAddressActivity.this,"删除成功");
                 prodialog.dismiss();// 关闭Dialog
-                MyToast.showShort(getActivity(),"更新中...");
+                MyToast.showShort(getActivity(), "更新中...");
             }
         });
     }

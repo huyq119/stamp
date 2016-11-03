@@ -216,7 +216,6 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             if (num != 0) {
                 MyLog.LogShitou("===1=====到这一部了吗", mList.size() + "=======" + num);
                 mGridView.setSelection(mStampMarAdapter.getCount() - 20);
-
                 //解决调用onRefreshComplete方法去停止刷新操作,无法取消刷新的bug
                 gridView.postDelayed(new Runnable() {
                     @Override
@@ -353,12 +352,12 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         });
 
         //GridView的条目点击事件
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //去往邮市详情页
                 Bundle bundle = new Bundle();
-                String mGoods_sn = mGoodsStampBean.getGoods_list().get(i).getGoods_sn();
+                String mGoods_sn = mList.get(i).getGoods_sn();
                 bundle.putString(StaticField.GOODS_SN, mGoods_sn);// 传入商品编号
                 openActivityWitchAnimation(StampDetailActivity.class, bundle);
             }
