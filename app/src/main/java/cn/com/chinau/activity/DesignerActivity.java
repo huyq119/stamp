@@ -6,9 +6,11 @@ import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +53,9 @@ public class DesignerActivity extends BaseActivity {
             }
         }
     };
+    private PullToRefreshScrollView mDesignerSV;
+    private ScrollView scrollView;
+
     @Override
     public View CreateTitle() {
         mDesignerTitle = View.inflate(this, R.layout.base_back_title, null);
@@ -66,13 +71,14 @@ public class DesignerActivity extends BaseActivity {
         return mDesignerContent;
     }
 
-
     private void initView() {
         mBack = (ImageView) mDesignerTitle.findViewById(R.id.base_title_back);
         TextView mTitle = (TextView) mDesignerTitle.findViewById(R.id.base_title);
         mTitle.setText("设计家");
+//        mDesignerSV = (PullToRefreshScrollView) mDesignerContent.findViewById(R.id.designer_list_sv);
         mDesignerLV = (IndexListView) mDesignerContent.findViewById(R.id.designer_lv);
     }
+
 
     private void initData() {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
@@ -111,6 +117,8 @@ public class DesignerActivity extends BaseActivity {
     }
 
     private void initListener() {
+//        scrollView =mDesignerSV.getRefreshableView();
+
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,6 +136,15 @@ public class DesignerActivity extends BaseActivity {
                 openActivityWitchAnimation(DesignerDetailActivity.class, bundle);
             }
         });
+
+//        // 上拉加载
+//        mDesignerSV.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
+//            @Override
+//            public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+//                num++;
+//                getHomeInfo(num);
+//            }
+//        });
     }
 
     private IndexListView.AlphabetPositionListener positionListener = new IndexListView.AlphabetPositionListener() {

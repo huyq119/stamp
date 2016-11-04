@@ -110,104 +110,111 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 case StaticField.SUCCESS:// 竞拍详情数据
                     Gson gson = new Gson();
                     StampDetailBean mStampDetailBean = gson.fromJson((String) msg.obj, StampDetailBean.class);
-                    // 赋值头布局显示的图片
-                    if (mStampDetailBean.getGoods_images() != null) {
-                        String[] mGoods_images = mStampDetailBean.getGoods_images();
-                        small_images = new String[mGoods_images.length];
-                        big_images = new String[mGoods_images.length];
-                        for (int i = 0; i < mGoods_images.length; i++) {
-                            String[] image = mGoods_images[i].split(",");
-                            small_images[i] = image[0];// 小图集合
-                            big_images[i] = image[1];// 大图集合
+                   String mCode = mStampDetailBean.getRsp_code();
+                   String mMsg = mStampDetailBean.getRsp_msg();
+                    if (mCode.equals("0000")){
+                        // 赋值头布局显示的图片
+                        if (mStampDetailBean.getGoods_images() != null) {
+                            String[] mGoods_images = mStampDetailBean.getGoods_images();
+                            small_images = new String[mGoods_images.length];
+                            big_images = new String[mGoods_images.length];
+                            for (int i = 0; i < mGoods_images.length; i++) {
+                                String[] image = mGoods_images[i].split(",");
+                                small_images[i] = image[0];// 小图集合
+                                big_images[i] = image[1];// 大图集合
+                            }
+
+                            mSharedImage = small_images[0];
+                            MyLog.LogShitou("需要分享显示图片url",mSharedImage);
                         }
 
-                        mSharedImage = small_images[0];
-                        MyLog.LogShitou("需要分享显示图片url",mSharedImage);
-                    }
-
-                    mGoods_name = mStampDetailBean.getGoods_name();
-                    mTitle.setText(mGoods_name);
-                    mGoodsName.setText(mGoods_name);
-                     mPrice = mStampDetailBean.getCurrent_price();// 出价价格
-                    mPrivce.setText("￥" + mPrice);
-                    mCount.setText(mPrice);
-                    String status = mStampDetailBean.getAuction_status();
-                    if (status.equals("DP")) {
-                        mStatus.setText("未开始");
-                    } else if (status.equals("JP")) {
-                        mStatus.setText("竞拍中");
-                    } else if (status.equals("JS")) {
-                        mStatus.setText("已结束");
-                    }
-                    // 商品状态
-                   String mGoodesStatus = mStampDetailBean.getGoods_status();
-                    MyLog.LogShitou("商品状态是多少",mGoodesStatus);
-                    if (mGoodesStatus.equals("0")){
-                        mOverTv.setVisibility(View.VISIBLE);
-                        mOverTv.setText("已结束");
-                        mBid.setEnabled(false);// 出价按钮不可点击
-                        mBid.setBackgroundColor(getResources().getColor(R.color.gary));
-                        mBid.setTextColor(getResources().getColor(R.color.font));
-                        mSubtract.setEnabled(false);//减号不可点击
-                        mAdd.setEnabled(false);// 加号不可点击
-                    }
-
-                    String mFreights = mStampDetailBean.getFreight();
-                    mFreight.setText("￥" + mFreights);
-                    String mFeeRates = mStampDetailBean.getService_fee_rate();
-                    mFeeRate.setText("(" + mFeeRates + "):");
-                    String mFees = mStampDetailBean.getService_fee();
-                    mServiceFee.setText("￥" + mFees);
-                    String mGoodsSources = mStampDetailBean.getGoods_source();
-                    MyLog.LogShitou("邮票类型-->:", mGoodsSources);
-                    if (mGoodsSources.equals("YS")) {
-                        mGoodsSource.setText("邮市");
-                    } else if (mGoodsSources.equals("JP")) {
-                        mGoodsSource.setText("竞拍");
-                    } else if (mGoodsSources.equals("SC_ZY")) {
-                        mGoodsSource.setText("自营");
-                    } else if (mGoodsSources.equals("SC_DSF")) {
-                        mGoodsSource.setText("第三方");
-                    }
-                    String mSellerNames = mStampDetailBean.getSeller_name();
-                    mSellerName.setText(mSellerNames);
-                    String mSellerNos = mStampDetailBean.getSeller_no();
-                    if (mSellerNos.length() < 11) {
-                        mNumber.setText(mSellerNos);
-                    } else {
-                        String mPhone = mSellerNos.substring(0, 3) + "****" + mSellerNos.substring(7, mSellerNos.length());
-                        mNumber.setText(mPhone);
-                    }
-                    mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
-                    MyLog.LogShitou("商品收藏状态-->:", mIsFavorite);
-                    if (mIsFavorite.equals("0")) { // 未收藏
-                        mCollect.setImageResource(R.mipmap.collection);
-                    } else if (mIsFavorite.equals("1")) { // 已收藏
-                        mCollect.setImageResource(R.mipmap.collections);
-                    }
-                    mShare_url = mStampDetailBean.getShare_url(); // 分享地址url
-                    mGoodsDetail = mStampDetailBean.getGoods_detail();  // 商家信息H5url
-                    mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
-                    MyLog.LogShitou("竞拍详情请求下来的H5url-->:", mGoodsDetail + "--" + mVerifyInfo);
-
-                    mBidList = mStampDetailBean.getOffer_list();// 出价记录list
-                    // 循环出User_id是否有自己的id，有addFlag = true;没有addFlag = false;
-                    for (int j = 0; j < mBidList.size(); j++) {
-                        String mUser_id =  mBidList.get(j).getUser_id();
-                        String myUser_id = sp.getString("userId", "");
-                        if (myUser_id.equals(mUser_id)){
-                            addFlag = true;// 出价加
-                            bidFlag = true; //
-                            MyLog.LogShitou(mUser_id+"到这了吗1",mUser_id);
+                        mGoods_name = mStampDetailBean.getGoods_name();
+                        mTitle.setText(mGoods_name);
+                        mGoodsName.setText(mGoods_name);
+                        mPrice = mStampDetailBean.getCurrent_price();// 出价价格
+                        mPrivce.setText("￥" + mPrice);
+                        mCount.setText(mPrice);
+                        String status = mStampDetailBean.getAuction_status();
+                        if (status.equals("DP")) {
+                            mStatus.setText("未开始");
+                        } else if (status.equals("JP")) {
+                            mStatus.setText("竞拍中");
+                        } else if (status.equals("JS")) {
+                            mStatus.setText("已结束");
                         }
+                        // 商品状态
+                        String mGoodesStatus = mStampDetailBean.getGoods_status();
+                        MyLog.LogShitou("商品状态是多少",mGoodesStatus);
+                        if (mGoodesStatus.equals("0")){
+                            mOverTv.setVisibility(View.VISIBLE);
+                            mOverTv.setText("已结束");
+                            mBid.setEnabled(false);// 出价按钮不可点击
+                            mBid.setBackgroundColor(getResources().getColor(R.color.gary));
+                            mBid.setTextColor(getResources().getColor(R.color.font));
+                            mSubtract.setEnabled(false);//减号不可点击
+                            mAdd.setEnabled(false);// 加号不可点击
+                        }
+
+                        String mFreights = mStampDetailBean.getFreight();
+                        mFreight.setText("￥" + mFreights);
+                        String mFeeRates = mStampDetailBean.getService_fee_rate();
+                        mFeeRate.setText("(" + mFeeRates + "):");
+                        String mFees = mStampDetailBean.getService_fee();
+                        mServiceFee.setText("￥" + mFees);
+                        String mGoodsSources = mStampDetailBean.getGoods_source();
+                        MyLog.LogShitou("邮票类型-->:", mGoodsSources);
+                        if (mGoodsSources.equals("YS")) {
+                            mGoodsSource.setText("邮市");
+                        } else if (mGoodsSources.equals("JP")) {
+                            mGoodsSource.setText("竞拍");
+                        } else if (mGoodsSources.equals("SC_ZY")) {
+                            mGoodsSource.setText("自营");
+                        } else if (mGoodsSources.equals("SC_DSF")) {
+                            mGoodsSource.setText("第三方");
+                        }
+                        String mSellerNames = mStampDetailBean.getSeller_name();
+                        mSellerName.setText(mSellerNames);
+                        String mSellerNos = mStampDetailBean.getSeller_no();
+                        if (mSellerNos.length() < 11) {
+                            mNumber.setText(mSellerNos);
+                        } else {
+                            String mPhone = mSellerNos.substring(0, 3) + "****" + mSellerNos.substring(7, mSellerNos.length());
+                            mNumber.setText(mPhone);
+                        }
+                        mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
+                        MyLog.LogShitou("商品收藏状态-->:", mIsFavorite);
+                        if (mIsFavorite.equals("0")) { // 未收藏
+                            mCollect.setImageResource(R.mipmap.collection);
+                        } else if (mIsFavorite.equals("1")) { // 已收藏
+                            mCollect.setImageResource(R.mipmap.collections);
+                        }
+                        mShare_url = mStampDetailBean.getShare_url(); // 分享地址url
+                        mGoodsDetail = mStampDetailBean.getGoods_detail();  // 商家信息H5url
+                        mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
+                        MyLog.LogShitou("竞拍详情请求下来的H5url-->:", mGoodsDetail + "--" + mVerifyInfo);
+
+                        mBidList = mStampDetailBean.getOffer_list();// 出价记录list
+                        // 循环出User_id是否有自己的id，有addFlag = true;没有addFlag = false;
+                        for (int j = 0; j < mBidList.size(); j++) {
+                            String mUser_id =  mBidList.get(j).getUser_id();
+                            String myUser_id = sp.getString("userId", "");
+                            if (myUser_id.equals(mUser_id)){
+                                addFlag = true;// 出价加
+                                bidFlag = true; //
+                                MyLog.LogShitou(mUser_id+"到这了吗1",mUser_id);
+                            }
+                        }
+
+                        if (mBidList != null && mBidList.size() != 0) {
+                            mBidCount.setText(mBidList.size() + "");// 出价次数
+                        } else {
+                            mBidCount.setText("0");
+                        }
+                        initAdapter();
+                    }else{
+                        MyToast.showShort(AuctionDetailActivity.this,mMsg);
                     }
 
-                    if (mBidList != null && mBidList.size() != 0) {
-                        mBidCount.setText(mBidList.size() + "");// 出价次数
-                    } else {
-                        mBidCount.setText("0");
-                    }
-                    initAdapter();
                     break;
                 case StaticField.ADDSUCCESS:// 收藏成功
                     Gson gsons = new Gson();

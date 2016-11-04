@@ -62,8 +62,10 @@ public class OrdersGoodsActivity extends BaseActivity {
     private Map<String, List<OrderAllListViewGoodsBean.Order_detail_list>> goods = new HashMap<String, List<OrderAllListViewGoodsBean.Order_detail_list>>();// 子元素数据列表
     private List<HashMap<String, String>> lists;
     private SharedPreferences sp;
-    private OrderAllListViewGoodsBean orderAllListViewGoodsBean;
-    private OrderAllListViewGoodsBean mOrderContentBean;
+    private ArrayList<OrderAllListViewGoodsBean.Order_list> order_list,order_list1,order_list2;
+    private OrderAllLsitViewAdapter allLsitViewAdapter1;
+    private OrderPaymentReceivingCompleteLsitViewAdapter payRecComLsitViewAdapter;
+    private OrderRefuseLsitViewAdapter refuseLsitViewAdapter;
 
     @Override
     public View CreateTitle() {
@@ -76,7 +78,7 @@ public class OrdersGoodsActivity extends BaseActivity {
         mOrderContent = View.inflate(this, R.layout.activity_order_goods, null);
         sp = getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         initViews();
-        initDatas();
+//        initDatas();
         initstartview();
         return mOrderContent;
     }
@@ -86,18 +88,23 @@ public class OrdersGoodsActivity extends BaseActivity {
         if (tag.equals("all")) {
             mRadioGroup.check(R.id.RBtn_All);
             mViewPager.setCurrentItem(0);
+            GetInitNet(num, StaticField.QB); // 商品订单列表网络请求
         } else if (tag.equals("payment")) {
             mRadioGroup.check(R.id.RBtn_Payment);
             mViewPager.setCurrentItem(1);
+            GetInitNet(num, StaticField.DFK);
         } else if (tag.equals("receiving")) {
             mRadioGroup.check(R.id.RBtn_Receiving);
             mViewPager.setCurrentItem(2);
+            GetInitNet(num, StaticField.DSH);
         } else if (tag.equals("completed")) {
             mRadioGroup.check(R.id.RBtn_Complete);
             mViewPager.setCurrentItem(3);
+            GetInitNet(num, StaticField.WC);
         } else if (tag.equals("refused")) {
             mRadioGroup.check(R.id.RBtn_Refuse);
             mViewPager.setCurrentItem(4);
+            GetInitNet(num, StaticField.TK);
         }
     }
 
@@ -127,9 +134,9 @@ public class OrdersGoodsActivity extends BaseActivity {
         });
     }
 
-    private void initDatas() {
-        GetInitNet(num, StaticField.QB); // 商品订单列表网络请求
-    }
+//    private void initDatas() {
+//        GetInitNet(num, StaticField.QB); // 商品订单列表网络请求
+//    }
 
     private void initAdapter() {
 
@@ -153,30 +160,31 @@ public class OrdersGoodsActivity extends BaseActivity {
         receiving_edListview = (ExpandableListView) v3.findViewById(R.id.all_expand_ListView);
         complete_edListview = (ExpandableListView) v4.findViewById(R.id.all_expand_ListView);
         refuse_edListview = (ExpandableListView) v5.findViewById(R.id.all_expand_ListView);
+//
+//        // (全部)适配器
+//         allLsitViewAdapter =  new OrderAllLsitViewAdapter(this, mBitmap,order_list );// 全部适配器
+//        // （待付款，待收货，已完成）适配器
+//        payRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(this, mBitmap, order_list1);
+//        // 退货/ 退款适配器
+//        refuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(this, mBitmap, order_list2);
 
-        // (全部)适配器
-        OrderAllLsitViewAdapter allLsitViewAdapter = new OrderAllLsitViewAdapter(this, mBitmap,mOrderContentBean );// 全部适配器
-        // （待付款，待收货，已完成）适配器
-        OrderPaymentReceivingCompleteLsitViewAdapter PayRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(this, mBitmap, groups, goods);
-        // （退款/退货）适配器
-        OrderRefuseLsitViewAdapter RefuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(this, mBitmap, groups, goods);// 退货/ 退款适配器
+//        all_edListview.setAdapter(allLsitViewAdapter);
+//        payment_edListview.setAdapter(payRecComLsitViewAdapter);
+//        receiving_edListview.setAdapter(payRecComLsitViewAdapter);
+//        complete_edListview.setAdapter(payRecComLsitViewAdapter);
+//        refuse_edListview.setAdapter(refuseLsitViewAdapter);
 
-        all_edListview.setAdapter(allLsitViewAdapter);
-        payment_edListview.setAdapter(PayRecComLsitViewAdapter);
-        receiving_edListview.setAdapter(PayRecComLsitViewAdapter);
-        complete_edListview.setAdapter(PayRecComLsitViewAdapter);
-        refuse_edListview.setAdapter(RefuseLsitViewAdapter);
-        for (int i = 0; i < PayRecComLsitViewAdapter.getGroupCount(); i++) {
-            all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-        }
-        for (int i = 0; i < PayRecComLsitViewAdapter.getGroupCount(); i++) {
-            payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-            receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-            complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-        }
-        for (int i = 0; i < RefuseLsitViewAdapter.getGroupCount(); i++) {
-            refuse_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-        }
+//        for (int i = 0; i < payRecComLsitViewAdapter.getGroupCount(); i++) {
+//            all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+//        }
+//        for (int i = 0; i < payRecComLsitViewAdapter.getGroupCount(); i++) {
+//            payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+//            receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+//            complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+//        }
+//        for (int i = 0; i < refuseLsitViewAdapter.getGroupCount(); i++) {
+//            refuse_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+//        }
 
 
     }
@@ -451,28 +459,92 @@ public class OrdersGoodsActivity extends BaseActivity {
             switch (msg.what) {
                 case StaticField.SUCCESS:// 全部
                     Gson gson0 = new Gson();
-                    mOrderContentBean = gson0.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
+                    OrderAllListViewGoodsBean mOrderContentBean = gson0.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
                     String code = mOrderContentBean.getRsp_code();
                     if (code.equals("0000")) {
-                        ArrayList<OrderAllListViewGoodsBean.Order_list> order_list = mOrderContentBean.getOrder_list();
-                        orderAllListViewGoodsBean = new OrderAllListViewGoodsBean(order_list);
-                        MyLog.LogShitou("benan是啥数据", "" + mOrderContentBean);
+                         order_list = mOrderContentBean.getOrder_list();
+//                        orderAllListViewGoodsBean = new OrderAllListViewGoodsBean(order_list);
+//                        this.order_list = orderAllListViewGoodsBean.getOrder_list();
+//                        MyLog.LogShitou("benan是啥数据", "" + mOrderContentBean);
                         initAdapter();
+                        // (全部)适配器
+                        allLsitViewAdapter =  new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap,order_list );// 全部适配器
+                        all_edListview.setAdapter(allLsitViewAdapter);
+                        for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
+                            all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        }
                         initListener();
                     }
                     break;
                 case StaticField.DFK_SUCCESS:// 待付款
                     Gson gson1 = new Gson();
-
+                    OrderAllListViewGoodsBean mOrderContentBean1 = gson1.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
+                    String code1 = mOrderContentBean1.getRsp_code();
+                    if (code1.equals("0000")) {
+                        order_list1 = mOrderContentBean1.getOrder_list();
+                        initAdapter();
+                        // （待付款，待收货，已完成）适配器
+                        payRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list1);
+                        payment_edListview.setAdapter(payRecComLsitViewAdapter);
+                        for (int i = 0; i < payRecComLsitViewAdapter.getGroupCount(); i++) {
+                            payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+//                            receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+//                            complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        }
+                        initListener();
+                    }
                     break;
                 case StaticField.DSH_SUCCESS:// 代收货
                     Gson gson2 = new Gson();
+                    OrderAllListViewGoodsBean mOrderContentBean2 = gson2.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
+                    String code2 = mOrderContentBean2.getRsp_code();
+                    if (code2.equals("0000")) {
+                        order_list1 = mOrderContentBean2.getOrder_list();
+                        initAdapter();
+                        // （待付款，待收货，已完成）适配器
+                        payRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list1);
+                        receiving_edListview.setAdapter(payRecComLsitViewAdapter);
+                        for (int i = 0; i < payRecComLsitViewAdapter.getGroupCount(); i++) {
+//                            payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                            receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+//                            complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        }
+                        initListener();
+                    }
                     break;
                 case StaticField.WC_SUCCESS:// 已完成
                     Gson gson3 = new Gson();
+                    OrderAllListViewGoodsBean mOrderContentBean3 = gson3.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
+                    String code3 = mOrderContentBean3.getRsp_code();
+                    if (code3.equals("0000")) {
+                        order_list1 = mOrderContentBean3.getOrder_list();
+                        initAdapter();
+                        // （待付款，待收货，已完成）适配器
+                        payRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list1);
+                        complete_edListview.setAdapter(payRecComLsitViewAdapter);
+                        for (int i = 0; i < payRecComLsitViewAdapter.getGroupCount(); i++) {
+//                            payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+//                            receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                            complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        }
+                        initListener();
+                    }
                     break;
                 case StaticField.TK_SUCCESS:// 退款、退货
                     Gson gson4 = new Gson();
+                    OrderAllListViewGoodsBean mOrderContentBean4 = gson4.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
+                    String code4 = mOrderContentBean4.getRsp_code();
+                    if (code4.equals("0000")) {
+                        order_list2 = mOrderContentBean4.getOrder_list();
+                        initAdapter();
+                        // 退货/ 退款适配器
+                        refuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list2);
+                        refuse_edListview.setAdapter(refuseLsitViewAdapter);
+                        for (int i = 0; i < refuseLsitViewAdapter.getGroupCount(); i++) {
+                            refuse_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        }
+                        initListener();
+                    }
                     break;
             }
         }

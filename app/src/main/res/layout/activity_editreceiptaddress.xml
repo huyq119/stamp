@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/distance"
             android:layout_weight="1"
-            android:text="北京"
+            android:text="北京市"
             android:singleLine="true"
             android:textColor="#333"
             android:textSize="14sp"/>
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/distance"
             android:layout_weight="1"
-            android:text="朝阳"
+            android:text="北京市"
             android:singleLine="true"
             android:textColor="#333"
             android:textSize="14sp"/>
@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/distance"
             android:layout_weight="1"
-            android:text="海淀"
+            android:text="海淀区"
             android:singleLine="true"
             android:textColor="#333"
             android:textSize="14sp"/>

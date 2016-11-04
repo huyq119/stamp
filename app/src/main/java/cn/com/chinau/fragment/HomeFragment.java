@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +31,7 @@ import cn.com.chinau.activity.HomeImageH5Activity;
 import cn.com.chinau.activity.ScanActivity;
 import cn.com.chinau.activity.SearchActivity;
 import cn.com.chinau.activity.SelfMallActivity;
+import cn.com.chinau.activity.SelfMallDetailActivity;
 import cn.com.chinau.activity.StampActivity;
 import cn.com.chinau.adapter.HomeGridViewAdapter;
 import cn.com.chinau.adapter.HomeViewPagerAdapter;
@@ -320,11 +322,24 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
         mThreeImage3.setOnClickListener(this);
         mThreeImage4.setOnClickListener(this);
         mThreeImage5.setOnClickListener(this);
+        // 上拉加载数据
         mScrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
                 num++;
                 getHomeInfo(num);
+            }
+        });
+
+        // 点击条目监听事件
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               String mGoods_sn = mList.get(position).getGoods_sn();
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.GOODS_SN,mGoods_sn);
+                // 跳转商品详情
+                openActivityWitchAnimation(SelfMallDetailActivity.class,bundle);
             }
         });
     }

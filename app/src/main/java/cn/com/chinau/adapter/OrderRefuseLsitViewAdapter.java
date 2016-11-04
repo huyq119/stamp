@@ -13,13 +13,13 @@ import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
 
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
 
 import cn.com.chinau.R;
 import cn.com.chinau.activity.ApplyForRefuseActivity;
 import cn.com.chinau.bean.OrderAllListViewGoodsBean;
 import cn.com.chinau.dialog.ApplyForInterventionDialog;
+import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyToast;
 
 /**
@@ -29,48 +29,51 @@ import cn.com.chinau.utils.MyToast;
 public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-    private List<OrderAllListViewGoodsBean.Seller_list> groups ;
-    private Map<String, List<OrderAllListViewGoodsBean.Order_detail_list>> goods;
+//    private List<OrderAllListViewGoodsBean.Seller_list> groups ;
+//    private Map<String, List<OrderAllListViewGoodsBean.Order_detail_list>> goods;
     private BitmapUtils bitmapUtils;
     private ApplyForInterventionDialog auctiondialog;
     private EditText mEditDes;
     private TextView mSubmit, mCancle;
+    ArrayList<OrderAllListViewGoodsBean.Order_list> order_list;
 
     /**
      * 构造函数
      *
-     * @param groups  组元素列表
-     * @param goods   子元素列表
      * @param context 上下文
      */
 
-    public OrderRefuseLsitViewAdapter(Context context, BitmapUtils bitmapUtils, List<OrderAllListViewGoodsBean.Seller_list> groups,
-                                      Map<String, List<OrderAllListViewGoodsBean.Order_detail_list>> goods) {
+    public OrderRefuseLsitViewAdapter(Context context, BitmapUtils bitmapUtils, ArrayList<OrderAllListViewGoodsBean.Order_list> order_list) {
         this.context = context;
-        this.groups = groups;
-        this.goods = goods;
+        this.bitmapUtils = bitmapUtils;
+        this.order_list = order_list;
+//        this.groups = groups;
+//        this.goods = goods;
     }
 
     @Override
     public int getGroupCount() {
-        return groups.size();
+        return order_list.size();
     }
 
     @Override
     public int getChildrenCount(int i) {
-        String groupName = groups.get(i).getSeller_name();
-        return goods.get(groupName).size();
+//        String groupName = groups.get(i).getSeller_name();
+//        return goods.get(groupName).size();
+        return order_list.get(i).getSeller_list().get(0).getOrder_detail_list().size();
     }
 
     @Override
     public Object getGroup(int i) {
-        return groups.get(i);
+//        return groups.get(i);
+        return order_list.get(i).getSeller_list().get(0);
     }
 
     @Override
     public Object getChild(int i, int i1) {
-        List<OrderAllListViewGoodsBean.Order_detail_list> childs = goods.get(groups.get(i).getSeller_name());
-        return childs.get(i1);
+//        List<OrderAllListViewGoodsBean.Order_detail_list> childs = goods.get(groups.get(i).getSeller_name());
+//        return childs.get(i1);
+        return order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
     }
 
     @Override
@@ -103,25 +106,27 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter {
         } else {
             gholder = (GroupViewHolder) view.getTag();
         }
-        final OrderAllListViewGoodsBean.Seller_list group = (OrderAllListViewGoodsBean.Seller_list)getGroup(i);
-//        String mName = group.getSeller_name();
-//        String mType = group.getSeller_type();
-
-        if (i == 0) {
-            gholder.mName.setText("邮票商城");
-            gholder.mEntry.setText("竞拍");
-            gholder.mView.setVisibility(View.GONE);
-        } else if (i == 1) {
-            gholder.mName.setText("邮票加盟商城");
+        // 获取父控件显示的
+        OrderAllListViewGoodsBean.Seller_list seller_list = order_list.get(i).getSeller_list().get(0);
+        MyLog.LogShitou("========111父控件seller_list",seller_list.toString());
+        String mName = seller_list.getSeller_name();// 卖家名称
+        gholder.mName.setText(mName);
+        String mType = seller_list.getSeller_type(); // 卖家类型
+        if (mType.equals("SC_ZY")) {
             gholder.mEntry.setText("自营");
-            gholder.mView.setVisibility(View.VISIBLE);
-        } else if (i == 2) {
-            gholder.mName.setText("我爱集邮商城");
-            gholder.mEntry.setText("邮市");
-            gholder.mView.setVisibility(View.VISIBLE);
-        } else if (i == 3) {
-            gholder.mName.setText("邮票收藏商城");
+
+        } else if (mType.equals("SC_DSF")) {
             gholder.mEntry.setText("第三方");
+        }
+        if (mType.equals("YS")) {
+            gholder.mEntry.setText("邮市");
+        }
+        if (mType.equals("JP")) {
+            gholder.mEntry.setText("竞拍");
+        }
+        if (i == 0) {
+            gholder.mView.setVisibility(View.GONE);
+        } else {
             gholder.mView.setVisibility(View.VISIBLE);
         }
 
@@ -149,49 +154,44 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter {
         } else {
             goodsholder = (GoodsViewHolder) view.getTag();
         }
+        // 子控件List
+        OrderAllListViewGoodsBean.Order_detail_list  order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
 
-        // 赋值
-        final OrderAllListViewGoodsBean.Order_detail_list goodsBean = (OrderAllListViewGoodsBean.Order_detail_list) getChild(i, i1);
+        MyLog.LogShitou("==ziizi===子控件List",order_detail_list.toString());
 
-//        bitmapUtils.display(goodsholder.img, goodsBean.getGoods_img());
-        if (i == 0) {
-            goodsholder.mNames.setText(goodsBean.getGoods_name());
-            goodsholder.mPrice.setText(goodsBean.getGoods_price());
-            goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mRejectLl.setVisibility(View.GONE);
-            goodsholder.mRefuse_Intervene.setVisibility(View.VISIBLE);
-            goodsholder.mRefuse_Intervene.setText("退货/退款");
-            goodsholder.mAudit.setVisibility(View.GONE);
-            goodsholder.mClose.setVisibility(View.GONE);
+        if (order_detail_list !=null){
+            // 获取子控件的值
+            String mImg = order_detail_list.getGoods_img();
+            String mName = order_detail_list.getGoods_name();
+            String mGoodeSn = order_detail_list.getGoods_sn();// 商品编号
+            String mPrice = order_detail_list.getGoods_price();
+            String mCounts = order_detail_list.getGoods_count();// 商品数量
+            String mStatues = order_detail_list.getStatus(); // 订单明细状态
+            String mDetailSn = order_detail_list.getOrder_detail_sn(); // 订单明细编号
+            // 赋值
+            bitmapUtils.display(goodsholder.img, mImg);
+            goodsholder.mNames.setText(mName); // 名称
+            goodsholder.mPrice.setText("￥" + mPrice); // 价钱
+            goodsholder.mCount.setText(mCounts); // 数量
 
-        } else if (i == 1) {
-            goodsholder.mNames.setText(goodsBean.getGoods_name());
-            goodsholder.mPrice.setText(goodsBean.getGoods_price());
-            goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mRejectLl.setVisibility(View.GONE);
-            goodsholder.mRefuse_Intervene.setVisibility(View.GONE);
-            goodsholder.mAudit.setVisibility(View.VISIBLE);
-            goodsholder.mAudit.setText("退款审核中");
-            goodsholder.mClose.setVisibility(View.GONE);
-        } else if (i == 2) {
-            goodsholder.mNames.setText(goodsBean.getGoods_name());
-            goodsholder.mPrice.setText(goodsBean.getGoods_price());
-            goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mRejectLl.setVisibility(View.GONE);
-            goodsholder.mRefuse_Intervene.setVisibility(View.GONE);
-            goodsholder.mAudit.setVisibility(View.GONE);
-            goodsholder.mClose.setVisibility(View.VISIBLE);
-            goodsholder.mClose.setText("退款关闭");
-        } else if (i == 3) {
-            goodsholder.mNames.setText(goodsBean.getGoods_name());
-            goodsholder.mPrice.setText(goodsBean.getGoods_price());
-            goodsholder.mCount.setText(goodsBean.getGoods_count());
-            goodsholder.mRejectLl.setVisibility(View.VISIBLE);
-            goodsholder.mReject.setText("退款驳回（卖家）");
-            goodsholder.mRefuse_Intervene.setVisibility(View.VISIBLE);
-            goodsholder.mRefuse_Intervene.setText("申请平台介入");
-            goodsholder.mAudit.setVisibility(View.GONE);
-            goodsholder.mClose.setVisibility(View.GONE);
+            int count =Integer.valueOf(mCounts).intValue(); //转成int
+            double countPrice =Double.parseDouble(mPrice); //价钱转double
+            MyLog.LogShitou("价钱转double",countPrice+"");
+            double price = countPrice * count;//总价钱
+            MyLog.LogShitou("总价",price+"");
+
+            if (mStatues.equals("INIT")){ // 待付款
+
+            }else if (mStatues.equals("UNSHIPPED")){ //待发货
+
+            }else if (mStatues.equals("SHIPPED")){ // 待收货
+
+            }else if (mStatues.equals("SIGN")){ // 已签收
+
+            }else if (mStatues.equals("SUCCESS")){ // 交易完毕
+
+            }else if (mStatues.equals("CLOSED")){ // 交易关闭
+            }
         }
 
         goodsholder.mRefuse_Intervene.setOnClickListener(new View.OnClickListener() {
@@ -206,8 +206,6 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter {
                 }
             }
         });
-
-
         return view;
     }
 

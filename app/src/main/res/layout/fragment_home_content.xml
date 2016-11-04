@@ -177,6 +177,5 @@
         android:background="@mipmap/top"
         android:gravity="center"
         />
-    <!--<include layout="@layout/stamptap_panstamp_top_btn" />-->
 
 </RelativeLayout>

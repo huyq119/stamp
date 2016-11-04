@@ -3,7 +3,6 @@ package  cn.com.chinau.view;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -23,13 +22,13 @@ public class OrderGoodsViewPager extends ViewPager {
     }
 
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.d("zhy", "zhy---111111111---" + super.onInterceptTouchEvent(ev));
+//        Log.d("zhy", "zhy---111111111---" + super.onInterceptTouchEvent(ev));
         return isTemp();
     }
 
     public boolean onTouchEvent(MotionEvent ev) {
         // System.out.println("viewpager_onTouchEvent"+super.onTouchEvent(ev));
-        Log.d("zhy", "zhy---66666666---" + isTemp());
+//        Log.d("zhy", "zhy---66666666---" + isTemp());
         return super.onTouchEvent(ev);
     }
 
@@ -58,7 +57,7 @@ public class OrderGoodsViewPager extends ViewPager {
                 break;
         }
         setTemp(isTouch);
-        Log.d("zhy", "zhy---4444444444---" + isTemp());
+//        Log.d("zhy", "zhy---4444444444---" + isTemp());
         return super.dispatchTouchEvent(ev);
     }
 
