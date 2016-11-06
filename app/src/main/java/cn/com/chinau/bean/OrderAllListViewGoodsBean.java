@@ -113,6 +113,9 @@ public class OrderAllListViewGoodsBean extends BaseBean {
     public static class Seller_list {
         public String seller_name;// 卖家名称
         public String seller_no; // 卖家编号
+//        public String express_comp; // 快递公司
+        public String express_no; // 快递单号
+
         public String seller_type; // 卖家类型
         public ArrayList<Order_detail_list> order_detail_list; //订单明细列表
 
@@ -139,6 +142,22 @@ public class OrderAllListViewGoodsBean extends BaseBean {
             return this.seller_no;
         }
 
+        public String getExpress_no() {
+            return express_no;
+        }
+
+//        public String getExpress_comp() {
+//            return express_comp;
+//        }
+//
+//        public void setExpress_comp(String express_comp) {
+//            this.express_comp = express_comp;
+//        }
+
+        public void setExpress_no(String express_no) {
+            this.express_no = express_no;
+        }
+
         public void setSeller_type(String seller_type) {
             this.seller_type = seller_type;
         }
@@ -160,6 +179,7 @@ public class OrderAllListViewGoodsBean extends BaseBean {
             return "Seller_list{" +
                     "seller_name='" + seller_name + '\'' +
                     ", seller_no='" + seller_no + '\'' +
+                    ", express_no='" + express_no + '\'' +
                     ", seller_type='" + seller_type + '\'' +
                     ", order_detail_list=" + order_detail_list +
                     '}';

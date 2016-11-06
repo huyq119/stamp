@@ -15,7 +15,7 @@ import cn.com.chinau.dialog.PhoneDialog;
 
 /**
  * Created by Administrator on 2016/9/22.
- * (查看订单详情)退款/退货页面
+ * (查看订单详情)退款/退货详情页面
  */
 public class LookOrderDetailRefuseActivity extends BaseActivity{
 

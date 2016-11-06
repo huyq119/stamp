@@ -12,6 +12,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/logisticsDetails_img"
             android:layout_width="101dp"
             android:layout_height="101dp"
             android:layout_gravity="center_vertical"
@@ -37,10 +38,10 @@
                     android:textSize="14sp"/>
 
                 <TextView
+                    android:id="@+id/logisticsDetails_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
-                    android:text="寄送中"
                     android:textColor="#25ae5f"
                     android:textSize="14sp"/>
             </LinearLayout>
@@ -59,6 +60,7 @@
                     android:textSize="14sp"/>
 
                 <TextView
+                    android:id="@+id/logisticsDetails_Express"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
@@ -81,10 +83,10 @@
                     android:textSize="14sp"/>
 
                 <TextView
+                    android:id="@+id/logisticsDetails_OrderSn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
-                    android:text="1358965236523333"
                     android:textColor="#999"
                     android:textSize="14sp"/>
             </LinearLayout>
@@ -104,10 +106,10 @@
                     android:textSize="14sp"/>
 
                 <TextView
+                    android:id="@+id/logisticsDetails_Express_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
-                    android:text="95336"
                     android:textColor="#58a8f7"
                     android:textSize="14sp"/>
             </LinearLayout>

@@ -165,7 +165,7 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
 
             }
         });
-        expandableAdapter.setSellerList(this);
+        expandableAdapter.setSellerList(this);// 回调刷新购物车数据
 
 
     }

@@ -15,7 +15,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="12dp"
-            android:src="@mipmap/zhifubao" />
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,8 +30,8 @@
                 android:layout_height="0dp"
                 android:layout_marginRight="12dp"
                 android:layout_weight="1"
+                android:singleLine="true"
                 android:gravity="center|left"
-                android:text="庚申年"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
@@ -57,7 +57,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|left"
-                    android:text="1000000000.00"
                     android:textColor="@color/red_font"
                     android:textSize="18sp" />
 
@@ -79,7 +78,6 @@
                         android:id="@+id/item_stamp_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1"
                         android:textColor="#000"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -102,7 +100,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center|left"
-            android:text="交易关闭"
             android:textColor="@color/geay_font"
             android:textSize="14sp" />
 
@@ -138,7 +135,6 @@
                 android:id="@+id/item_stamp_allPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="￥1000000.00"
                 android:textColor="@color/red_font"
                 android:textSize="12sp" />
 

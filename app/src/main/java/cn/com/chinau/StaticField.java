@@ -270,6 +270,8 @@ public class StaticField {
 
     // 商品订单list
     public static final String GOODSORDERLIST = "cn.com.chinau.orderlist.query";
+    public static final String GOODSORDERDETAIL = "cn.com.chinau.order.detail.query";// 商品详情
+    public static final String EXPRESSQUERY = "cn.com.chinau.express.query";// 物流详情
     public static final String ORDERSTATUS = "order_status";
     public static final String DFK = "DFK";// 待付款
     public static final String DSH = "DSH";// 待收货

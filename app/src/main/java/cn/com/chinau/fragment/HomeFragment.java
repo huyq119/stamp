@@ -481,7 +481,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
                 HashMap<String, String> params = new HashMap<>();
                 params.put(StaticField.SERVICE_TYPE, StaticField.HOMEPAGE);
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(num));
-                MyLog.e(num + "");
+                MyLog.LogShitou("========这个步长是多少","num==========="+num );
                 params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM));
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
@@ -564,12 +564,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
             //这句是为了防止展示到GridView处
             mGridView.requestChildFocus(mHomeVP, null);
             if (num != 0) {
-                mScrollView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mScrollView.onRefreshComplete();
-                    }
-                }, 800);
+                mScrollView.onRefreshComplete();
+//                mScrollView.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                    }
+//                }, 800);
             }
         }
     }
@@ -622,10 +623,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
                 msg.what = SYSPARAM;
                 msg.obj = result;
                 handler.sendMessage(msg);
-
             }
         });
-
     }
 
     /**

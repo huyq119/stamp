@@ -26,7 +26,6 @@ import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.OrderAllLsitViewAdapter;
 import cn.com.chinau.adapter.OrderGoodsPagerAdapter;
-import cn.com.chinau.adapter.OrderPaymentReceivingCompleteLsitViewAdapter;
 import cn.com.chinau.adapter.OrderRefuseLsitViewAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.OrderAllListViewGoodsBean;
@@ -36,6 +35,8 @@ import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 import cn.com.chinau.view.OrderGoodsViewPager;
+
+import static cn.com.chinau.StaticField.QB;
 
 /**
  * Created by Administrator on 2016/8/29.
@@ -62,9 +63,8 @@ public class OrdersGoodsActivity extends BaseActivity {
     private Map<String, List<OrderAllListViewGoodsBean.Order_detail_list>> goods = new HashMap<String, List<OrderAllListViewGoodsBean.Order_detail_list>>();// 子元素数据列表
     private List<HashMap<String, String>> lists;
     private SharedPreferences sp;
-    private ArrayList<OrderAllListViewGoodsBean.Order_list> order_list,order_list1,order_list2;
+    private ArrayList<OrderAllListViewGoodsBean.Order_list> order_list, order_list1;
     private OrderAllLsitViewAdapter allLsitViewAdapter1;
-    private OrderPaymentReceivingCompleteLsitViewAdapter payRecComLsitViewAdapter;
     private OrderRefuseLsitViewAdapter refuseLsitViewAdapter;
 
     @Override
@@ -79,16 +79,16 @@ public class OrdersGoodsActivity extends BaseActivity {
         sp = getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         initViews();
 //        initDatas();
+        initAdapter();
         initstartview();
         return mOrderContent;
     }
-
 
     private void initstartview() {
         if (tag.equals("all")) {
             mRadioGroup.check(R.id.RBtn_All);
             mViewPager.setCurrentItem(0);
-            GetInitNet(num, StaticField.QB); // 商品订单列表网络请求
+            GetInitNet(num, QB); // 商品订单列表网络请求
         } else if (tag.equals("payment")) {
             mRadioGroup.check(R.id.RBtn_Payment);
             mViewPager.setCurrentItem(1);
@@ -115,6 +115,7 @@ public class OrdersGoodsActivity extends BaseActivity {
         // 获取我的页面传过来的键值
         Bundle bundle = getIntent().getExtras();
         tag = bundle.getString(StaticField.ORDERS);
+
         mBack = (ImageView) mOrderTitle.findViewById(R.id.base_title_back);
         mTitle = (TextView) mOrderTitle.findViewById(R.id.base_title);
         mTitle.setText("商品订单");
@@ -138,8 +139,10 @@ public class OrdersGoodsActivity extends BaseActivity {
 //        GetInitNet(num, StaticField.QB); // 商品订单列表网络请求
 //    }
 
+    /**
+     * 创建出ViewPager所需的ExpandableListView
+     */
     private void initAdapter() {
-
         LayoutInflater inflater = LayoutInflater.from(this);
         View v1 = inflater.inflate(R.layout.view_ordersgoods_all_edlistview, null);
         View v2 = inflater.inflate(R.layout.view_ordersgoods_all_edlistview, null);
@@ -160,32 +163,6 @@ public class OrdersGoodsActivity extends BaseActivity {
         receiving_edListview = (ExpandableListView) v3.findViewById(R.id.all_expand_ListView);
         complete_edListview = (ExpandableListView) v4.findViewById(R.id.all_expand_ListView);
         refuse_edListview = (ExpandableListView) v5.findViewById(R.id.all_expand_ListView);
-//
-//        // (全部)适配器
-//         allLsitViewAdapter =  new OrderAllLsitViewAdapter(this, mBitmap,order_list );// 全部适配器
-//        // （待付款，待收货，已完成）适配器
-//        payRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(this, mBitmap, order_list1);
-//        // 退货/ 退款适配器
-//        refuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(this, mBitmap, order_list2);
-
-//        all_edListview.setAdapter(allLsitViewAdapter);
-//        payment_edListview.setAdapter(payRecComLsitViewAdapter);
-//        receiving_edListview.setAdapter(payRecComLsitViewAdapter);
-//        complete_edListview.setAdapter(payRecComLsitViewAdapter);
-//        refuse_edListview.setAdapter(refuseLsitViewAdapter);
-
-//        for (int i = 0; i < payRecComLsitViewAdapter.getGroupCount(); i++) {
-//            all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-//        }
-//        for (int i = 0; i < payRecComLsitViewAdapter.getGroupCount(); i++) {
-//            payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-//            receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-//            complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-//        }
-//        for (int i = 0; i < refuseLsitViewAdapter.getGroupCount(); i++) {
-//            refuse_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-//        }
-
 
     }
 
@@ -234,10 +211,18 @@ public class OrdersGoodsActivity extends BaseActivity {
          */
         // 全部
         all_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-
-                openActivityWitchAnimation(OrderDetailsActivity.class);
+//                OrderAllListViewGoodsBean.Order_detail_list order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
+//                String mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
+//                String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
+//                Bundle bundle = new Bundle();
+//                bundle.putString(StaticField.ORDER_SN, mOrder_sn);
+//                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
+//                bundle.putString(StaticField.ORDERSTATUS, "QB");
+//                MyLog.LogShitou("QB请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
+//                openActivityWitchAnimation(OrderDetailsActivity.class, bundle);
                 return false;
             }
         });
@@ -246,8 +231,15 @@ public class OrdersGoodsActivity extends BaseActivity {
         payment_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-
-                openActivityWitchAnimation(OrderDetailsActivity.class);
+                OrderAllListViewGoodsBean.Order_detail_list order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
+                String mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
+                String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.ORDER_SN, mOrder_sn);
+                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
+                bundle.putString(StaticField.ORDERSTATUS, "DFK");
+                MyLog.LogShitou("DFK请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
+                openActivityWitchAnimation(OrderDetailsActivity.class,bundle);
                 return false;
             }
         });
@@ -255,8 +247,15 @@ public class OrdersGoodsActivity extends BaseActivity {
         receiving_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-
-                openActivityWitchAnimation(OrderDetailsActivity.class);
+                OrderAllListViewGoodsBean.Order_detail_list order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
+                String mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
+                String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.ORDER_SN, mOrder_sn);
+                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
+                bundle.putString(StaticField.ORDERSTATUS, "DSH");
+                MyLog.LogShitou("DSH请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
+                openActivityWitchAnimation(OrderDetailsActivity.class,bundle);
                 return false;
             }
         });
@@ -264,8 +263,15 @@ public class OrdersGoodsActivity extends BaseActivity {
         complete_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-
-                openActivityWitchAnimation(OrderDetailsActivity.class);
+                OrderAllListViewGoodsBean.Order_detail_list order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
+                String mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
+                String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.ORDER_SN, mOrder_sn);
+                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
+                bundle.putString(StaticField.ORDERSTATUS, "WC");
+                MyLog.LogShitou("WC请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
+                openActivityWitchAnimation(OrderDetailsActivity.class,bundle);
                 return false;
             }
         });
@@ -273,7 +279,15 @@ public class OrdersGoodsActivity extends BaseActivity {
         refuse_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-                openActivityWitchAnimation(OrderDetailsActivity.class);
+                OrderAllListViewGoodsBean.Order_detail_list order_detail_list = order_list1.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
+                String mOrder_sn = order_list1.get(i).getOrder_sn();// 交易订单号
+                String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.ORDER_SN, mOrder_sn);
+                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
+                bundle.putString(StaticField.ORDERSTATUS, "TK");
+                MyLog.LogShitou("TK请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
+                openActivityWitchAnimation(LookOrderDetailRefuseActivity.class,bundle);
                 return false;
             }
         });
@@ -359,7 +373,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                 case R.id.RBtn_All:// 全部
                     position = 0;
                     mViewPager.setCurrentItem(0);
-                    GetInitNet(num, StaticField.QB); // 商品订单列表网络请求
+                    GetInitNet(num, QB); // 商品订单列表网络请求
                     break;
                 case R.id.RBtn_Payment:// 待付款
                     position = 1;
@@ -398,7 +412,6 @@ public class OrdersGoodsActivity extends BaseActivity {
      */
     private void GetInitNet(final int num, final String orderStatus) {
         ThreadManager.getInstance().createLongPool().execute(new Runnable() {
-
             @Override
             public void run() {
                 HashMap<String, String> params = new HashMap<String, String>();
@@ -453,7 +466,6 @@ public class OrdersGoodsActivity extends BaseActivity {
     }
 
     private Handler mHandler = new Handler() {
-
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -462,14 +474,11 @@ public class OrdersGoodsActivity extends BaseActivity {
                     OrderAllListViewGoodsBean mOrderContentBean = gson0.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
                     String code = mOrderContentBean.getRsp_code();
                     if (code.equals("0000")) {
-                         order_list = mOrderContentBean.getOrder_list();
-//                        orderAllListViewGoodsBean = new OrderAllListViewGoodsBean(order_list);
-//                        this.order_list = orderAllListViewGoodsBean.getOrder_list();
-//                        MyLog.LogShitou("benan是啥数据", "" + mOrderContentBean);
-                        initAdapter();
+                        order_list = mOrderContentBean.getOrder_list();
                         // (全部)适配器
-                        allLsitViewAdapter =  new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap,order_list );// 全部适配器
+                        allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
                         all_edListview.setAdapter(allLsitViewAdapter);
+                        allLsitViewAdapter.notifyDataSetChanged();
                         for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
                             all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
                         }
@@ -481,15 +490,13 @@ public class OrdersGoodsActivity extends BaseActivity {
                     OrderAllListViewGoodsBean mOrderContentBean1 = gson1.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
                     String code1 = mOrderContentBean1.getRsp_code();
                     if (code1.equals("0000")) {
-                        order_list1 = mOrderContentBean1.getOrder_list();
-                        initAdapter();
+                        order_list = mOrderContentBean1.getOrder_list();
                         // （待付款，待收货，已完成）适配器
-                        payRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list1);
-                        payment_edListview.setAdapter(payRecComLsitViewAdapter);
-                        for (int i = 0; i < payRecComLsitViewAdapter.getGroupCount(); i++) {
+                        allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
+                        payment_edListview.setAdapter(allLsitViewAdapter);
+                        allLsitViewAdapter.notifyDataSetChanged();
+                        for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
                             payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-//                            receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-//                            complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
                         }
                         initListener();
                     }
@@ -499,15 +506,13 @@ public class OrdersGoodsActivity extends BaseActivity {
                     OrderAllListViewGoodsBean mOrderContentBean2 = gson2.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
                     String code2 = mOrderContentBean2.getRsp_code();
                     if (code2.equals("0000")) {
-                        order_list1 = mOrderContentBean2.getOrder_list();
-                        initAdapter();
+                        order_list = mOrderContentBean2.getOrder_list();
                         // （待付款，待收货，已完成）适配器
-                        payRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list1);
-                        receiving_edListview.setAdapter(payRecComLsitViewAdapter);
-                        for (int i = 0; i < payRecComLsitViewAdapter.getGroupCount(); i++) {
-//                            payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
+                        receiving_edListview.setAdapter(allLsitViewAdapter);
+                        allLsitViewAdapter.notifyDataSetChanged();
+                        for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
                             receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-//                            complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
                         }
                         initListener();
                     }
@@ -517,14 +522,13 @@ public class OrdersGoodsActivity extends BaseActivity {
                     OrderAllListViewGoodsBean mOrderContentBean3 = gson3.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
                     String code3 = mOrderContentBean3.getRsp_code();
                     if (code3.equals("0000")) {
-                        order_list1 = mOrderContentBean3.getOrder_list();
-                        initAdapter();
+                        order_list = mOrderContentBean3.getOrder_list();
+//                        initAdapter();
                         // （待付款，待收货，已完成）适配器
-                        payRecComLsitViewAdapter = new OrderPaymentReceivingCompleteLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list1);
-                        complete_edListview.setAdapter(payRecComLsitViewAdapter);
-                        for (int i = 0; i < payRecComLsitViewAdapter.getGroupCount(); i++) {
-//                            payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
-//                            receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
+                        complete_edListview.setAdapter(allLsitViewAdapter);
+                        allLsitViewAdapter.notifyDataSetChanged();
+                        for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
                             complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
                         }
                         initListener();
@@ -535,11 +539,12 @@ public class OrdersGoodsActivity extends BaseActivity {
                     OrderAllListViewGoodsBean mOrderContentBean4 = gson4.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
                     String code4 = mOrderContentBean4.getRsp_code();
                     if (code4.equals("0000")) {
-                        order_list2 = mOrderContentBean4.getOrder_list();
-                        initAdapter();
+                        order_list1 = mOrderContentBean4.getOrder_list();
+//                        initAdapter();
                         // 退货/ 退款适配器
-                        refuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list2);
+                        refuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list1);
                         refuse_edListview.setAdapter(refuseLsitViewAdapter);
+                        refuseLsitViewAdapter.notifyDataSetChanged();
                         for (int i = 0; i < refuseLsitViewAdapter.getGroupCount(); i++) {
                             refuse_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
                         }

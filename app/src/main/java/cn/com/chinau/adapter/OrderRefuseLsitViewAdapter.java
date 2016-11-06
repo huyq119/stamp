@@ -47,8 +47,6 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter {
         this.context = context;
         this.bitmapUtils = bitmapUtils;
         this.order_list = order_list;
-//        this.groups = groups;
-//        this.goods = goods;
     }
 
     @Override
@@ -58,21 +56,16 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int i) {
-//        String groupName = groups.get(i).getSeller_name();
-//        return goods.get(groupName).size();
         return order_list.get(i).getSeller_list().get(0).getOrder_detail_list().size();
     }
 
     @Override
     public Object getGroup(int i) {
-//        return groups.get(i);
         return order_list.get(i).getSeller_list().get(0);
     }
 
     @Override
     public Object getChild(int i, int i1) {
-//        List<OrderAllListViewGoodsBean.Order_detail_list> childs = goods.get(groups.get(i).getSeller_name());
-//        return childs.get(i1);
         return order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
     }
 
@@ -156,44 +149,79 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter {
         }
         // 子控件List
         OrderAllListViewGoodsBean.Order_detail_list  order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
-
         MyLog.LogShitou("==ziizi===子控件List",order_detail_list.toString());
 
-        if (order_detail_list !=null){
+        String mOrder_status = order_list.get(i).getOrder_status();// 获取订单状态
+
+        if (order_list !=null){
             // 获取子控件的值
             String mImg = order_detail_list.getGoods_img();
             String mName = order_detail_list.getGoods_name();
-            String mGoodeSn = order_detail_list.getGoods_sn();// 商品编号
             String mPrice = order_detail_list.getGoods_price();
             String mCounts = order_detail_list.getGoods_count();// 商品数量
             String mStatues = order_detail_list.getStatus(); // 订单明细状态
-            String mDetailSn = order_detail_list.getOrder_detail_sn(); // 订单明细编号
+//            String mDetailSn = order_detail_list.getOrder_detail_sn(); // 订单明细编号
             // 赋值
             bitmapUtils.display(goodsholder.img, mImg);
             goodsholder.mNames.setText(mName); // 名称
-            goodsholder.mPrice.setText("￥" + mPrice); // 价钱
+            goodsholder.mPrice.setText(mPrice); // 价钱
             goodsholder.mCount.setText(mCounts); // 数量
 
-            int count =Integer.valueOf(mCounts).intValue(); //转成int
-            double countPrice =Double.parseDouble(mPrice); //价钱转double
-            MyLog.LogShitou("价钱转double",countPrice+"");
-            double price = countPrice * count;//总价钱
-            MyLog.LogShitou("总价",price+"");
+//            int count =Integer.valueOf(mCounts).intValue(); //转成int
+//            double countPrice =Double.parseDouble(mPrice); //价钱转double
+//            MyLog.LogShitou("价钱转double",countPrice+"");
+//            double price = countPrice * count;//总价钱
+//            MyLog.LogShitou("总价",price+"");
 
-            if (mStatues.equals("INIT")){ // 待付款
+            if (mStatues.equals("REFUND")){ // 退货/退款
+                goodsholder.mRejectLl.setVisibility(View.GONE);
+                goodsholder.mRefuse_Intervene.setVisibility(View.VISIBLE);
+                goodsholder.mRefuse_Intervene.setText("退货/退款");
+                goodsholder.mAudit.setVisibility(View.GONE);
+                goodsholder.mClose.setVisibility(View.GONE);
+            }else if (mStatues.equals("WAIT_REFUND")){ //退款审核中
+                goodsholder.mRejectLl.setVisibility(View.GONE);
+                goodsholder.mRefuse_Intervene.setVisibility(View.GONE);
+                goodsholder.mAudit.setVisibility(View.VISIBLE);
+                goodsholder.mAudit.setText("退款审核中");
+                goodsholder.mClose.setVisibility(View.GONE);
 
-            }else if (mStatues.equals("UNSHIPPED")){ //待发货
+            }else if (mStatues.equals("REFUNDING")){ // 退款中
+                goodsholder.mRejectLl.setVisibility(View.GONE);
+                goodsholder.mRefuse_Intervene.setVisibility(View.GONE);
+                goodsholder.mAudit.setVisibility(View.VISIBLE);
+                goodsholder.mAudit.setText("退款中");
+                goodsholder.mClose.setVisibility(View.GONE);
+            }else if (mStatues.equals("REJECT_SELLER")){ // 退款驳回（卖家）
+                goodsholder.mRejectLl.setVisibility(View.VISIBLE);
+                goodsholder.mReject.setText("退款驳回（卖家）");
+                goodsholder.mRefuse_Intervene.setVisibility(View.VISIBLE);
+                goodsholder.mRefuse_Intervene.setText("申请平台介入");
+                goodsholder.mAudit.setVisibility(View.GONE);
+                goodsholder.mClose.setVisibility(View.GONE);
 
-            }else if (mStatues.equals("SHIPPED")){ // 待收货
-
-            }else if (mStatues.equals("SIGN")){ // 已签收
-
-            }else if (mStatues.equals("SUCCESS")){ // 交易完毕
-
-            }else if (mStatues.equals("CLOSED")){ // 交易关闭
+            }else if (mStatues.equals("REJECT")){ // 退款驳回（平台）
+                goodsholder.mRejectLl.setVisibility(View.VISIBLE);
+                goodsholder.mReject.setText("退款驳回（平台）");
+                goodsholder.mRefuse_Intervene.setVisibility(View.GONE);
+                goodsholder.mAudit.setVisibility(View.GONE);
+                goodsholder.mClose.setVisibility(View.GONE);
+            }else if (mStatues.equals("REFUNDED")){ // 退款完成
+                goodsholder.mRejectLl.setVisibility(View.GONE);
+                goodsholder.mRefuse_Intervene.setVisibility(View.GONE);
+                goodsholder.mAudit.setVisibility(View.GONE);
+                goodsholder.mClose.setVisibility(View.VISIBLE);
+                goodsholder.mClose.setText("已完成");
+            }else if (mStatues.equals("REFUND_FAIL")){ // 退款关闭
+                goodsholder.mRejectLl.setVisibility(View.GONE);
+                goodsholder.mRefuse_Intervene.setVisibility(View.GONE);
+                goodsholder.mAudit.setVisibility(View.GONE);
+                goodsholder.mClose.setVisibility(View.VISIBLE);
+                goodsholder.mClose.setText("退款关闭");
             }
         }
 
+        // 点击退款/退货，申请平台介入监听事件
         goodsholder.mRefuse_Intervene.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -229,7 +257,8 @@ public class OrderRefuseLsitViewAdapter extends BaseExpandableListAdapter {
     private class GoodsViewHolder {
         private ImageView img;// 图片
         private LinearLayout mRejectLl; //驳回LL
-        private TextView mNames, mPrice, mCount, mReject, mRefuse_Intervene, mAudit, mClose; // 名称，价格,数量，驳回，退货/退款，退款审核中，退款关闭
+        // 名称，价格,数量，驳回，退货/退款，退款审核中，退款关闭
+        private TextView mNames, mPrice, mCount, mReject, mRefuse_Intervene, mAudit, mClose;
         private View mView; //分割项
     }
 

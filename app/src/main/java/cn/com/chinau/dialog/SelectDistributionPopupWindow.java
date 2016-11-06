@@ -51,6 +51,9 @@ public class SelectDistributionPopupWindow extends PopupWindow implements View.O
         initListener();
     }
 
+//    public SelectDistributionPopupWindow(OrderDetailsActivity orderDetailsActivity, OnClickListener mDistributionWindow) {
+//    }
+
     /**
      * 设置显示参数
      */

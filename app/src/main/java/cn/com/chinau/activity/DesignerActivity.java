@@ -39,7 +39,9 @@ public class DesignerActivity extends BaseActivity {
     private List<DesignerBean.Designer> mList;
     private ImageView mBack;//返回按钮
 
-    private int num = 0;
+    private int num = 0; // 初始步长
+    private static final int OFFSETNUM = 1000; // 首次请求条目数
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -87,7 +89,7 @@ public class DesignerActivity extends BaseActivity {
                 HashMap<String, String> params = new HashMap<>();
                 params.put(StaticField.SERVICE_TYPE, StaticField.DESIGNERLIST);
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(num));
-                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM));
+                params.put(StaticField.OFFSET, String.valueOf(OFFSETNUM));
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
@@ -98,7 +100,7 @@ public class DesignerActivity extends BaseActivity {
                     return;
                 }
 
-                MyLog.e("设计家List~~>" + result);
+                MyLog.LogShitou("设计家List","===" + result);
                 Message msg = mHandler.obtainMessage();
                 msg.what = StaticField.SUCCESS;
                 msg.obj = result;
@@ -137,14 +139,6 @@ public class DesignerActivity extends BaseActivity {
             }
         });
 
-//        // 上拉加载
-//        mDesignerSV.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
-//            @Override
-//            public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
-//                num++;
-//                getHomeInfo(num);
-//            }
-//        });
     }
 
     private IndexListView.AlphabetPositionListener positionListener = new IndexListView.AlphabetPositionListener() {

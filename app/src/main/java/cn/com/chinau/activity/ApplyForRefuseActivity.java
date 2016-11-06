@@ -16,7 +16,7 @@ import cn.com.chinau.utils.MyToast;
 
 /**
  * Created by Administrator on 2016/9/21.
- * (提交申请)退款/退货页面
+ * 点击退款/退货(提交申请)页面
  */
 public class ApplyForRefuseActivity extends BaseActivity implements View.OnClickListener{
 

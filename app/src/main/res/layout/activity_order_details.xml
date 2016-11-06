@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ScrollView
+    <cn.com.chinau.view.VerticalScrollView
         android:id="@+id/order_details_sv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -21,13 +21,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <!--付款状态-->
             <include layout="@layout/orderdetails_payment"/>
-            <!--收货地址-->
-            <include layout="@layout/firmorder_location"/>
             <!--物流信息-->
             <include layout="@layout/orderdetails_logistic"/>
+            <!--收货地址-->
+            <include layout="@layout/firmorder_location"/>
 
             <View
                 style="@style/myline"
@@ -49,6 +48,7 @@
                     android:textSize="15sp"/>
 
                 <TextView
+                    android:id="@+id/order_details_ExpressType"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
@@ -58,6 +58,7 @@
                     android:textSize="15sp"/>
 
                 <TextView
+                    android:id="@+id/ExpressType_freight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
@@ -82,6 +83,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/order_details_ServiceRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
@@ -90,6 +92,7 @@
                     android:textSize="15sp"/>
 
                 <TextView
+                    android:id="@+id/order_details_ServiceFee"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="44dp"
@@ -120,6 +123,7 @@
                     android:textSize="15sp"/>
 
                 <TextView
+                    android:id="@+id/order_details_PayType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
@@ -144,13 +148,13 @@
                 style="@style/myline"
                 android:layout_marginTop="15dp"/>
 
-            <cn.com.chinau.view.WrapExpandableListView
+            <ExpandableListView
                 android:id="@+id/order_details_lv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:listSelector="@android:color/transparent"/>
         </LinearLayout>
-    </ScrollView>
+    </cn.com.chinau.view.VerticalScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -167,6 +171,7 @@
             android:paddingLeft="@dimen/distance">
 
             <TextView
+                android:id="@+id/order_details_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="共3件商品"
@@ -182,6 +187,7 @@
                 android:textSize="15sp"/>
 
             <TextView
+                android:id="@+id/order_details_total_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/distance"
@@ -191,6 +197,7 @@
                 android:textSize="15sp"/>
 
             <TextView
+                android:id="@+id/order_details_Payfor_tv"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

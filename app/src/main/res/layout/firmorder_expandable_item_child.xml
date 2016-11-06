@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/distance"
             android:text="庚申年"
+            android:singleLine="true"
             android:textColor="#000"
             android:textSize="15sp"/>
 

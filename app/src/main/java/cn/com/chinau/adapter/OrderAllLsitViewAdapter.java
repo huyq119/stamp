@@ -1,6 +1,10 @@
 package cn.com.chinau.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -10,9 +14,11 @@ import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import cn.com.chinau.R;
+import cn.com.chinau.activity.LogisticsDetailsActivity;
 import cn.com.chinau.bean.OrderAllListViewGoodsBean;
 import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyToast;
@@ -24,11 +30,10 @@ import cn.com.chinau.utils.MyToast;
 public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-//    private List<OrderAllListViewGoodsBean.Order_list.Seller_list> groups ;
-//    private Map<String, List<OrderAllListViewGoodsBean.Order_list.Seller_list.Order_detail_list>> goods;
-    private OrderAllListViewGoodsBean mOrderBean;
     private BitmapUtils bitmapUtils;
     ArrayList<OrderAllListViewGoodsBean.Order_list> order_list;
+    private String mExpress_no,mExpress_comp;
+
     /**
      *
      * @param context
@@ -66,13 +71,11 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
     }
     @Override
     public long getGroupId(int i) {
-//        MyLog.LogShitou("=======getGroupId===55555这个值是多少","============"+i);
         return i;
     }
 
     @Override
     public long getChildId(int i, int i1) {
-//        MyLog.LogShitou("=======getChildId===6666这个值是多少",i+"======="+i1);
         return i1;
     }
 
@@ -98,7 +101,8 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
         }
         // 获取父控件显示的
         OrderAllListViewGoodsBean.Seller_list seller_list = order_list.get(i).getSeller_list().get(0);
-//        MyLog.LogShitou("========111父控件seller_list",seller_list.toString());
+        mExpress_no = seller_list.getExpress_no();// 快递单号
+
         String mName = seller_list.getSeller_name();// 卖家名称
         gholder.mName.setText(mName);
         String mType = seller_list.getSeller_type(); // 卖家类型
@@ -146,16 +150,18 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
 
         // 子控件List
         OrderAllListViewGoodsBean.Order_detail_list  order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
-//        MyLog.LogShitou("==ziizi===子控件List",order_detail_list.toString());
-        if (order_detail_list !=null){
+
+       String mOrder_status = order_list.get(i).getOrder_status();// 获取订单状态
+//MyLog.LogShitou("mOrder_status=============订单状态","mOrder_status="+mOrder_status);
+        if (order_list !=null){
             // 获取子控件的值
             String mImg = order_detail_list.getGoods_img();
             String mName = order_detail_list.getGoods_name();
-            String mGoodeSn = order_detail_list.getGoods_sn();// 商品编号
+//            String mGoodeSn = order_detail_list.getGoods_sn();// 商品编号
             String mPrice = order_detail_list.getGoods_price();
             String mCounts = order_detail_list.getGoods_count();// 商品数量
-            String mStatues = order_detail_list.getStatus(); // 订单明细状态
-            String mDetailSn = order_detail_list.getOrder_detail_sn(); // 订单明细编号
+//            String mStatues = order_detail_list.getStatus(); // 订单明细状态
+//            String mDetailSn = order_detail_list.getOrder_detail_sn(); // 订单明细编号
             // 赋值
             bitmapUtils.display(goodsholder.img, mImg);
             goodsholder.mNames.setText(mName); // 名称
@@ -168,54 +174,78 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
             double countPrice =Double.parseDouble(str); //价钱转double
 
             MyLog.LogShitou("价钱转double+++商品数量",countPrice+"===="+count);
-
             double price = countPrice * count;//总价钱
-
-            goodsholder.mAllPrice.setText(String.valueOf(price));// 显示的总价
+            DecimalFormat    df   = new DecimalFormat("######0.00");// 保留2位小数
+            String mprice = df.format(price);
+            goodsholder.mAllPrice.setText("￥"+mprice);// 显示的总价
 
             MyLog.LogShitou("总价",price+"");
 
-            if (mStatues.equals("INIT")){ // 待付款
+            if (mOrder_status.equals("INIT")){ // 待付款
                 goodsholder.mStatus.setText("待付款");
                 goodsholder.mBtnLl.setVisibility(View.VISIBLE);
                 goodsholder.mPayment.setVisibility(View.VISIBLE);
                 goodsholder.mLogistics.setVisibility(View.GONE);
-            }else if (mStatues.equals("UNSHIPPED")){ //待发货
-                goodsholder.mStatus.setText("待发货");
-                goodsholder.mBtnLl.setVisibility(View.GONE);
-            }else if (mStatues.equals("SHIPPED")){ // 待收货
+
+            }else if (mOrder_status.equals("UNSHIPPED")){ //待发货
+                goodsholder.mStatus.setText("待收货");
+                goodsholder.mBtnLl.setVisibility(View.VISIBLE);
+                goodsholder.mLogistics.setVisibility(View.VISIBLE);
+                goodsholder.mPayment.setVisibility(View.GONE);
+            }else if (mOrder_status.equals("SHIPPED")){ // 待收货
                 goodsholder.mStatus.setText("待收货");
                 goodsholder.mBtnLl.setVisibility(View.VISIBLE);
                 goodsholder.mLogistics.setVisibility(View.VISIBLE);
                 goodsholder.mPayment.setVisibility(View.GONE);
 
-            }else if (mStatues.equals("SIGN")){ // 已签收
-                goodsholder.mStatus.setText("已签收");
-                goodsholder.mBtnLl.setVisibility(View.VISIBLE);
-                goodsholder.mLogistics.setVisibility(View.VISIBLE);
-                goodsholder.mPayment.setVisibility(View.GONE);
-
-            }else if (mStatues.equals("SUCCESS")){ // 交易完毕
+            }else if (mOrder_status.equals("SIGN")){ // 已签收
                 goodsholder.mStatus.setText("已完成");
                 goodsholder.mBtnLl.setVisibility(View.VISIBLE);
                 goodsholder.mLogistics.setVisibility(View.VISIBLE);
                 goodsholder.mPayment.setVisibility(View.GONE);
 
-            }else if (mStatues.equals("CLOSED")){ // 交易关闭
+            }else if (mOrder_status.equals("SUCCESS")){ // 交易完毕
+                goodsholder.mStatus.setText("已完成");
+                goodsholder.mBtnLl.setVisibility(View.VISIBLE);
+                goodsholder.mLogistics.setVisibility(View.VISIBLE);
+                goodsholder.mPayment.setVisibility(View.GONE);
+
+            }else if (mOrder_status.equals("CLOSED")){ // 交易关闭
                 goodsholder.mStatus.setText("交易关闭");
                 goodsholder.mBtnLl.setVisibility(View.GONE);
+
+            }else if (mOrder_status.equals("FINISH")){ // 已完成
+                goodsholder.mStatus.setText("已完成");
+                goodsholder.mBtnLl.setVisibility(View.VISIBLE);
+                goodsholder.mLogistics.setVisibility(View.VISIBLE);
+                goodsholder.mPayment.setVisibility(View.GONE);
             }
 
+            // 待付款
             goodsholder.mPayment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     MyToast.showShort(context, "付款...");
                 }
             });
+
+            // 查看物流
             goodsholder.mLogistics.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MyToast.showShort(context, "查看了物流...");
+                    MyLog.LogShitou("==========快递单号",mExpress_no+"");
+                    if (TextUtils.isEmpty(mExpress_no)){
+                        MyToast.showShort(context,"快递单号有误");
+                    }else {
+                        Intent intent = new Intent(context, LogisticsDetailsActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("ExpressNo", mExpress_no);
+                        MyLog.LogShitou("适配器获取的快递单号", mExpress_no);
+                        intent.putExtras(bundle);
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+//                    MyToast.showShort(context, "查看了物流...");
+                    }
                 }
             });
         }

@@ -15,7 +15,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="12dp"
-            android:src="@mipmap/zhifubao" />
+             />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:gravity="center|left"
-                android:text="庚申年"
+                android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
@@ -57,7 +57,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|left"
-                    android:text="1000000000.00"
                     android:textColor="@color/red_font"
                     android:textSize="18sp" />
 
@@ -79,7 +78,6 @@
                         android:id="@+id/item_stamp_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1"
                         android:textColor="#000"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -93,13 +91,13 @@
                 android:layout_weight="1"
                 android:gravity="bottom|right"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <TextView
                     android:id="@+id/item_refuse_reject_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="退款驳回（卖家）"
                     android:textColor="#ff9900"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -122,7 +120,8 @@
                     android:text="退货/退款"
                     android:textColor="#666"
                     android:textSize="13sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/item_refuse_audit_tv"
@@ -131,7 +130,8 @@
                     android:text="退款审核中"
                     android:textColor="#ff9900"
                     android:textSize="13sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/item_refuse_close"
@@ -140,7 +140,8 @@
                     android:text="退款关闭"
                     android:textColor="#666"
                     android:textSize="13sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
