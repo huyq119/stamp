@@ -8,12 +8,16 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,8 +37,8 @@ import java.util.List;
 import cn.com.chinau.MainActivity;
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
+import cn.com.chinau.adapter.DesignerDetailTapViewPagerAdapter;
 import cn.com.chinau.adapter.HomeViewPagerAdapter;
-import cn.com.chinau.adapter.StampDetailPagerAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.AddShopCartBean;
 import cn.com.chinau.bean.BaseBean;
@@ -49,7 +53,7 @@ import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.ScreenUtils;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
-import cn.com.chinau.view.CustomViewPager;
+import cn.com.chinau.view.OrderGoodsViewPager;
 import cn.com.chinau.view.VerticalScrollView;
 
 /**
@@ -80,7 +84,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private String mSharedImage;
     private String mGoods_name;
     private String mShare_url;
-    private CustomViewPager mViewPager;
+    private OrderGoodsViewPager mViewPager;
     private LinearLayout mShoppingLl;
     private SharedPreferences sp;
     private SharedDialog dialog;
@@ -88,6 +92,8 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private View dialog_finsih;
     private boolean addFlag = true; // 点击加入购物车，立即购买的的标识
     private String mPrice;
+    private RadioButton mGoodsDetailBtn,mVerifyInfoBtn;
+    private RadioGroup mStampDetailRG;
     private ArrayList<AddShopCartBean> info_list = new ArrayList<>();
     private Handler mHandler = new Handler() {
         @Override
@@ -118,7 +124,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                             big_images[i] = image[1];// 大图集合
                         }
                         mSharedImage = small_images[0];
-                        MyLog.LogShitou("需要分享显示图片url", mSharedImage);
+//                        MyLog.LogShitou("需要分享显示图片url", mSharedImage);
                     }
 
                     mGoods_name = mStampDetailBean.getGoods_name();
@@ -155,12 +161,19 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                         mSellerNo.setText(mPhone);
                     }
                     mShare_url = mStampDetailBean.getShare_url();// 分享地址url
+
                     mGoodsDetail = mStampDetailBean.getGoods_detail();  // 邮票信息H5url
                     mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
-                    MyLog.LogShitou("请求下来的H5url-->:", mGoodsDetail + "--" + mVerifyInfo);
+
+                    if (mGoodsDetail != null && mVerifyInfo != null){
+                        mStampInfo_wb.loadUrl(mGoodsDetail);
+                        mStampPractice_wb.loadUrl(mVerifyInfo);
+                    }
+                    MyLog.LogShitou("邮票信息的H5url", mGoodsDetail );
+                    MyLog.LogShitou("鉴定信息的H5url", mVerifyInfo );
 
                     mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
-                    MyLog.LogShitou("商品收藏状态-->:", mIsFavorite);
+//                    MyLog.LogShitou("商品收藏状态", mIsFavorite);
                     if (mIsFavorite.equals("0")) { // 未收藏
                         mCollect.setImageResource(R.mipmap.collection);
                     } else if (mIsFavorite.equals("1")) { // 已收藏
@@ -173,7 +186,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                     if (!mCartGoodsCount.equals("0") && !mCartGoodsCount.equals("")) {
                         mShoppingCount.setVisibility(View.VISIBLE);
                         mShoppingCount.setText("+" + mCartGoodsCount);
-                        MyLog.LogShitou("商品数量---002>", "走了吗。。。。。。。。。。");
+//                        MyLog.LogShitou("商品数量---002>", "走了吗。。。。。。。。。。");
                     }
 
                     String mGoodsStatuss = mStampDetailBean.getGoods_status();// 商品状态
@@ -216,7 +229,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                     if (mBasebean.getRsp_code().equals("0000")) {
                         String mCount = mShoppingCount.getText().toString().trim();
                         String count = mCount.substring(1);// 去掉"+"号
-                        MyLog.LogShitou("请求下来的数量", "--->:" + mCount);
+//                        MyLog.LogShitou("请求下来的数量", "--->:" + mCount);
                         int mShopCount = Integer.valueOf(count).intValue();// 转int
                         mShopCount++; // 数量自增
                         mShoppingCount.setVisibility(View.VISIBLE);// 加入购物车成功后显示数量
@@ -247,7 +260,11 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
             }
         }
     };
-
+    private View view1,view2,vStampInfo,vStampPractice;
+    private ArrayList<View> vList;
+    private WebView mStampInfo_wb,mStampPractice_wb;
+    private int mPosition;
+    private int position =0;
 
     @Override
     public View CreateTitle() {
@@ -303,32 +320,60 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         //轮播条的View
         mTopVP = (ViewPager) mStampDetailContent.findViewById(R.id.base_viewpager);
         mTopVPI = (CirclePageIndicator) mStampDetailContent.findViewById(R.id.base_viewpagerIndicator);
-        //底部ViewPager的页面
-        mViewPager = (CustomViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
-        mViewPager.setVisibility(View.VISIBLE);
-        mIndicator = (TabPageIndicator) mStampDetailContent.findViewById(R.id.stampdetail_indicator);
+
+        // 底部viewPager页面
+        mViewPager = (OrderGoodsViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
+
+        mStampDetailRG = (RadioGroup) mStampDetailContent.findViewById(R.id.StampDetail_RG);
+        mGoodsDetailBtn = (RadioButton) mStampDetailContent.findViewById(R.id.StampDetail_GoodsDetail_Btn);
+        mVerifyInfoBtn = (RadioButton) mStampDetailContent.findViewById(R.id.StampDetail_VerifyInfo_Btn);
+
+        view1 = mStampDetailContent.findViewById(R.id.view1);// line为红色
+        view1.setBackgroundResource(R.color.red_font);
+        view2 = mStampDetailContent.findViewById(R.id.view2);
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        vStampInfo = inflater.inflate(R.layout.fragment_stamp_info, null);
+        vStampPractice = inflater.inflate(R.layout.fragment_stamppractice, null);
+        vList = new ArrayList<View>();
+        vList.add(vStampInfo);
+        vList.add(vStampPractice);
+
+        mStampInfo_wb = (WebView) vStampInfo.findViewById(R.id.StampInfo_wb);
+        mStampPractice_wb = (WebView) vStampPractice.findViewById(R.id.StampPractice_wb);
+
+        //底部导航的ViewPager
+        DesignerDetailTapViewPagerAdapter adapter = new DesignerDetailTapViewPagerAdapter(vList, arr);
+        mViewPager.setAdapter(adapter);
+
+
+//        //底部ViewPager的页面
+//        mViewPager = (CustomViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
+//        mViewPager.setVisibility(View.VISIBLE);
+//        mIndicator = (TabPageIndicator) mStampDetailContent.findViewById(R.id.stampdetail_indicator);
     }
 
     private void initAdapter() {
-
-        mList = new ArrayList<>();
-        stampInfoFragment = new StampInfoFragment(mGoodsDetail);
-        mList.add(stampInfoFragment);
-        stampPracticeFragment = new StampPracticeFragment(mVerifyInfo);
-        mList.add(stampPracticeFragment);
-
         //顶部导航的Viewpager
         HomeViewPagerAdapter mViewPagerAdapter = new HomeViewPagerAdapter(mBitmap, small_images, this);
         mTopVP.setAdapter(mViewPagerAdapter);
         mTopVPI.setVisibility(View.VISIBLE);
         mTopVPI.setViewPager(mTopVP);
 
-        //底部导航的ViewPager
-        StampDetailPagerAdapter adapter = new StampDetailPagerAdapter(getSupportFragmentManager(), mList, arr);
-        mViewPager.setAdapter(adapter);
-        mViewPager.setOffscreenPageLimit(2);
-        mIndicator.setVisibility(View.VISIBLE);
-        mIndicator.setViewPager(mViewPager);
+//        mList = new ArrayList<>();
+//        stampInfoFragment = new StampInfoFragment(mGoodsDetail);
+//        mList.add(stampInfoFragment);
+//        stampPracticeFragment = new StampPracticeFragment(mVerifyInfo);
+//        mList.add(stampPracticeFragment);
+
+//        //底部导航的ViewPager
+//        StampDetailPagerAdapter adapter = new StampDetailPagerAdapter(getSupportFragmentManager(), mList, arr);
+//        mViewPager.setAdapter(adapter);
+//        mViewPager.setOffscreenPageLimit(2);
+//        mIndicator.setVisibility(View.VISIBLE);
+//        mIndicator.setViewPager(mViewPager);
+
+
 
     }
 
@@ -341,7 +386,57 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         mCollect.setOnClickListener(this);
         mShoppingLl.setOnClickListener(this);
         mAddShoppingCart.setOnClickListener(this);
+
         mBuyNow.setOnClickListener(this);
+        // mViewPager 滑动事件监听
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+            @Override
+            public void onPageSelected(int position) {
+                mPosition = position;
+                MyLog.e("哈哈~~~>", "--->" + mPosition);
+                switch (position) {
+                    case 0:
+                        mGoodsDetailBtn.setTextColor(getResources().getColor(R.color.red_font));
+                        mVerifyInfoBtn.setTextColor(getResources().getColor(R.color.black));
+                        view1.setBackgroundResource(R.color.red_font);
+                        view2.setBackgroundResource(R.color.line_bg);
+
+                        break;
+                    case 1:
+                        mGoodsDetailBtn.setTextColor(getResources().getColor(R.color.black));
+                        mVerifyInfoBtn.setTextColor(getResources().getColor(R.color.red_font));
+                        view1.setBackgroundResource(R.color.line_bg);
+                        view2.setBackgroundResource(R.color.red_font);
+                        break;
+                }
+            }
+        });
+        // mStampDetailRG点击事件监听
+        mStampDetailRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.StampDetail_GoodsDetail_Btn:// 邮票信息
+                        position = 0;
+                        view1.setBackgroundResource(R.color.red_font);
+                        view2.setBackgroundResource(R.color.line_bg);
+                        mViewPager.setCurrentItem(0); // 显示邮票信息页
+                        break;
+                    case R.id.StampDetail_VerifyInfo_Btn: // 鉴定信息
+                        position = 1;
+                        view1.setBackgroundResource(R.color.line_bg);
+                        view2.setBackgroundResource(R.color.red_font);
+                        mViewPager.setCurrentItem(1);// 显示鉴定信息页
+                        break;
+                }
+            }
+        });
 
     }
 
@@ -454,7 +549,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
                 MyLog.LogShitou("result邮市详情~~~~>", result);
-                if (result.equals("-1")) {
+                if (result.equals("-1") | result.equals("-2") ) {
                     return;
                 }
                 Message msg = mHandler.obtainMessage();

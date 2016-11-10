@@ -46,23 +46,21 @@ import cn.com.chinau.utils.ThreadManager;
 import cn.com.chinau.zxing.activity.CaptureActivity;
 
 
-
 /**
  * 淘邮票页面
  */
-public class PanStampFragment extends BaseFragment implements View.OnClickListener,AbsListView.OnScrollListener ,SelfMallPanStampFilterDialog.ClickEnsure{
-
+public class PanStampFragment extends BaseFragment implements View.OnClickListener, AbsListView.OnScrollListener, SelfMallPanStampFilterDialog.ClickEnsure {
 
     private View mPanStampContent;//内容View
     private View mPanStampTitle;//标题View
-    private Button mFilter,mTopBtn,mSynthesize,mSales,mValue;//筛选,置顶,综合，销量，价格
+    private Button mFilter, mTopBtn, mSynthesize, mSales, mValue;//筛选,置顶,综合，销量，价格
     private List<Fragment> mPopupList;//展示PopupWindow页面的Fragment的集合
     private String[] arr = {"自营商城", "第三方商家", "邮市", "竞拍"};
     private GridView mPanStampGV;//本页的GridView
     private PullToRefreshGridView gridView;//本页的GridView
     private GoodsStampBean mGoodsStampBean;
     private ArrayList<GoodsStampBean.GoodsList> mList;//存放数据的集合
-    private ImageView mScan,mSearch;// 扫码，搜索
+    private ImageView mScan, mSearch;// 扫码，搜索
     private int lastVisibleItemPosition = 0;// 标记上次滑动位置
     private int mCount;
     private boolean scrollFlag;
@@ -101,7 +99,8 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                     if (mRsp_code1.equals("0000")) {
 
                         if (num == 0) {
-                            ArrayList<GoodsStampBean.GoodsList> stamp_list = mGoodsStampBean1.getGoods_list();;
+                            ArrayList<GoodsStampBean.GoodsList> stamp_list = mGoodsStampBean1.getGoods_list();
+                            ;
                             PanStampGridViewAdapter mPanStampAdapter = new PanStampGridViewAdapter(getActivity(), stamp_list, mBitmap);
                             gridView.setAdapter(mPanStampAdapter);
                             mPanStampAdapter.notifyDataSetChanged();
@@ -134,7 +133,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
 
         mSynthesize = (Button) mPanStampContent.findViewById(R.id.panStamp_synthesize);
         mSales = (Button) mPanStampContent.findViewById(R.id.panStamp_sales);
-        mValue= (Button) mPanStampContent.findViewById(R.id.panStamp_value);
+        mValue = (Button) mPanStampContent.findViewById(R.id.panStamp_value);
         mFilter = (Button) mPanStampContent.findViewById(R.id.panStamp_filter);
 
         gridView = (PullToRefreshGridView) mPanStampContent.findViewById(R.id.panstamp_gl);
@@ -150,7 +149,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
         }
         // 初始化第一个按钮
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-        RequestNet(StaticField.ZH, num, StaticField.D,"");
+        RequestNet(StaticField.ZH, num,StaticField.GOODSSOURCE, StaticField.D, "");
     }
 
     /**
@@ -159,12 +158,14 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
     private void initAdapter() {
         setGridViewAdapter();
     }
+
     /**
      * 设置GridView的适配器
      */
     private void setGridViewAdapter() {
         if (mGoodsStampBean != null) {
-            List<GoodsStampBean.GoodsList> stamp_list = mGoodsStampBean.getGoods_list();;
+            List<GoodsStampBean.GoodsList> stamp_list = mGoodsStampBean.getGoods_list();
+            ;
             mList.addAll(stamp_list);
             //为GridView设置适配器
             PanStampGridViewAdapter mPanStampAdapter = new PanStampGridViewAdapter(getActivity(), mList, mBitmap);
@@ -173,7 +174,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
 //            MyLog.LogShitou("num=====3=======",""+num);
             if (num != 0) {
 //                MyLog.LogShitou("===1=====到这一部了吗",mList.size()+"======="+num);
-                mPanStampGV.setSelection(mPanStampAdapter.getCount()-20);
+                mPanStampGV.setSelection(mPanStampAdapter.getCount() - 20);
                 //解决调用onRefreshComplete方法去停止刷新操作,无法取消刷新的bug
                 gridView.postDelayed(new Runnable() {
                     @Override
@@ -204,22 +205,22 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               String mSource = mList.get(i).getGoods_source();
-               String mGoodsSn = mList.get(i).getGoods_sn();
+                String mSource = mList.get(i).getGoods_source();
+                String mGoodsSn = mList.get(i).getGoods_sn();
                 Bundle bundle = new Bundle();
-                MyLog.LogShitou("哪个商家-->:",mSource);
-                if (mSource.equals("SC_ZY")){
-                    bundle.putString(StaticField.GOODS_SN,mGoodsSn);
-                    openActivityWitchAnimation(SelfMallDetailActivity.class,bundle);
-                }else if(mSource.equals("YS")){
-                    bundle.putString(StaticField.GOODS_SN,mGoodsSn);
-                    openActivityWitchAnimation(StampDetailActivity.class,bundle);
-                }else if(mSource.equals("JP")){
-                    bundle.putString(StaticField.GOODS_SN,mGoodsSn);
-                    openActivityWitchAnimation(AuctionDetailActivity.class,bundle);
-                }else if(mSource.equals("SC_DSF")){
-                    bundle.putString(StaticField.GOODS_SN,mGoodsSn);
-                    openActivityWitchAnimation(SelfMallDetailActivity.class,bundle);
+                MyLog.LogShitou("哪个商家-->:", mSource);
+                if (mSource.equals("SC_ZY")) {
+                    bundle.putString(StaticField.GOODS_SN, mGoodsSn);
+                    openActivityWitchAnimation(SelfMallDetailActivity.class, bundle);
+                } else if (mSource.equals("YS")) {
+                    bundle.putString(StaticField.GOODS_SN, mGoodsSn);
+                    openActivityWitchAnimation(StampDetailActivity.class, bundle);
+                } else if (mSource.equals("JP")) {
+                    bundle.putString(StaticField.GOODS_SN, mGoodsSn);
+                    openActivityWitchAnimation(AuctionDetailActivity.class, bundle);
+                } else if (mSource.equals("SC_DSF")) {
+                    bundle.putString(StaticField.GOODS_SN, mGoodsSn);
+                    openActivityWitchAnimation(SelfMallDetailActivity.class, bundle);
                 }
             }
         });
@@ -229,7 +230,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onRefresh(PullToRefreshBase<GridView> refreshView) {
                 num++;
-                RequestNet(StaticField.ZH, num, StaticField.D,"");
+                RequestNet(StaticField.ZH, num, StaticField.GOODSSOURCE,StaticField.D, "");
                 MyLog.LogShitou("num===2====", "" + num);
             }
         });
@@ -242,19 +243,20 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
 
 
     /**
-     *  套邮票list网络请求
+     * 套邮票list网络请求
+     *
      * @param Order_By 类别
-     * @param index 角标
-     * @param Sort 排序
+     * @param index    角标
+     * @param Sort     排序
      */
-    private void RequestNet(final String Order_By, final int index, final String Sort,final String mJson) {
+    private void RequestNet(final String Order_By, final int index, final String source, final String Sort, final String mJson) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
                 HashMap<String, String> params = new HashMap<>();
                 params.put(StaticField.SERVICE_TYPE, StaticField.GOODSLIST);// 接口名称
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
-                params.put(StaticField.GOODS_SOURCE,StaticField.GOODSSOURCE ); // 商品类型(SC_ZY,SC_DSF,YS,JP)
+                params.put(StaticField.GOODS_SOURCE,source); // 商品类型
                 params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；XL销量；JG价格)
                 params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
                 params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
@@ -264,8 +266,8 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                 params.put(StaticField.SIGN, md5code); // 签名
 
                 if (!mJson.equals("")) {
-                    MyLog.LogShitou("==1111=========mJson有值吗",mJson);
-                    params.put(StaticField.CATEGORY, mJson); // 类别，json串
+                    MyLog.LogShitou("==1111=========mJson有值吗", mJson);
+                    params.put(StaticField.RUERY_CONDITION, mJson); // 类别，json串
                 }
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
@@ -274,13 +276,13 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-                if (mJson.equals("")){
-                    MyLog.LogShitou("net==2222=========num","num====="+num);
+                if (mJson.equals("")) {
+                    MyLog.LogShitou("net==2222=========num", "num=====" + num);
                     Message msg = mHandler.obtainMessage();
                     msg.obj = result;
                     msg.what = StaticField.SUCCESS;
                     mHandler.sendMessage(msg);
-                }else{ // 筛选后请求的数据
+                } else { // 筛选后请求的数据
                     Message msg = mHandler.obtainMessage();
                     msg.obj = result;
                     msg.what = StaticField.CG_SUCCESS;
@@ -296,64 +298,64 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
         switch (view.getId()) {
             case R.id.panstamp_title_scan://扫码
                 Bundle bundle1 = new Bundle();
-                bundle1.putString("SanFragment","PanStampFragment");
-                openActivityWitchAnimation(CaptureActivity.class,bundle1);
+                bundle1.putString("SanFragment", "PanStampFragment");
+                openActivityWitchAnimation(CaptureActivity.class, bundle1);
                 break;
             case R.id.panstamp_search://搜索
                 openActivityWitchAnimation(SearchActivity.class);
                 break;
             case R.id.panStamp_synthesize://综合
-                Log.e("综合~~>","综合。。。。。");
+                Log.e("综合~~>", "综合。。。。。");
                 setOtherButton(mSales, mValue);
                 SalesFlag = true;// 销量为true
                 ValueFlag = true;// 价格为true
                 // true代表降序,false代表升序
                 if (SynthesizeFlag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.ZH, num, StaticField.D,"");
+                    RequestNet(StaticField.ZH, num,StaticField.GOODSSOURCE, StaticField.D, "");
                     SynthesizeFlag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSynthesize, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.ZH, num, StaticField.A,"");
+                    RequestNet(StaticField.ZH, num,StaticField.GOODSSOURCE, StaticField.A, "");
                     SynthesizeFlag = true;
                 }
                 break;
             case R.id.panStamp_sales://销量
-                Log.e("销量~~>","销量。。。。。");
+                Log.e("销量~~>", "销量。。。。。");
                 setOtherButton(mSynthesize, mValue);
                 SynthesizeFlag = true;// 综合为true
                 ValueFlag = true;// 价格为true
                 // true代表降序,false代表升序
                 if (SalesFlag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSales, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.XL, num, StaticField.D,"");
+                    RequestNet(StaticField.XL, num,StaticField.GOODSSOURCE, StaticField.D, "");
                     SalesFlag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSales, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.XL, num, StaticField.A,"");
+                    RequestNet(StaticField.XL, num,StaticField.GOODSSOURCE, StaticField.A, "");
                     SalesFlag = true;
                 }
                 break;
             case R.id.panStamp_value://价格
-                Log.e("价格~~>","价格。。。。。");
+                Log.e("价格~~>", "价格。。。。。");
                 setOtherButton(mSynthesize, mSales);
                 SynthesizeFlag = true;// 综合为true
                 SalesFlag = true;// 销量为true
                 // true代表降序,false代表升序
                 if (ValueFlag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mValue, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.JG, num, StaticField.D,"");
+                    RequestNet(StaticField.JG, num,StaticField.GOODSSOURCE, StaticField.D, "");
                     ValueFlag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mValue, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.JG, num, StaticField.A,"");
+                    RequestNet(StaticField.JG, num,StaticField.GOODSSOURCE, StaticField.A, "");
                     ValueFlag = true;
                 }
                 break;
             case R.id.panStamp_filter://筛选
                 // 筛选有点问题
                 setPopupWindowListData();
-                  mSelfPanDialog = new SelfMallPanStampFilterDialog(mPopupList,arr);
+                mSelfPanDialog = new SelfMallPanStampFilterDialog(mPopupList, arr);
                 mSelfPanDialog.setClickEnsure(this);
                 mSelfPanDialog.show(getChildFragmentManager(), StaticField.PANSTAMPFILTERDIALOG);
                 break;
@@ -379,6 +381,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
             mPanStampGV.setSelection(pos);
         }
     }
+
     /**
      * GridView滑动状态改变监听的方法
      */
@@ -406,12 +409,14 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                 break;
         }
     }
+
     /**
      * 置顶按钮显示的方法
+     *
      * @param absListView
      * @param firstVisibleItem 当前能看见的第一个列表项ID（从0开始）
      * @param visibleItemCount 当前能看见的列表项个数（小半个也算）
-     * @param totalItemCount totalItemCount：列表项共数
+     * @param totalItemCount   totalItemCount：列表项共数
      */
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -482,21 +487,44 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
         button.setTextColor(color);
     }
 
+
+    /**
+     * 筛选回调的回来的数据
+     */
     @Override
     public void setEnsureData() {
-        String mAlldata = mallFragment.getData();
+        String mToJson = mallFragment.getData();
         String mJson = mThreeFragment.getJson();
         String mStampdata = mStampFragment.getData();
         String mAuctiondata = mAuctionFragment.getData();
 
+        MyLog.LogShitou("===========请求上传的Json串", mToJson+"==/"+mJson+"==/"+mStampdata+"==/"+mAuctiondata);
 
-        if (mJson != null){
-            MyLog.LogShitou("传过来的Json串", mJson);
+        //  此处注意请求网络里面的字段数据StaticField.SC_ZY,StaticField.SC_DSF
+        //  筛选商品类型不同，传不同类型
+        // 自营商城
+        if (mToJson != null) {
             setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-            RequestNet(StaticField.ZH, num, StaticField.D, mJson); // 邮票目录请求网络的方法
-            MyLog.e("点中了谁0001-->"+mAlldata+"---"+mJson+"--"+mStampdata+"---"+mAuctiondata);
+            RequestNet(StaticField.ZH, num, StaticField.SC_ZY,StaticField.D, mToJson); // 淘邮票请求网络的方法
+            MyLog.LogShitou("===点中了自营商城-->" , mToJson );
+        }
+        // 第三方
+        if (mJson != null) {
+            setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
+            RequestNet(StaticField.ZH, num, StaticField.SC_DSF,StaticField.D, mJson); // 淘邮票请求网络的方法
+            MyLog.LogShitou("===点中了第三方-->" , mJson);
         }
 
+
+        // 邮市
+        if (mStampdata != null) {
+
+        }
+        // 竞拍
+        if (mAuctiondata != null) {
+
+
+        }
 
         mSelfPanDialog.dismiss();
     }

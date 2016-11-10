@@ -36,7 +36,7 @@ public class StampPracticeFragment extends Fragment {
     }
 
     public void setInfoContent(String url) {
-        MyLog.e("邮票故事:" + mStory+ "-" + "mVB是否为空" + (mSWB == null));
+        MyLog.LogShitou("邮票故事:" + mStory+ "-" + "mVB是否为空" + (mSWB == null));
         if (url != null)
             mSWB.loadUrl(url);
     }

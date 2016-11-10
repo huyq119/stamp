@@ -17,6 +17,7 @@ import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.SelfMallPanStampGridViewAdapter;
 import cn.com.chinau.base.BaseDialogFragment;
+import cn.com.chinau.bean.CategoryGoodsJsonBean;
 import cn.com.chinau.bean.CategorySCBean;
 import cn.com.chinau.dialog.SelfMallPanStampFilterDialog;
 import cn.com.chinau.listener.SellMallPanStampGridViewOnItemClickListener;
@@ -28,7 +29,6 @@ import cn.com.chinau.view.NoScrollGridView;
  */
 public class SelfMallFilterFragment extends BaseDialogFragment implements SellMallPanStampGridViewOnItemClickListener.SelfMallItemClick {
 
-
     private View mFilterView;
     private int Current = -1;//当前选择的年代角标
     private SellMallPanStampGridViewOnItemClickListener mYearListener, mCategoryListener, mThemeListener;//年份的监听,类别的监听,人物的监听
@@ -38,6 +38,9 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
     private SharedPreferences sp;
     private String[] mTitle, mArrTitle0, mArrTitle1, mArrTitle2, mArrValue0, mArrValue1, mArrValue2;
     private TextView mYears, mCategorys, mTheme; // 年代，类别，人物
+    private String CategoryValue;
+    private String mToJson;
+
     public SelfMallFilterFragment() {
     }
 
@@ -52,6 +55,7 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
         setPopupWindowData();
         return mSelfMall;
     }
+
     private void initView() {
         mYears = (TextView) mSelfMall.findViewById(R.id.selfmall_pop_category_title);
         mCategorys = (TextView) mSelfMall.findViewById(R.id.selfmall_pop_year_title);
@@ -64,7 +68,7 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
     private void GetCategory() {
         String mCategory = sp.getString("Category3", "");
         if (!mCategory.equals("")) {
-//            MyLog.LogShitou("========获取本地类别商城数据", mCategory);
+            MyLog.LogShitou("========获取本地类别商城数据", mCategory);
             Gson gson = new Gson();
             CategorySCBean mCategoryDSFBean3 = gson.fromJson(mCategory, CategorySCBean.class);
             ArrayList<CategorySCBean.Category> categoryList = mCategoryDSFBean3.getCategory();
@@ -96,6 +100,11 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
 
             mArrTitle2 = new String[sub2];// 一级分类name
             mArrValue2 = new String[sub2];// 一级分类value
+
+            for (int i = 0; i < subCategory0.size(); i++) {
+                CategoryValue = subCategory0.get(i).getValue();// 一级类别CategoryValue值
+                MyLog.LogShitou("类别==Value值", CategoryValue);
+            }
 
             for (int i = 0; i < subCategory0.get(0).getSubCategory().size(); i++) {
                 mArrTitle0[i] = subCategory0.get(0).getSubCategory().get(i).getName();
@@ -180,22 +189,48 @@ public class SelfMallFilterFragment extends BaseDialogFragment implements SellMa
         int CategoryNum = mCategoryListener.getPosition();
         int PersonNum = mThemeListener.getPosition();
 
-        MyLog.LogShitou("筛选点击的位置Position", CategoryNum + "-" + yearNum + "-" + PersonNum);
+//        MyLog.LogShitou("筛选点击的位置Position", CategoryNum + "-" + yearNum + "-" + PersonNum);
 
         String Category = (CategoryNum == -1) ? "" : mArrValue0[CategoryNum];
         String Year = (yearNum == -1) ? "" : mArrValue1[yearNum];
         String Person = (PersonNum == -1) ? "" : mArrValue2[PersonNum];
 
-        mData = Year + "," + Category + "," + Person;
+        // 首先判断Category类别是否选中
+        if (!Category.equals("")) { // 首先判断Category类别是否选中
+            CategoryGoodsJsonBean mGoodsJsonBean = new CategoryGoodsJsonBean();
+            if (!Year.equals("")) { // 判断Year年代是否选中
+                mGoodsJsonBean.setYear(Year);
+            }
+            if (!Person.equals("")) { // 判断Person人物是否选中
+                mGoodsJsonBean.setDesigner(Person);
+            }
 
+            CategoryGoodsJsonBean.CategoryBean mCategoryBean = new CategoryGoodsJsonBean.CategoryBean();
+            mCategoryBean.setCategory(CategoryValue);// 一级类别
+            CategoryGoodsJsonBean.CategoryBean.SubBean mSubBean = new CategoryGoodsJsonBean.CategoryBean.SubBean();
+            mSubBean.setSub(Category);// 二级
+            mCategoryBean.setSubCategory(mSubBean);
+            mGoodsJsonBean.setCategory(mCategoryBean);
 
+            mToJson = new Gson().toJson(mGoodsJsonBean);
 
+            MyLog.LogShitou("======选中类别的Json串", "mToJson===" + mToJson);
+        } else { // 不选中Category类别
+            CategoryGoodsJsonBean mGoodsJsonBean = new CategoryGoodsJsonBean();
+            if (!Year.equals("")) {  // 判断Year年代是否选中
+                mGoodsJsonBean.setYear(Year);
+            }
+            if (!Person.equals("")) { // 判断Person人物是否选中
+                mGoodsJsonBean.setDesigner(Person);
+            }
+            mToJson = new Gson().toJson(mGoodsJsonBean);
 
-
-        setData(mData);
-
-        MyLog.LogShitou("点击了啥" ,"mData==="+ mData);
-
+            MyLog.LogShitou("====选中年代或设计家的Json串", "mToJson===" + mToJson);
+        }
+        // 全选Json格式     {"category":{"category":"274","subCategory":{"sub":"521"}},"designer":"590","year":"640"}
+        // 只选类别格式     {"category": {"category": "543","subCategory": {"sub": "550"}}}
+        // 只选年代或设计家 {"designer":"590","year":"640"}
+        setData(mToJson);
     }
 
     public String getData() {

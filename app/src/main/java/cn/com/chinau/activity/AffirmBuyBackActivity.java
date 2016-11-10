@@ -66,10 +66,6 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
                         JSONObject json = new JSONObject(Result);
                         String order_sn = json.getString("order_sn");
                         sp.edit().putString("order_sn",order_sn).commit();
-//                        Bundle mBundle = new Bundle();
-//                        mBundle.putString("Result",result);
-//                        mBundle.putString("phone",mPhone);
-//                        mBundle.putString("order_sn",order_sn);
                         openActivityWitchAnimation(FastMailInfoActivity.class);// 跳转快递信息页面
                         finish();
                     } catch (JSONException e) {
@@ -80,16 +76,12 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
                     dialog = new SussessDialog(AffirmBuyBackActivity.this);
                     dialog.setText((String) msg.obj);
                     dialog.show();
-                    handler.sendEmptyMessage(DELSURESS);
+                    handler.sendEmptyMessageDelayed(DELSURESS, 1000);
                     break;
                 case DELSURESS :
                     if (dialog != null)
                         dialog.dismiss();
                     break;
-//                case DELPROGRESS :// 关闭对话框
-//                    if (pd != null)
-//                        pd.dismiss();
-//                    break;
                 case AGAINLOGIN :// 再次登录
                     if (dialog != null){
                         dialog.dismiss();
@@ -201,14 +193,6 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
             case R.id.Affirm_buyBack://确认回购按钮
                 mToken = sp.getString("token", "");
                 mUserId = sp.getString("userId", "");
-//                if (TextUtils.isEmpty(mToken) && TextUtils.isEmpty(mUserId)) {
-//                    Intent intent = new Intent(AffirmBuyBackActivity.this, LoginActivity.class);
-//                    intent.putExtra("WithDraw", "buyback");
-//                    startActivity(intent);
-//                } else {
-//                    mPhone = mBuyPhone.getText().toString();
-//                    GetNetBackBuy(mPhone);
-//                }
                 mPhone = mBuyPhone.getText().toString();
                 sp.edit().putString("Phone",mPhone).commit();
                 GetNetBackBuy(mPhone);
@@ -222,8 +206,6 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
      * 确认回购网络请求
      */
     private void GetNetBackBuy(final String phone){
-//        pd = new SendProgressDialog(this);
-//        pd.show();
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {

@@ -46,6 +46,9 @@ public class HttpUtils {
      */
     public static String submitPostData(String strUrlPath, Map<String, String> params) {
         byte[] data = getRequestData(params, "UTF-8").toString().getBytes();// 获得请求体
+
+//        MyLog.LogShitou("=========请求参数字段",params);
+
         try {
             URL url = new URL(strUrlPath);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -81,6 +84,7 @@ public class HttpUtils {
      */
     public static StringBuffer getRequestData(Map<String, String> params, String encode) {
         StringBuffer stringBuffer = new StringBuffer(); // 存储封装好的请求体信息
+//        MyLog.LogShitou("=00000========请求参数字段",stringBuffer.toString());
         try {
             for (Map.Entry<String, String> entry : params.entrySet()) {
                 stringBuffer.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue(), encode)).append("&");
@@ -90,6 +94,7 @@ public class HttpUtils {
             // e.printStackTrace();
             Log.e("网络请求", "编码格式错误");
         }
+        MyLog.LogShitou("=11111========请求参数字段",stringBuffer.toString());
         return stringBuffer;
     }
 

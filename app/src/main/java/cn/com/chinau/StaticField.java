@@ -141,7 +141,7 @@ public class StaticField {
 
     //邮票分类
     public static final String STAMPCATEGORY = "cn.com.chinau.category.query";
-    public static final String RUERY_CONDITION = "query_condition";// 筛选列表查询需要的字段
+    public static final String RUERY_CONDITION = "query_condition";// 筛选列表查询Json串字段
 
     //邮市目录传值的键
     public static final String STAMPDETAIL_SN = "stampDetail_sn";// 编号

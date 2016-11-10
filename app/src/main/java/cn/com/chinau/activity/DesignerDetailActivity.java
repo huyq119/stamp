@@ -416,7 +416,6 @@ public class DesignerDetailActivity extends BaseActivity implements View.OnClick
                     view2.setBackgroundResource(R.color.line_bg);
                     view3.setBackgroundResource(R.color.line_bg);
                     view4.setBackgroundResource(R.color.line_bg);
-
                     break;
                 case 1:
                     mResumeBtn.setTextColor(getResources().getColor(R.color.black));

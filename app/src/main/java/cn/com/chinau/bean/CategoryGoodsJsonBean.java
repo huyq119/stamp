@@ -4,29 +4,29 @@ package cn.com.chinau.bean;
  * Date: 2016/11/8 15:07
  * Autor：ChenXR
  * Mail：410529656@qq.com
- * 邮市，竞拍类别查询Json实体类
+ * 自营商城，邮市，竞拍类别查询上传Json实体类
  */
 
 public class CategoryGoodsJsonBean {
 
 
-    private CategoryBean year;// 年代
-    private CategoryBean designer; // 设计家
+    private String year;// 年代
+    private String designer; // 设计家
     private CategoryBean category; // 类别
 
-    public CategoryBean getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(CategoryBean year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
-    public CategoryBean getDesigner() {
+    public String getDesigner() {
         return designer;
     }
 
-    public void setDesigner(CategoryBean designer) {
+    public void setDesigner(String designer) {
         this.designer = designer;
     }
 

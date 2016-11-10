@@ -174,7 +174,9 @@
                 android:id="@+id/market_chart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"></RelativeLayout>
+                android:layout_margin="10dp">
+
+            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout

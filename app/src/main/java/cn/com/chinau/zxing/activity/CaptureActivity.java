@@ -131,6 +131,9 @@ public class CaptureActivity extends Activity implements Callback, View.OnClickL
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.base_title_back) {
+//            finish();
+//            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+
             if (mHomeFragment!= null && mHomeFragment.equals("HomeFragment")) {
                 finish();
                 overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);

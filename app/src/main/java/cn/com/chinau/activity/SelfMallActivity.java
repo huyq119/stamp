@@ -233,12 +233,13 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 String md5code = Encrypt.MD5(mapSort);
                 MyLog.e(md5code);
                 params.put(StaticField.SIGN, md5code); // 签名
+
                 if (!mJson.equals("")) {
                     params.put(StaticField.RUERY_CONDITION, mJson); // 查询条件，json字符串
                     MyLog.LogShitou("mJson======", "mJson==" + mJson);
                 }
-                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
                 MyLog.LogShitou(source+"/=="+"result+商城list", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
@@ -432,15 +433,19 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void setEnsureData() {
-        String mAlldata = mallFragment.getData();
+        String mToJson = mallFragment.getData();
         String mJson = mThreeFragment.getJson();
 
-        MyLog.LogShitou("上传json",mAlldata+"---"+mJson);
+        MyLog.LogShitou("上传json",mToJson+"---"+mJson);
 
+        if (mToJson != null){
+            RequestNet(StaticField.ZH, num, StaticField.SC_ZY,StaticField.A,mToJson);
+            MyLog.LogShitou("自营请求","-=====自营商城请求"+"=="+mToJson);
+        }
         if(mJson!=null){
             RequestNet(StaticField.ZH, num, StaticField.SC_DSF,StaticField.A,mJson);
+            MyLog.LogShitou("第三方请求","-=====第三方请求"+"=="+mToJson);
         }
-
         mSelfPanDialog.dismiss();
     }
 }
