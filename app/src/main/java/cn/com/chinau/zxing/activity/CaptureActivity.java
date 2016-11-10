@@ -261,6 +261,7 @@ public class CaptureActivity extends Activity implements Callback, View.OnClickL
 //         ShowDialog.showTextDialog(this, "扫码成功");
         Intent intent = new Intent(this, ScanDetailsActivity.class); // 跳转扫码详情页
         sp.edit().putString("result", rawResult.getText()).commit();
+
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);

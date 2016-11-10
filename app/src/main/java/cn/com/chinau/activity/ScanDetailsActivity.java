@@ -162,8 +162,9 @@ public class ScanDetailsActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.base_title_back://返回
-                openActivityWitchAnimation(ScanActivity.class);
-                finish();
+                finishWitchAnimation();
+//                openActivityWitchAnimation(ScanActivity.class);
+//                finish();
                 break;
             case R.id.scan_buyBack://申请回购
                 token = sp.getString("token", "");
