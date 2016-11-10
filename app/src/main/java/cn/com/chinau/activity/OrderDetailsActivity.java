@@ -5,66 +5,63 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.OrderDatilExpandableListAdapter;
 import cn.com.chinau.base.BaseActivity;
-import cn.com.chinau.bean.OrderAllListViewGoodsBean;
 import cn.com.chinau.bean.OrderDetailBean;
-import cn.com.chinau.dialog.SelectDistributionPopupWindow;
-import cn.com.chinau.dialog.SelectPayPopupWindow;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
-import cn.com.chinau.view.VerticalScrollView;
+import cn.com.chinau.utils.Utility;
 
 /**
  * 订单详情页面
  * 所有的订单页面都在这一个类里面,到时候看看区分显示
  */
-public class OrderDetailsActivity extends BaseActivity implements View.OnClickListener {
+public class OrderDetailsActivity extends BaseActivity implements View.OnClickListener ,OrderDatilExpandableListAdapter.CountOrPrice{
 
 
     private View mOrderDetailsTitle;
     private View mOrderDetailsContent;
     private LinearLayout mLogistics;//物流信息页面
-    private ExpandableListView mListView;//数据展示
-    private VerticalScrollView mScrollView;
-    private LinearLayout mPay,mPayment_ll,mEndTimeLl,mAddress_ll;//付款
-    private LinearLayout mDistribution;//快递
-    private SelectPayPopupWindow mPayPopupWindow;//付款的PopupWindow
-    private SelectDistributionPopupWindow mDistributionPopupWindow;//快递弹出的PopupWindow
-    private ImageView mBack;
+
+//    private ExpandableListView mListView;//数据展示list
+    private ExpandableListView mListView;//数据展示list
+
+    private ScrollView mScrollView;
+    private LinearLayout mPayment_ll,mEndTimeLl,mAddress_ll;//付款
+    private ImageView mBack,mPayImg;
     private TextView mTitle,mStatusTv,mEndTimeTv,mOrderSn,mCreateTime,mFirmOrderName,mCreateMobile,mAddress,
-            mExpressType,mFreight,mServiceRate,mServiceFee,mPayType,mGoodsCount,mTotalPrice,mPayforTv;
+            mExpressType,mFreight,mServiceRate,mServiceFee,mPayType,mGoodsCount,mTotalPrice,mPayforTv
+            ,mLookLogisticsTv,mClooseTv;
     private String mGoods_sn, mOrder_sn,mOrderStatus;
     private String mToken, mUser_id;// 标识，用户ID
     private SharedPreferences sp;
-    private ArrayList<OrderDetailBean.SellerBean> seller_list;
+//    private ArrayList<OrderDetailBean> mOrderDetailBean;
+    private OrderDetailBean mOrderDetailBean;
 
     private Handler mHandler = new Handler() {
-
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case StaticField.SUCCESS:// 全部
                     Gson gson0 = new Gson();
-                    OrderDetailBean mOrderDetailBean= gson0.fromJson((String) msg.obj, OrderDetailBean.class);
+                    OrderDetailBean mOrderDetailBean = gson0.fromJson((String) msg.obj, OrderDetailBean.class);
                     String code = mOrderDetailBean.getRsp_code();
                     String Rsp_msg = mOrderDetailBean.getRsp_msg();
                     if (code.equals("0000")) {
@@ -74,9 +71,9 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
                         if (mOrderStatus.equals("INIT")){ // 待付款
                             mStatusTv.setText("待付款");
                             mEndTimeLl.setVisibility(View.VISIBLE);// 显示剩余时间LL
-
                             mAddress_ll.setVisibility(View.GONE);// 物流栏隐藏
                             mEndTimeTv.setText(mEnd_time); // 倒计时
+                            mPayforTv.setVisibility(View.VISIBLE);// 付款按钮显示
 
                         }else if (mOrderStatus.equals("UNSHIPPED")){ //待发货
                             mStatusTv.setText("待收货");
@@ -102,30 +99,47 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
                             mStatusTv.setText("交易关闭");
                             mEndTimeLl.setVisibility(View.GONE);
                             mAddress_ll.setVisibility(View.GONE);// 物流栏隐藏
+                            mClooseTv.setVisibility(View.VISIBLE);// 显示交易关闭
 
                         }else if (mOrderStatus.equals("FINISH")){ // 已完成
                             mStatusTv.setText("已完成");
                             mEndTimeLl.setVisibility(View.GONE);
                             mAddress_ll.setVisibility(View.VISIBLE);// 物流栏显示
+
                         }
 
                         SetOrderDetailBeanData(mOrderDetailBean); // 给控件赋值
 
-                        seller_list = mOrderDetailBean.getSeller_list();
-
-                        MyLog.LogShitou("seller_list============","几条========="+seller_list.size());
-                        initAdapter();
+//                        initAdapter(mOrderDetailBean);
                     }else if(code.equals("1002")){
+                        MyToast.showShort(OrderDetailsActivity.this,Rsp_msg);
+                    }else if(code.equals("2083")){
                         MyToast.showShort(OrderDetailsActivity.this,Rsp_msg);
                     }
 
                     break;
                 case StaticField.DFK_SUCCESS:// 待付款
                     Gson gson1 = new Gson();
-                    OrderAllListViewGoodsBean mOrderContentBean1 = gson1.fromJson((String) msg.obj, OrderAllListViewGoodsBean.class);
-                    String code1 = mOrderContentBean1.getRsp_code();
+                    OrderDetailBean mOrderDetailBean1 = gson1.fromJson((String) msg.obj, OrderDetailBean.class);
+                    String code1 = mOrderDetailBean1.getRsp_code();
+                    String Rsp_msgs = mOrderDetailBean1.getRsp_msg();
                     if (code1.equals("0000")) {
+                        String mOrderStatus= mOrderDetailBean1.getOrder_status();// 订单状态
+                        String mEnd_time = mOrderDetailBean1.getEnd_pay_time();// 付款剩余时间
+                        if (mOrderStatus.equals("INIT")){ // 待付款
+                            mStatusTv.setText("待付款");
+                            mEndTimeLl.setVisibility(View.VISIBLE);// 显示剩余时间LL
+                            mAddress_ll.setVisibility(View.GONE);// 物流栏隐藏
+                            mEndTimeTv.setText(mEnd_time); // 倒计时
+                            mPayforTv.setVisibility(View.VISIBLE);// 付款按钮显示
+                        }
+                        SetOrderDetailBeanData(mOrderDetailBean1); // 给控件赋值
+//                        initAdapter(mOrderDetailBean1);
 
+                    }else if(code1.equals("1002")){
+                        MyToast.showShort(OrderDetailsActivity.this,Rsp_msgs);
+                    }else if(code1.equals("2083")){
+                        MyToast.showShort(OrderDetailsActivity.this,Rsp_msgs);
                     }
                     break;
                 case StaticField.DSH_SUCCESS:// 代收货
@@ -147,9 +161,7 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
                         }
 
                         SetOrderDetailBeanData(mOrderDetailBean2); // 给控件赋值
-                        seller_list = mOrderDetailBean2.getSeller_list();
-                        MyLog.LogShitou("seller_list============","几条========="+seller_list.size());
-                        initAdapter();
+//                        initAdapter(mOrderDetailBean2);
                     }else if (code2.equals("1002")){
                         MyToast.showShort(OrderDetailsActivity.this,Rsp_msg2);
                     }
@@ -177,9 +189,7 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
                             mAddress_ll.setVisibility(View.VISIBLE);// 物流栏显示
                         }
                         SetOrderDetailBeanData(mOrderDetailBean3); // 给控件赋值
-                        seller_list = mOrderDetailBean3.getSeller_list();
-                        MyLog.LogShitou("seller_list============","几条========="+seller_list.size());
-                        initAdapter();
+//                        initAdapter(mOrderDetailBean3);
                     }else if (code3.equals("1002")){
                         MyToast.showShort(OrderDetailsActivity.this,Rsp_msg3);
                     }
@@ -191,13 +201,12 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
 //                    String Rsp_msg4 = mOrderDetailBean4.getRsp_msg();
 //                    if (code4.equals("0000")) {
 //                        String mOrderStatus= mOrderDetailBean4.getOrder_status();// 订单状态
-//
-//
 //                    }
 //                    break;
             }
         }
     };
+    private String mExpress_no;
 
     @Override
     public View CreateTitle() {
@@ -224,7 +233,7 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
         mOrder_sn = bundle.getString(StaticField.ORDER_SN); // 交易订单号
         mGoods_sn = bundle.getString(StaticField.GOODS_SN); // 商品编号
         mOrderStatus= bundle.getString(StaticField.ORDERSTATUS); //订单状态
-        MyLog.LogShitou("传过来的商品编号===订单号", mGoods_sn + "===" + mOrder_sn+"===="+mOrderStatus);
+//        MyLog.LogShitou("传过来的商品编号===订单号", mGoods_sn + "===" + mOrder_sn+"===="+mOrderStatus);
         mBack = (ImageView) mOrderDetailsTitle.findViewById(R.id.base_title_back);
         mTitle = (TextView) mOrderDetailsTitle.findViewById(R.id.base_title);
         mTitle.setText("订单详情");
@@ -244,18 +253,18 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
         mFreight = (TextView) mOrderDetailsContent.findViewById(R.id.ExpressType_freight);// 快递费
         mServiceRate = (TextView) mOrderDetailsContent.findViewById(R.id.order_details_ServiceRate);// 服务费率
         mServiceFee = (TextView) mOrderDetailsContent.findViewById(R.id.order_details_ServiceFee);// 服务费
+        mPayImg = (ImageView) mOrderDetailsContent.findViewById(R.id.order_details_payImg);// 支付方式图片
         mPayType = (TextView) mOrderDetailsContent.findViewById(R.id.order_details_PayType);// 支付方式
         mGoodsCount = (TextView) mOrderDetailsContent.findViewById(R.id.order_details_count);// 商品总件数
         mTotalPrice = (TextView) mOrderDetailsContent.findViewById(R.id.order_details_total_price);// 商品总价
         mPayforTv = (TextView) mOrderDetailsContent.findViewById(R.id.order_details_Payfor_tv);// 付款按钮
+        mLookLogisticsTv = (TextView) mOrderDetailsContent.findViewById(R.id.order_details_look_logistics_tv);// 查看物流按钮
+        mClooseTv = (TextView) mOrderDetailsContent.findViewById(R.id.order_details_cloose_tv);// 交易已关闭
 
-        mPay = (LinearLayout) mOrderDetailsContent.findViewById(R.id.orderDetails_pay);
-        mDistribution = (LinearLayout) mOrderDetailsContent.findViewById(R.id.orderDetails_distribution);
         mListView = (ExpandableListView) mOrderDetailsContent.findViewById(R.id.order_details_lv);
-        mScrollView = (VerticalScrollView) mOrderDetailsContent.findViewById(R.id.order_details_sv);
-        //隐藏地址上面的箭头
-        ImageView Arrow = (ImageView) mOrderDetailsContent.findViewById(R.id.firmOrder_back);
-        Arrow.setVisibility(View.GONE);
+
+
+        mScrollView = (ScrollView) mOrderDetailsContent.findViewById(R.id.order_details_sv);
     }
 
     private void initDate(){
@@ -275,10 +284,12 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
     }
 
 
-    private void initAdapter() {
-        OrderDatilExpandableListAdapter expandableAdapter = new OrderDatilExpandableListAdapter(this, mBitmap, seller_list);
+    private void initAdapter(OrderDetailBean mOrderDetailBean) {
+        OrderDatilExpandableListAdapter expandableAdapter = new OrderDatilExpandableListAdapter(this, mBitmap, mOrderDetailBean);
         mListView.setAdapter(expandableAdapter);
-        expandableAdapter.notifyDataSetChanged();
+        Utility.setListViewHeightBasedOnChildren(mListView);
+//        expandableAdapter.notifyDataSetChanged();
+        expandableAdapter.setCountOrPrice(this);
         //让子控件全部展开
         for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
             mListView.expandGroup(i);
@@ -292,8 +303,8 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
     private void initListener() {
         mBack.setOnClickListener(this);
         mAddress_ll.setOnClickListener(this);
-        mPay.setOnClickListener(this);
-        mDistribution.setOnClickListener(this);
+        mPayforTv.setOnClickListener(this);
+        mLookLogisticsTv.setOnClickListener(this);
     }
 
     @Override
@@ -308,58 +319,21 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
                 finishWitchAnimation();
                 break;
             case R.id.orderDetails_Address_ll://物流信息页面
+//                Bundle bundle = new Bundle();
+//                bundle.putString("ExpressNo",mExpress_no);
+//                openActivityWitchAnimation(LogisticsDetailsActivity.class, bundle);
+                break;
+            case R.id.order_details_Payfor_tv://付款按钮
+                break;
+            case R.id.order_details_look_logistics_tv://查看物流栏
                 openActivityWitchAnimation(LogisticsDetailsActivity.class);
-                break;
-            case R.id.orderDetails_pay://支付方式
-                mPayPopupWindow = new SelectPayPopupWindow(this, mPayWindow);
-                //设置layout在PopupWindow中显示的位置,因为这里写了全屏的所以就没有居中
-                mPayPopupWindow.showAtLocation(this.findViewById(R.id.order_details), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-                break;
-            case R.id.orderDetails_distribution://快递方式
-//                mDistributionPopupWindow = new SelectDistributionPopupWindow(this, mDistributionWindow);
-//                mDistributionPopupWindow.showAtLocation(this.findViewById(R.id.order_details), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
         }
     }
 
-    /**
-     * 支付方式的内部监听
-     */
-    private View.OnClickListener mPayWindow = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            mPayPopupWindow.dismiss();
-            switch (view.getId()) {
-                case R.id.Wechat_click://点击了微信按钮
-                    MyToast.showShort(OrderDetailsActivity.this, "点击了微信按钮");
-                    break;
-                case R.id.Alipay_click://点击了支付宝按钮
-                    MyToast.showShort(OrderDetailsActivity.this, "点击了支付宝按钮");
-                    break;
-            }
-        }
-    };
-    /**
-     * 配送方式的内部监听
-     */
-    private View.OnClickListener mDistributionWindow = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            mDistributionPopupWindow.dismiss();
-            switch (view.getId()) {
-                case R.id.EMS_click://Ems的点击按钮
-                    MyToast.showShort(OrderDetailsActivity.this, "点击了EMS按钮");
-                    break;
-                case R.id.Wind_click://顺丰的点击按钮
-                    MyToast.showShort(OrderDetailsActivity.this, "点击了顺丰按钮");
-                    break;
-            }
-        }
-    };
-
 
     /**
-     * 商品详情网络请求
+     * 订单详情网络请求
      */
     private void GetInitNet(final String orderStatus){
         ThreadManager.getInstance().createLongPool().execute(new Runnable() {
@@ -412,9 +386,7 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
                 }
             }
         });
-
     }
-
 
     /**
      * 给控件赋值
@@ -442,10 +414,24 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
         mServiceFee.setText("￥"+mServiceFees);
         String mPayTypes = orderDetailBean.getPay_type();// 支付方式
         if (mPayTypes.equals("ALIPAY")){
+            mPayImg.setImageResource(R.mipmap.zhifubao);
             mPayType.setText("支付宝");
         }else{
+            mPayImg.setImageResource(R.mipmap.weixin_pay);
             mPayType.setText("微信");
         }
+
     }
 
+    /**
+     * 适配器回调过来的数据
+     * @param count  商品数量
+     * @param price 商品总价格
+     */
+    @Override
+    public void GetCountOrPrice(String count, String price,String express_no) {
+        mGoodsCount.setText("共"+count+"件商品");
+        mTotalPrice.setText("￥" + price);
+        mExpress_no = express_no;// 快递单号
+    }
 }

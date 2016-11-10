@@ -1,9 +1,11 @@
 package cn.com.chinau.activity;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,7 +48,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
     private int checkNum; // 记录选中的条目数量
     private TextView mDelete;
     private CollectionListViewAdapter adapter;
-    private LinearLayout CollEditLl, mChooseAllLl,mCollectionTabLl;
+    private LinearLayout CollEditLl, mChooseAllLl, mCollectionTabLl;
     private MyCollectionListViewEditerAdapter mListAdapter;
     private ProgressDialog prodialog;
     private TextView Title;
@@ -74,7 +76,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                     if (mRsp_code.equals("0000")) {
                         mList = mCollectionBean.getGoods_list();
 //                        if (mList != null && mList.size() != 0) {
-                            initAdapter();
+                        initAdapter();
 //                        }
                     }
                     break;
@@ -84,9 +86,9 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                     String codes = mCollectionBean1.getRsp_code();
                     if (codes.equals("0000")) {
                         mList = mCollectionBean1.getGoods_list();
-                            initAdapter();
-                            adapter.flage = !adapter.flage;
-                            adapter.notifyDataSetChanged();
+                        initAdapter();
+                        adapter.flage = !adapter.flage;
+                        adapter.notifyDataSetChanged();
                     }
                     break;
                 case StaticField.DeleteSUCCESS:// 删除
@@ -102,8 +104,8 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                         }
 
                         MyLog.LogShitou("删除成功", "--->删除成功");
-                    }else{
-                        MyToast.showShort(MyCollectionActivity.this,mRsp_msg);
+                    } else {
+                        MyToast.showShort(MyCollectionActivity.this, mRsp_msg);
                     }
                     break;
 
@@ -174,6 +176,29 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
         mAuctionBtn.setOnClickListener(this);
         mMallBtn.setOnClickListener(this);
         mChooseAllLl.setOnClickListener(this);
+        // 条目监听
+        mCollection_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
+                String mGoods_type = mList.get(position).getGoods_type();
+                String mGoodsSn = mList.get(position).getGoods_sn();
+                MyLog.LogShitou("=======哪个商家", mGoods_type);
+                if (mGoods_type.equals("SC")) {
+                    bundle.putString(StaticField.GOODS_SN, mGoodsSn);
+                    openActivityWitchAnimation(SelfMallDetailActivity.class, bundle);
+                } else if (mGoods_type.equals("YS")) {
+                    bundle.putString(StaticField.GOODS_SN, mGoodsSn);
+                    openActivityWitchAnimation(StampDetailActivity.class, bundle);
+                } else if (mGoods_type.equals("JP")) {
+                    bundle.putString(StaticField.GOODS_SN, mGoodsSn);
+                    openActivityWitchAnimation(AuctionDetailActivity.class, bundle);
+                } else if (mGoods_type.equals("DSF")) {
+                    bundle.putString(StaticField.GOODS_SN, mGoodsSn);
+                    openActivityWitchAnimation(SelfMallDetailActivity.class, bundle);
+                }
+            }
+        });
     }
 
     @Override
@@ -337,7 +362,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-                if (goods_type.equals("QB")){// 全部
+                if (goods_type.equals("QB")) {// 全部
 //                    initDataFlage = true;
                     if (initDataFlage) {
                         Message msg = mHandler.obtainMessage();
@@ -354,7 +379,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                         MyLog.LogShitou("再次请求这是多少02", initDataFlage + "");
 
                     }
-                }else if(goods_type.equals("YS")){ // 邮市
+                } else if (goods_type.equals("YS")) { // 邮市
                     initDataFlage = true;
                     if (initDataFlage) {
                         Message msg = mHandler.obtainMessage();
@@ -371,7 +396,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                         MyLog.LogShitou("再次请求这是多少02", initDataFlage + "");
 
                     }
-                }else if(goods_type.equals("JP")){ // 竞拍
+                } else if (goods_type.equals("JP")) { // 竞拍
                     initDataFlage = true;
                     if (initDataFlage) {
                         Message msg = mHandler.obtainMessage();
@@ -388,7 +413,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                         MyLog.LogShitou("再次请求这是多少02", initDataFlage + "");
 
                     }
-                }else if(goods_type.equals("SC")){ // 商城
+                } else if (goods_type.equals("SC")) { // 商城
                     initDataFlage = true;
                     if (initDataFlage) {
                         Message msg = mHandler.obtainMessage();
@@ -406,7 +431,6 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
 
                     }
                 }
-
 
 
             }

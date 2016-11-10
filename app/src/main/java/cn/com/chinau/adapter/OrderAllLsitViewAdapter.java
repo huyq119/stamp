@@ -157,11 +157,8 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
             // 获取子控件的值
             String mImg = order_detail_list.getGoods_img();
             String mName = order_detail_list.getGoods_name();
-//            String mGoodeSn = order_detail_list.getGoods_sn();// 商品编号
             String mPrice = order_detail_list.getGoods_price();
             String mCounts = order_detail_list.getGoods_count();// 商品数量
-//            String mStatues = order_detail_list.getStatus(); // 订单明细状态
-//            String mDetailSn = order_detail_list.getOrder_detail_sn(); // 订单明细编号
             // 赋值
             bitmapUtils.display(goodsholder.img, mImg);
             goodsholder.mNames.setText(mName); // 名称
@@ -240,7 +237,6 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
                         Intent intent = new Intent(context, LogisticsDetailsActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("ExpressNo", mExpress_no);
-                        MyLog.LogShitou("适配器获取的快递单号", mExpress_no);
                         intent.putExtras(bundle);
                         context.startActivity(intent);
                         ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);

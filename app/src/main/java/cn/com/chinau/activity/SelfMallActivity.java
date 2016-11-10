@@ -78,6 +78,21 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                         }
                     }
                     break;
+                case StaticField.CG_SUCCESS://筛选
+                    Gson gson1 = new Gson();
+                    GoodsStampBean mGoodsStampBean1 = gson1.fromJson((String) msg.obj, GoodsStampBean.class);
+                   String mCode1 = mGoodsStampBean1.getRsp_code();
+                    if (mCode1.equals("0000")){
+                        if (num == 0) {
+                            ArrayList<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean1.getGoods_list();
+                            //为GridView设置适配器
+                            StampMarketGridViewAdapter mStampMarAdapter = new StampMarketGridViewAdapter(SelfMallActivity.this, goods_list, mBitmap);
+                            //内容GridView设置适配器
+                            mGridView.setAdapter(mStampMarAdapter);
+                            mStampMarAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    break;
             }
         }
     };
@@ -142,7 +157,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onRefresh(PullToRefreshBase<GridView> refreshView) {
                 num++;
-                RequestNet(StaticField.ZH, num, StaticField.A);
+                RequestNet(StaticField.ZH, num,StaticField.GOODSMALL, StaticField.A,"");
                 MyLog.LogShitou("num===2====",""+num);
             }
         });
@@ -153,7 +168,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
             mList = new ArrayList<>();
         }
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-        RequestNet(StaticField.ZH, num, StaticField.A);
+        RequestNet(StaticField.ZH, num,StaticField.GOODSMALL, StaticField.A,"");
         MyLog.LogShitou("num=====1=======", "" + num);
     }
 
@@ -203,14 +218,14 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
      * @param index 角标
      * @param Sort 排序
      */
-    private void RequestNet(final String Order_By, final int index, final String Sort) {
+    private void RequestNet(final String Order_By, final int index,final String source, final String Sort,final String mJson) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
                 HashMap<String, String> params = new HashMap<>();
                 params.put(StaticField.SERVICE_TYPE, StaticField.GOODSLIST);// 接口名称
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
-                params.put(StaticField.GOODS_SOURCE,StaticField.GOODSMALL); // 商品类型
+                params.put(StaticField.GOODS_SOURCE,source); // 商品类型
                 params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；XL销量；JG价格)
                 params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
                 params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
@@ -218,17 +233,28 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 String md5code = Encrypt.MD5(mapSort);
                 MyLog.e(md5code);
                 params.put(StaticField.SIGN, md5code); // 签名
-
+                if (!mJson.equals("")) {
+                    params.put(StaticField.RUERY_CONDITION, mJson); // 查询条件，json字符串
+                    MyLog.LogShitou("mJson======", "mJson==" + mJson);
+                }
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                Log.e("result+商城~~~~>", result);
+                MyLog.LogShitou(source+"/=="+"result+商城list", result);
+
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-                Message msg = mHandler.obtainMessage();
-                msg.what = StaticField.SUCCESS;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
+                if (mJson.equals("")){
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }else{
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.CG_SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
             }
         });
     }
@@ -260,11 +286,11 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 // true代表降序,false代表升序
                 if (Synthesizeflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.ZH, num, StaticField.D);
+                    RequestNet(StaticField.ZH, num, StaticField.GOODSMALL,StaticField.D,"");
                     Synthesizeflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSynthesize, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.ZH, num, StaticField.A);
+                    RequestNet(StaticField.ZH, num, StaticField.GOODSMALL,StaticField.A,"");
                     Synthesizeflag = true;
                 }
                 break;
@@ -275,11 +301,11 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
 
                 if (Salesflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSales, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.XL, num, StaticField.D);
+                    RequestNet(StaticField.XL, num,StaticField.GOODSMALL, StaticField.D,"");
                     Salesflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSales, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.XL, num, StaticField.A);
+                    RequestNet(StaticField.XL, num, StaticField.GOODSMALL,StaticField.A,"");
                     Salesflag = true;
                 }
                 break;
@@ -290,12 +316,12 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
 
                 if (Priceflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mPrice, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.JG, num, StaticField.D);
+                    RequestNet(StaticField.JG, num,StaticField.GOODSMALL, StaticField.D,"");
                     Priceflag = false;
                 } else {
                     Log.e("flag", "false");
                     setDrawable(R.mipmap.top_arrow_top, mPrice, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.JG, num, StaticField.A);
+                    RequestNet(StaticField.JG, num, StaticField.GOODSMALL,StaticField.A,"");
                     Priceflag = true;
                 }
                 break;
@@ -407,9 +433,14 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void setEnsureData() {
         String mAlldata = mallFragment.getData();
-        String mThreedata = mThreeFragment.getData();
+        String mJson = mThreeFragment.getJson();
 
-        MyLog.e("点中了谁-->"+mAlldata+"---"+mThreedata);
+        MyLog.LogShitou("上传json",mAlldata+"---"+mJson);
+
+        if(mJson!=null){
+            RequestNet(StaticField.ZH, num, StaticField.SC_DSF,StaticField.A,mJson);
+        }
+
         mSelfPanDialog.dismiss();
     }
 }

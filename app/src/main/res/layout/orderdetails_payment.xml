@@ -65,14 +65,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/order_number"
-            android:textSize="11sp"/>
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/order_detail_orderSn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/distance"
-            android:text="132465465132465"
             android:textColor="@color/black"
             android:textSize="13sp"/>
     </LinearLayout>
@@ -90,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Order_time"
-            android:textSize="11sp"/>
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/order_detail_mCreate_time"
@@ -98,7 +97,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/distance"
             android:textColor="@color/black"
-            android:text="2014年07月07日 18:11"
             android:textSize="13sp"/>
     </LinearLayout>
 

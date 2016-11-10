@@ -1,14 +1,22 @@
 package cn.com.chinau.fragment.popfragment;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 import cn.com.chinau.R;
+import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.SelfMallPanStampGridViewAdapter;
 import cn.com.chinau.base.BaseDialogFragment;
+import cn.com.chinau.bean.CategoryBean;
 import cn.com.chinau.dialog.SelfMallPanStampFilterDialog;
 import cn.com.chinau.listener.SellMallPanStampGridViewOnItemClickListener;
 import cn.com.chinau.utils.MyLog;
@@ -17,18 +25,17 @@ import cn.com.chinau.view.NoScrollGridView;
 /**
  * 淘邮票筛选（邮市）Fragment
  */
-public class StampFilterFragment extends BaseDialogFragment implements SellMallPanStampGridViewOnItemClickListener.SelfMallItemClick{
+public class StampFilterFragment extends BaseDialogFragment implements SellMallPanStampGridViewOnItemClickListener.SelfMallItemClick {
 
-    private String[] arrClass = {"人物", "植物", "节日", "器皿", "字画", "风光", "经济", "农业", "民俗", "动物", "生肖",
-            "文化艺术", "政治", "科教", "工业", "交通", "军事", "文学", "邮政", "公共"};
-    private String[] arrYear = {"2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005"};
-    private String[] arrPerson = {"任平", "于平", "甲钴胺", "邮票", "任平", "于平", "甲钴胺", "邮票", "任平", "于平", "甲钴胺", "邮票"};
 
-    private View mFilterView;
     private int Current = -1;//当前选择的年代角标
-    private SellMallPanStampGridViewOnItemClickListener mYearListener, mCategoryListener,mThemeListener;//年份的监听,类别的监听,人物的监听
-    private View mSelfMall;
+    private View mStampView;
     private String mData;
+    private TextView mNewChinese, mQingMin, mTheme, mOther;
+    private SellMallPanStampGridViewOnItemClickListener mNewChineseListener, mQingMinListener, getmThemeListener, mThemeListener, mOtherListener;
+    private ArrayList<CategoryBean.Category.SubCategory> subCategory1;
+    private SharedPreferences sp;
+    private String[] mChinese, mQingMins, mThemes, mOthers, mChineseValue, mQingminValue, mThemeValue, mOtherValue;
 
 
     public StampFilterFragment() {
@@ -37,75 +44,157 @@ public class StampFilterFragment extends BaseDialogFragment implements SellMallP
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mSelfMall = View.inflate(getActivity(), R.layout.fragment_selfmall_filter_dialog, null);
+        mStampView = View.inflate(getActivity(), R.layout.fragment_stamp_filter_dialog, null);
+        sp = getActivity().getSharedPreferences(StaticField.NAME, getActivity().MODE_PRIVATE);
+        initView();
+        GetCategoryData();
         //设置GridView的数据
         setPopupWindowData();
-//        RequestNet();
-        return mSelfMall;
+        return mStampView;
     }
+
+
+    private void initView() {
+        mNewChinese = (TextView) mStampView.findViewById(R.id.stamp_pop_newchinese_title);
+        mQingMin = (TextView) mStampView.findViewById(R.id.stamp_pop_qingmin_title);
+        mTheme = (TextView) mStampView.findViewById(R.id.stamp_pop_theme_title);
+        mOther = (TextView) mStampView.findViewById(R.id.stamp_pop_other_title);
+    }
+
+    // 获取保存在本地邮市类别数据
+    private void GetCategoryData() {
+        String category5 = sp.getString("Category5", "");
+        MyLog.LogShitou("获取本地邮市类别数据", category5);
+        if (category5 != null) {
+            Gson gson = new Gson();
+            CategoryBean mCategoryBean = gson.fromJson(category5, CategoryBean.class);
+            ArrayList<CategoryBean.Category> mCategory = mCategoryBean.getCategory();// 一级标题list
+            CategoryBean.Category category = mCategory.get(0);
+            subCategory1 = category.getSubCategory();// 二级标题list
+
+            int sub = subCategory1.size();// 获取subCategory1的个数
+            MyLog.LogShitou("-==============sub", "sub==" + sub);
+
+            String[] mArrTitle = new String[sub];// 一级分类
+            //二级分类
+            ArrayList<String[]> mArrList = new ArrayList<>();
+            ArrayList<String[]> mArrListValue = new ArrayList<>();
+            // 循环出一级分类的名字
+            for (int i = 0; i < subCategory1.size(); i++) {
+                mArrTitle[i] = subCategory1.get(i).getName();
+
+                MyLog.LogShitou("邮市一级类别0001----->:", mArrTitle[i]);
+                ArrayList<CategoryBean.Category.SubCategory.SmllSubCategoryData> subCategory = subCategory1.get(i).getSubCategory();
+                String[] mArr = new String[subCategory.size()];
+                String[] mArrValue = new String[subCategory.size()];
+                // 循环出二级分类名字
+                for (int j = 0; j < subCategory.size(); j++) {
+                    mArr[j] = subCategory.get(j).getName();
+                    mArrValue[j] = subCategory.get(j).getValue();
+                    MyLog.LogShitou("邮市二级类别0", mArr[j] + "===" + mArrValue[j]);
+                }
+                mArrList.add(mArr);
+                mArrListValue.add(mArrValue);
+            }
+            // 获取单个的一级标题Title
+            String title0 = mArrTitle[0];
+            mNewChinese.setText(title0);
+            String title1 = mArrTitle[1];
+            mQingMin.setText(title1);
+            String title2 = mArrTitle[2];
+            mTheme.setText(title2);
+            String title3 = mArrTitle[3];
+            mOther.setText(title3);
+            MyLog.LogShitou("邮市一级类别----->:", title0 + "--" + title1 + "--" + title2 + "--" + title3);
+
+            // 获取二级分类name
+            mChinese = mArrList.get(0);
+            mQingMins = mArrList.get(1);
+            mThemes = mArrList.get(2);
+            mOthers = mArrList.get(3);
+            // 获取二级分类value值
+            mChineseValue = mArrListValue.get(0);
+            mQingminValue = mArrListValue.get(1);
+            mThemeValue = mArrListValue.get(2);
+            mOtherValue = mArrListValue.get(3);
+
+        }
+    }
+
 
     /**
      * 设置PopupWindow页面的数据
      */
     private void setPopupWindowData() {
-        //类别的GridView
-        NoScrollGridView mCategoryGV = (NoScrollGridView) mSelfMall.findViewById(R.id.selfmall_pop_category);
-        //年代的GridView
-        NoScrollGridView mYearGV = (NoScrollGridView) mSelfMall.findViewById(R.id.selfmall_pop_years);
-        //题材的GridView
-        NoScrollGridView mThemeGV = (NoScrollGridView) mSelfMall.findViewById(R.id.selfmall_pop_theme);
+        //新中国GridView
+        NoScrollGridView mNewChineseGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_newchinese);
+        //清民区GridView
+        NoScrollGridView mQingMinGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_qingmin);
+        //主题GridView
+        NoScrollGridView mThemeGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_theme);
+        //其他GridView
+        NoScrollGridView mOtherGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_other);
 
         //创建适配器
-        SelfMallPanStampGridViewAdapter mCategoryAdapter = new SelfMallPanStampGridViewAdapter(getActivity(),arrClass);
-        SelfMallPanStampGridViewAdapter mYearAdapter =  new SelfMallPanStampGridViewAdapter(getActivity(), arrYear);
-        SelfMallPanStampGridViewAdapter mThemeAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), arrPerson);
+        SelfMallPanStampGridViewAdapter mNewChineseAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mChinese);
+        SelfMallPanStampGridViewAdapter mQingMinAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mQingMins);
+        SelfMallPanStampGridViewAdapter mThemeAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mThemes);
+        SelfMallPanStampGridViewAdapter mOtherAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mOthers);
 
         //设置适配器
-        mYearGV.setAdapter(mYearAdapter);
-        mCategoryGV.setAdapter(mCategoryAdapter);
+        mNewChineseGV.setAdapter(mNewChineseAdapter);
+        mQingMinGV.setAdapter(mQingMinAdapter);
         mThemeGV.setAdapter(mThemeAdapter);
+        mOtherGV.setAdapter(mOtherAdapter);
 
         //设置监听
-        //年份的监听
-        mYearListener = new SellMallPanStampGridViewOnItemClickListener(Current, mYearAdapter);
-        mYearListener.setSelfMallItemClick(this);
-        mYearGV.setOnItemClickListener(mYearListener);
-        //类别的监听
-        mCategoryListener = new SellMallPanStampGridViewOnItemClickListener(Current, mCategoryAdapter);
-        mCategoryListener.setSelfMallItemClick(this);
-        mCategoryGV.setOnItemClickListener(mCategoryListener);
+        //新中国的监听
+        mNewChineseListener = new SellMallPanStampGridViewOnItemClickListener(Current, mNewChineseAdapter);
+        mNewChineseListener.setSelfMallItemClick(this);
+        mNewChineseGV.setOnItemClickListener(mNewChineseListener);
+        //清民的监听
+        mQingMinListener = new SellMallPanStampGridViewOnItemClickListener(Current, mQingMinAdapter);
+        mQingMinListener.setSelfMallItemClick(this);
+        mQingMinGV.setOnItemClickListener(mQingMinListener);
         //题材的监听
         mThemeListener = new SellMallPanStampGridViewOnItemClickListener(Current, mThemeAdapter);
         mThemeListener.setSelfMallItemClick(this);
         mThemeGV.setOnItemClickListener(mThemeListener);
+        //其他的监听
+        mOtherListener = new SellMallPanStampGridViewOnItemClickListener(Current, mOtherAdapter);
+        mOtherListener.setSelfMallItemClick(this);
+        mOtherGV.setOnItemClickListener(mOtherListener);
 
         SelfMallPanStampFilterDialog selfMallPanStampFilterDialog = (SelfMallPanStampFilterDialog) getParentFragment();
         selfMallPanStampFilterDialog.setClickReset(new SelfMallPanStampFilterDialog.ClickReset() {
             @Override
             public void setReset() {
                 MyLog.e("ThreeMallFilterFragment-->");
-                mYearListener.setPosition();
-                mCategoryListener.setPosition();
+                mNewChineseListener.setPosition();
+                mQingMinListener.setPosition();
                 mThemeListener.setPosition();
+                mOtherListener.setPosition();
             }
         });
     }
 
     @Override
     public void GetClickItem() {
-        int yearNum = mYearListener.getPosition();
-        int CategoryNum = mCategoryListener.getPosition();
-        int PersonNum = mThemeListener.getPosition();
-        MyLog.e(yearNum + "-" + CategoryNum + "-" + PersonNum);
+        int chineseNum = mNewChineseListener.getPosition();
+        int qingminNum = mQingMinListener.getPosition();
+        int themeNum = mThemeListener.getPosition();
+        int otherNum = mOtherListener.getPosition();
+        MyLog.e(chineseNum + "-" + qingminNum + "-" + themeNum + "-" + otherNum);
 
 
-        String Category = (CategoryNum == -1) ? "" : arrClass[CategoryNum];
-        String Year = (yearNum == -1) ? "" : arrYear[yearNum];
-        String Person = (PersonNum == -1) ? "" : arrPerson[PersonNum];
+        String chinese = (chineseNum == -1) ? "" : mChineseValue[chineseNum];
+        String qingmin = (qingminNum == -1) ? "" : mQingminValue[qingminNum];
+        String theme = (themeNum == -1) ? "" : mThemeValue[themeNum];
+        String other = (otherNum == -1) ? "" : mOtherValue[otherNum];
 
-        mData = Year + "," + Category + "," + Person;
+        mData = chinese + "," + qingmin + "," + theme + "," + other;
         setData(mData);
-        MyLog.e("点击了啥002--->"+mData);
+        MyLog.e("点击了啥002--->" + mData);
 
     }
 

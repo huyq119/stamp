@@ -82,33 +82,6 @@ public class DesignerActivity extends BaseActivity {
     }
 
 
-    private void initData() {
-        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                HashMap<String, String> params = new HashMap<>();
-                params.put(StaticField.SERVICE_TYPE, StaticField.DESIGNERLIST);
-                params.put(StaticField.CURRENT_INDEX, String.valueOf(num));
-                params.put(StaticField.OFFSET, String.valueOf(OFFSETNUM));
-                String mapSort = SortUtils.MapSort(params);
-                String md5code = Encrypt.MD5(mapSort);
-                params.put(StaticField.SIGN, md5code);
-
-                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-
-                if (result.equals("-1") | result.equals("-2")) {
-                    return;
-                }
-
-                MyLog.LogShitou("设计家List","===" + result);
-                Message msg = mHandler.obtainMessage();
-                msg.what = StaticField.SUCCESS;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
-            }
-        });
-    }
-
     private void initAdapter(DesignerBean designerBean) {
         mList = new ArrayList<>();
         mList = designerBean.getDesigner_list();
@@ -147,12 +120,12 @@ public class DesignerActivity extends BaseActivity {
 //            mList.get(i).getEnglish_name().charAt(0);
             // 先注释
             for (int i = 0, count = mList.size(); i < count; i++) {
-//                Character firstLetter = mList.get(i).getEnglish_name().charAt(0);
-//                if (firstLetter != null){
-//                    if (firstLetter.toString().equals(letter)) {
-//                        return i;
-//                    }
-//                }
+                Character firstLetter = mList.get(i).getEnglish_name().charAt(0);
+                if (firstLetter != null){
+                    if (firstLetter.toString().equals(letter)) {
+                        return i;
+                    }
+                }
             }
             return UNKNOW;
         }
@@ -161,5 +134,35 @@ public class DesignerActivity extends BaseActivity {
     @Override
     public void AgainRequest() {
         initData();
+    }
+
+    /**
+     * 设计家list网络请求
+     */
+    private void initData() {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.DESIGNERLIST);
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(num));
+                params.put(StaticField.OFFSET, String.valueOf(OFFSETNUM));
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+
+                MyLog.LogShitou("设计家List","===" + result);
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        });
     }
 }

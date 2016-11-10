@@ -3,23 +3,26 @@ package cn.com.chinau.bean;
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2016/10/12.
- * 在首页类别查询实体类
+ * Date: 2016/11/9 14:02
+ * Autor：ChenXR
+ * Mail：410529656@qq.com
+ * 邮票目录类别查询实体类
  */
-public class CategoryRMBean extends BaseBean{
 
+public class CategoryMLBean extends BaseBean {
 
     private ArrayList<Category> category;
 
     public ArrayList<Category> getCategory() {
         return category;
     }
+
     public void setCategory(ArrayList<Category> category) {
         this.category = category;
     }
 
     public class Category {
-        private String name;// 类别
+        private String name;// 一级类别
         private String value;
         private String img_url;// 图片
         private ArrayList<SubCategory> subCategory;
@@ -40,14 +43,6 @@ public class CategoryRMBean extends BaseBean{
             this.value = value;
         }
 
-        public String getImg_url() {
-            return img_url;
-        }
-
-        public void setImg_url(String img_url) {
-            this.img_url = img_url;
-        }
-
         public ArrayList<SubCategory> getSubCategory() {
             return subCategory;
         }
@@ -56,12 +51,19 @@ public class CategoryRMBean extends BaseBean{
             this.subCategory = subCategory;
         }
 
+        public String getImg_url() {
+            return img_url;
+        }
+
+        public void setImg_url(String img_url) {
+            this.img_url = img_url;
+        }
 
         public class SubCategory {
-            private String name;// 热门搜索内容
+            private String name;// 一级类别名字
             private String value;
             private String img_url;// 图片
-            private ArrayList<SubCategorys> subCategory;
+            private ArrayList<SubCategorys>  subCategory;
 
             public String getName() {
                 return name;
@@ -87,13 +89,13 @@ public class CategoryRMBean extends BaseBean{
                 this.img_url = img_url;
             }
 
-          /*  public String getSubCategory() {
-                return subCategory;
-            }
-
-            public void setSubCategory(String subCategory) {
-                this.subCategory = subCategory;
-            }*/
+//            public String getSubCategory() {
+//                return subCategory;
+//            }
+//
+//            public void setSubCategory(String subCategory) {
+//                this.subCategory = subCategory;
+//            }
 
             public ArrayList<SubCategorys> getSubCategory() {
                 return subCategory;

@@ -47,6 +47,8 @@ import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 import cn.com.chinau.view.VerticalScrollView;
 
+import static cn.com.chinau.R.id.FirmOrder;
+
 /**
  * 确认订单页面
  */
@@ -58,15 +60,15 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private LinearLayout mPay, mDistribution;//支付方式,配送方式
     private SelectPayPopupWindow mPayPopupWindow;//支付的弹出框
     private SelectDistributionPopupWindow mDistributionPopupWindow;//配送方式的弹出框
-//    private CustomExpandableListView mListView;//底部列表展示
+    //    private CustomExpandableListView mListView;//底部列表展示
     private ListView mListView;//底部列表展示
     private ImageView mBack, mPayImg;
     private TextView mTitle, mOkPay, mDistributionTv, mDistributionPrice, mPayNmme, mFeeRate, mAddressName,
-            mAddressMobile, mAddressDetail, mNoAddressAdd,mTotalPrice,mGoodsCount;
+            mAddressMobile, mAddressDetail, mNoAddressAdd, mTotalPrice, mGoodsCount;
 
     private LinearLayout mAddress1;
     private String mAuctionRecord;
-//    private String mShopGoodsJson;// 传过来的Json串
+    //    private String mShopGoodsJson;// 传过来的Json串
     private SharedPreferences sp;
     private String mToken, mUser_id;
 
@@ -84,17 +86,17 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private IWXAPI api;
     private String address_id;
     private String mGroupSet;
-    private ArrayList<AddShopCartBean> info_list = new ArrayList<>();;
-//    private HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet;
+    private ArrayList<AddShopCartBean> info_list = new ArrayList<>();
+    //    private HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet;
     private Integer key;
     private String goods_sn;
     private String goods_count;
 
     private boolean isChild;
-    private String mPrice,mCount,mSellerList;// 价钱，数量
-//    private String groupSet;
-  private HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
-    private String groupSet1;
+    private String mPrice, mCount, mSellerList, mFirmOrder;// 价钱，数量
+    //    private String groupSet;
+    private HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
+    private String info_list1;
 
     @Override
     public View CreateTitle() {
@@ -153,20 +155,20 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         mPayNmme = (TextView) mFirmOrderContent.findViewById(R.id.firmorder_pay_name);
         mFeeRate = (TextView) mFirmOrderContent.findViewById(R.id.firmOrder_fee_rate);// 服务费率
         mTotalPrice = (TextView) mFirmOrderContent.findViewById(R.id.totl_price);// 价钱
-        mTotalPrice.setText("￥"+mPrice);// 赋值总价钱
+        mTotalPrice.setText("￥" + mPrice);// 赋值总价钱
         mGoodsCount = (TextView) mFirmOrderContent.findViewById(R.id.goods_count);// 数量
-        mGoodsCount.setText("共"+mCount+"件商品");
+        mGoodsCount.setText("共" + mCount + "件商品");
     }
 
     // 获取传过来的数据
-    private void GetStringData(){
+    private void GetStringData() {
         Intent intent = getIntent();
         mCount = intent.getStringExtra("Count");// 获取传过来的数量
         mPrice = intent.getStringExtra("Price");// 获取传过来的总价钱
 
-        String  mSellerList = sp.getString("SellerList","");// 获取保存在本地的购物车总数据
+        String mSellerList = sp.getString("SellerList", "");// 获取保存在本地的购物车总数据
 
-        MyLog.LogShitou("获取保存在本地的总数据", mSellerList );
+        MyLog.LogShitou("获取保存在本地的总数据", mSellerList);
 
 
 //        groupSet1 = intent.getStringExtra("GroupSet");// 获取传过来的总价钱
@@ -187,7 +189,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         groupSet = MyApplication.getGroupSet();// 传过来的集合数据
         for (HashMap.Entry<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
 //            key = entry.getKey();
-            Set<ShopNameBean.SellerBean.GoodsBean>  value = entry.getValue(); // 拿到循环后的value值
+            Set<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
             for (int i = 0; i < value.size(); i++) {
                 Iterator<ShopNameBean.SellerBean.GoodsBean> iterator = value.iterator();
                 ShopNameBean.SellerBean.GoodsBean next = iterator.next();
@@ -206,28 +208,28 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     }
 
     /**
-     *
      * @param soureStr 源字符
      * @return list
      */
-    public static ArrayList<String> getNoJsonToList(String soureStr){
-        ArrayList<String> list=new ArrayList<String>();
-        String arr1[]=	soureStr.split("=");
-        for(int i=1;i<arr1.length;i++){
-            String arr2[]=arr1[i].split("],");
-            for(int j=0;j<arr2.length;j++){
-                if(j%2==0){
-                    String str4=arr2[j].trim().substring(1, arr2[j].trim().length());
+    public static ArrayList<String> getNoJsonToList(String soureStr) {
+        ArrayList<String> list = new ArrayList<String>();
+        String arr1[] = soureStr.split("=");
+        for (int i = 1; i < arr1.length; i++) {
+            String arr2[] = arr1[i].split("],");
+            for (int j = 0; j < arr2.length; j++) {
+                if (j % 2 == 0) {
+                    String str4 = arr2[j].trim().substring(1, arr2[j].trim().length());
 //                      str4=str4.replace("GoodsBean","GoodsBean"+j);
 //                    str4=str4.replaceAll("GoodsBean","GoodsBean"+j);
                     list.add(str4);
                 }
             }
         }
-        if(list.size()>0){
-            String str=list.get(list.size()-1).trim().substring(0,list.get(list.size()-1).trim().length()-1).trim();
-            list.set(list.size()-1,str.substring(0,str.length()-1));
-        };
+        if (list.size() > 0) {
+            String str = list.get(list.size() - 1).trim().substring(0, list.get(list.size() - 1).trim().length() - 1).trim();
+            list.set(list.size() - 1, str.substring(0, str.length() - 1));
+        }
+        ;
 
 //        StringBuffer  strb=new StringBuffer();
 //        strb.append("\"aaa\":[");
@@ -241,19 +243,17 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //        returnStr=returnStr+"]";
 
 
-
 //        StringBuffer strbuffer=new StringBuffer();
 //        for(int i=0;i<list.size();i++){
 //            list.set(i, "{"+list.get(i)+"}");
 //        }
 //        list.set(i, "\"Goods_list\":"+"[{"+list.get(i)+"}]");
-        for (int i=0;i<list.size();i++){
-            list.set(i,list.get(0).replace("GoodsBean","GoodsBean"+i));
+        for (int i = 0; i < list.size(); i++) {
+            list.set(i, list.get(0).replace("GoodsBean", "GoodsBean" + i));
 
         }
         return list;
     }
-
 
 
     private void initData() {
@@ -288,10 +288,11 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
      * 设置假数据
      */
     private void setFalseData() {
-
-        FirmOrderExpandableAdapter expandableAdapter = new FirmOrderExpandableAdapter(this, mBitmap, groupSet);
-        mListView.setAdapter(expandableAdapter);
-        expandableAdapter.notifyDataSetChanged();
+        if (groupSet != null) {
+            FirmOrderExpandableAdapter expandableAdapter = new FirmOrderExpandableAdapter(this, mBitmap, groupSet);
+            mListView.setAdapter(expandableAdapter);
+            expandableAdapter.notifyDataSetChanged();
+        }
         //让子控件全部展开
 //        for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
 //            mListView.expandGroup(i);
@@ -307,12 +308,12 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             case R.id.FirmOrder_distribution://配送方式
                 mDistributionPopupWindow = new SelectDistributionPopupWindow(this, express_comp, express_fee);
                 mDistributionPopupWindow.SetStringText(this);
-                mDistributionPopupWindow.showAtLocation(this.findViewById(R.id.FirmOrder), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                mDistributionPopupWindow.showAtLocation(this.findViewById(FirmOrder), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
             case R.id.FirmOrder_pay://支付方式
                 mPayPopupWindow = new SelectPayPopupWindow(this, mPayWindowListener);
                 //设置layout在PopupWindow中显示的位置,因为这里写了全屏的所以就没有居中
-                mPayPopupWindow.showAtLocation(this.findViewById(R.id.FirmOrder), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                mPayPopupWindow.showAtLocation(this.findViewById(FirmOrder), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
             case R.id.FirmOrder_NoAddress://没有收获地址
                 openActivityWitchAnimation(ManagerAddressActivity.class);
@@ -465,7 +466,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     params.put(StaticField.PAYTYPE, StaticField.ALIPAY);// 支付方式
                     params.put(StaticField.GOODESINFO, info_list.toString());//  商品信息：所有商品的json字符串
                     MyLog.LogShitou("生成订单参数", mToken + "--" + mUser_id + "--" + mAddressId + "--" + mNoAddressId + "--" + mTimeId + "--" + info_list.toString());
-
                     String mapSort = SortUtils.MapSort(params);
                     String md5code = Encrypt.MD5(mapSort);
                     params.put(StaticField.SIGN, md5code);
@@ -526,8 +526,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                             mNoAddress.setVisibility(View.VISIBLE); // 显示无收货地址布局
                             mAddress.setVisibility(View.GONE);// 隐藏收货地址布局
                         }
-                    }else{
-                        MyToast.showShort(FirmOrderActivity.this,mMsges);
+                    } else {
+                        MyToast.showShort(FirmOrderActivity.this, "结算商品信息异常");
                     }
                     break;
                 case StaticField.WX_SUCCESS:// 微信订单支付
@@ -554,7 +554,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 
                             MyLog.LogShitou("payurl详细信息", signs + "--" + timestamps + "--" + noncestrs + "--" +
                                     partnerids + "--" + prepayids + "--" + packages + "--" + appids);
-                           // 截取字符串
+                            // 截取字符串
                             String[] mSign = signs.split("=");
                             String[] mTimestamp = timestamps.split("=");
                             String[] mNoncestr = noncestrs.split("=");
@@ -604,7 +604,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //                        String mRequestId = mOrderPayBeans.getRequest_id();// 交易订单号
 //                        String mPayRequestId = mOrderPayBeans.getPay_request_id();// 平台支付请求号
                         MyLog.LogShitou("mPayUrl+支付宝请求需要的串", mPayUrl);
-                       // 发起支付宝支付
+                        // 发起支付宝支付
                         Runnable payRunnable = new Runnable() {
                             @Override
                             public void run() {
@@ -619,8 +619,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                         };
                         Thread payThread = new Thread(payRunnable);
                         payThread.start();
-                    }else {
-                        MyToast.showShort(FirmOrderActivity.this,mMsgs);
+                    } else {
+                        MyToast.showShort(FirmOrderActivity.this, mMsgs);
                     }
                     break;
 
@@ -630,7 +630,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                      对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
                      */
                     String resultInfo = payResult.getResult();// 同步返回需要验证的信息
-                    MyLog.LogShitou("result+支付宝请求", payResult.toString()+"--"+resultInfo);
+                    MyLog.LogShitou("result+支付宝请求", payResult.toString() + "--" + resultInfo);
                     String resultStatus = payResult.getResultStatus();
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
@@ -642,16 +642,16 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                         if (TextUtils.equals(resultStatus, "8000")) {
                             Toast.makeText(FirmOrderActivity.this, "正在支付中...",
                                     Toast.LENGTH_SHORT).show();
-                        } else if(TextUtils.equals(resultStatus, "4000")){
+                        } else if (TextUtils.equals(resultStatus, "4000")) {
                             Toast.makeText(FirmOrderActivity.this, "支付失败",
                                     Toast.LENGTH_LONG).show();
-                        }else if(TextUtils.equals(resultStatus, "6001")){
+                        } else if (TextUtils.equals(resultStatus, "6001")) {
                             Toast.makeText(FirmOrderActivity.this, "你已取消支付",
                                     Toast.LENGTH_LONG).show();
-                        }else if(TextUtils.equals(resultStatus, "6002")){
+                        } else if (TextUtils.equals(resultStatus, "6002")) {
                             Toast.makeText(FirmOrderActivity.this, "网络连接失败",
                                     Toast.LENGTH_LONG).show();
-                        }else{
+                        } else {
                             Toast.makeText(FirmOrderActivity.this, "支付失败",
                                     Toast.LENGTH_LONG).show();
                         }

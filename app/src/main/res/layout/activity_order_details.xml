@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--商品订单详情页面-->
-<LinearLayout
+<?xml version="1.0" encoding="utf-8"?><!--商品订单详情页面-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/order_details"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <cn.com.chinau.view.VerticalScrollView
+    <ScrollView
         android:id="@+id/order_details_sv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -16,21 +14,20 @@
         android:scrollbars="none">
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <!--付款状态-->
-            <include layout="@layout/orderdetails_payment"/>
+            <include layout="@layout/orderdetails_payment" />
             <!--物流信息-->
-            <include layout="@layout/orderdetails_logistic"/>
+            <include layout="@layout/orderdetails_logistic" />
             <!--收货地址-->
-            <include layout="@layout/firmorder_location"/>
+            <include layout="@layout/firmorder_location" />
 
             <View
                 style="@style/myline"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="15dp" />
 
             <LinearLayout
                 android:id="@+id/orderDetails_distribution"
@@ -45,36 +42,31 @@
                     android:layout_marginLeft="@dimen/distance"
                     android:text="@string/Distribution_mode"
                     android:textColor="#333"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/order_details_ExpressType"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
-                    android:layout_weight="1"
-                    android:text="EMS"
                     android:textColor="#333"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/ExpressType_freight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
-                    android:text="￥30.00"
+                    android:layout_marginRight="44dp"
+                    android:layout_weight="1"
+                    android:gravity="right"
                     android:textColor="@color/red_font"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
-                <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="match_parent"
-                    android:scaleType="center"
-                    android:src="@mipmap/right_arrow"/>
             </LinearLayout>
 
 
-            <View style="@style/myline"/>
+            <View style="@style/myline" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,7 +81,7 @@
                     android:layout_marginLeft="@dimen/distance"
                     android:text="服务费(1%)"
                     android:textColor="#333"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/order_details_ServiceFee"
@@ -98,13 +90,12 @@
                     android:layout_marginRight="44dp"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="￥10.00"
                     android:textColor="@color/red_font"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
-            <View style="@style/myline"/>
+            <View style="@style/myline" />
 
             <LinearLayout
                 android:id="@+id/orderDetails_pay"
@@ -114,54 +105,80 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/distance"
-                    android:layout_weight="1"
-                    android:text="支付方式"
-                    android:textColor="#333"
-                    android:textSize="15sp"/>
-
-                <TextView
-                    android:id="@+id/order_details_PayType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/distance"
-                    android:drawableLeft="@mipmap/zhifubao"
-                    android:drawablePadding="10dp"
-                    android:gravity="right"
-                    android:text="@string/mode_of_payment"
+                    android:text="支付方式"
                     android:textColor="#333"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
-                <ImageView
-                    android:layout_width="44dp"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:scaleType="center"
-                    android:src="@mipmap/right_arrow"/>
+                    android:layout_marginRight="44dp"
+                    android:layout_weight="1"
+                    android:gravity="right">
 
+                    <ImageView
+                        android:id="@+id/order_details_payImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/order_details_PayType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="12dp"
+                        android:drawablePadding="10dp"
+                        android:gravity="center|right"
+                        android:textColor="#333"
+                        android:textSize="15sp" />
+                </LinearLayout>
             </LinearLayout>
 
-            <View style="@style/myline"/>
+            <View style="@style/myline" />
 
             <View
                 style="@style/myline"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="15dp" />
 
-            <ExpandableListView
-                android:id="@+id/order_details_lv"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:listSelector="@android:color/transparent"/>
+                android:layout_height="match_parent">
+
+                <ExpandableListView
+                     android:id="@+id/order_details_lv"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:listSelector="@android:color/transparent"
+                     android:overScrollMode="never"
+                     android:scrollbars="none" />
+
+               <!-- <cn.com.chinau.view.WrapExpandableListView
+                    android:id="@+id/order_details_lv"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:listSelector="@android:color/transparent"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" >
+
+                </cn.com.chinau.view.WrapExpandableListView>-->
+
+            </LinearLayout>
+
+
         </LinearLayout>
-    </cn.com.chinau.view.VerticalScrollView>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
-        <View style="@style/myline"/>
+
+        <View style="@style/myline" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -176,7 +193,7 @@
                 android:layout_height="wrap_content"
                 android:text="共3件商品"
                 android:textColor="@color/black"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -184,7 +201,7 @@
                 android:layout_marginLeft="@dimen/distance"
                 android:text="合计"
                 android:textColor="@color/black"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/order_details_total_price"
@@ -192,22 +209,45 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/distance"
                 android:layout_weight="1"
-                android:text="￥100000.00"
                 android:textColor="@color/red_font"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/order_details_Payfor_tv"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/red_font"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:background="@mipmap/pay_bg_order_detail"
                 android:gravity="center"
-                android:maxWidth="60dp"
-                android:text="确认并付款"
-                android:textColor="@color/white"
-                android:textSize="16sp"/>
+                android:text="付款"
+                android:textColor="@color/red_font"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/order_details_look_logistics_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:background="@mipmap/look_logistics_bg"
+                android:gravity="center"
+                android:text="查看物流"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/order_details_cloose_tv"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@color/gary"
+                android:gravity="center"
+                android:text="交易已关闭"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:visibility="gone" />
         </LinearLayout>
-        <View style="@style/myline"/>
+
+        <View style="@style/myline" />
     </LinearLayout>
 </LinearLayout>

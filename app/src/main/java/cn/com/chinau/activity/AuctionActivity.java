@@ -33,6 +33,7 @@ import cn.com.chinau.adapter.AuctionListViewAdapter;
 import cn.com.chinau.adapter.StampHorizontalListViewAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.CategoryBean;
+import cn.com.chinau.bean.CategoryGoodsJsonBean;
 import cn.com.chinau.bean.GoodsStampBean;
 import cn.com.chinau.bitmap.BitmapHelper;
 import cn.com.chinau.http.HttpUtils;
@@ -82,6 +83,8 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private String[] string0, string2, string3, string4;
     private RadioGroup mRadioGroup;
     private SharedPreferences sp;
+    private ArrayList<CategoryBean.Category.SubCategory> subCategory1;
+    private int Flag = 0;  // 类别标记
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -98,6 +101,19 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                         } else {
                             //设置GridView的适配器
                             setGridViewAdapter();
+                        }
+                    }
+                    break;
+                case 12://筛选
+                    Gson gson1 = new Gson();
+                    GoodsStampBean mGoodsStampBean1 = gson1.fromJson((String) msg.obj, GoodsStampBean.class);
+                    String mRsp_code1 = mGoodsStampBean1.getRsp_code();
+                    if (mRsp_code1.equals("0000")) {
+                        if (num == 0) {
+                            ArrayList<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean1.getGoods_list();
+                            AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, goods_list);
+                            mListView.setAdapter(mListAdapter);
+                            mListAdapter.notifyDataSetChanged();
                         }
                     }
                     break;
@@ -242,7 +258,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
             mList = new ArrayList<>();
         }
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-        RequestNet(StaticField.ZH, num, StaticField.A);
+        RequestNet(StaticField.ZH, num, StaticField.D,"");
     }
 
     private void initAdapter() {
@@ -436,7 +452,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 num++;
-                RequestNet(StaticField.ZH, num, StaticField.A);
+                RequestNet(StaticField.ZH, num, StaticField.A,"");
                 MyLog.LogShitou("num===2====", "" + num);
             }
         });
@@ -445,10 +461,50 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //设置点击背景的方法
-                hListViewAdapter.setSelection(i);
-                hListViewAdapter.notifyDataSetChanged();
-                MyToast.showShort(AuctionActivity.this,"点击二级分类的名字--->:"+i);
+                if (Flag == 0) {
+                    //设置点击背景的方法
+                    hListViewAdapter.setSelection(i);
+                    hListViewAdapter.notifyDataSetChanged();
+                    String name = subCategory1.get(0).getName();
+                    String mValue = subCategory1.get(0).getValue();// 一级类别标题
+                    String mValues = subCategory1.get(0).getSubCategory().get(i).getValue();//  二级类别标题
+                    String tojson = GoodsJsonBean(mValue, mValues);
+
+//                    MyLog.LogShitou("-000===转换成的Json", tojson+"=="+mValue+"=="+mValues+"=="+name);
+                    RequestNet(StaticField.ZH, num, StaticField.A, tojson); // 筛选请求
+
+                } else if (Flag == 1) {
+                    //设置点击背景的方法
+                    hListViewAdapter.setSelection(i);
+                    hListViewAdapter.notifyDataSetChanged();
+                    String name = subCategory1.get(2).getName();
+                    String mValue = subCategory1.get(2).getValue();
+                    String mValues = subCategory1.get(2).getSubCategory().get(i).getValue();
+                    String tojson = GoodsJsonBean(mValue, mValues);
+//                    MyLog.LogShitou("-111===转换成的Json", tojson+"=="+mValue+"=="+mValues+"=="+name);
+                    RequestNet(StaticField.ZH, num, StaticField.A, tojson); // 筛选请求
+                } else if (Flag == 2) {
+                    //设置点击背景的方法
+                    hListViewAdapter.setSelection(i);
+                    hListViewAdapter.notifyDataSetChanged();
+                    String name = subCategory1.get(3).getName();
+                    String mValue = subCategory1.get(3).getValue();
+                    String mValues = subCategory1.get(3).getSubCategory().get(i).getValue();
+
+                    String tojson = GoodsJsonBean(mValue, mValues);
+//                    MyLog.LogShitou("-222===转换成的Json", tojson+"=="+mValue+"=="+mValues+"=="+name);
+                    RequestNet(StaticField.ZH, num, StaticField.A, tojson); // 筛选请求
+                } else if (Flag == 3) {
+                    //设置点击背景的方法
+                    hListViewAdapter.setSelection(i);
+                    hListViewAdapter.notifyDataSetChanged();
+                    String name = subCategory1.get(4).getName();
+                    String mValue = subCategory1.get(4).getValue();
+                    String mValues = subCategory1.get(4).getSubCategory().get(i).getValue();
+                    String tojson = GoodsJsonBean(mValue, mValues);
+//                    MyLog.LogShitou("-333===转换成的Json", tojson+"=="+mValue+"=="+mValues+"=="+name);
+                    RequestNet(StaticField.ZH, num, StaticField.A, tojson); // 筛选请求
+                }
             }
         });
         // mListView的条目监听
@@ -476,11 +532,32 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     public void AgainRequest() {
         initData();
     }
+
+
+    /**
+     * 筛选数据获取的Json串
+     *
+     * @param mValue  一级Value值
+     * @param mValues 二级Value值
+     * @return
+     */
+    private String GoodsJsonBean(String mValue, String mValues) {
+        CategoryGoodsJsonBean mGoodsJsonBean = new CategoryGoodsJsonBean();
+        CategoryGoodsJsonBean.CategoryBean mCategoryBean = new CategoryGoodsJsonBean.CategoryBean();
+        mCategoryBean.setCategory(mValue);// 一级
+        CategoryGoodsJsonBean.CategoryBean.SubBean mSubBean = new CategoryGoodsJsonBean.CategoryBean.SubBean();
+        mSubBean.setSub(mValues);// 二级
+        mCategoryBean.setSubCategory(mSubBean);
+        mGoodsJsonBean.setCategory(mCategoryBean);
+        String toJson = new Gson().toJson(mGoodsJsonBean);
+        return toJson;
+    }
     /**
      * 竞拍类别查询网络请求
      */
     private void GetInitCategory() {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+
             @Override
             public void run() {
                 HashMap<String, String> params = new HashMap<>();
@@ -502,7 +579,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 if(mRsp_code.equals("0000")){
                     ArrayList<CategoryBean.Category> mCategory = mCategoryBean.getCategory();
                     CategoryBean.Category category = mCategory.get(0);
-                    ArrayList<CategoryBean.Category.SubCategory> subCategory1 = category.getSubCategory();
+                    subCategory1 = category.getSubCategory();
                     // 外分类
                     int sub = subCategory1.size();// 获取subCategory1的个数
                     String[] mArrTitle = new String[sub];// 一级分类
@@ -615,7 +692,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
      * @param index    角标
      * @param Sort     排序
      */
-    private void RequestNet(final String Order_By, final int index, final String Sort) {
+    private void RequestNet(final String Order_By, final int index, final String Sort,final String mJson) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -630,16 +707,28 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code); // 签名
+                if (!mJson.equals("")) {
+                    params.put(StaticField.RUERY_CONDITION, mJson); // 查询条件，json字符串
+                    MyLog.LogShitou("mJson======", "mJson==" + mJson);
+                }
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.LogShitou("result+竞拍List", result);
+                MyLog.LogShitou(mJson+"=="+"result+竞拍List", result);
                 if (result.equals("-1") |result.equals("-2")) {
                     return;
                 }
-                Message msg = mHandler.obtainMessage();
-                msg.what = StaticField.SUCCESS;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
+                if (mJson.equals("")){
+
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }else{
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = 12;// 筛选
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
             }
         });
     }
@@ -654,21 +743,25 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 openActivityWitchAnimation(SearchActivity.class);
                 break;
             case R.id.auction_newchinese_btn://新中国邮票
+                Flag = 0;
                 hListViewAdapter = new StampHorizontalListViewAdapter(this, string0);
                 hListView.setAdapter(hListViewAdapter);
                 hListViewAdapter.notifyDataSetChanged();
                 break;
             case R.id.auction_republicChina_btn:// 民国邮票
+                Flag = 1;
                 hListViewAdapter = new StampHorizontalListViewAdapter(this, string2);
                 hListView.setAdapter(hListViewAdapter);
                 hListViewAdapter.notifyDataSetChanged();
                 break;
             case R.id.auction_liberatedArea_btn://解放区邮票
+                Flag = 2;
                 hListViewAdapter = new StampHorizontalListViewAdapter(this, string3);
                 hListView.setAdapter(hListViewAdapter);
                 hListViewAdapter.notifyDataSetChanged();
                 break;
             case R.id.auction_qingDynasty_btn://清代邮票
+                Flag = 3;
                 hListViewAdapter = new StampHorizontalListViewAdapter(this, string4);
                 hListView.setAdapter(hListViewAdapter);
                 hListViewAdapter.notifyDataSetChanged();
@@ -684,11 +777,11 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 // true代表降序,false代表升序
                 if (Synthesizeflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.ZH, num, StaticField.D);
+                    RequestNet(StaticField.ZH, num, StaticField.D,"");
                     Synthesizeflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSynthesize, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.ZH, num, StaticField.A);
+                    RequestNet(StaticField.ZH, num, StaticField.A,"");
                     Synthesizeflag = true;
                 }
                 break;
@@ -699,11 +792,11 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                 if (Overflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mOver, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.JS, num, StaticField.D);
+                    RequestNet(StaticField.JS, num, StaticField.D,"");
                     Overflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mOver, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.JS, num, StaticField.A);
+                    RequestNet(StaticField.JS, num, StaticField.A,"");
                     Overflag = true;
                 }
                 break;
@@ -714,11 +807,11 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
 
                 if (Cameraflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mCamera, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.KP, num, StaticField.D);
+                    RequestNet(StaticField.KP, num, StaticField.D,"");
                     Cameraflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mCamera, Color.parseColor("#ff0000"));
-                    RequestNet(StaticField.KP, num, StaticField.A);
+                    RequestNet(StaticField.KP, num, StaticField.A,"");
                     Cameraflag = true;
                 }
                 break;

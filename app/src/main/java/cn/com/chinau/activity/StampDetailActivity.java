@@ -55,7 +55,7 @@ import cn.com.chinau.view.VerticalScrollView;
 /**
  * 邮市详情页
  */
-public class StampDetailActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener,UMShareListener {
+public class StampDetailActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener, UMShareListener {
 
 
     private View mStampDetailTitle, mStampDetailContent;
@@ -68,7 +68,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private Button mTopBtn;
     // 标题，商家账号，加入购物车，立即购买
     private TextView mTitle, mSellerNo, mGoodsName, mCurrentPrice, mFreight, mSaleCount, mFeeRate, mFee,
-    mGoodsSource, mSellerName, mGoodsStatus, mShoppingCart, mShoppingCount, mAddShoppingCart, mBuyNow,tv_cancel;
+            mGoodsSource, mSellerName, mGoodsStatus, mShoppingCart, mShoppingCount, mAddShoppingCart, mBuyNow, tv_cancel;
     private VerticalScrollView home_SV;
     private View contentView;
     private int lastY = 0;
@@ -84,8 +84,11 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout mShoppingLl;
     private SharedPreferences sp;
     private SharedDialog dialog;
-    private ImageView mWeiXin,mPengYouQuan;
+    private ImageView mWeiXin, mPengYouQuan;
     private View dialog_finsih;
+    private boolean addFlag = true; // 点击加入购物车，立即购买的的标识
+    private String mPrice;
+    private ArrayList<AddShopCartBean> info_list = new ArrayList<>();
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -115,13 +118,13 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                             big_images[i] = image[1];// 大图集合
                         }
                         mSharedImage = small_images[0];
-                        MyLog.LogShitou("需要分享显示图片url",mSharedImage);
+                        MyLog.LogShitou("需要分享显示图片url", mSharedImage);
                     }
 
                     mGoods_name = mStampDetailBean.getGoods_name();
                     mTitle.setText(mGoods_name);
                     mGoodsName.setText(mGoods_name);
-                    String mPrice = mStampDetailBean.getCurrent_price();
+                    mPrice = mStampDetailBean.getCurrent_price();
                     mCurrentPrice.setText("￥" + mPrice);
                     String mFreights = mStampDetailBean.getFreight();
                     mFreight.setText("￥" + mFreights);
@@ -223,8 +226,20 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                         mHandler.sendEmptyMessage(5); // 发送提示添加成功
                     }
                     break;
+                case StaticField.GOBUY: // 立即购买
+                    Gson gsones1 = new Gson();
+                    BaseBean mBasebean1 = gsones1.fromJson((String) msg.obj, BaseBean.class);
+                    if (mBasebean1.getRsp_code().equals("0000")) {
+                        Intent intent = new Intent(StampDetailActivity.this, MainActivity.class);
+                        intent.putExtra("Login", "StampDetail");
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+                    }
+                    break;
+
                 case 5:
-                    MyToast.showShort(StampDetailActivity.this,"添加成功");
+                    MyToast.showShort(StampDetailActivity.this, "添加成功");
                     break;
 
                 default:
@@ -232,7 +247,6 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
             }
         }
     };
-
 
 
     @Override
@@ -373,28 +387,38 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
 
                 break;
             case R.id.stamp_details_addShoppingCart:// 加入购物车
+                addFlag = true; // 点击加入购物车的标识
                 if (mToken.equals("") || mUser_id.equals("")) {
                     openActivityWitchAnimation(LoginActivity.class);
                 } else {
-                    AddShopCartBean mAddShopCartBean = new AddShopCartBean();
-                    mAddShopCartBean.setGoods_count("1");
-                    mAddShopCartBean.setGoods_sn(mGoods_sn);
-                    String mSnJson = new Gson().toJson(mAddShopCartBean); // 转json串
-                    String toJson = "[" + mSnJson + "]"; // 转数组
-                    AddShopCart(toJson); // 加入购物车网络请求
-                    MyLog.LogShitou("加入购物车转换的Json", toJson);
-
+                    if (mGoods_sn != null) {
+                        AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+                        mAddShopCartBean.setGoods_count("1");
+                        mAddShopCartBean.setGoods_sn(mGoods_sn);
+                        String mSnJson = new Gson().toJson(mAddShopCartBean); // 转json串
+                        String toJson = "[" + mSnJson + "]"; // 转数组
+                        AddShopCart(toJson); // 加入购物车网络请求
+                        MyLog.LogShitou("加入购物车转换的Json", toJson);
+                    }
                 }
 
                 break;
             case R.id.stamp_details_buyNow:// 立即购买
-                Intent intents = new Intent(StampDetailActivity.this, MainActivity.class);
-                intents.putExtra("Login", "StampDetail");
-                startActivity(intents);
-                finish();
-                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-//                MyToast.showShort(this, "点击了立即购买");
+                addFlag = false; // 点击立即购买的标识
+                if (mToken.equals("") || mUser_id.equals("")) {
+                    openActivityWitchAnimation(LoginActivity.class);
+                } else {
+                    if (mGoods_sn != null) {
 
+                        AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+                        mAddShopCartBean.setGoods_count("1");
+                        mAddShopCartBean.setGoods_sn(mGoods_sn);
+                        String mSnJson = new Gson().toJson(mAddShopCartBean); // 转json串
+                        String toJson = "[" + mSnJson + "]"; // 转数组
+                        AddShopCart(toJson); // 立即后买加入购物车网络请求
+                        MyLog.LogShitou("立即购买加入购物车转换的Json", toJson);
+                    }
+                }
                 break;
             case R.id.base_top_btn:// 置顶
                 home_SV.post(new Runnable() {
@@ -510,11 +534,18 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
+                if (addFlag) {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.ADDSHOPPINGCARTSUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.GOBUY;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
 
-                Message msg = mHandler.obtainMessage();
-                msg.what = StaticField.ADDSHOPPINGCARTSUCCESS;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
 
             }
         });
@@ -570,7 +601,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     /**
      * 分享弹出Dialog
      */
-    private void SharedDialog(){
+    private void SharedDialog() {
         dialog = new SharedDialog(this);
         Window window = dialog.getWindow();
         window.setGravity(Gravity.BOTTOM);
@@ -615,10 +646,11 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
 
     /**
      * 调起微信分享的方法
+     *
      * @param share_media // 分享类型
      */
-    private void SharedDes(SHARE_MEDIA share_media ){
-        UMImage  image = new UMImage(this.getApplicationContext(), mSharedImage);
+    private void SharedDes(SHARE_MEDIA share_media) {
+        UMImage image = new UMImage(this.getApplicationContext(), mSharedImage);
         ShareAction shareAction = new ShareAction(this);
         shareAction.withText("微信分享"); // 显示的内容
         shareAction.withMedia(image);// 显示图片的url
@@ -632,6 +664,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
 
     /**
      * 友盟微信分享回调 (成功，失败，取消)
+     *
      * @param share_media 分享类型
      */
     @Override

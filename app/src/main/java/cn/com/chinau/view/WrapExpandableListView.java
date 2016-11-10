@@ -1,4 +1,4 @@
-package  cn.com.chinau.view;
+package cn.com.chinau.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -24,7 +24,8 @@ public class WrapExpandableListView extends ExpandableListView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int expandSpec = View.MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, View.MeasureSpec.AT_MOST);
-        super.onMeasure(widthMeasureSpec, expandSpec);
+        //子元素最多达到指定大小的高度值
+        int expandSpecHeight = View.MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, View.MeasureSpec.AT_MOST);
+        super.onMeasure(widthMeasureSpec, expandSpecHeight);
     }
 }

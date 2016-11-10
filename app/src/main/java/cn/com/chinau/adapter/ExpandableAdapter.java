@@ -502,6 +502,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                         Intent intent = new Intent(context, FirmOrderActivity.class);
                         intent.putExtra("Count", count);// 传数量
                         intent.putExtra("Price", price);// 传总价钱
+                        intent.putExtra("FirmOrder", "Adapter");// 适配器的标识
                         //这里只要是把集合遍历一下传过去就行了
                         MyApplication.setGroupSet(groupSet);
                         MyLog.LogShitou("去结算传的数据", "" + groupSet);

@@ -214,15 +214,15 @@ public class OrdersGoodsActivity extends BaseActivity {
 
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-//                OrderAllListViewGoodsBean.Order_detail_list order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
-//                String mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
-//                String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
-//                Bundle bundle = new Bundle();
-//                bundle.putString(StaticField.ORDER_SN, mOrder_sn);
-//                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
-//                bundle.putString(StaticField.ORDERSTATUS, "QB");
-//                MyLog.LogShitou("QB请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
-//                openActivityWitchAnimation(OrderDetailsActivity.class, bundle);
+                OrderAllListViewGoodsBean.Order_detail_list order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
+                String mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
+                String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.ORDER_SN, mOrder_sn);
+                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
+                bundle.putString(StaticField.ORDERSTATUS, "QB");
+                MyLog.LogShitou("QB请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
+                openActivityWitchAnimation(OrderDetailsActivity.class, bundle);
                 return false;
             }
         });

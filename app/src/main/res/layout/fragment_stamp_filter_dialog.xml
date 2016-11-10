@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--淘邮票筛选邮市Fagment布局-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,19 +21,19 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/selfmall_pop_category_title"
+                android:id="@+id/stamp_pop_newchinese_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/stamptap_class"
-                android:layout_marginTop="10dp"
+                android:text="新中国邮票"
                 android:textColor="#000"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
                 android:textSize="15sp" />
 
             <View style="@style/myline" />
 
             <cn.com.chinau.view.NoScrollGridView
-                android:id="@+id/selfmall_pop_category"
+                android:id="@+id/stamp_pop_newchinese"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -50,11 +50,11 @@
             <View style="@style/myline" />
 
             <TextView
-                android:id="@+id/selfmall_pop_year_title"
+                android:id="@+id/stamp_pop_qingmin_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/Years"
+                android:text="清民区邮票"
                 android:textColor="#000"
                 android:layout_marginBottom="5dp"
                 android:textSize="15sp" />
@@ -62,7 +62,7 @@
             <View style="@style/myline" />
 
             <cn.com.chinau.view.NoScrollGridView
-                android:id="@+id/selfmall_pop_years"
+                android:id="@+id/stamp_pop_qingmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -79,11 +79,11 @@
             <View style="@style/myline" />
 
             <TextView
-                android:id="@+id/selfmall_pop_theme_title"
+                android:id="@+id/stamp_pop_theme_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/person"
+                android:text="主题邮票"
                 android:textColor="#000"
                 android:layout_marginBottom="5dp"
                 android:textSize="15sp" />
@@ -91,7 +91,35 @@
             <View style="@style/myline" />
 
             <cn.com.chinau.view.NoScrollGridView
-                android:id="@+id/selfmall_pop_theme"
+                android:id="@+id/stamp_pop_theme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:horizontalSpacing="16dp"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="4"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="8dp" />
+
+            <View style="@style/myline" />
+            <TextView
+                android:id="@+id/stamp_pop_other_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="其他邮品"
+                android:textColor="#000"
+                android:layout_marginBottom="5dp"
+                android:textSize="15sp" />
+
+            <View style="@style/myline" />
+
+            <cn.com.chinau.view.NoScrollGridView
+                android:id="@+id/stamp_pop_other"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"

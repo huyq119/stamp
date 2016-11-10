@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2016/8/10.
- * 类别查询(不登录) bean
+ * 类别查询(不登录) bean （邮市，竞拍）
  */
 public class CategoryBean extends BaseBean {
 
@@ -20,12 +20,9 @@ public class CategoryBean extends BaseBean {
 
     public class Category {
         private String name;
-
         private String value;
-
         private String img_url;
-
-        private ArrayList<SubCategory> subCategory;
+        private ArrayList<SubCategory> subCategory;// 一级标题List
 
         public void setName(String name){
             this.name = name;
@@ -54,12 +51,9 @@ public class CategoryBean extends BaseBean {
 
         public class SubCategory {
             private String name;
-
             private String value;
-
             private String img_url;
-
-            private ArrayList<SmllSubCategoryData> subCategory;
+            private ArrayList<SmllSubCategoryData> subCategory;// 二级标题list
 
             public void setName(String name){
                 this.name = name;
@@ -90,7 +84,8 @@ public class CategoryBean extends BaseBean {
                 private String name;
                 private String value;
                 private String img_url;// 图片
-                private String subCategory;
+//                private String subCategory;
+                private ArrayList<SmllSubCategoryTwo> subCategory;// 二级标题list
 
                 public String getName() {
                     return name;
@@ -116,18 +111,29 @@ public class CategoryBean extends BaseBean {
                     this.img_url = img_url;
                 }
 
-                public String getSubCategory() {
+//                public String getSubCategory() {
+//                    return subCategory;
+//                }
+//
+//                public void setSubCategory(String subCategory) {
+//                    this.subCategory = subCategory;
+//                }
+
+
+                public ArrayList<SmllSubCategoryTwo> getSubCategory() {
                     return subCategory;
                 }
 
-                public void setSubCategory(String subCategory) {
+                public void setSubCategory(ArrayList<SmllSubCategoryTwo> subCategory) {
                     this.subCategory = subCategory;
                 }
 
+
+                public class SmllSubCategoryTwo{
+
+                }
             }
         }
-
-
     }
 
 }

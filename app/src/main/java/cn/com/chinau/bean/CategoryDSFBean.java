@@ -60,7 +60,7 @@ public class CategoryDSFBean extends BaseBean {
             private String name;// 一级类别名字
             private String value;
             private String img_url;// 图片
-            private String subCategory;
+            private ArrayList<SubCategorys> subCategory;
 
             public String getName() {
                 return name;
@@ -86,12 +86,25 @@ public class CategoryDSFBean extends BaseBean {
                 this.img_url = img_url;
             }
 
-            public String getSubCategory() {
+//            public String getSubCategory() {
+//                return subCategory;
+//            }
+//
+//            subCategorypublic void setSubCategory(String subCategory) {
+//                this.subCategory = subCategory;
+//            }
+
+
+            public ArrayList<SubCategorys> getSubCategory() {
                 return subCategory;
             }
 
-            public void setSubCategory(String subCategory) {
+            public void setSubCategory(ArrayList<SubCategorys> subCategory) {
                 this.subCategory = subCategory;
+            }
+
+            public class SubCategorys{
+
             }
         }
     }

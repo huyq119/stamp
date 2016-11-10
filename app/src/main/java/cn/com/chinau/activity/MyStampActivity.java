@@ -2,6 +2,7 @@ package cn.com.chinau.activity;
 
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -66,9 +68,11 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     private int num = 0;//初始索引
     private SharedDialog dialog;
     private String mShare_url;
+    private GridView grid;
+    private String mTotal;
+
     private Handler mHandler = new Handler() {
 
-        private String mTotal;
 
         @Override
         public void handleMessage(Message msg) {
@@ -101,7 +105,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                             for (int i = 0; i < pageCount; i++) {
                                 //每个页面都是inflate出一个新实例
                                 //这里面传的是GridView的布局
-                                GridView grid = (GridView) layoutInflater.inflate(R.layout.item_viewpager, myStampViewPager, false);
+                                grid = (GridView) layoutInflater.inflate(R.layout.item_viewpager, myStampViewPager, false);
                                 //给GridView设置Adapter，传入index
                                 grid.setAdapter(new GridViewAdapter(MyStampActivity.this, mList, i, mBitmap, flag));
                                 //加入到ViewPager的View数据集中
@@ -109,12 +113,19 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                             }
 
                             initAdapter();
-
+                            // 条目监听事件
+                            grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    String mStamp_sn = mList.get(position).getStamp_sn();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(StaticField.STAMPDETAIL_SN,mStamp_sn);
+                                    openActivityWitchAnimation(StampTapDetailActivity.class,bundle);
+                                }
+                            });
                         }
                     }
-
                     break;
-
             }
         }
     };
@@ -137,7 +148,6 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
         initListener();
         return mMyStampContent;
     }
-
 
     @Override
     public void AgainRequest() {
@@ -213,6 +223,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     private void initListener() {
         mBack.setOnClickListener(this);
         mMore.setOnClickListener(this);
+
     }
 
 

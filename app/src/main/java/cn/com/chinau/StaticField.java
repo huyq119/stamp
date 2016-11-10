@@ -62,6 +62,7 @@ public class StaticField {
     public static final int ADDSUCCESS = 1;// Handler发送的结果码(加入成功)
     public static final int DeleteSUCCESS = 4;// Handler发送的结果码（删除成功）
     public static final int ADDSHOPPINGCARTSUCCESS = 3;// Handler发送的结果码（加入购物车）
+    public static final int GOBUY = 6;// Handler发送的结果码（加入购物车）
     public static final int PRICESUCCESS = 3;// Handler发送的结果码（出价）
     public static final int QUERYSUCCESS = 1;// Handler发送的结果码（地址查询）
     public static final int DETAILSUCCESS = 2;// Handler发送的结果码（编辑地址查询）
@@ -131,7 +132,6 @@ public class StaticField {
     public static final String JG = "JG";
     public static final String ML = "ML";
     public static final String SC_ZY = "SC_ZY";
-    public static final String SC_DSF = "SC_DSF";
     public static final String CATEGORY = "category";
 
 
@@ -141,7 +141,7 @@ public class StaticField {
 
     //邮票分类
     public static final String STAMPCATEGORY = "cn.com.chinau.category.query";
-
+    public static final String RUERY_CONDITION = "query_condition";// 筛选列表查询需要的字段
 
     //邮市目录传值的键
     public static final String STAMPDETAIL_SN = "stampDetail_sn";// 编号
@@ -196,6 +196,7 @@ public class StaticField {
 
     // 商城
     public static final String GOODSMALL = "SC_ZY,SC_DSF";
+    public static final String SC_DSF = "SC_DSF";
     //竞拍
     public static final String JS = "JS";//即将结束
     public static final String KP = "KP";//等待开拍
@@ -272,6 +273,7 @@ public class StaticField {
     public static final String GOODSORDERLIST = "cn.com.chinau.orderlist.query";
     public static final String GOODSORDERDETAIL = "cn.com.chinau.order.detail.query";// 商品详情
     public static final String EXPRESSQUERY = "cn.com.chinau.express.query";// 物流详情
+    public static final String REFUNDDETAIL = "cn.com.chinau.refund.detail.query";// 退款详情查询
     public static final String ORDERSTATUS = "order_status";
     public static final String DFK = "DFK";// 待付款
     public static final String DSH = "DSH";// 待收货

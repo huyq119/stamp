@@ -1,5 +1,10 @@
 package cn.com.chinau.utils;
 
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 /**
  * Created by Administrator on 2016/9/27.
  * 字符串事件截取工具类
@@ -23,7 +28,7 @@ public class StringTimeUtils {
      *
      * @param str
      *            传入的时间字符串
-     * @return
+     * @return 获取的是年-月-日 时-分-秒
      */
     public static String getLongTime(String str) {
         String mTime = LastIndex(str, 3);
@@ -41,7 +46,7 @@ public class StringTimeUtils {
      *
      * @param str
      *            传入的时间字符串
-     * @return
+     * @return 获取的是年-月-日
      */
     public static String getShortTime(String str) {
         String mTime = LastIndex(str, 3);
@@ -49,8 +54,32 @@ public class StringTimeUtils {
         String month = mTime.substring(4, 6);
         String day = mTime.substring(6, 8);
 
+//        return year + month + day;
         return year + "-" + month + "-" + day;
     }
+
+    /**
+     * 描述：获取指定日期时间的字符串,用于导出想要的格式.
+     *
+     * @param strDate String形式的日期时间，必须为yyyy-MM-dd HH:mm:ss格式
+     * @return String 转换后的String类型的日期时间 格式为yyyy-MM-dd
+     */
+    public static String getStringByFormat(String strDate) {
+       String YMD = "yyyy-MM-dd";
+        String mDateTime = null;
+        try {
+            Calendar c = new GregorianCalendar();
+            SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat(YMD);
+            c.setTime(mSimpleDateFormat.parse(strDate));
+
+            SimpleDateFormat mSimpleDateFormat2 = new SimpleDateFormat(YMD);
+            mDateTime = mSimpleDateFormat2.format(c.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mDateTime;
+    }
+
 
 
 }

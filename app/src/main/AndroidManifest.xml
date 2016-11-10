@@ -150,6 +150,9 @@
         <activity android:name="cn.com.chinau.activity.SuccessApplyForRefuseActivity" />
         <activity android:name="cn.com.chinau.activity.LookOrderDetailRefuseActivity" />
         <activity android:name="cn.com.chinau.activity.BigPhotoActivity" />
+
+
+
         <!--回调微信支付成功后跳转页面-->
         <activity
             android:name="cn.com.chinau.wxapi.WXPayEntryActivity"

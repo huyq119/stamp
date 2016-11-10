@@ -10,6 +10,7 @@ public class LogisticsBean extends BaseBean {
     public String goods_image;
     public String express_status;
     public String express_no;
+    public String express_comp;
     public String service_phone;
     public List<Express> express_info_list;
 
@@ -43,6 +44,14 @@ public class LogisticsBean extends BaseBean {
 
     public void setExpress_no(String express_no) {
         this.express_no = express_no;
+    }
+
+    public String getExpress_comp() {
+        return express_comp;
+    }
+
+    public void setExpress_comp(String express_comp) {
+        this.express_comp = express_comp;
     }
 
     public List<Express> getExpress_info_list() {

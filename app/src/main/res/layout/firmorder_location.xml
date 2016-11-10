@@ -60,12 +60,12 @@
 
         </LinearLayout>
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/firmOrder_back"
             android:layout_width="44dp"
             android:layout_height="match_parent"
             android:scaleType="center"
-            android:src="@mipmap/right_arrow" />
+            android:src="@mipmap/right_arrow" />-->
     </LinearLayout>
 
     <View style="@style/myline" />

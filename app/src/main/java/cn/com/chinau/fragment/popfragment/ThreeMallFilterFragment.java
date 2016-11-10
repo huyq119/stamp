@@ -18,6 +18,7 @@ import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.SelfMallPanStampGridViewAdapter;
 import cn.com.chinau.base.BaseDialogFragment;
 import cn.com.chinau.bean.CategoryDSFBean;
+import cn.com.chinau.bean.CategoryDSFToJson;
 import cn.com.chinau.dialog.SelfMallPanStampFilterDialog;
 import cn.com.chinau.listener.SellMallPanStampGridViewOnItemClickListener;
 import cn.com.chinau.utils.MyLog;
@@ -38,6 +39,8 @@ public class ThreeMallFilterFragment extends BaseDialogFragment implements SellM
     private String[] mArrTitle0;
     private String[] mArrTitle1;
     private TextView mCategory,mYears;
+    private String[] mArrValue0,mArrValue1;
+    private String mToJson;
 
 
     public ThreeMallFilterFragment() {
@@ -61,6 +64,7 @@ public class ThreeMallFilterFragment extends BaseDialogFragment implements SellM
      */
     private void GetCategory(){
         String mCategory = sp.getString("Category4","");
+//        MyLog.LogShitou("获取本地第三方类别数据", mCategory);
         Gson gson = new Gson();
         CategoryDSFBean mCategoryDSFBean3 = gson.fromJson(mCategory, CategoryDSFBean.class);
         ArrayList<CategoryDSFBean.Category> CategoryList =  mCategoryDSFBean3.getCategory();
@@ -68,7 +72,7 @@ public class ThreeMallFilterFragment extends BaseDialogFragment implements SellM
         mTitle = new String[CategoryList.size()];
         for (int i = 0; i < CategoryList.size(); i++) {
             mTitle[i] = CategoryList.get(i).getName();
-            MyLog.LogShitou("第三方1级mTitle", mTitle[i]);
+//            MyLog.LogShitou("第三方1级mTitle", mTitle[i]);
         }
         mCategorys = mTitle[0];
         mYearses = mTitle[1];
@@ -85,16 +89,22 @@ public class ThreeMallFilterFragment extends BaseDialogFragment implements SellM
         int sub1 = subCategory1.size();// 获取subCategory1的个数
 //        int sub2 = subCategory2.size();// 获取subCategory2的个数
         mArrTitle0 = new String[sub0];// 一级分类
+        mArrValue0 = new String[sub0];// 一级分类
+
         mArrTitle1 = new String[sub1];// 一级分类
+        mArrValue1 = new String[sub1];// 一级分类
 //        mArrTitle2 = new String[sub2];// 一级分类
 
         for (int i = 0; i < subCategory0.size(); i++) {
             mArrTitle0[i] = subCategory0.get(i).getName();
-            MyLog.LogShitou("2级Title1", mArrTitle0[i]);
+            mArrValue0[i] = subCategory0.get(i).getValue();
+//            MyLog.LogShitou("2级Title1", mArrTitle0[i]+"=="+mArrValue0[i]);
         }
+
         for (int i = 0; i < subCategory1.size(); i++) {
             mArrTitle1[i] = subCategory1.get(i).getName();
-            MyLog.LogShitou("2级Title1", mArrTitle1[i]);
+            mArrValue1[i] = subCategory1.get(i).getValue();
+//            MyLog.LogShitou("2级Title1", mArrTitle1[i]+"=="+mArrValue1[i]);
         }
 
 //        for (int i = 0; i < subCategory2.size(); i++) {
@@ -165,22 +175,37 @@ public class ThreeMallFilterFragment extends BaseDialogFragment implements SellM
         MyLog.e(CategoryNum + "-" + yearNum);
 
 
-        String Category = (CategoryNum == -1) ? "" :mArrTitle0[CategoryNum];
-        String Year = (yearNum == -1) ? "" : mArrTitle1[yearNum];
+        String Category = (CategoryNum == -1) ? "" :mArrValue0[CategoryNum];
+        String Year = (yearNum == -1) ? "" : mArrValue1[yearNum];
 //        String Person = (PersonNum == -1) ? "" : arrPerson[PersonNum];
-
         mData = Category + "," + Year;
-        setData(mData);
-        MyLog.e("点击了啥002--->"+mData);
+
+        CategoryDSFToJson mCategoryDSFToJson = new CategoryDSFToJson();
+        mCategoryDSFToJson.setYear(Year);
+        mCategoryDSFToJson.setCategory(Category);
+
+//        CategoryGoodsJsonBean mGoodsJsonBean = new CategoryGoodsJsonBean();
+//        CategoryGoodsJsonBean.CategoryBean mCategoryBean = new CategoryGoodsJsonBean.CategoryBean();
+//        mCategoryBean.setCategory(Category);// 一级
+//        CategoryGoodsJsonBean.CategoryBean.SubBean mSubBean = new CategoryGoodsJsonBean.CategoryBean.SubBean();
+//        mSubBean.setSub(Year);// 二级
+//        mCategoryBean.setSubCategory(mSubBean);
+//        mGoodsJsonBean.setCategory(mCategoryBean);
+        mToJson = new Gson().toJson(mCategoryDSFToJson);
+
+        MyLog.LogShitou("-000===转换成的Json", mToJson);
+
+        setJson(mToJson);
+        MyLog.e("点击了啥002--->"+ mToJson);
 
     }
 
-    public String getData() {
-        return mData;
+    public String getJson() {
+        return mToJson;
     }
 
-    public void setData(String data) {
-        mData = data;
+    public void setJson(String mJson) {
+        mToJson = mJson;
     }
 
 }

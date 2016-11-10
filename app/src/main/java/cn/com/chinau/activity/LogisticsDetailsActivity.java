@@ -42,7 +42,7 @@ public class LogisticsDetailsActivity extends BaseActivity {
     private String mToken, mUser_id;// 标识，用户ID
     private SharedPreferences sp;
     private TextView mStatus, mExpress, mOrderSn, mExpressPhone;
-    private String mExpress_status, mExpress_no, mExpress_phone, mGoods_image;
+    private String mExpress_status, mExpress_no,mExpress_comp, mExpress_phone, mGoods_image;
     private BitmapUtils mBitmap;
     private ImageView mImg;
 
@@ -70,7 +70,7 @@ public class LogisticsDetailsActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         mExpressNo = bundle.getString("ExpressNo", "");
 
-        MyLog.LogShitou("快递单号+快递公司",mExpressNo);
+        MyLog.LogShitou("传过来的快递单号",mExpressNo);
         mToken = sp.getString("token", "");
         mUser_id = sp.getString("userId", "");
         ImageView mBack = (ImageView) mLogisticsDetailsTitle.findViewById(R.id.base_title_back);
@@ -136,8 +136,6 @@ public class LogisticsDetailsActivity extends BaseActivity {
     }
 
     private Handler mHandler = new Handler() {
-
-
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -161,7 +159,9 @@ public class LogisticsDetailsActivity extends BaseActivity {
                         }
                         mExpress_no = mLogisticsBean.getExpress_no();// 快递编号
                         mOrderSn.setText(mExpress_no);
-                        mExpress_phone = mLogisticsBean.getService_phone();// 客服电话
+                       mExpress_comp = mLogisticsBean.getExpress_comp();// 快递公司
+                        mExpress.setText(mExpress_comp);
+                        mExpress_phone = mLogisticsBean.getService_phone();// 官方电话
                         mExpressPhone.setText(mExpress_phone);
                         mGoods_image = mLogisticsBean.getGoods_image();// 商品图片
                         mBitmap.display(mImg,mGoods_image);

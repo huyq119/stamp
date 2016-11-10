@@ -10,11 +10,14 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+
 import cn.com.chinau.R;
 import cn.com.chinau.adapter.StampTapFilterGridViewAdapter;
 import cn.com.chinau.adapter.StampTapFilterThemeGridViewAdapter;
 import cn.com.chinau.base.BaseDialogFragment;
 import cn.com.chinau.bean.CategoryJsonBean;
+import cn.com.chinau.bean.CategoryMLBean;
 import cn.com.chinau.listener.GridViewOnItemClickListener;
 import cn.com.chinau.listener.GridViewThemeOnItemClickListener;
 import cn.com.chinau.utils.MyLog;
@@ -27,7 +30,7 @@ import cn.com.chinau.view.NoScrollGridView;
 @SuppressLint("ValidFragment")
 public class StampTapFilterDialog extends BaseDialogFragment {
 
-    private String[] title, arrYear,arrClass,arrPerson;
+    private String category;
 
     private View mFilterView;
     private int Current = -1;//当前选择的年代角标
@@ -35,13 +38,10 @@ public class StampTapFilterDialog extends BaseDialogFragment {
     private GridViewThemeOnItemClickListener mThemeListener;// 题材的监听
     private TextView mYears, mCategory, mTheme; // 年代，类别，题材
     private JsonData mJsonData;
+    private String[] mTitle, mArrTitle0, mArrTitle1, mArrTitle2,mArrValue0,mArrValue1,mArrValue2;
 
-
-    public StampTapFilterDialog(String[] title, String[] arrYear, String[] arrClass, String[] arrPerson) {
-        this.title = title;
-        this.arrYear = arrYear;
-        this.arrClass = arrClass;
-        this.arrPerson = arrPerson;
+    public StampTapFilterDialog(String category) {
+        this.category = category;
 
     }
 
@@ -59,13 +59,61 @@ public class StampTapFilterDialog extends BaseDialogFragment {
 
 
     private void initData() {
+        // 获取串过来的字符串象category
+        if (!category.equals("")) {
+            Gson gson = new Gson();
+            CategoryMLBean mCategoryRMBean = gson.fromJson(category, CategoryMLBean.class);
+            ArrayList<CategoryMLBean.Category> list = mCategoryRMBean.getCategory();
+
+            mTitle = new String[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                mTitle[i] = list.get(i).getName();
+                MyLog.LogShitou("标题mTitle", mTitle[i]);
+            }
+            CategoryMLBean.Category SubCategory0 = list.get(0);
+            CategoryMLBean.Category SubCategory1 = list.get(1);
+            CategoryMLBean.Category SubCategory2 = list.get(2);
+            ArrayList<CategoryMLBean.Category.SubCategory> subCategory0 = SubCategory0.getSubCategory();
+            ArrayList<CategoryMLBean.Category.SubCategory> subCategory1 = SubCategory1.getSubCategory();
+            ArrayList<CategoryMLBean.Category.SubCategory> subCategory2 = SubCategory2.getSubCategory();
+
+            int sub0 = subCategory0.size();// 获取subCategory0的个数
+            int sub1 = subCategory1.size();// 获取subCategory1的个数
+            int sub2 = subCategory2.size();// 获取subCategory2的个数
+            mArrTitle0 = new String[sub0];// 一级分类name
+            mArrValue0 = new String[sub0];// 一级分类value
+
+            mArrTitle1 = new String[sub1];// 一级分类name
+            mArrValue1 = new String[sub1];// 一级分类value
+
+            mArrTitle2 = new String[sub2];// 一级分类name
+            mArrValue2 = new String[sub2];// 一级分类value
+
+            for (int i = 0; i < subCategory0.size(); i++) {
+                mArrTitle0[i] = subCategory0.get(i).getName();
+                mArrValue0[i] = subCategory0.get(i).getValue();
+//                MyLog.LogShitou("年代2级Title0==Value值", mArrTitle0[i]+"==="+mArrValue0[i] );
+            }
+            for (int i = 0; i < subCategory1.size(); i++) {
+                mArrTitle1[i] = subCategory1.get(i).getName();
+                mArrValue1[i] = subCategory1.get(i).getValue();
+//                MyLog.LogShitou("类别2级Title1==Value值", mArrTitle1[i]+"=="+mArrValue1[i]);
+            }
+            for (int i = 0; i < subCategory2.size(); i++) {
+                mArrTitle2[i] = subCategory2.get(i).getName();
+                mArrValue2[i] = subCategory2.get(i).getValue();
+//                MyLog.LogShitou("题材2级Title2==Value值", mArrTitle2[i]+"=="+mArrValue2[i]);
+            }
+        }
+
         // 获取一级标题数据并赋值
-        String title1 = title[0];
+        String title1 = mTitle[0];
         mYears.setText(title1);
 
-        String title2 = title[1];
+        String title2 = mTitle[1];
         mCategory.setText(title2);
-        String title3 = title[2];
+
+        String title3 = mTitle[2];
         mTheme.setText(title3);
     }
 
@@ -87,9 +135,9 @@ public class StampTapFilterDialog extends BaseDialogFragment {
         NoScrollGridView mThemeGV = (NoScrollGridView) mFilterView.findViewById(R.id.stamptap_pop_theme);
 
         //创建适配器
-        StampTapFilterGridViewAdapter mYearAdapter = new StampTapFilterGridViewAdapter(getActivity(),arrYear);
-        StampTapFilterGridViewAdapter mCategoryAdapter = new StampTapFilterGridViewAdapter(getActivity(),  arrClass);
-        StampTapFilterThemeGridViewAdapter mThemeAdapter = new StampTapFilterThemeGridViewAdapter(getActivity(), arrPerson);
+        StampTapFilterGridViewAdapter mYearAdapter = new StampTapFilterGridViewAdapter(getActivity(),mArrTitle0);
+        StampTapFilterGridViewAdapter mCategoryAdapter = new StampTapFilterGridViewAdapter(getActivity(),  mArrTitle1);
+        StampTapFilterThemeGridViewAdapter mThemeAdapter = new StampTapFilterThemeGridViewAdapter(getActivity(), mArrTitle2);
 
         //设置适配器
         mYearGV.setAdapter(mYearAdapter);
@@ -125,15 +173,16 @@ public class StampTapFilterDialog extends BaseDialogFragment {
             @Override
             public void onClick(View view) {
                 //所有PopupWindow选择的内容
+
                 int yearNum = mYearListener.getPosition();
                 int CategoryNum = mCategoryListener.getPosition();
                 int PersonNum = mThemeListener.getPosition();
 
-                MyLog.LogShitou("邮票目录筛选点击了啥Position", yearNum + "_" + CategoryNum + "_" + PersonNum);
+//                MyLog.LogShitou("邮票目录筛选点击了啥Position", yearNum + "_" + CategoryNum + "_" + PersonNum);
 
-                String year = (yearNum == -1) ? "" : arrYear[yearNum];
-                String category = (CategoryNum == -1) ? "" : arrClass[CategoryNum];
-                String theme = (PersonNum == -1) ? "" : arrPerson[PersonNum];
+                String year = (yearNum == -1) ? "" : mArrValue0[yearNum];
+                String category = (CategoryNum == -1) ? "" : mArrValue1[CategoryNum];
+                String theme = (PersonNum == -1) ? "" : mArrValue2[PersonNum];
 
                 mData = year + "," + category + "," + theme;
 //                setData(mData);

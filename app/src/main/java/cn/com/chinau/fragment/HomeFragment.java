@@ -39,7 +39,9 @@ import cn.com.chinau.base.BaseFragment;
 import cn.com.chinau.bean.AddressBean;
 import cn.com.chinau.bean.CategoryBean;
 import cn.com.chinau.bean.CategoryDSFBean;
+import cn.com.chinau.bean.CategoryMLBean;
 import cn.com.chinau.bean.CategoryRMBean;
+import cn.com.chinau.bean.CategorySCBean;
 import cn.com.chinau.bean.HomeBean;
 import cn.com.chinau.bean.SysParamQueryBean;
 import cn.com.chinau.http.HttpUtils;
@@ -148,28 +150,31 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
                     String code1 = mCategoryRMBean.getRsp_code();
                     if (code1.equals("0000")) {
                         sp.edit().putString("Category1", mCategory1).commit();// 保存在本地的热搜类别查询
-                        MyLog.LogShitou("保存在本地的热搜类别",mCategory1);
+//                        MyLog.LogShitou("保存在本地的热搜类别",mCategory1);
                     }
                     break;
                 case StaticField.ML_SUCCESS://邮票目录类别查询
                     Gson mGsones2 = new Gson();
                     String mCategory2 = (String) msg.obj;
-                    CategoryDSFBean mCategoryDSFBean1 = mGsones2.fromJson(mCategory2, CategoryDSFBean.class);
+                    CategoryMLBean mCategoryDSFBean1 = mGsones2.fromJson(mCategory2, CategoryMLBean.class);
                     String code2 = mCategoryDSFBean1.getRsp_code();
                     if (code2.equals("0000")) {
                         sp.edit().putString("Category2", mCategory2).commit();// 保存在本地的邮票目录类别查询
-                        MyLog.LogShitou("保存在本地的邮票目录类别",mCategory2);
+//                        MyLog.LogShitou("保存在本地的邮票目录类别",mCategory2);
                     }
                     break;
                 case StaticField.SC_SUCCESS://商城类别查询
-//                    Gson mGsones3 = new Gson();
+                    Gson mGsones3 = new Gson();
                     String mCategory3 = (String) msg.obj;
-//                    CategoryBean mCategoryBean2 = mGsones3.fromJson(mCategory3, CategoryBean.class);
-//                    String code3 = mCategoryBean2.getRsp_code();
-//                    if (code3.equals("0000")) {
-                        sp.edit().putString("Category3", mCategory3);// 保存在本地的商城类别查询
+                    MyLog.LogShitou("商城类别数据",mCategory3);
+                    CategorySCBean mCategorySCBean2 = mGsones3.fromJson(mCategory3, CategorySCBean.class);
+                    String code3 = mCategorySCBean2.getRsp_code();
+                    if (code3.equals("0000")) {
+                        sp.edit().putString("Category3", mCategory3).commit();// 保存在本地的商城类别查询
+
 //                        MyLog.LogShitou("保存在本地的商城类别",mCategory3);
-//                    }
+//                        MyLog.LogShitou("保存在本地的商城类别","执行了次方法====================");
+                    }
                     break;
                 case StaticField.DSF_SUCCESS://邮票第三方类别查询
                     Gson mGsones4 = new Gson();
@@ -178,7 +183,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
                     String code4 = mCategoryDSFBean3.getRsp_code();
                     if (code4.equals("0000")) {
                         sp.edit().putString("Category4", mCategory4).commit();// 保存在本地的第三方类别查询
-                        MyLog.LogShitou("保存在本地的第三方类别",mCategory4);
+//                        MyLog.LogShitou("保存在本地的第三方类别",mCategory4);
                     }
                     break;
                 case StaticField.YS_SUCCESS://邮市类别查询
@@ -188,7 +193,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
                     String code5 = mCategoryBean4.getRsp_code();
                     if (code5.equals("0000")) {
                         sp.edit().putString("Category5", mCategory5).commit();// 保存在本地的邮市类别查询
-                        MyLog.LogShitou("保存在本地的邮市类别",mCategory5);
+//                        MyLog.LogShitou("保存在本地的邮市类别",mCategory5);
                     }
                     break;
                 case StaticField.JP_SUCCESS://竞拍类别查询
@@ -198,7 +203,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
                     String code6 = mCategoryBean.getRsp_code();
                     if (code6.equals("0000")) {
                         sp.edit().putString("Category6", mCategory6).commit();// 保存在本地的竞拍类别查询
-                        MyLog.LogShitou("保存在本地的竞拍类别",mCategory6);
+//                        MyLog.LogShitou("保存在本地的竞拍类别",mCategory6);
                     }
                     break;
             }
@@ -481,7 +486,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
                 HashMap<String, String> params = new HashMap<>();
                 params.put(StaticField.SERVICE_TYPE, StaticField.HOMEPAGE);
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(num));
-                MyLog.LogShitou("========这个步长是多少","num==========="+num );
                 params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM));
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);

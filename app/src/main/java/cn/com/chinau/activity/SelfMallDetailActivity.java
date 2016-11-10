@@ -58,7 +58,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
     private String[] small_images, big_images;
     private WebView mWeb; // 邮票信息url
     private LinearLayout mShoppingLl; // 购物车
-
+    private boolean addFlag = true; // 点击加入购物车，立即购买的的标识
     private String mSharedImage;
     private String mShare_url;
     private Handler mHandler = new Handler() {
@@ -179,6 +179,17 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                         mHandler.sendEmptyMessage(5);// 发送提示添加成功
                     }
                     break ;
+                case StaticField.GOBUY: // 立即购买
+                    Gson gsones1 = new Gson();
+                    BaseBean mBasebean1 = gsones1.fromJson((String) msg.obj, BaseBean.class);
+                    if (mBasebean1.getRsp_code().equals("0000")) {
+                        Intent intent = new Intent(SelfMallDetailActivity.this, MainActivity.class);
+                        intent.putExtra("Login", "SelfMallDetail");
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+                    }
+                    break;
                 case 5:
                     MyToast.showShort(SelfMallDetailActivity.this,"添加成功");
                     break;
@@ -298,26 +309,42 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                 break;
 
             case R.id.mall_detail_addshopping://加入购物车
+
                 if (mToken.equals("") || mUser_id.equals("")) {
                     openActivityWitchAnimation(LoginActivity.class);
                 } else {
-                    AddShopCartBean mAddShopCartBean = new AddShopCartBean();
-                    mAddShopCartBean.setGoods_count("1");
-                    mAddShopCartBean.setGoods_sn(mGoods_sn);
-                    String mSnJson = new Gson().toJson(mAddShopCartBean); // 转json串
-                    String toJson = "["+mSnJson+"]"; // 转数组
-                    AddShopCart(toJson); // 加入购物车网络请求
-                    MyLog.LogShitou("加入购物车转换的Json",toJson);
-
+                    if(mGoods_sn != null){
+                        AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+                        mAddShopCartBean.setGoods_count("1");
+                        mAddShopCartBean.setGoods_sn(mGoods_sn);
+                        String mSnJson = new Gson().toJson(mAddShopCartBean); // 转json串
+                        String toJson = "["+mSnJson+"]"; // 转数组
+                        AddShopCart(toJson); // 加入购物车网络请求
+                        MyLog.LogShitou("加入购物车转换的Json",toJson);
+                    }
                 }
                 break;
             case R.id.mall_detail_gobuy://立即购买
-                Intent intents = new Intent(SelfMallDetailActivity.this, MainActivity.class);
-                intents.putExtra("Login", "SelfMallDetail");
-                startActivity(intents);
-                finish();
-                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-                MyToast.showShort(this, "点击了立即购买");
+                addFlag = false; // 点击立即购买的标识
+                if (mToken.equals("") || mUser_id.equals("")) {
+                    openActivityWitchAnimation(LoginActivity.class);
+                } else {
+                    if (mGoods_sn != null) {
+                        AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+                        mAddShopCartBean.setGoods_count("1");
+                        mAddShopCartBean.setGoods_sn(mGoods_sn);
+                        String mSnJson = new Gson().toJson(mAddShopCartBean); // 转json串
+                        String toJson = "[" + mSnJson + "]"; // 转数组
+                        AddShopCart(toJson); // 立即后买加入购物车网络请求
+                        MyLog.LogShitou("立即购买加入购物车转换的Json", toJson);
+                    }
+                }
+//                Intent intents = new Intent(SelfMallDetailActivity.this, MainActivity.class);
+//                intents.putExtra("Login", "SelfMallDetail");
+//                startActivity(intents);
+//                finish();
+//                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+//                MyToast.showShort(this, "点击了立即购买");
                 break;
         }
     }
@@ -431,10 +458,17 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-                Message msg = mHandler.obtainMessage();
-                msg.what = StaticField.ADDSHOPPINGCARTSUCCESS;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
+                if (addFlag) {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.ADDSHOPPINGCARTSUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else {
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.GOBUY;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
 
             }
         });
