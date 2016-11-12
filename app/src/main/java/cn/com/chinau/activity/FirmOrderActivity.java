@@ -62,7 +62,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private ListView mListView;//底部列表展示
     private ImageView mBack, mPayImg;
     private TextView mTitle, mOkPay, mDistributionTv, mDistributionPrice, mPayNmme, mFeeRate, mAddressName,
-            mAddressMobile, mAddressDetail, mNoAddressAdd,mTotalPrice,mGoodsCount;
+            mAddressMobile, mAddressDetail, mNoAddressAdd, mTotalPrice, mGoodsCount;
 
     private LinearLayout mAddress1;
     private String mAuctionRecord;
@@ -84,14 +84,15 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private IWXAPI api;
     private String address_id;
     private String mGroupSet;
-    private ArrayList<AddShopCartBean> info_list = new ArrayList<>();;
+    private ArrayList<AddShopCartBean> info_list = new ArrayList<>();
+    ;
     //    private HashMap<Integer, Set<ShopNameBean.GoodsBean>> groupSet;
     private Integer key;
     private String goods_sn;
     private String goods_count;
 
     private boolean isChild;
-    private String mPrice,mCount,mSellerList;// 价钱，数量
+    private String mPrice, mCount, mSellerList;// 价钱，数量
     //    private String groupSet;
     private HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
     private String groupSet1;
@@ -153,20 +154,20 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         mPayNmme = (TextView) mFirmOrderContent.findViewById(R.id.firmorder_pay_name);
         mFeeRate = (TextView) mFirmOrderContent.findViewById(R.id.firmOrder_fee_rate);// 服务费率
         mTotalPrice = (TextView) mFirmOrderContent.findViewById(R.id.totl_price);// 价钱
-        mTotalPrice.setText("￥"+mPrice);// 赋值总价钱
+        mTotalPrice.setText("￥" + mPrice);// 赋值总价钱
         mGoodsCount = (TextView) mFirmOrderContent.findViewById(R.id.goods_count);// 数量
-        mGoodsCount.setText("共"+mCount+"件商品");
+        mGoodsCount.setText("共" + mCount + "件商品");
     }
 
     // 获取传过来的数据
-    private void GetStringData(){
+    private void GetStringData() {
         Intent intent = getIntent();
         mCount = intent.getStringExtra("Count");// 获取传过来的数量
         mPrice = intent.getStringExtra("Price");// 获取传过来的总价钱
 
-        String  mSellerList = sp.getString("SellerList","");// 获取保存在本地的购物车总数据
+        String mSellerList = sp.getString("SellerList", "");// 获取保存在本地的购物车总数据
 
-        MyLog.LogShitou("获取保存在本地的总数据", mSellerList );
+        MyLog.LogShitou("获取保存在本地的总数据", mSellerList);
 
 
 //        groupSet1 = intent.getStringExtra("GroupSet");// 获取传过来的总价钱
@@ -183,51 +184,52 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //        returnStr="{"+returnStr+"}}";
 //        MyLog.LogShitou("传过来选中的编号+数量", returnStr);
 
-
-        groupSet = MyApplication.getGroupSet();// 传过来的集合数据
-        for (HashMap.Entry<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
+        if (groupSet != null) {
+            groupSet = MyApplication.getGroupSet();// 传过来的集合数据
+            for (HashMap.Entry<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
 //            key = entry.getKey();
-            Set<ShopNameBean.SellerBean.GoodsBean>  value = entry.getValue(); // 拿到循环后的value值
-            for (int i = 0; i < value.size(); i++) {
-                Iterator<ShopNameBean.SellerBean.GoodsBean> iterator = value.iterator();
-                ShopNameBean.SellerBean.GoodsBean next = iterator.next();
-                goods_sn = next.getGoods_sn();// 商品编号
-                goods_count = next.getGoods_count();// 商品数量
-                isChild = next.isChildSelected();
-                MyLog.LogShitou("---1---编号+数量Json", goods_sn + "--" + goods_count);
+                Set<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
+                for (int i = 0; i < value.size(); i++) {
+                    Iterator<ShopNameBean.SellerBean.GoodsBean> iterator = value.iterator();
+                    ShopNameBean.SellerBean.GoodsBean next = iterator.next();
+                    goods_sn = next.getGoods_sn();// 商品编号
+                    goods_count = next.getGoods_count();// 商品数量
+                    isChild = next.isChildSelected();
+                    MyLog.LogShitou("---1---编号+数量Json", goods_sn + "--" + goods_count);
+                }
+                // 添加数据到AddShopCartBean生成Json
+                AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+                mAddShopCartBean.setGoods_sn(goods_sn);
+                mAddShopCartBean.setGoods_count(goods_count);
+                info_list.add(mAddShopCartBean); // 添加到list
+                MyLog.LogShitou("==2===最后需要的编号+数量Json", info_list.toString());
             }
-            // 添加数据到AddShopCartBean生成Json
-            AddShopCartBean mAddShopCartBean = new AddShopCartBean();
-            mAddShopCartBean.setGoods_sn(goods_sn);
-            mAddShopCartBean.setGoods_count(goods_count);
-            info_list.add(mAddShopCartBean); // 添加到list
-            MyLog.LogShitou("==2===最后需要的编号+数量Json", info_list.toString());
         }
     }
 
     /**
-     *
      * @param soureStr 源字符
      * @return list
      */
-    public static ArrayList<String> getNoJsonToList(String soureStr){
-        ArrayList<String> list=new ArrayList<String>();
-        String arr1[]=	soureStr.split("=");
-        for(int i=1;i<arr1.length;i++){
-            String arr2[]=arr1[i].split("],");
-            for(int j=0;j<arr2.length;j++){
-                if(j%2==0){
-                    String str4=arr2[j].trim().substring(1, arr2[j].trim().length());
+    public static ArrayList<String> getNoJsonToList(String soureStr) {
+        ArrayList<String> list = new ArrayList<String>();
+        String arr1[] = soureStr.split("=");
+        for (int i = 1; i < arr1.length; i++) {
+            String arr2[] = arr1[i].split("],");
+            for (int j = 0; j < arr2.length; j++) {
+                if (j % 2 == 0) {
+                    String str4 = arr2[j].trim().substring(1, arr2[j].trim().length());
 //                      str4=str4.replace("GoodsBean","GoodsBean"+j);
 //                    str4=str4.replaceAll("GoodsBean","GoodsBean"+j);
                     list.add(str4);
                 }
             }
         }
-        if(list.size()>0){
-            String str=list.get(list.size()-1).trim().substring(0,list.get(list.size()-1).trim().length()-1).trim();
-            list.set(list.size()-1,str.substring(0,str.length()-1));
-        };
+        if (list.size() > 0) {
+            String str = list.get(list.size() - 1).trim().substring(0, list.get(list.size() - 1).trim().length() - 1).trim();
+            list.set(list.size() - 1, str.substring(0, str.length() - 1));
+        }
+        ;
 
 //        StringBuffer  strb=new StringBuffer();
 //        strb.append("\"aaa\":[");
@@ -241,19 +243,17 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //        returnStr=returnStr+"]";
 
 
-
 //        StringBuffer strbuffer=new StringBuffer();
 //        for(int i=0;i<list.size();i++){
 //            list.set(i, "{"+list.get(i)+"}");
 //        }
 //        list.set(i, "\"Goods_list\":"+"[{"+list.get(i)+"}]");
-        for (int i=0;i<list.size();i++){
-            list.set(i,list.get(0).replace("GoodsBean","GoodsBean"+i));
+        for (int i = 0; i < list.size(); i++) {
+            list.set(i, list.get(0).replace("GoodsBean", "GoodsBean" + i));
 
         }
         return list;
     }
-
 
 
     private void initData() {
@@ -289,15 +289,18 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
      */
     private void setFalseData() {
 
-        FirmOrderExpandableAdapter expandableAdapter = new FirmOrderExpandableAdapter(this, mBitmap, groupSet);
-        mListView.setAdapter(expandableAdapter);
-        expandableAdapter.notifyDataSetChanged();
-        //让子控件全部展开
+        if (groupSet !=null){
+
+            FirmOrderExpandableAdapter expandableAdapter = new FirmOrderExpandableAdapter(this, mBitmap, groupSet);
+            mListView.setAdapter(expandableAdapter);
+            expandableAdapter.notifyDataSetChanged();
+            //让子控件全部展开
 //        for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
 //            mListView.expandGroup(i);
 //        }
 //        //去掉自带按钮
 //        mListView.setGroupIndicator(null);
+        }
     }
 
 
@@ -323,7 +326,11 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             case R.id.firmOrder_ok_pay://确认并付款
                 mExCompName = mDistributionTv.getText().toString().trim();
                 payNmae = mPayNmme.getText().toString().trim();
-                OrderPayNet(); // 订单支付网络请求
+                if (mAddressId !=null && mNoAddressId !=null){
+                    OrderPayNet(); // 订单支付网络请求
+                }else{
+                   MyToast.showShort(FirmOrderActivity.this,"订单信息异常");
+                }
                 break;
             case R.id.FirmOrder_Address: // 选择收货地址
                 Intent intent = new Intent();
@@ -526,8 +533,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                             mNoAddress.setVisibility(View.VISIBLE); // 显示无收货地址布局
                             mAddress.setVisibility(View.GONE);// 隐藏收货地址布局
                         }
-                    }else{
-                        MyToast.showShort(FirmOrderActivity.this,mMsges);
+                    } else {
+                        MyToast.showShort(FirmOrderActivity.this, mMsges);
                     }
                     break;
                 case StaticField.WX_SUCCESS:// 微信订单支付
@@ -619,8 +626,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                         };
                         Thread payThread = new Thread(payRunnable);
                         payThread.start();
-                    }else {
-                        MyToast.showShort(FirmOrderActivity.this,mMsgs);
+                    } else {
+                        MyToast.showShort(FirmOrderActivity.this, mMsgs);
                     }
                     break;
 
@@ -630,7 +637,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                      对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
                      */
                     String resultInfo = payResult.getResult();// 同步返回需要验证的信息
-                    MyLog.LogShitou("result+支付宝请求", payResult.toString()+"--"+resultInfo);
+                    MyLog.LogShitou("result+支付宝请求", payResult.toString() + "--" + resultInfo);
                     String resultStatus = payResult.getResultStatus();
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
@@ -642,16 +649,16 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                         if (TextUtils.equals(resultStatus, "8000")) {
                             Toast.makeText(FirmOrderActivity.this, "正在支付中...",
                                     Toast.LENGTH_SHORT).show();
-                        } else if(TextUtils.equals(resultStatus, "4000")){
+                        } else if (TextUtils.equals(resultStatus, "4000")) {
                             Toast.makeText(FirmOrderActivity.this, "支付失败",
                                     Toast.LENGTH_LONG).show();
-                        }else if(TextUtils.equals(resultStatus, "6001")){
+                        } else if (TextUtils.equals(resultStatus, "6001")) {
                             Toast.makeText(FirmOrderActivity.this, "你已取消支付",
                                     Toast.LENGTH_LONG).show();
-                        }else if(TextUtils.equals(resultStatus, "6002")){
+                        } else if (TextUtils.equals(resultStatus, "6002")) {
                             Toast.makeText(FirmOrderActivity.this, "网络连接失败",
                                     Toast.LENGTH_LONG).show();
-                        }else{
+                        } else {
                             Toast.makeText(FirmOrderActivity.this, "支付失败",
                                     Toast.LENGTH_LONG).show();
                         }

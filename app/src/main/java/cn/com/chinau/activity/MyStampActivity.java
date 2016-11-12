@@ -144,7 +144,6 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
         sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         initView();
         initData();
-//        initAdapter();
         initListener();
         return mMyStampContent;
     }
@@ -247,11 +246,9 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
         if (MorePopView == null) {
             MorePopView = View.inflate(this, R.layout.mystamp_dialog, null);
         }
-
         if (mMorePop == null) {
             mMorePop = new PopupWindow(MorePopView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         }
-
         // 为了响应返回键和界面外的其他界面
         mMorePop.setBackgroundDrawable(mColorBg);
         //把他改为屏幕中间了
@@ -333,42 +330,6 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                 msg.what = StaticField.SUCCESS;
                 msg.obj = result;
                 mHandler.sendMessage(msg);
-
-            }
-        });
-    }
-
-    /**
-     * 修改邮集网络请求
-     */
-    private void UpDateGetInitNet(final String stamp_count, final String op_type) {
-        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                HashMap<String, String> params = new HashMap<String, String>();
-                params.put(StaticField.SERVICE_TYPE, StaticField.MODIFY);// 接口名称
-                params.put(StaticField.TOKEN, mToken);// 标识
-                params.put(StaticField.USER_ID, mUser_id);// 用户ID
-                params.put(StaticField.STAMP_SN, "");//  邮票编号 （暂时为空）
-                params.put(StaticField.STAMP_COUNT, stamp_count);//  邮票数量
-                params.put(StaticField.OP_TYPE, op_type);//  操作类型：SC：删除；JR加入；XG修改
-                params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 当前记录索引
-                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
-
-                String mapSort = SortUtils.MapSort(params);
-                String md5code = Encrypt.MD5(mapSort);
-                params.put(StaticField.SIGN, md5code);
-
-                result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                MyLog.LogShitou("我的邮集List-->:", result);
-
-                if (result.equals("-1") | result.equals("-2")) {
-                    return;
-                }
-//                Message msg = mHandler.obtainMessage();
-//                msg.what = StaticField.SUCCESS;
-//                msg.obj = result;
-//                mHandler.sendMessage(msg);
 
             }
         });

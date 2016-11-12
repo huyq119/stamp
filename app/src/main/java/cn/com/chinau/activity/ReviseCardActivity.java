@@ -238,6 +238,7 @@ public class ReviseCardActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initListener() {
+        mBack.setOnClickListener(this);
         ib_cash.setOnClickListener(this);
         ib_name.setOnClickListener(this);
         btn_cimmit.setOnClickListener(this);

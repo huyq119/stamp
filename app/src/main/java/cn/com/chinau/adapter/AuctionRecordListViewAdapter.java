@@ -114,13 +114,14 @@ public class AuctionRecordListViewAdapter extends BaseAdapter {
                 holder.SpareTime.setVisibility(View.GONE);
             }
         } else if (AuctionStatus.equals("CJ")) {
-            holder.AuctionStatue.setText("已出局");
+            holder.AuctionStatue.setText("交易关闭");
             holder.AuctionStatue.setTextColor(context.getResources().getColor(R.color.font_color));
             holder.CurrentPrice.setVisibility(View.INVISIBLE);// 价格栏隐藏
             holder.MarkTimeTv.setText(auction.getCreate_time());
             holder.SpareTime.setVisibility(View.GONE);
         }
         bitmapUtils.display(holder.GoodsImageUrl, mList.get(i).getGoods_img());
+
         holder.PaymentTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

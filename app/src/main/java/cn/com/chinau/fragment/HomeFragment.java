@@ -216,6 +216,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
     public View CreateTitle() {
         View HomeTitle = View.inflate(getActivity(), R.layout.fragment_home_title, null);
         mScan = (ImageView) HomeTitle.findViewById(R.id.home_title_scan);
+
+        // 这三行是为了防止展示到GridView处
+        mScan.setFocusable(true);
+        mScan.setFocusableInTouchMode(true);
+        mScan.requestFocus();
         mSearch = (LinearLayout) HomeTitle.findViewById(R.id.home_search);
         return HomeTitle;
     }
@@ -240,7 +245,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
      * 初始化布局参数
      */
     private void initView() {
-
         mStampShop = (Button) mHomeView.findViewById(R.id.home_stampshop);
         mMall = (Button) mHomeView.findViewById(R.id.home_mall);
         mAuction = (Button) mHomeView.findViewById(R.id.home_auction);
@@ -296,6 +300,27 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
         setGridViewAdapter();
 
 
+    }
+    /**
+     * 设置GridView的适配器
+     */
+    private void setGridViewAdapter() {
+        if (mHomeBean != null) {
+            List<HomeBean.Good> goods_list = mHomeBean.getGoods_list();
+            mList.addAll(goods_list);
+            HomeGridViewAdapter Adapter = new HomeGridViewAdapter(getActivity(), mList, mBitmap);
+            mGridView.setAdapter(Adapter);
+
+            if (num != 0) {
+                mScrollView.onRefreshComplete();
+//                mScrollView.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                    }
+//                }, 800);
+            }
+        }
     }
 
 
@@ -556,28 +581,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
         mBitmap.display(mThreeImage5, child_list2.get(4).getImg_url());
     }
 
-    /**
-     * 设置GridView的适配器
-     */
-    private void setGridViewAdapter() {
-        if (mHomeBean != null) {
-            List<HomeBean.Good> goods_list = mHomeBean.getGoods_list();
-            mList.addAll(goods_list);
-            HomeGridViewAdapter Adapter = new HomeGridViewAdapter(getActivity(), mList, mBitmap);
-            mGridView.setAdapter(Adapter);
-            //这句是为了防止展示到GridView处
-            mGridView.requestChildFocus(mHomeVP, null);
-            if (num != 0) {
-                mScrollView.onRefreshComplete();
-//                mScrollView.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                    }
-//                }, 800);
-            }
-        }
-    }
 
     /**
      * 滑动ScrollView监听事件

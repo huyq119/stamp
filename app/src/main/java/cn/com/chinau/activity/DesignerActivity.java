@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -42,6 +43,15 @@ public class DesignerActivity extends BaseActivity {
     private int num = 0; // 初始步长
     private static final int OFFSETNUM = 1000; // 首次请求条目数
 
+    private PullToRefreshScrollView mDesignerSV;
+    private ScrollView scrollView;
+    private Button mTopBtn;
+
+    @Override
+    public View CreateTitle() {
+        mDesignerTitle = View.inflate(this, R.layout.base_back_title, null);
+        return mDesignerTitle;
+    }
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -55,14 +65,6 @@ public class DesignerActivity extends BaseActivity {
             }
         }
     };
-    private PullToRefreshScrollView mDesignerSV;
-    private ScrollView scrollView;
-
-    @Override
-    public View CreateTitle() {
-        mDesignerTitle = View.inflate(this, R.layout.base_back_title, null);
-        return mDesignerTitle;
-    }
 
     @Override
     public View CreateSuccess() {
@@ -77,8 +79,8 @@ public class DesignerActivity extends BaseActivity {
         mBack = (ImageView) mDesignerTitle.findViewById(R.id.base_title_back);
         TextView mTitle = (TextView) mDesignerTitle.findViewById(R.id.base_title);
         mTitle.setText("设计家");
-//        mDesignerSV = (PullToRefreshScrollView) mDesignerContent.findViewById(R.id.designer_list_sv);
         mDesignerLV = (IndexListView) mDesignerContent.findViewById(R.id.designer_lv);
+        mTopBtn = (Button) mDesignerContent.findViewById(R.id.base_top_btn);// 置顶
     }
 
 
@@ -111,6 +113,7 @@ public class DesignerActivity extends BaseActivity {
                 openActivityWitchAnimation(DesignerDetailActivity.class, bundle);
             }
         });
+
 
     }
 

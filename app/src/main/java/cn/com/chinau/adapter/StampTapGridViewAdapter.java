@@ -86,18 +86,22 @@ public class StampTapGridViewAdapter extends BaseAdapter {
         //设置数据
         StampTapBean.StampList stampList = mList.get(i);
         mStampSn = stampList.getStamp_sn();// 邮票编号
+
+        MyLog.LogShitou("==0000====邮票编号",mStampSn);
         viewHolder.mTitle.setText(stampList.getStamp_name());
         viewHolder.mMoney.setText("￥"+stampList.getCurrent_price());
+        viewHolder.mAdd.setTag(mStampSn);
         //设置图片
         bitmap.display(viewHolder.mIcon, stampList.getStamp_img());
-        //添加收藏的点击按钮
+        //添加邮集点击按钮
         viewHolder.mAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 GetTokenUserID();// 获取标识，用户ID
                 if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)){
-                    MyLog.LogShitou("邮票编号-->:",mStampSn);
-                    UpDateGetInitNet("1",StaticField.JR); //加入邮集网络请求
+
+                    AddStampGetInitNet("1",StaticField.JR,String.valueOf(view.getTag())); //加入邮集网络请求
+                    MyLog.LogShitou("==11111====邮票编号",mStampSn);
                 }else{
                     Intent intent = new Intent(context, LoginActivity.class);
                     intent.putExtra("WithDraw","StampTap");
@@ -130,7 +134,7 @@ public class StampTapGridViewAdapter extends BaseAdapter {
      * @param op_type 操作类型：SC：删除；JR加入；XG修改
      */
 
-    private void UpDateGetInitNet(final String stamp_count,final String op_type){
+    private void AddStampGetInitNet(final String stamp_count,final String op_type,final String stampsn){
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -138,7 +142,7 @@ public class StampTapGridViewAdapter extends BaseAdapter {
                 params.put(StaticField.SERVICE_TYPE, StaticField.MODIFY);// 接口名称
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
-                params.put(StaticField.STAMP_SN, mStampSn);//  邮票编号 （暂时为空）
+                params.put(StaticField.STAMP_SN, stampsn);//  邮票编号
                 params.put(StaticField.STAMP_COUNT, stamp_count);//  邮票数量
                 params.put(StaticField.OP_TYPE, op_type);//  操作类型：SC：删除；JR加入；XG修改
 
@@ -146,8 +150,9 @@ public class StampTapGridViewAdapter extends BaseAdapter {
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
 
+                MyLog.LogShitou("===邮集编号", stampsn);
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                MyLog.LogShitou("result加入邮集-->:", result);
+                MyLog.LogShitou("===result加入邮集", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;

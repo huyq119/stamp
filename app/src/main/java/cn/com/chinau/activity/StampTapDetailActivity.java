@@ -200,6 +200,54 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     }
 
 
+    private void initListener() {
+        mShared.setOnClickListener(this);
+        mBack.setOnClickListener(this);
+        mAddAlbum.setOnClickListener(this);
+        mAddStampLl.setOnClickListener(this);
+        mTopBtn.setOnClickListener(this);
+        home_SV.setOnTouchListener(this);
+        mTopVPI.setOnPageChangeListener(this);
+    }
+
+    @Override
+    public void AgainRequest() {
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.base_shared://分享按钮
+                SharedDialog(); //分享弹出Dialog
+                break;
+            case R.id.base_title_back://返回
+                finishWitchAnimation();
+                break;
+            case R.id.stamp_details_add_album://加入邮集
+
+                if (mToken.equals("") || mUser_id.equals("")) {
+                    openActivityWitchAnimation(LoginActivity.class);
+                } else {
+                    UpDateGetInitNet("1", StaticField.JR ,mStampSn); // 加入邮集网络请求
+                }
+                break;
+            case R.id.stamp_details_add_stamp_ll://邮集数
+                openActivityWitchAnimation(MyStampActivity.class);
+                break;
+            case R.id.base_top_btn://置顶
+                home_SV.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        home_SV.fullScroll(ScrollView.FOCUS_UP);  // 滚动到顶部
+                    }
+                });
+                mTopBtn.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+
     /**
      * 请求网络的方法,这里请求的是详情的所有内容
      */
@@ -236,7 +284,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
      * @param op_type     操作类型：SC：删除；JR加入；XG修改
      */
 
-    private void UpDateGetInitNet(final String stamp_count, final String op_type) {
+    private void UpDateGetInitNet(final String stamp_count, final String op_type,final String stampsn) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -244,14 +292,14 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
                 params.put(StaticField.SERVICE_TYPE, StaticField.MODIFY);// 接口名称
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
-                params.put(StaticField.STAMP_SN, mStampSn);//  邮票编号 （暂时为空）
-//                params.put(StaticField.STAMP_COUNT, stamp_count);//  邮票数量
+                params.put(StaticField.STAMP_SN, stampsn);//  邮票编号 （暂时为空）
+                params.put(StaticField.STAMP_COUNT, stamp_count);//  邮票数量
                 params.put(StaticField.OP_TYPE, op_type);//  操作类型：SC：删除；JR加入；XG修改
 
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
-
+                MyLog.LogShitou("===========邮票编号", stampsn);
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
                 MyLog.LogShitou("result加入邮集-->:", result);
 
@@ -335,52 +383,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
 
     }
 
-    private void initListener() {
-        mShared.setOnClickListener(this);
-        mBack.setOnClickListener(this);
-        mAddAlbum.setOnClickListener(this);
-        mAddStampLl.setOnClickListener(this);
-        mTopBtn.setOnClickListener(this);
-        home_SV.setOnTouchListener(this);
-        mTopVPI.setOnPageChangeListener(this);
-    }
 
-    @Override
-    public void AgainRequest() {
-
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.base_shared://分享按钮
-               SharedDialog(); //分享弹出Dialog
-                break;
-            case R.id.base_title_back://返回
-                finishWitchAnimation();
-                break;
-            case R.id.stamp_details_add_album://加入邮集
-
-                if (mToken.equals("") || mUser_id.equals("")) {
-                    openActivityWitchAnimation(LoginActivity.class);
-                } else {
-                    UpDateGetInitNet(null, StaticField.JR); // 加入邮集网络请求
-                }
-                break;
-            case R.id.stamp_details_add_stamp_ll://邮集数
-                openActivityWitchAnimation(MyStampActivity.class);
-                break;
-            case R.id.base_top_btn://置顶
-                home_SV.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        home_SV.fullScroll(ScrollView.FOCUS_UP);  // 滚动到顶部
-                    }
-                });
-                mTopBtn.setVisibility(View.GONE);
-                break;
-        }
-    }
 
 
     /**

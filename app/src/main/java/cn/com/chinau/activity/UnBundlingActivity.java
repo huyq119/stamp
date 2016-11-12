@@ -168,6 +168,7 @@ public class UnBundlingActivity extends BaseActivity implements View.OnClickList
         mUnBundlingContent = View.inflate(this, R.layout.activity_cash_card_jiebang, null);
         sp = getSharedPreferences(StaticField.NAME,MODE_APPEND);
         bitmapUtils = BitmapHelper.getBitmapUtils();
+        initView();
         return mUnBundlingContent;
     }
 
@@ -211,6 +212,7 @@ public class UnBundlingActivity extends BaseActivity implements View.OnClickList
 
     }
     private void initListener(){
+        mBack.setOnClickListener(this);
         btn_cimmit.setOnClickListener(this);
         btn_get_code.setOnClickListener(this);
         btn_forget_pw.setOnClickListener(this);
@@ -267,6 +269,13 @@ public class UnBundlingActivity extends BaseActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.base_title_back :// 返回
                 finishWitchAnimation();
+                break;
+            case R.id.btn_cimmit :// 提交
+                String mPassWordLogin = et_cash_pw.getText().toString();
+                String mCodeLogin = et_code.getText().toString();
+                pd = new SendProgressDialog(UnBundlingActivity.this);
+                pd.show();
+                getLoginContext(mPassWordLogin, mCodeLogin);// 获取注册访问网络内容
                 break;
             case R.id.btn_get_code :// 获取验证码
                 // 判断次数访问网络

@@ -2,95 +2,112 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
-
-    <cn.com.chinau.view.SquareView
-        android:id="@+id/mystamp_item_squareView"
-        android:layout_width="173dp"
-        android:layout_height="173dp"
-        android:layout_weight="1"
-        android:background="@drawable/roct_bg"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/mystamp_item_img"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:src="@mipmap/head_icon" />
-    </cn.com.chinau.view.SquareView>
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="173dp"
-        android:layout_height="31dp"
-        android:background="#8a8a8a">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp"
 
-        <TextView
-            android:id="@+id/mystamp_item_name"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+        >
+
+        <cn.com.chinau.view.SquareView
+            android:id="@+id/mystamp_item_squareView"
+            android:layout_width="123dp"
+            android:layout_height="123dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="庚申年"
-            android:textColor="#fff"
-            android:textSize="13sp" />
+            android:background="@drawable/roct_bg"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/mystamp_item_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@mipmap/head_icon" />
+        </cn.com.chinau.view.SquareView>
 
         <LinearLayout
-            android:id="@+id/stamp_NoEdit"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:visibility="gone">
+            android:layout_width="123dp"
+            android:layout_height="31dp"
+            android:background="#8a8a8a">
 
             <TextView
-                android:id="@+id/mystamp_item_nocCunt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/mystamp_count_bg"
-                android:gravity="center"
-                android:text="2"
-                android:textColor="#333"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/stamp_Edit"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/mystamp_item_subtract"
+                android:id="@+id/mystamp_item_name"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="-"
+                android:singleLine="true"
+                android:text="庚申年"
                 android:textColor="#fff"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/mystamp_item_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/mystamp_count_bg"
-                android:gravity="center"
-                android:textColor="#333"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/mystamp_item_add"
+            <LinearLayout
+                android:id="@+id/stamp_NoEdit"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="+"
-                android:textColor="#fff"
-                android:textSize="15sp" />
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/mystamp_item_nocCunt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/mystamp_count_bg"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="#333"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/stamp_Edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/mystamp_item_subtract"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="-"
+                    android:textColor="#fff"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/mystamp_item_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/mystamp_count_bg"
+                    android:gravity="center"
+                    android:textColor="#333"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/mystamp_item_add"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="#fff"
+                    android:textSize="15sp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/mystamp_item_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/stamp_delete"
+        />
+
 </LinearLayout>

@@ -58,9 +58,6 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private ListView mListView;
     private PullToRefreshListView listView;
     private ImageView mBack, mSearch;//返回按钮,搜索
-
-    private String[] mArrTitle = {"新中国邮票", "民国邮票", "解放区邮票", "清代邮票"};
-    private String[] mArr = {"全部", "编年邮票", "新JT邮票", "编号邮票", "文革邮票", "老纪特邮票", "普通邮票"};
     private TextView mTitle;
     // 新中国邮票, 民国邮票, 解放区邮票, 清代邮票
     private RadioButton mNewChinese, mRepublicChina, mLiberatedArea, mQingDynasty;
@@ -276,8 +273,8 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
             mListView.setAdapter(mListAdapter);
             mListAdapter.notifyDataSetChanged();
 
-            //这句是为了防止展示到listView处
-            listView.requestChildFocus(mHeartll, null);
+//            //这句是为了防止展示到listView处
+//            listView.requestChildFocus(mHeartll, null);
             MyLog.LogShitou("num=====3=======", "" + num);
             if (num != 0) {
                 MyLog.LogShitou("===1=====到这一部了吗", mList.size() + "=======" + num);

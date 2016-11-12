@@ -50,6 +50,7 @@ import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.ScreenUtils;
 import cn.com.chinau.utils.SortUtils;
+import cn.com.chinau.utils.StringTimeUtils;
 import cn.com.chinau.utils.ThreadManager;
 import cn.com.chinau.view.CustomViewPager;
 import cn.com.chinau.view.VerticalScrollView;
@@ -58,14 +59,14 @@ import cn.com.chinau.view.VerticalScrollView;
 /**
  * 竞拍详情页面
  */
-public class AuctionDetailActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener,UMShareListener{
+public class AuctionDetailActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener, UMShareListener {
     private View mAuctionDetailTitle, mAuctionDetailContent, contentView;
     private String[] arr = {"邮票信息", "鉴定信息"};
     private List<Fragment> mList;
     private ImageView mBack, mShared, mCollect, mArrows;
     private TextView mTitle, mNumber, mSubtract, mCount, mAdd, mBid, mRecordTv, mBidCount,
             mGoodsName, mTimeTv, mTime, mStatus, mPrivce, mFreight, mFeeRate, mServiceFee, mSellerName,
-            mGoodsSource, mOverTv,tv_cancel;
+            mGoodsSource, mOverTv, tv_cancel;
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
     private Button mTopBtn, mKonwBtn;
@@ -74,11 +75,11 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     private int lastY = 0;
     private int scrollY; // 标记上次滑动位置
     private double intCount;// 每次出价加减的值
-    private String count, mGoods_sn, mGoodsDetail, mVerifyInfo, mToken, mUser_id, mIsFavorite,mPrice,mAuctionRecord;// 获取出价的值
+    private String count, mGoods_sn, mGoodsDetail, mVerifyInfo, mToken, mUser_id, mIsFavorite, mPrice, mAuctionRecord;// 获取出价的值
     private int goods_storage = 1; //出价最低价
     private AuctionRegulationsAgreementDialog auctiondialog; // 协议dialog
-    private boolean bidFlag =false ,addFlag;// 出价标识,加价标识
-    private LinearLayout mRecordLl;
+    private boolean bidFlag = false, addFlag;// 出价标识,加价标识
+    private LinearLayout mRecordLl,mTimeLl;
     private ListView mBidRecordLV;
     private boolean bidRecordFlag = false;// 查看出价记录标识
     private FrameLayout mBidRecordFl;
@@ -88,12 +89,10 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     private TabPageIndicator mIndicator;
     private StampInfoFragment stampInfoFragment;
     private StampPracticeFragment stampPracticeFragment;
-    private String mShare_url,mSharedImage;
+    private String mShare_url, mSharedImage;
     private String mGoods_name;
+    private int mHour ,mMin,mSecond;// 时，分，秒
     private Handler mHandler = new Handler() {
-
-
-
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -110,9 +109,9 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 case StaticField.SUCCESS:// 竞拍详情数据
                     Gson gson = new Gson();
                     StampDetailBean mStampDetailBean = gson.fromJson((String) msg.obj, StampDetailBean.class);
-                   String mCode = mStampDetailBean.getRsp_code();
-                   String mMsg = mStampDetailBean.getRsp_msg();
-                    if (mCode.equals("0000")){
+                    String mCode = mStampDetailBean.getRsp_code();
+                    String mMsg = mStampDetailBean.getRsp_msg();
+                    if (mCode.equals("0000")) {
                         // 赋值头布局显示的图片
                         if (mStampDetailBean.getGoods_images() != null) {
                             String[] mGoods_images = mStampDetailBean.getGoods_images();
@@ -125,7 +124,25 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                             }
 
                             mSharedImage = small_images[0];
-                            MyLog.LogShitou("需要分享显示图片url",mSharedImage);
+                            MyLog.LogShitou("需要分享显示图片url", mSharedImage);
+                        }
+
+                        String mLeft_time = mStampDetailBean.getLeft_time(); // 剩余时间
+
+                        if (mLeft_time != null){
+                            startRun(); //开启倒计时
+                            // 将时间转换成时分秒格式
+                            int times = Integer.valueOf(mLeft_time).intValue(); // 转int类型
+                            String time = StringTimeUtils.calculatTime(times); //  将毫秒转换成时分秒格式
+                            String[] mTimes = time.split(",");
+                            String time2 = mTimes[0];// 获取小时
+                            mHour = Integer.valueOf(time2).intValue(); // 转int类型
+                            String time3 = mTimes[1]; // 分钟
+                            mMin = Integer.valueOf(time3).intValue();
+                            String time4 = mTimes[2]; // 秒
+                            mSecond = Integer.valueOf(time4).intValue();
+
+                            MyLog.LogShitou("=====剩余时间", "=======/"+mHour + "时" + mMin + "分" + mSecond+"秒");
                         }
 
                         mGoods_name = mStampDetailBean.getGoods_name();
@@ -136,16 +153,35 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                         mCount.setText(mPrice);
                         String status = mStampDetailBean.getAuction_status();
                         if (status.equals("DP")) {
+                            mTimeLl.setVisibility(View.VISIBLE);
                             mStatus.setText("未开始");
+                            mTimeTv.setText("距离开拍:");
+                            mBid.setBackgroundColor(getResources().getColor(R.color.gary));
+                            mBid.setTextColor(getResources().getColor(R.color.font));
+                            mSubtract.setEnabled(false);//减号不可点击
+                            mAdd.setEnabled(false);// 加号不可点击
+                            mBid.setEnabled(false);// 出价按钮不可点击
                         } else if (status.equals("JP")) {
+                            mTimeLl.setVisibility(View.VISIBLE);
                             mStatus.setText("竞拍中");
+                            mTimeTv.setText("剩余时间:");
                         } else if (status.equals("JS")) {
+                            mTimeLl.setVisibility(View.GONE);
                             mStatus.setText("已结束");
+
+                            mOverTv.setVisibility(View.VISIBLE);
+                            mOverTv.setText("已结束");
+                            mBid.setBackgroundColor(getResources().getColor(R.color.gary));
+                            mBid.setTextColor(getResources().getColor(R.color.font));
+                            mSubtract.setEnabled(false);//减号不可点击
+                            mAdd.setEnabled(false);// 加号不可点击
+                            mBid.setEnabled(false);// 出价按钮不可点击
+
                         }
                         // 商品状态
                         String mGoodesStatus = mStampDetailBean.getGoods_status();
-                        MyLog.LogShitou("商品状态是多少",mGoodesStatus);
-                        if (mGoodesStatus.equals("0")){
+                        MyLog.LogShitou("商品状态是多少", mGoodesStatus);
+                        if (mGoodesStatus.equals("0")) { // 下架
                             mOverTv.setVisibility(View.VISIBLE);
                             mOverTv.setText("已结束");
                             mBid.setEnabled(false);// 出价按钮不可点击
@@ -196,12 +232,12 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                         mBidList = mStampDetailBean.getOffer_list();// 出价记录list
                         // 循环出User_id是否有自己的id，有addFlag = true;没有addFlag = false;
                         for (int j = 0; j < mBidList.size(); j++) {
-                            String mUser_id =  mBidList.get(j).getUser_id();
+                            String mUser_id = mBidList.get(j).getUser_id();
                             String myUser_id = sp.getString("userId", "");
-                            if (myUser_id.equals(mUser_id)){
+                            if (myUser_id.equals(mUser_id)) {
                                 addFlag = true;// 出价加
                                 bidFlag = true; //
-                                MyLog.LogShitou(mUser_id+"到这了吗1",mUser_id);
+                                MyLog.LogShitou(mUser_id + "到这了吗1", mUser_id);
                             }
                         }
 
@@ -211,8 +247,8 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                             mBidCount.setText("0");
                         }
                         initAdapter();
-                    }else{
-                        MyToast.showShort(AuctionDetailActivity.this,mMsg);
+                    } else {
+                        MyToast.showShort(AuctionDetailActivity.this, mMsg);
                     }
 
                     break;
@@ -237,19 +273,31 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 case StaticField.PRICESUCCESS:// 出价成功
                     Gson gsones = new Gson();
                     BaseBean mBaseBeanees = gsones.fromJson((String) msg.obj, BaseBean.class);
-                    String mRsp_codees = mBaseBeanees.getRsp_code();
-                    if (mRsp_codees.equals("0000")) {
+                    String mRsp_codes1 = mBaseBeanees.getRsp_code();
+                    String mRsp_msg = mBaseBeanees.getRsp_msg();
+                    if (mRsp_codes1.equals("0000")) {
                         initData();// 再次请求网络的更新价格
                         MyToast.showShort(AuctionDetailActivity.this, "出价成功");
+                    } else if (mRsp_codes1.equals("2102")) {
+                        MyToast.showShort(AuctionDetailActivity.this, mRsp_msg);
                     }
+                case 10:
+                    computeTime(); // 倒计时计算
+                    mTime.setText(mHour+"时"+mMin+"分"+mSecond+"秒");
+                    if (mHour==0&&mMin==0&&mSecond==0) {
+//                        mTime.setVisibility(View.GONE);
+                        mTimeLl.setVisibility(View.GONE);
+                    }
+
                     break;
             }
         }
     };
-    private ImageView mWeiXin,mPengYouQuan;
+    private ImageView mWeiXin, mPengYouQuan;
     private SharedDialog dialog;
     private View dialog_finsih;
-
+    private int recLen = 11;
+    private boolean isRun = true;
 
     @Override
     public View CreateTitle() {
@@ -272,11 +320,11 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         mUser_id = sp.getString("userId", "");
         // 获取竞拍页面传过来的的值
         Bundle bundle = getIntent().getExtras();
-        mAuctionRecord = bundle.getString("AuctionRecord","");
-        if (mAuctionRecord.equals("AuctionRecord")){
+        mAuctionRecord = bundle.getString("AuctionRecord", "");
+        if (mAuctionRecord.equals("AuctionRecord")) {
             mGoods_sn = bundle.getString(StaticField.GOODS_SN);
             MyLog.LogShitou("竞拍记录传的编号001~~~~>", mGoods_sn);
-        }else {
+        } else {
             mGoods_sn = bundle.getString(StaticField.GOODS_SN);
             MyLog.LogShitou("竞拍传的编号002~~~~>", mGoods_sn);
         }
@@ -306,6 +354,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         mBid = (TextView) mAuctionDetailContent.findViewById(R.id.auction_bid);
 
         mGoodsName = (TextView) mAuctionDetailContent.findViewById(R.id.auction_detail_goods_name);// 邮票名称
+        mTimeLl  = (LinearLayout) mAuctionDetailContent.findViewById(R.id.auction_detail_time_ll);// 时间ll
         mTimeTv = (TextView) mAuctionDetailContent.findViewById(R.id.auction_detail_time_tv);// 时间类型
         mTime = (TextView) mAuctionDetailContent.findViewById(R.id.auction_detail_time);// 倒计时
         mStatus = (TextView) mAuctionDetailContent.findViewById(R.id.auction_detail_status);// 竞拍状态
@@ -324,6 +373,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
         // 底部的ViewPager
         mViewPager = (CustomViewPager) mAuctionDetailContent.findViewById(R.id.auctiondetail_viewpager);
         mIndicator = (TabPageIndicator) mAuctionDetailContent.findViewById(R.id.auctiondetail_indicator);
+
 
     }
 
@@ -449,6 +499,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 竞拍出价网络请求
+     *
      * @param mPrice 出价价格
      */
     private void AuctionGoodsPriceDate(final String mPrice) {
@@ -555,19 +606,19 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.auction_subtract:// 出价减
                 String counts = mCount.getText().toString().trim(); // 获取出价价格
-                String mCountes = counts.replace(",","");
+                String mCountes = counts.replace(",", "");
                 intCount = Double.parseDouble(mCountes);
-                MyLog.LogShitou("减后当前价是多少",counts+"--"+intCount);
-                if (intCount<=50){
+                MyLog.LogShitou("减后当前价是多少", counts + "--" + intCount);
+                if (intCount <= 50) {
                     intCount--;
                     mCount.setText(String.valueOf(intCount));
-                }else if(intCount>50 && intCount<=100 ){
+                } else if (intCount > 50 && intCount <= 100) {
                     intCount -= 2;
                     mCount.setText(String.valueOf(intCount));
-                }else if(intCount>100 && intCount<=500 ){
+                } else if (intCount > 100 && intCount <= 500) {
                     intCount -= 5;
                     mCount.setText(String.valueOf(intCount));
-                }else if(intCount>500 && intCount<=10000000 ){
+                } else if (intCount > 500 && intCount <= 10000000) {
                     intCount -= 10;
                     mCount.setText(String.valueOf(intCount));
                 }
@@ -580,20 +631,20 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     // 是否是第一次加价
                     if (addFlag) {
                         String countes = mCount.getText().toString().trim(); // 获取出价价格
-                        String mCountess = countes.replace(",","");
-                          intCount =   Double.parseDouble(mCountess);
+                        String mCountess = countes.replace(",", "");
+                        intCount = Double.parseDouble(mCountess);
 //                        intCount =Double.valueOf(counts).doubleValue();
-                        MyLog.LogShitou("增加后的当前价是多少",countes+"--"+intCount);
-                        if (intCount<=50){
+                        MyLog.LogShitou("增加后的当前价是多少", countes + "--" + intCount);
+                        if (intCount <= 50) {
                             intCount++;
                             mCount.setText(String.valueOf(intCount));
-                        }else if(intCount>50 && intCount<=100 ){
+                        } else if (intCount > 50 && intCount <= 100) {
                             intCount += 2;
                             mCount.setText(String.valueOf(intCount));
-                        }else if(intCount>100 && intCount<=500 ){
+                        } else if (intCount > 100 && intCount <= 500) {
                             intCount += 5;
                             mCount.setText(String.valueOf(intCount));
-                        }else if(intCount>500 && intCount<=10000000 ){
+                        } else if (intCount > 500 && intCount <= 10000000) {
                             intCount += 10;
                             mCount.setText(String.valueOf(intCount));
                         }
@@ -612,9 +663,8 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     } else {
                         // 是否是第一次出价
                         if (bidFlag) {
-//                        mBid.setEnabled(false);
+
                             AuctionGoodsPriceDate(String.valueOf(intCount));
-//                        MyToast.showShort(this, "出价成功");
                         } else {
                             DialogAgreement();// 出价协议Dialog
                             bidFlag = true;
@@ -710,7 +760,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     /**
      * 分享弹出Dialog
      */
-    private void SharedDialog(){
+    private void SharedDialog() {
         dialog = new SharedDialog(this);
         Window window = dialog.getWindow();
         window.setGravity(Gravity.BOTTOM);
@@ -754,9 +804,10 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 调起微信分享的方法
+     *
      * @param share_media // 分享类型
      */
-    private void SharedDes(SHARE_MEDIA share_media ){
+    private void SharedDes(SHARE_MEDIA share_media) {
         UMImage image = new UMImage(this.getApplicationContext(), mSharedImage);
         ShareAction shareAction = new ShareAction(this);
         shareAction.withText("微信分享"); // 显示的内容
@@ -771,6 +822,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 友盟微信分享回调 (成功，失败，取消)
+     *
      * @param share_media 分享类型
      */
     @Override
@@ -793,4 +845,46 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
     }
 
 
+
+    /**
+     * 开启倒计时
+     */
+    private void startRun() {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                while (isRun) {
+                    try {
+                        Thread.sleep(1000); // 停止1000ms
+                        Message message = Message.obtain();
+                        message.what = 10;
+                        mHandler.sendMessage(message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 倒计时计算
+     */
+    private void computeTime() {
+        mSecond--;
+        if (mSecond < 0) {
+            mMin--;
+            mSecond = 59;
+            if (mMin < 0) {
+                mMin = 59;
+                mHour--;
+                if (mHour < 0) {
+                    // 倒计时结束
+                    mHour = 23;
+//                    mDay--;
+                }
+            }
+        }
+    }
 }

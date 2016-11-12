@@ -125,6 +125,7 @@ public class ApplyWithdrawActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initListener() {
+        mBack.setOnClickListener(this);
         btn_get_code.setOnClickListener(this);
         btn_cimmit.setOnClickListener(this);
         et_cash_num.addTextChangedListener(this);
@@ -136,6 +137,9 @@ public class ApplyWithdrawActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.base_title_back:// 返回
+              finishWitchAnimation();
+                break;
             case R.id.btn_get_code:// 获取验证码
                 phone = sp.getString("phone", "");
                 getNetData(phone);
