@@ -88,6 +88,17 @@ public class MyStampGridViewBean extends BaseBean {
         public void setStamp_count(String stamp_count) {
             this.stamp_count = stamp_count;
         }
+
+        @Override
+        public String toString() {
+            return "StampList{" +
+                    "stamp_sn='" + stamp_sn + '\'' +
+                    ", stamp_img='" + stamp_img + '\'' +
+                    ", stamp_name='" + stamp_name + '\'' +
+                    ", current_price='" + current_price + '\'' +
+                    ", stamp_count='" + stamp_count + '\'' +
+                    '}';
+        }
     }
 
     @Override

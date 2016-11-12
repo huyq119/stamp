@@ -58,7 +58,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
     private ListView mListView;
     private PullToRefreshListView listView;
     private ImageView mBack, mSearch;//返回按钮,搜索
-    private TextView mTitle;
+    private TextView mTitle,mOederTv;
     // 新中国邮票, 民国邮票, 解放区邮票, 清代邮票
     private RadioButton mNewChinese, mRepublicChina, mLiberatedArea, mQingDynasty;
 
@@ -108,9 +108,15 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     if (mRsp_code1.equals("0000")) {
                         if (num == 0) {
                             ArrayList<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean1.getGoods_list();
-                            AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, goods_list);
-                            mListView.setAdapter(mListAdapter);
-                            mListAdapter.notifyDataSetChanged();
+                            if (goods_list !=null && goods_list.size() != 0){
+                                mListView.setVisibility(View.GONE);
+                                AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, goods_list);
+                                mListView.setAdapter(mListAdapter);
+                                mListAdapter.notifyDataSetChanged();
+                            }else{
+                                GoneOrVisibleView(); // ListView为空时显示的布局
+                            }
+
                         }
                     }
                     break;
@@ -242,7 +248,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         mSynthesize = (Button) mAuctionContent.findViewById(R.id.auction_synthesize);
         mOver = (Button) mAuctionContent.findViewById(R.id.auction_over);
         mCamera = (Button) mAuctionContent.findViewById(R.id.auction_camera);
-
+        mOederTv = (TextView )mAuctionContent.findViewById(R.id.no_order_tv);
         initGestureListener();// 滑动lsitview隐藏导航栏的方法
 
     }
@@ -269,26 +275,39 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         if (mGoodsStampBean != null) {
             List<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean.getGoods_list();
             mList.addAll(goods_list);
-            AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, mList);
-            mListView.setAdapter(mListAdapter);
-            mListAdapter.notifyDataSetChanged();
+           if (mList !=null && mList.size() != 0){
+               listView.setVisibility(View.VISIBLE);
+               AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, mList);
+               mListView.setAdapter(mListAdapter);
+               mListAdapter.notifyDataSetChanged();
 
 //            //这句是为了防止展示到listView处
 //            listView.requestChildFocus(mHeartll, null);
-            MyLog.LogShitou("num=====3=======", "" + num);
-            if (num != 0) {
-                MyLog.LogShitou("===1=====到这一部了吗", mList.size() + "=======" + num);
-                mListView.setSelection(mListAdapter.getCount() - 20);
+               MyLog.LogShitou("num=====3=======", "" + num);
+               if (num != 0) {
+                   MyLog.LogShitou("===1=====到这一部了吗", mList.size() + "=======" + num);
+                   mListView.setSelection(mListAdapter.getCount() - 20);
 
-                //解决调用onRefreshComplete方法去停止刷新操作,无法取消刷新的bug
-                listView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        listView.onRefreshComplete();
-                    }
-                }, 800);
-            }
+                   //解决调用onRefreshComplete方法去停止刷新操作,无法取消刷新的bug
+                   listView.postDelayed(new Runnable() {
+                       @Override
+                       public void run() {
+                           listView.onRefreshComplete();
+                       }
+                   }, 800);
+               }
+           }else{
+               GoneOrVisibleView(); // ListView为空时显示的布局
+           }
+
         }
+    }
+
+    // ListView为空时显示的布局
+    private void GoneOrVisibleView() {
+        mListView.setVisibility(View.GONE);
+        mOederTv.setVisibility(View.VISIBLE); // 无信息控件显示
+        mOederTv.setText("暂无竞拍商品信息~");
     }
 
     /**

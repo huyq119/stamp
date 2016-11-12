@@ -170,6 +170,17 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
 
     }
 
+
+
+   /* @Override
+    public void o() {
+        ShopRequestNet(); //  购物车网络请求
+        MyLog.LogShitou("====1111=======再次回到此Fragment","再次回到此Fragment的操作");
+        super.onResume();
+    }*/
+
+
+
     @Override
     public void AgainRequest() {
 

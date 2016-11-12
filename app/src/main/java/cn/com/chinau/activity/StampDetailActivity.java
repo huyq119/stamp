@@ -92,7 +92,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private View dialog_finsih;
     private boolean addFlag = true; // 点击加入购物车，立即购买的的标识
     private String mPrice;
-    private RadioButton mGoodsDetailBtn,mVerifyInfoBtn;
+    private RadioButton mGoodsDetailBtn, mVerifyInfoBtn;
     private RadioGroup mStampDetailRG;
     private ArrayList<AddShopCartBean> info_list = new ArrayList<>();
     private Handler mHandler = new Handler() {
@@ -111,99 +111,102 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                     break;
                 case StaticField.SUCCESS:// 详情数据
                     Gson gson = new Gson();
-                    StampDetailBean mStampDetailBean = gson.fromJson((String) msg.obj, StampDetailBean.class);
-                    // 赋值头布局显示的图片
-                    if (mStampDetailBean.getGoods_images() != null) {
-                        String[] mGoods_images = mStampDetailBean.getGoods_images();
+                    String data = (String) msg.obj;
+                    if (data != null) {
+                        StampDetailBean mStampDetailBean = gson.fromJson(data, StampDetailBean.class);
+                        // 赋值头布局显示的图片
+                        if (mStampDetailBean.getGoods_images() != null) {
+                            String[] mGoods_images = mStampDetailBean.getGoods_images();
 //                       MyLog.LogShitou("mGoods_images商品图片001-->:", mGoods_images.length + "");
-                        small_images = new String[mGoods_images.length];
-                        big_images = new String[mGoods_images.length];
-                        for (int i = 0; i < mGoods_images.length; i++) {
-                            String[] image = mGoods_images[i].split(",");
-                            small_images[i] = image[0];// 小图集合
-                            big_images[i] = image[1];// 大图集合
-                        }
-                        mSharedImage = small_images[0];
+                            small_images = new String[mGoods_images.length];
+                            big_images = new String[mGoods_images.length];
+                            for (int i = 0; i < mGoods_images.length; i++) {
+                                String[] image = mGoods_images[i].split(",");
+                                small_images[i] = image[0];// 小图集合
+                                big_images[i] = image[1];// 大图集合
+                            }
+                            mSharedImage = small_images[0];
 //                        MyLog.LogShitou("需要分享显示图片url", mSharedImage);
-                    }
+                        }
 
-                    mGoods_name = mStampDetailBean.getGoods_name();
-                    mTitle.setText(mGoods_name);
-                    mGoodsName.setText(mGoods_name);
-                    mPrice = mStampDetailBean.getCurrent_price();
-                    mCurrentPrice.setText("￥" + mPrice);
-                    String mFreights = mStampDetailBean.getFreight();
-                    mFreight.setText("￥" + mFreights);
-                    String mSaleCounts = mStampDetailBean.getSale_count();
-                    mSaleCount.setText(mSaleCounts);
-                    String mFeeRates = mStampDetailBean.getService_fee_rate();
-                    mFeeRate.setText("(" + mFeeRates + "):");
-                    String mFees = mStampDetailBean.getService_fee();
-                    mFee.setText("￥" + mFees);
-                    String mGoodsSources = mStampDetailBean.getGoods_source();
-                    MyLog.LogShitou("邮票类型-->:", mGoodsSources);
-                    if (mGoodsSources.equals("YS")) {
-                        mGoodsSource.setText("邮市");
-                    } else if (mGoodsSources.equals("JP")) {
-                        mGoodsSource.setText("竞拍");
-                    } else if (mGoodsSources.equals("SC_ZY")) {
-                        mGoodsSource.setText("自营");
-                    } else if (mGoodsSources.equals("SC_DSF")) {
-                        mGoodsSource.setText("第三方");
-                    }
-                    String mSellerNames = mStampDetailBean.getSeller_name();
-                    mSellerName.setText(mSellerNames);
-                    String mSellerNos = mStampDetailBean.getSeller_no();
-                    if (mSellerNos.length() < 11) {
-                        mSellerNo.setText(mSellerNos);
-                    } else {
-                        String mPhone = mSellerNos.substring(0, 3) + "****" + mSellerNos.substring(7, mSellerNos.length());
-                        mSellerNo.setText(mPhone);
-                    }
-                    mShare_url = mStampDetailBean.getShare_url();// 分享地址url
+                        mGoods_name = mStampDetailBean.getGoods_name();
+                        mTitle.setText(mGoods_name);
+                        mGoodsName.setText(mGoods_name);
+                        mPrice = mStampDetailBean.getCurrent_price();
+                        mCurrentPrice.setText("￥" + mPrice);
+                        String mFreights = mStampDetailBean.getFreight();
+                        mFreight.setText("￥" + mFreights);
+                        String mSaleCounts = mStampDetailBean.getSale_count();
+                        mSaleCount.setText(mSaleCounts);
+                        String mFeeRates = mStampDetailBean.getService_fee_rate();
+                        mFeeRate.setText("(" + mFeeRates + "):");
+                        String mFees = mStampDetailBean.getService_fee();
+                        mFee.setText("￥" + mFees);
+                        String mGoodsSources = mStampDetailBean.getGoods_source();
+                        MyLog.LogShitou("邮票类型-->:", mGoodsSources);
+                        if (mGoodsSources.equals("YS")) {
+                            mGoodsSource.setText("邮市");
+                        } else if (mGoodsSources.equals("JP")) {
+                            mGoodsSource.setText("竞拍");
+                        } else if (mGoodsSources.equals("SC_ZY")) {
+                            mGoodsSource.setText("自营");
+                        } else if (mGoodsSources.equals("SC_DSF")) {
+                            mGoodsSource.setText("第三方");
+                        }
+                        String mSellerNames = mStampDetailBean.getSeller_name();
+                        mSellerName.setText(mSellerNames);
+                        String mSellerNos = mStampDetailBean.getSeller_no();
+                        if (mSellerNos.length() < 11) {
+                            mSellerNo.setText(mSellerNos);
+                        } else {
+                            String mPhone = mSellerNos.substring(0, 3) + "****" + mSellerNos.substring(7, mSellerNos.length());
+                            mSellerNo.setText(mPhone);
+                        }
+                        mShare_url = mStampDetailBean.getShare_url();// 分享地址url
 
-                    mGoodsDetail = mStampDetailBean.getGoods_detail();  // 邮票信息H5url
-                    mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
+                        mGoodsDetail = mStampDetailBean.getGoods_detail();  // 邮票信息H5url
+                        mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
 
-                    if (mGoodsDetail != null && mVerifyInfo != null){
-                        mStampInfo_wb.loadUrl(mGoodsDetail);
-                        mStampPractice_wb.loadUrl(mVerifyInfo);
-                    }
-                    MyLog.LogShitou("邮票信息的H5url", mGoodsDetail );
-                    MyLog.LogShitou("鉴定信息的H5url", mVerifyInfo );
+                        if (mGoodsDetail != null && mVerifyInfo != null) {
+                            mStampInfo_wb.loadUrl(mGoodsDetail);
+                            mStampPractice_wb.loadUrl(mVerifyInfo);
+                        }
+                        MyLog.LogShitou("邮票信息的H5url", mGoodsDetail);
+                        MyLog.LogShitou("鉴定信息的H5url", mVerifyInfo);
 
-                    mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
+                        mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
 //                    MyLog.LogShitou("商品收藏状态", mIsFavorite);
-                    if (mIsFavorite.equals("0")) { // 未收藏
-                        mCollect.setImageResource(R.mipmap.collection);
-                    } else if (mIsFavorite.equals("1")) { // 已收藏
-                        mCollect.setImageResource(R.mipmap.collections);
-                    }
+                        if (mIsFavorite.equals("0")) { // 未收藏
+                            mCollect.setImageResource(R.mipmap.collection);
+                        } else if (mIsFavorite.equals("1")) { // 已收藏
+                            mCollect.setImageResource(R.mipmap.collections);
+                        }
 
-                    mCartGoodsCount = mStampDetailBean.getCart_goods_count();// 购物车里的商品数量
+                        mCartGoodsCount = mStampDetailBean.getCart_goods_count();// 购物车里的商品数量
 
-                    MyLog.LogShitou("商品数量-->:", mCartGoodsCount);
-                    if (!mCartGoodsCount.equals("0") && !mCartGoodsCount.equals("")) {
-                        mShoppingCount.setVisibility(View.VISIBLE);
-                        mShoppingCount.setText("+" + mCartGoodsCount);
+                        MyLog.LogShitou("商品数量-->:", mCartGoodsCount);
+                        if (!mCartGoodsCount.equals("0") && !mCartGoodsCount.equals("")) {
+                            mShoppingCount.setVisibility(View.VISIBLE);
+                            mShoppingCount.setText("+" + mCartGoodsCount);
 //                        MyLog.LogShitou("商品数量---002>", "走了吗。。。。。。。。。。");
-                    }
+                        }
 
-                    String mGoodsStatuss = mStampDetailBean.getGoods_status();// 商品状态
-                    MyLog.LogShitou("商品状态-->:", mGoodsStatuss);
-                    if (mGoodsStatuss.equals("0")) {
-                        mGoodsStatus.setVisibility(View.VISIBLE);
-                        mGoodsStatus.setText("已下架");
-                        // 加入购物车，立即购买按钮背景，字体置灰，不可点击
-                        mAddShoppingCart.setBackgroundColor(getResources().getColor(R.color.gary));
-                        mBuyNow.setBackgroundColor(getResources().getColor(R.color.gary));
-                        mAddShoppingCart.setTextColor(getResources().getColor(R.color.font));
-                        mBuyNow.setTextColor(getResources().getColor(R.color.font));
-                        mAddShoppingCart.setEnabled(false);
-                        mBuyNow.setEnabled(false);
-                    }
+                        String mGoodsStatuss = mStampDetailBean.getGoods_status();// 商品状态
+                        MyLog.LogShitou("商品状态-->:", mGoodsStatuss);
+                        if (mGoodsStatuss.equals("0")) {
+                            mGoodsStatus.setVisibility(View.VISIBLE);
+                            mGoodsStatus.setText("已下架");
+                            // 加入购物车，立即购买按钮背景，字体置灰，不可点击
+                            mAddShoppingCart.setBackgroundColor(getResources().getColor(R.color.gary));
+                            mBuyNow.setBackgroundColor(getResources().getColor(R.color.gary));
+                            mAddShoppingCart.setTextColor(getResources().getColor(R.color.font));
+                            mBuyNow.setTextColor(getResources().getColor(R.color.font));
+                            mAddShoppingCart.setEnabled(false);
+                            mBuyNow.setEnabled(false);
+                        }
 
-                    initAdapter();
+                        initAdapter();
+                    }
                     break;
                 case StaticField.ADDSUCCESS:// 收藏成功
                     Gson gsons = new Gson();
@@ -260,11 +263,11 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
             }
         }
     };
-    private View view1,view2,vStampInfo,vStampPractice;
+    private View view1, view2, vStampInfo, vStampPractice;
     private ArrayList<View> vList;
-    private WebView mStampInfo_wb,mStampPractice_wb;
+    private WebView mStampInfo_wb, mStampPractice_wb;
     private int mPosition;
-    private int position =0;
+    private int position = 0;
 
     @Override
     public View CreateTitle() {
@@ -374,7 +377,6 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
 //        mIndicator.setViewPager(mViewPager);
 
 
-
     }
 
 
@@ -393,9 +395,11 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
             }
+
             @Override
             public void onPageSelected(int position) {
                 mPosition = position;
@@ -421,7 +425,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         mStampDetailRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.StampDetail_GoodsDetail_Btn:// 邮票信息
                         position = 0;
                         view1.setBackgroundResource(R.color.red_font);
@@ -549,7 +553,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
                 MyLog.LogShitou("result邮市详情~~~~>", result);
-                if (result.equals("-1") | result.equals("-2") ) {
+                if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
                 Message msg = mHandler.obtainMessage();

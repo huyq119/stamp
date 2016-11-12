@@ -150,6 +150,8 @@
         <activity android:name="cn.com.chinau.activity.SuccessApplyForRefuseActivity" />
         <activity android:name="cn.com.chinau.activity.LookOrderDetailRefuseActivity" />
         <activity android:name="cn.com.chinau.activity.BigPhotoActivity" />
+        <!--支付成功页面-->
+        <activity android:name="cn.com.chinau.activity.OrderBuySuccessActivity" />
 
 
 

@@ -45,7 +45,7 @@ import static cn.com.chinau.StaticField.QB;
 public class OrdersGoodsActivity extends BaseActivity {
 
     private View mOrderTitle, mOrderContent;
-    private TextView mTitle;
+    private TextView mTitle,mOederTv1,mOederTv2,mOederTv3,mOederTv4,mOederTv5;
     private ImageView mBack;
     private String tag;
     private OrderGoodsViewPager mViewPager;
@@ -78,7 +78,6 @@ public class OrdersGoodsActivity extends BaseActivity {
         mOrderContent = View.inflate(this, R.layout.activity_order_goods, null);
         sp = getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
         initViews();
-//        initDatas();
         initAdapter();
         initstartview();
         return mOrderContent;
@@ -127,17 +126,16 @@ public class OrdersGoodsActivity extends BaseActivity {
         mReceiving = (RadioButton) mOrderContent.findViewById(R.id.RBtn_Receiving);
         mComplete = (RadioButton) mOrderContent.findViewById(R.id.RBtn_Complete);
         mRefuse = (RadioButton) mOrderContent.findViewById(R.id.RBtn_Refuse);
+
+
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finishWitchAnimation();
             }
         });
-    }
 
-//    private void initDatas() {
-//        GetInitNet(num, StaticField.QB); // 商品订单列表网络请求
-//    }
+    }
 
     /**
      * 创建出ViewPager所需的ExpandableListView
@@ -163,7 +161,11 @@ public class OrdersGoodsActivity extends BaseActivity {
         receiving_edListview = (ExpandableListView) v3.findViewById(R.id.all_expand_ListView);
         complete_edListview = (ExpandableListView) v4.findViewById(R.id.all_expand_ListView);
         refuse_edListview = (ExpandableListView) v5.findViewById(R.id.all_expand_ListView);
-
+        mOederTv1 = (TextView )v1.findViewById(R.id.no_order_tv);
+        mOederTv2 = (TextView )v2.findViewById(R.id.no_order_tv);
+        mOederTv3 = (TextView )v3.findViewById(R.id.no_order_tv);
+        mOederTv4 = (TextView )v4.findViewById(R.id.no_order_tv);
+        mOederTv5 = (TextView )v5.findViewById(R.id.no_order_tv);
     }
 
     public void initListener() {
@@ -475,12 +477,19 @@ public class OrdersGoodsActivity extends BaseActivity {
                     String code = mOrderContentBean.getRsp_code();
                     if (code.equals("0000")) {
                         order_list = mOrderContentBean.getOrder_list();
-                        // (全部)适配器
-                        allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
-                        all_edListview.setAdapter(allLsitViewAdapter);
-                        allLsitViewAdapter.notifyDataSetChanged();
-                        for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
-                            all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        if (order_list != null && order_list.size() != 0) {
+                            // (全部)适配器
+                            all_edListview.setVisibility(View.VISIBLE);
+                            allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
+                            all_edListview.setAdapter(allLsitViewAdapter);
+                            allLsitViewAdapter.notifyDataSetChanged();
+                            for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
+                                all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                            }
+                        }else {
+                            all_edListview.setVisibility(View.GONE);
+                            mOederTv1.setVisibility(View.VISIBLE); // 无信息控件显示
+                            mOederTv1.setText("暂无订单信息~");
                         }
                         initListener();
                     }
@@ -491,12 +500,19 @@ public class OrdersGoodsActivity extends BaseActivity {
                     String code1 = mOrderContentBean1.getRsp_code();
                     if (code1.equals("0000")) {
                         order_list = mOrderContentBean1.getOrder_list();
-                        // （待付款，待收货，已完成）适配器
-                        allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
-                        payment_edListview.setAdapter(allLsitViewAdapter);
-                        allLsitViewAdapter.notifyDataSetChanged();
-                        for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
-                            payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        if (order_list != null && order_list.size() != 0) {
+                            // （待付款，待收货，已完成）适配器
+                            payment_edListview.setVisibility(View.VISIBLE);
+                            allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
+                            payment_edListview.setAdapter(allLsitViewAdapter);
+                            allLsitViewAdapter.notifyDataSetChanged();
+                            for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
+                                payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                            }
+                        }else {
+                            payment_edListview.setVisibility(View.GONE);
+                            mOederTv2.setVisibility(View.VISIBLE); // 无信息控件显示
+                            mOederTv2.setText("暂无订单信息~");
                         }
                         initListener();
                     }
@@ -507,12 +523,19 @@ public class OrdersGoodsActivity extends BaseActivity {
                     String code2 = mOrderContentBean2.getRsp_code();
                     if (code2.equals("0000")) {
                         order_list = mOrderContentBean2.getOrder_list();
-                        // （待付款，待收货，已完成）适配器
-                        allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
-                        receiving_edListview.setAdapter(allLsitViewAdapter);
-                        allLsitViewAdapter.notifyDataSetChanged();
-                        for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
-                            receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        if (order_list != null && order_list.size() != 0) {
+                            // （待付款，待收货，已完成）适配器
+                            receiving_edListview.setVisibility(View.VISIBLE);
+                            allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
+                            receiving_edListview.setAdapter(allLsitViewAdapter);
+                            allLsitViewAdapter.notifyDataSetChanged();
+                            for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
+                                receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                            }
+                        }else {
+                            receiving_edListview.setVisibility(View.GONE);
+                            mOederTv3.setVisibility(View.VISIBLE); // 无信息控件显示
+                            mOederTv3.setText("暂无订单信息~");
                         }
                         initListener();
                     }
@@ -523,13 +546,19 @@ public class OrdersGoodsActivity extends BaseActivity {
                     String code3 = mOrderContentBean3.getRsp_code();
                     if (code3.equals("0000")) {
                         order_list = mOrderContentBean3.getOrder_list();
-//                        initAdapter();
-                        // （待付款，待收货，已完成）适配器
-                        allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
-                        complete_edListview.setAdapter(allLsitViewAdapter);
-                        allLsitViewAdapter.notifyDataSetChanged();
-                        for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
-                            complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        if (order_list != null && order_list.size() != 0) {
+                            // （待付款，待收货，已完成）适配器
+                            complete_edListview.setVisibility(View.VISIBLE);
+                            allLsitViewAdapter = new OrderAllLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list);// 全部适配器
+                            complete_edListview.setAdapter(allLsitViewAdapter);
+                            allLsitViewAdapter.notifyDataSetChanged();
+                            for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
+                                complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                            }
+                        }else{
+                            complete_edListview.setVisibility(View.GONE);
+                            mOederTv4.setVisibility(View.VISIBLE); // 无信息控件显示
+                            mOederTv4.setText("暂无订单信息~");
                         }
                         initListener();
                     }
@@ -540,13 +569,19 @@ public class OrdersGoodsActivity extends BaseActivity {
                     String code4 = mOrderContentBean4.getRsp_code();
                     if (code4.equals("0000")) {
                         order_list1 = mOrderContentBean4.getOrder_list();
-//                        initAdapter();
-                        // 退货/ 退款适配器
-                        refuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list1);
-                        refuse_edListview.setAdapter(refuseLsitViewAdapter);
-                        refuseLsitViewAdapter.notifyDataSetChanged();
-                        for (int i = 0; i < refuseLsitViewAdapter.getGroupCount(); i++) {
-                            refuse_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                        if (order_list1 != null && order_list1.size() != 0) {
+                            // 退货/ 退款适配器
+                            refuse_edListview.setVisibility(View.VISIBLE);
+                            refuseLsitViewAdapter = new OrderRefuseLsitViewAdapter(OrdersGoodsActivity.this, mBitmap, order_list1);
+                            refuse_edListview.setAdapter(refuseLsitViewAdapter);
+                            refuseLsitViewAdapter.notifyDataSetChanged();
+                            for (int i = 0; i < refuseLsitViewAdapter.getGroupCount(); i++) {
+                                refuse_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
+                            }
+                        }else{
+                            refuse_edListview.setVisibility(View.GONE);
+                            mOederTv5.setVisibility(View.VISIBLE); // 无信息控件显示
+                            mOederTv5.setText("暂无订单信息~");
                         }
                         initListener();
                     }

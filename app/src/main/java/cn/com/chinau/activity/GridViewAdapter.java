@@ -27,10 +27,12 @@ import cn.com.chinau.dialog.ProgressDialog;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
+import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 
-import static com.umeng.socialize.utils.DeviceConfig.context;
+import static cn.com.chinau.StaticField.OFFSETNUM;
+import static java.lang.String.valueOf;
 
 /**
  * 我的邮集中GridView的适配器
@@ -52,7 +54,8 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
     private ProgressDialog prodialog;
     private TextView Title;
     private Button dialog_button_cancel,dialog_button_ok;
-
+    private String mStamp_sn;
+    private DataList mDataList;
     public GridViewAdapter(Context context, List<MyStampGridViewBean.StampList> mList, int index, BitmapUtils bitmap, boolean flag) {
         this.mList = mList;
         this.index = index;
@@ -101,12 +104,14 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
 
         //这里根据传入的flag进行判断是否进入编辑模式
         MyLog.e(flag + "");
-        if (!flag) {//true代表编辑模式
+        if (!flag) {//true代表非编辑模式
             holder.mEdit.setVisibility(View.GONE);
             holder.mNotEdit.setVisibility(View.VISIBLE);
-        } else {//false代表非编辑模式
+            holder.mDelete.setVisibility(View.GONE);
+        } else {//false代表编辑模式
             holder.mEdit.setVisibility(View.VISIBLE);
             holder.mNotEdit.setVisibility(View.GONE);
+            holder.mDelete.setVisibility(View.VISIBLE);
         }
 
 
@@ -124,10 +129,13 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
         holder.mAdd.setOnClickListener(this);
         holder.mSubtract.setTag(pos);
         holder.mSubtract.setOnClickListener(this);
+
         String mStampSn = mList.get(pos).getStamp_sn();
+        MyLog.LogShitou("==000000000=====获取邮集编号",mStampSn);
         holder.mDelete.setTag(mStampSn);
-        holder.mDelete.setTag(pos);
+//        holder.mDelete.setTag(pos);
         holder.mDelete.setOnClickListener(this);
+
         return convertView;
     }
 
@@ -140,7 +148,7 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
 
     // 获取标识，用户ID
     private void GetTokenUserID(){
-        SharedPreferences sp = context.getSharedPreferences(StaticField.NAME,Context.MODE_PRIVATE);
+        SharedPreferences sp = mLayoutInflater.getContext().getSharedPreferences(StaticField.NAME,mLayoutInflater.getContext().MODE_PRIVATE);
         mToken = sp.getString("token", "");
         mUser_id = sp.getString("userId", "");
     }
@@ -150,7 +158,7 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
             case R.id.mystamp_item_add://添加
                 MyStampGridViewBean.StampList stampAdd = mList.get((int) v.getTag());
                 String addCount = stampAdd.getStamp_count();
-                String newAddCount = String.valueOf(Integer.valueOf(addCount) + 1);
+                String newAddCount = valueOf(Integer.valueOf(addCount) + 1);
                 mList.get((int) v.getTag()).setStamp_count(newAddCount);
                 notifyDataSetChanged();
                 break;
@@ -160,12 +168,14 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
                 int newNum = Integer.valueOf(subtractCount) - 1;
                 if (newNum<0)
                     return;
-                String newSubtractCount = String.valueOf(newNum);
+                String newSubtractCount = valueOf(newNum);
                 mList.get((int) v.getTag()).setStamp_count(newSubtractCount);
                 notifyDataSetChanged();
                 break;
             case R.id.mystamp_item_delete://删除
-//                DeleteDialog();
+                mStamp_sn =  String.valueOf(v.getTag());
+//                MyLog.LogShitou("===点击删除获取的邮集编号", "===stampsn="+mStamp_sn);
+                DeleteDialog();
                 break;
         }
     }
@@ -179,17 +189,17 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
             @Override
             public void run() {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put(StaticField.SERVICE_TYPE, StaticField.MODIFY);// 接口名称
+                params.put(StaticField.SERVICE_TYPE, StaticField.MODIFY);// 修改邮集接口名称
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
                 params.put(StaticField.STAMP_SN, stampsn);//  邮票编号
                 params.put(StaticField.OP_TYPE, op_type);//  操作类型：SC：删除；JR加入；XG修改
-                if(op_type.equals("SC")){
-                    params.put(StaticField.STAMP_COUNT, stamp_count);//  邮票数量
-                }
-                params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 当前记录索引
-                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
 
+                if(!op_type.equals("SC")){
+                    params.put(StaticField.STAMP_COUNT, stamp_count);//  邮票数量
+                    MyLog.LogShitou(op_type+"/======修改邮集数量", stamp_count);
+                }
+                MyLog.LogShitou("===邮集编号", "===stampsn="+stampsn);
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
@@ -214,14 +224,29 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-
             switch (msg.what) {
                 case  StaticField.SUCCESS://修改邮集
                     Gson gson = new Gson();
                     BaseBean mBaseBean = gson.fromJson((String) msg.obj, BaseBean.class);
                     String code = mBaseBean.getRsp_code();
+                    String msg1 = mBaseBean.getRsp_msg();
                     if (code.equals("0000")){
-
+                        GetInitNet(num); // 我的邮集列表网络请求
+                    }else if (code.equals("1002")){
+                    MyToast.showShort(mLayoutInflater.getContext(),msg1);
+                    }
+                    break;
+                case  StaticField.CG_SUCCESS://邮集list
+                    String msge = (String) msg.obj;
+                    Gson gson1 = new Gson();
+                    MyStampGridViewBean mOrderSweepBean = gson1.fromJson(msge, MyStampGridViewBean.class);
+                    String mRsp_code = mOrderSweepBean.getRsp_code();
+                    if (mRsp_code.equals("0000")) {
+                        mList = mOrderSweepBean.getStamp_list();
+                      String mTotalPrice=  mOrderSweepBean.getTotal_amount();// 总资产
+                        MyLog.LogShitou("/======删除后邮集条数", mList.size()+"");
+                        mDataList.GetDataList(mList,mTotalPrice);// 定义接口调用
+//                        MyLog.LogShitou("/======删除邮集条数", mList.size()+"");
                     }
                     break;
                 default:
@@ -235,7 +260,7 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
      */
 
     private void DeleteDialog() {
-        prodialog = new ProgressDialog(context);
+        prodialog = new ProgressDialog(mLayoutInflater.getContext());
         prodialog.show();
         Title = (TextView) prodialog.findViewById(R.id.title_tv);
         Title.setText("确定要删除吗？");
@@ -256,8 +281,54 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
             @Override
             public void onClick(View view) {
                 GetTokenUserID();
-                UpDateGetInitNet(null,StaticField.SC,String.valueOf(view.getTag())); //加入邮集网络请求
+                UpDateGetInitNet(null,StaticField.SC, mStamp_sn); //加入邮集网络请求
                 prodialog.dismiss();
+            }
+        });
+    }
+
+
+    // 定义一个接口给Fragment,删除成功，通知list刷新
+    public interface DataList{
+        void GetDataList( List<MyStampGridViewBean.StampList> mDataList,String str);
+    }
+
+    public void SetDataList (DataList dataList) {
+        this.mDataList = dataList;
+    }
+
+
+    /**
+     * 我的邮集列表网络请求
+     *
+     * @param num 初始化索引
+     */
+    private void GetInitNet(final int num) {
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.ALBUMLIST);// 接口名称
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 当前记录索引
+                params.put(StaticField.OFFSET, String.valueOf(OFFSETNUM)); // 步长(item条目数)
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+               String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("适配器我的邮集", result);
+
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+                Message msg = mHandler.obtainMessage();
+                msg.what = StaticField.CG_SUCCESS;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+
             }
         });
     }

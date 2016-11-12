@@ -61,16 +61,16 @@ public class ScanOrderBuyDetailActivity extends BaseActivity implements View.OnC
                             mOrderStatus.setText("审核中");
                             mLlOrderExpressName.setVisibility(View.VISIBLE);
                             mLlOrderExpressNum.setVisibility(View.VISIBLE);
-                            mOrderExpressName.setText(mOrderBuyDetailBean.getBack_express_comp()); // 快递公司
-                            mOrderExpressNum.setText(mOrderBuyDetailBean.getBack_express_no()); // 快递单号
+                            mOrderExpressName.setText(mOrderBuyDetailBean.getExpress_comp()); // 快递公司
+                            mOrderExpressNum.setText(mOrderBuyDetailBean.getExpress_no()); // 快递单号
                         } else if (mStatus.equals("FINISH")) { // 已完成
                             mOrderStatus.setText("已完成");
                             mLlOrderExpressName.setVisibility(View.VISIBLE);
                             mLlOrderExpressNum.setVisibility(View.VISIBLE);
                             mOrderStatusDes.setVisibility(View.VISIBLE);
                             mOrderStatusDes.setText("回购款项请到余额中查收");
-                            mOrderExpressName.setText(mOrderBuyDetailBean.getBack_express_comp()); // 快递公司
-                            mOrderExpressNum.setText(mOrderBuyDetailBean.getBack_express_no()); // 快递单号
+                            mOrderExpressName.setText(mOrderBuyDetailBean.getExpress_comp()); // 快递公司
+                            mOrderExpressNum.setText(mOrderBuyDetailBean.getExpress_no()); // 快递单号
                         } else if (mStatus.equals("REFUSE")) { //订单驳回
                             mOrderStatus.setText("订单驳回");
                             mLlOrderExpressName.setVisibility(View.VISIBLE);
@@ -80,6 +80,9 @@ public class ScanOrderBuyDetailActivity extends BaseActivity implements View.OnC
                             mOrderStatusDes.setText("邮品品相破损严重不予进行回购");
                             mOrderExpressName.setText(mOrderBuyDetailBean.getBack_express_comp()); // 快递公司
                             mOrderExpressNum.setText(mOrderBuyDetailBean.getBack_express_no()); // 快递单号
+                            mOrderExpressNameBack.setText(mOrderBuyDetailBean.getBack_express_comp());// 回寄快递公司
+                            mOrderExpressNumBack.setText(mOrderBuyDetailBean.getBack_express_no()); // 回寄快递单号
+
                         }
                         mOrderSn.setText(mOrderBuyDetailBean.getOrder_sn()); // 订单编号
                         mOrderTime.setText(mOrderBuyDetailBean.getCreate_time()); // 订单创建时间

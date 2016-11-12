@@ -20,8 +20,6 @@ import cn.com.chinau.R;
 
 public class ProgressDialog extends Dialog{
 
-
-
 	public ProgressDialog(Context context) {
 		super(context, R.style.exitdialog);
 	}

@@ -509,6 +509,8 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                         context.startActivity(intent);
                         ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                     } else {
+
+
                         MyToast.showShort(context, "您还没有选择商品哦");
                     }
 

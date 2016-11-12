@@ -2,6 +2,7 @@ package cn.com.chinau.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -61,7 +62,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     //    private CustomExpandableListView mListView;//底部列表展示
     private ListView mListView;//底部列表展示
     private ImageView mBack, mPayImg;
-    private TextView mTitle, mOkPay, mDistributionTv, mDistributionPrice, mPayNmme, mFeeRate, mAddressName,
+    private TextView mTitle, mOkPay, mDistributionTv, mDistributionPrice, mPayNmme, mFeeRate,mFee, mAddressName,
             mAddressMobile, mAddressDetail, mNoAddressAdd, mTotalPrice, mGoodsCount;
 
     private LinearLayout mAddress1;
@@ -96,7 +97,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     //    private String groupSet;
     private HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
     private String groupSet1;
-
+    private String mRequestId;
+    private String mPayUrl;
     @Override
     public View CreateTitle() {
         mFirmOrderTitle = View.inflate(this, R.layout.base_back_title, null);
@@ -153,6 +155,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         mPayImg = (ImageView) mFirmOrderContent.findViewById(R.id.firmorder_pay_img);
         mPayNmme = (TextView) mFirmOrderContent.findViewById(R.id.firmorder_pay_name);
         mFeeRate = (TextView) mFirmOrderContent.findViewById(R.id.firmOrder_fee_rate);// 服务费率
+        mFee = (TextView) mFirmOrderContent.findViewById(R.id.firmOrder_fee);// 服务费
         mTotalPrice = (TextView) mFirmOrderContent.findViewById(R.id.totl_price);// 价钱
         mTotalPrice.setText("￥" + mPrice);// 赋值总价钱
         mGoodsCount = (TextView) mFirmOrderContent.findViewById(R.id.goods_count);// 数量
@@ -184,8 +187,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //        returnStr="{"+returnStr+"}}";
 //        MyLog.LogShitou("传过来选中的编号+数量", returnStr);
 
+        groupSet = MyApplication.getGroupSet();// 传过来的集合数据
         if (groupSet != null) {
-            groupSet = MyApplication.getGroupSet();// 传过来的集合数据
             for (HashMap.Entry<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
 //            key = entry.getKey();
                 Set<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
@@ -326,7 +329,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             case R.id.firmOrder_ok_pay://确认并付款
                 mExCompName = mDistributionTv.getText().toString().trim();
                 payNmae = mPayNmme.getText().toString().trim();
-                if (mAddressId !=null && mNoAddressId !=null){
+                MyLog.LogShitou("===========地址id",mAddressId+"=="+mNoAddressId);
+                if (mAddressId !=null | mNoAddressId !=null){
                     OrderPayNet(); // 订单支付网络请求
                 }else{
                    MyToast.showShort(FirmOrderActivity.this,"订单信息异常");
@@ -361,33 +365,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         }
     };
 
-    /**
-     * 配送方式的内部监听
-     */
-    /*private View.OnClickListener mDistributionWindowListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            mDistributionPopupWindow.dismiss();
-            switch (view.getId()) {
-                case R.id.EMS_click_image://Ems的点击按钮
-                    ImageView img =  (ImageView) view;
-                    ImageView img2 =  (ImageView) view;
-                    img.setImageResource(R.mipmap.circle_select_click);
-                    img2.setImageResource(R.mipmap.circle_select);
-                    mDistributionTv.setText(express_comp.get(0).getValue());
-                    mDistributionPrice.setText("￥"+express_fee.get(0).getValue());
-                    break;
-                case R.id.SF_click_image://顺丰的点击按钮
-                    ImageView img0 =  (ImageView) view;
-                    ImageView img1 =  (ImageView) view;
-                    img0.setImageResource(R.mipmap.circle_select_click);
-                    img1.setImageResource(R.mipmap.circle_select);
-                    mDistributionTv.setText( express_comp.get(1).getValue());
-                    mDistributionPrice.setText("￥"+express_fee.get(1).getValue());
-                    break;
-            }
-        }
-    };*/
 
 
     /**
@@ -495,9 +472,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 
     private Handler mHandler = new Handler() {
 
-        private String mPayUrl;
-        private IWXAPI api;
-
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -509,7 +483,9 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     String mMsges = mFirmOrderBean.getRsp_msg();
                     if (mCode.equals("0000")) {
                         String mFeeRates = mFirmOrderBean.getService_fee_rate();// 服务费率
-                        mFeeRate.setText("￥" + mFeeRates);
+
+                        mFeeRate.setText("服务费("+mFeeRates+")");
+                        mFee.setText("￥" +mFirmOrderBean.getService_fee());
                         // 快递公司
                         express_comp = mFirmOrderBean.getExpress_comp();
                         mDistributionTv.setText(express_comp.get(0).getValue());
@@ -608,7 +584,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     String mMsgs = mOrderPayBeans.getRsp_msg();
                     if (mCodess.equals("0000")) {
                         mPayUrl = mOrderPayBeans.getPay_url();  // 支付请求地址
-//                        String mRequestId = mOrderPayBeans.getRequest_id();// 交易订单号
+                         mRequestId = mOrderPayBeans.getRequest_id();// 交易订单号
 //                        String mPayRequestId = mOrderPayBeans.getPay_request_id();// 平台支付请求号
                         MyLog.LogShitou("mPayUrl+支付宝请求需要的串", mPayUrl);
                         // 发起支付宝支付
@@ -642,7 +618,13 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        Toast.makeText(FirmOrderActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(FirmOrderActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                        String mGoods_sn = info_list.get(0).getGoods_sn();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(StaticField.GOODS_SN,mGoods_sn);
+                        bundle.putString(StaticField.ORDER_SN,mRequestId);
+                        openActivityWitchAnimation(OrderBuySuccessActivity.class,bundle);
+                        finish();
                     } else {
                         // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。

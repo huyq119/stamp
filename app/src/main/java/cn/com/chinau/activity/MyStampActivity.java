@@ -42,7 +42,7 @@ import cn.com.chinau.utils.ThreadManager;
 /**
  * 我的邮集页面
  */
-public class MyStampActivity extends BaseActivity implements View.OnClickListener, UMShareListener {
+public class MyStampActivity extends BaseActivity implements View.OnClickListener, UMShareListener,GridViewAdapter.DataList {
 
     private View mMyStampTitle, mMyStampContent;
     private ImageView mBack, mMore,mWeiXin,mPengYouQuan;
@@ -70,9 +70,8 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     private String mShare_url;
     private GridView grid;
     private String mTotal;
-
+    private final static int OFFSETNUM = 1000;// 邮集显示的条数
     private Handler mHandler = new Handler() {
-
 
         @Override
         public void handleMessage(Message msg) {
@@ -96,7 +95,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                             //获取Activity的LayoutInflater
                             layoutInflater = getLayoutInflater();
 
-                            //计算每页最大显示个数，2行4列
+                            //计算每页最大显示个数，2列4行
                             pageSize = getResources().getInteger(R.integer.PagerCount) * 2;
                             //总共的页数 总数/每页数量，并取整。
                             pageCount = (int) Math.ceil(mList.size() * 1.0 / pageSize);
@@ -107,12 +106,16 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                                 //这里面传的是GridView的布局
                                 grid = (GridView) layoutInflater.inflate(R.layout.item_viewpager, myStampViewPager, false);
                                 //给GridView设置Adapter，传入index
-                                grid.setAdapter(new GridViewAdapter(MyStampActivity.this, mList, i, mBitmap, flag));
+                                GridViewAdapter mAdapter = new GridViewAdapter(MyStampActivity.this, mList, i, mBitmap, flag);
+                                grid.setAdapter(mAdapter);
                                 //加入到ViewPager的View数据集中
                                 mViewPagerList.add(grid);
                             }
 
+
                             initAdapter();
+
+
                             // 条目监听事件
                             grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
@@ -120,6 +123,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                                     String mStamp_sn = mList.get(position).getStamp_sn();
                                     Bundle bundle = new Bundle();
                                     bundle.putString(StaticField.STAMPDETAIL_SN,mStamp_sn);
+                                    MyLog.LogShitou("===========mStamp_sn邮集编号",mStamp_sn);
                                     openActivityWitchAnimation(StampTapDetailActivity.class,bundle);
                                 }
                             });
@@ -131,6 +135,9 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     };
     private TextView mContentTotal;
     private View dialog_finsih;
+    private GridViewAdapter adapter;
+    private String mToalPrice;
+    private int mEditFlag;
 
     @Override
     public View CreateTitle() {
@@ -153,6 +160,35 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
 
     }
 
+    // 适配器的回调回来的通知
+    @Override
+    public void GetDataList(List<MyStampGridViewBean.StampList> mDataList,String str) {
+       final List<MyStampGridViewBean.StampList> dataList = mDataList;
+       String mToalPrice =  str;
+        mContentTotal.setText("￥" + mToalPrice);
+       MyLog.LogShitou("dataList回调回来的数据",dataList.toString());
+        if(dataList != null && dataList.size() != 0){
+
+            //使用For循环创建页面,并添加到集合中去
+            for (int i = 0; i < pageCount; i++) {
+                //每个页面都是inflate出一个新实例
+                //这里面传的是GridView的布局
+                GridView grid = (GridView) layoutInflater.inflate(R.layout.item_viewpager, myStampViewPager, false);
+                //给GridView设置Adapter，传入index
+                adapter = new GridViewAdapter(this, mList, i, mBitmap, flag);
+                grid.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                //加入到ViewPager的View数据集中
+                mViewPagerList.add(grid);
+            }
+            adapter.SetDataList(MyStampActivity.this);// 回调刷新邮集数据
+            myStampViewPager.setAdapter(new MyStampViewPagerAdapter(mViewPagerList));
+        }
+
+
+
+    }
+
     private void initView() {
         mToken = sp.getString("token", "");
         mUser_id = sp.getString("userId", "");
@@ -161,46 +197,15 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
         mMore = (ImageView) mMyStampTitle.findViewById(R.id.base_more);
         //初始化ViewPager
         myStampViewPager = (ViewPager) mMyStampContent.findViewById(R.id.my_content_Viewpager);
-        mContentTotal = (TextView) mMyStampContent.findViewById(R.id.my_content_total);
+        mContentTotal = (TextView) mMyStampContent.findViewById(R.id.my_content_total);// 总资产值
 
     }
 
     private void initData() {
         GetInitNet(num);// 我的邮集列表网络请求方法
-//        mStampGV = (GridView) mMyStampContent.findViewById(R.id.myStamp_gv);
-        //初始化数据的集合，一共20条
-//        mList = new ArrayList<>();
-//        for (int i = 0; i < 20; i++) {
-//            mList.add(new MyStampGridViewBean.StampList("庚申年", "" + i, "http://img1.imgtn.bdimg.com/it/u=3024095604,405628783&fm=21&gp=0.jpg"));
-//        }
-
-//        //初始化GridView的集合
-//        mViewPagerList = new ArrayList<>();
-//        //获取Activity的LayoutInflater
-//        layoutInflater = getLayoutInflater();
-//
-//        //计算每页最大显示个数，2行4列
-//        pageSize = getResources().getInteger(R.integer.PagerCount) * 2;
-//        //总共的页数 总数/每页数量，并取整。
-//        pageCount = (int) Math.ceil(mList.size() * 1.0 / pageSize);
-//
-//        //使用For循环创建页面,并添加到集合中去
-//        for (int i = 0; i < pageCount; i++) {
-//            //每个页面都是inflate出一个新实例
-//            //这里面传的是GridView的布局
-//            GridView grid = (GridView) layoutInflater.inflate(R.layout.item_viewpager, myStampViewPager, false);
-//            //给GridView设置Adapter，传入index
-//            grid.setAdapter(new GridViewAdapter(this, mList, i, mBitmap, flag));
-//
-//            //加入到ViewPager的View数据集中
-//            mViewPagerList.add(grid);
-//        }
-
-
     }
 
     private void initAdapter() {
-
         //设置翻页效果
         myStampViewPager.setPageTransformer(true, new ViewPager.PageTransformer() {
             @Override
@@ -222,7 +227,6 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
     private void initListener() {
         mBack.setOnClickListener(this);
         mMore.setOnClickListener(this);
-
     }
 
 
@@ -281,10 +285,16 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
         mMorePop.dismiss();
         flag = !flag;
         if (flag) {//编辑状态
+            mEditFlag = 1;
             mEdit.setText("完成");
+            MyLog.LogShitou("===============000000000000","-================00000000000001");
         } else {//非编辑状态
+            mEditFlag = 2;
             mEdit.setText("编辑");
+            MyLog.LogShitou("===============0000000000000222","-================00000000002222");
         }
+
+
         mViewPagerList.clear();
         //使用For循环创建页面,并添加到集合中去
         for (int i = 0; i < pageCount; i++) {
@@ -292,11 +302,17 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
             //这里面传的是GridView的布局
             GridView grid = (GridView) layoutInflater.inflate(R.layout.item_viewpager, myStampViewPager, false);
             //给GridView设置Adapter，传入index
-            grid.setAdapter(new GridViewAdapter(this, mList, i, mBitmap, flag));
+            adapter = new GridViewAdapter(this, mList, i, mBitmap, flag);
+            adapter.notifyDataSetChanged();
+            grid.setAdapter(adapter);
             //加入到ViewPager的View数据集中
             mViewPagerList.add(grid);
         }
-        myStampViewPager.setAdapter(new MyStampViewPagerAdapter(mViewPagerList));
+        adapter.SetDataList(MyStampActivity.this);// 回调刷新邮集数据
+        MyStampViewPagerAdapter  mMyStampViewPagerAdapter =  new MyStampViewPagerAdapter(mViewPagerList);
+//        mMyStampViewPagerAdapter.notifyDataSetChanged();
+        myStampViewPager.setAdapter(mMyStampViewPagerAdapter);
+
     }
 
 
@@ -314,7 +330,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 当前记录索引
-                params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
+                params.put(StaticField.OFFSET, String.valueOf(OFFSETNUM)); // 步长(item条目数)
 
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
@@ -422,6 +438,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
 //        Toast.makeText(MyStampActivity.this, " 分享取消了", Toast.LENGTH_SHORT).show();
         MyLog.LogShitou("platform分享33", share_media + "");
     }
+
 
 
 }

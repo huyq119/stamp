@@ -178,6 +178,8 @@
             android:scrollbars="none"
             />
 
+        <include layout="@layout/frameayout_no_order"/>
+
     </LinearLayout>
 
     <!--置顶按钮-->

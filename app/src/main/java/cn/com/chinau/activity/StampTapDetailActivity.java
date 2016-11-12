@@ -66,7 +66,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
 
-    private String mStampSn, mStampPrice, mDetail, mStory;//邮票标识(编号，价格)
+    private String mStampSn, mDetail, mStory;//邮票标识(编号，价格)
 
     private List<Fragment> mList;
     private String[] arr = {"邮票信息", "价格行情", "邮票故事"};
@@ -168,8 +168,7 @@ public class StampTapDetailActivity extends BaseActivity implements View.OnClick
         mUser_id = sp.getString("userId", "");
         //获取传邮市传过来的内容
         Bundle bundle = getIntent().getExtras();
-        mStampSn = bundle.getString(StaticField.STAMPDETAIL_SN);//
-        mStampPrice = bundle.getString(StaticField.STAMPDETAIL_PRICE);
+        mStampSn = bundle.getString(StaticField.STAMPDETAIL_SN);// 邮集编号
 
         mBack = (ImageView) mStampTapDetailTitle.findViewById(R.id.base_title_back);
         mTitle = (TextView) mStampTapDetailTitle.findViewById(R.id.base_title);

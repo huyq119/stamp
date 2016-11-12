@@ -86,8 +86,6 @@ public class StampTapGridViewAdapter extends BaseAdapter {
         //设置数据
         StampTapBean.StampList stampList = mList.get(i);
         mStampSn = stampList.getStamp_sn();// 邮票编号
-
-        MyLog.LogShitou("==0000====邮票编号",mStampSn);
         viewHolder.mTitle.setText(stampList.getStamp_name());
         viewHolder.mMoney.setText("￥"+stampList.getCurrent_price());
         viewHolder.mAdd.setTag(mStampSn);
@@ -101,7 +99,7 @@ public class StampTapGridViewAdapter extends BaseAdapter {
                 if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)){
 
                     AddStampGetInitNet("1",StaticField.JR,String.valueOf(view.getTag())); //加入邮集网络请求
-                    MyLog.LogShitou("==11111====邮票编号",mStampSn);
+//                    MyLog.LogShitou("==11111====邮票编号",mStampSn);
                 }else{
                     Intent intent = new Intent(context, LoginActivity.class);
                     intent.putExtra("WithDraw","StampTap");
