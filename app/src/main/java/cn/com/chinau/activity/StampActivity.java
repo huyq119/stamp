@@ -108,9 +108,8 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                     GoodsStampBean mGoodsStampBean1 = gson1.fromJson((String) msg.obj, GoodsStampBean.class);
                     String mRsp_code1 = mGoodsStampBean1.getRsp_code();
                     if (mRsp_code1.equals("0000")) {
-
                         if (num == 0) {
-                           ArrayList<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean1.getGoods_list();
+                            ArrayList<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean1.getGoods_list();
                             StampMarketGridViewAdapter mStampMarAdapter = new StampMarketGridViewAdapter(StampActivity.this, goods_list, mBitmap);
                             gridView.setAdapter(mStampMarAdapter);
                             mStampMarAdapter.notifyDataSetChanged();
@@ -207,7 +206,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             mList = new ArrayList<>();
         }
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-        RequestNet(StaticField.ZH, num, StaticField.A,"");
+        RequestNet(StaticField.ZH, num, StaticField.A, "");
 //        MyLog.LogShitou("num=====1=======", "" + num);
     }
 
@@ -227,7 +226,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             mStampMarAdapter.notifyDataSetChanged();
 
             //这句是为了防止展示到GridView处
-            gridView.requestChildFocus(mHeartll, null);
+//            gridView.requestChildFocus(mHeartll, null);
             MyLog.LogShitou("num=====3=======", "" + num);
             if (num != 0) {
                 MyLog.LogShitou("===1=====到这一部了吗", mList.size() + "=======" + num);
@@ -490,23 +489,22 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 }
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.LogShitou(mJson+"==1"+"邮市List-->", result);
+                MyLog.LogShitou(mJson + "==1" + "邮市List-->", result);
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-                if (mJson.equals("")){
+                if (mJson.equals("")) {
 
                     Message msg = mHandler.obtainMessage();
                     msg.what = StaticField.SUCCESS;
                     msg.obj = result;
                     mHandler.sendMessage(msg);
-                }else{
+                } else {
                     Message msg = mHandler.obtainMessage();
                     msg.what = StaticField.YS_SUCCESS;// 筛选
                     msg.obj = result;
                     mHandler.sendMessage(msg);
                 }
-
 
 
             }

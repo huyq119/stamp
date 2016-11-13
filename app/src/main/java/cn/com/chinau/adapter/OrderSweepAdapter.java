@@ -67,8 +67,9 @@ public class OrderSweepAdapter extends BaseAdapter {
         holder.Scantime.setText(list.get(i).getCreate_time());
         holder.collect.setText(list.get(i).getGoods_name());
         holder.Repurchase.setText("回购价:￥" + list.get(i).getBuyback_price());
-        holder.percent.setText(list.get(i).getIncome());
-        String ScanCodestatus = list.get(i).getOrder_status();
+        holder.percent.setText(list.get(i).getIncome()); // 预计收益
+
+        String ScanCodestatus = list.get(i).getOrder_status();// 订单状态
 
         if (ScanCodestatus.equals("INIT")) {// 待寄送
             holder.Earnings.setText("预计收益:");
@@ -94,6 +95,8 @@ public class OrderSweepAdapter extends BaseAdapter {
             holder.Earnings.setText("收益:");
             holder.ScanLinear.setVisibility(View.VISIBLE);
             holder.Scanstatus.setText("订单驳回");
+        }else{
+
         }
 
         bitmapUtils.display(holder.ScanIcon, list.get(i).getGoods_image());

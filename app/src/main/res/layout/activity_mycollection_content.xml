@@ -20,86 +20,87 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-            <View style="@style/myline" />
+                <View style="@style/myline" />
 
-            <RadioGroup
-                android:id="@+id/record_radioGroup"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:orientation="horizontal">
+                <RadioGroup
+                    android:id="@+id/record_radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/collection_all_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="@string/recordAll"
-                    android:textColor="@drawable/auction_record_text_bg"
-                    android:textSize="12sp" />
+                    <RadioButton
+                        android:id="@+id/collection_all_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="@string/recordAll"
+                        android:textColor="@drawable/auction_record_text_bg"
+                        android:textSize="12sp" />
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginTop="3dp"
-                    android:background="#dedfe3" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="#dedfe3" />
 
-                <RadioButton
-                    android:id="@+id/collection_stamps_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="@string/stampshop"
-                    android:textColor="@drawable/auction_record_text_bg"
-                    android:textSize="12sp" />
+                    <RadioButton
+                        android:id="@+id/collection_stamps_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="@string/stampshop"
+                        android:textColor="@drawable/auction_record_text_bg"
+                        android:textSize="12sp" />
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginTop="3dp"
-                    android:background="#dedfe3" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="#dedfe3" />
 
-                <RadioButton
-                    android:id="@+id/collection_auction_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="@string/auction"
-                    android:textColor="@drawable/auction_record_text_bg"
-                    android:textSize="12sp" />
+                    <RadioButton
+                        android:id="@+id/collection_auction_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="@string/auction"
+                        android:textColor="@drawable/auction_record_text_bg"
+                        android:textSize="12sp" />
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginTop="3dp"
-                    android:background="#dedfe3" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="#dedfe3" />
 
-                <RadioButton
-                    android:id="@+id/collection_mall_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="@string/mall"
-                    android:textColor="@drawable/auction_record_text_bg"
-                    android:textSize="12sp" />
-            </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/collection_mall_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="@string/mall"
+                        android:textColor="@drawable/auction_record_text_bg"
+                        android:textSize="12sp" />
+                </RadioGroup>
 
-            <View style="@style/myline" />
-        </LinearLayout>
+                <View style="@style/myline" />
+            </LinearLayout>
+
             <ListView
                 android:id="@+id/collection_listView"
                 android:layout_width="match_parent"
@@ -108,7 +109,15 @@
                 android:listSelector="@android:color/transparent"
                 android:overScrollMode="never"
                 android:scrollbars="none" />
+
+            <include layout="@layout/frameayout_no_order" />
+
+
         </LinearLayout>
+
+
+
+
     </LinearLayout>
 
 
@@ -117,8 +126,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <View style="@style/myline" />
 

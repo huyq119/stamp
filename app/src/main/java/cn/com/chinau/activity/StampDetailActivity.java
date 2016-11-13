@@ -505,7 +505,12 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.stamp_details_buyNow:// 立即购买
                 addFlag = false; // 点击立即购买的标识
                 if (mToken.equals("") || mUser_id.equals("")) {
-                    openActivityWitchAnimation(LoginActivity.class);
+                    Intent intent1 = new Intent(StampDetailActivity.this, LoginActivity.class);
+                    intent1.putExtra("WithDraw", "StampDetail");
+                    startActivity(intent1);
+                    finish();
+                    overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+//                    openActivityWitchAnimation(LoginActivity.class);
                 } else {
                     if (mGoods_sn != null) {
 

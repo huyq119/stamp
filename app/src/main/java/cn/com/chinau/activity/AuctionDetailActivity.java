@@ -232,14 +232,15 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                             MyLog.LogShitou("竞拍详情请求下来的H5url-->:", mGoodsDetail + "--" + mVerifyInfo);
 
                             mBidList = mStampDetailBean.getOffer_list();// 出价记录list
-                            // 循环出User_id是否有自己的id，有addFlag = true;没有addFlag = false;
+                            // 循环出User_id是否有自己的id，有bidFlag = true;没有bidFlag = false;
                             for (int j = 0; j < mBidList.size(); j++) {
                                 String mUser_id = mBidList.get(j).getUser_id();
                                 String myUser_id = sp.getString("userId", "");
+
                                 if (myUser_id.equals(mUser_id)) {
-                                    addFlag = true;// 出价加
-                                    bidFlag = true; //
-                                    MyLog.LogShitou(mUser_id + "到这了吗1", mUser_id);
+//                                    addFlag = true;// 出价加
+                                    bidFlag = true; // 出价按钮
+                                    MyLog.LogShitou(mUser_id + "-============到这了吗1", mUser_id);
                                 }
                             }
 
@@ -632,7 +633,7 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                     openActivityWitchAnimation(LoginActivity.class);
                 } else {
                     // 是否是第一次加价
-                    if (addFlag) {
+//                    if (addFlag) {
                         String countes = mCount.getText().toString().trim(); // 获取出价价格
                         String mCountess = countes.replace(",", "");
                         intCount = Double.parseDouble(mCountess);
@@ -651,9 +652,9 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                             intCount += 10;
                             mCount.setText(String.valueOf(intCount));
                         }
-                    } else {
-                        DialogAgreement();// 出价协议Dialog
-                    }
+//                    } else {
+//                        DialogAgreement();// 出价协议Dialog
+//                    }
                 }
 
                 break;
@@ -661,23 +662,56 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 if (mToken.equals("") || mUser_id.equals("")) {
                     openActivityWitchAnimation(LoginActivity.class);
                 } else {
-                    if (count.equals("0")) {
-                        MyToast.showShort(this, "请先加价");
-                    } else {
-                        // 是否是第一次出价
-                        if (bidFlag) {
-
-                            AuctionGoodsPriceDate(String.valueOf(intCount));
+                   String mUserId = mBidList.get(0).getUser_id();
+                    String myUser_id = sp.getString("userId", "");
+                    if (!myUser_id.equals(mUserId)){
+                        if (count.equals("0")) {
+                            MyToast.showShort(this, "请先加价");
                         } else {
-                            DialogAgreement();// 出价协议Dialog
-                            bidFlag = true;
+                            // 是否是第一次出价
+                            if (bidFlag) {
+                                AuctionGoodsPriceDate(String.valueOf(intCount)); // 竞拍出价网络请求
+                            } else {
+                                DialogAgreement();// 出价协议Dialog
+                                bidFlag = true;
+                            }
                         }
+                    }else{
+                       MyToast.showShort(AuctionDetailActivity.this,"您已出价");
                     }
+
+
                 }
 
                 break;
         }
     }
+
+    /**
+     * 出价协议Dialog
+     */
+    private void DialogAgreement() {
+        auctiondialog = new AuctionRegulationsAgreementDialog(this);
+        auctiondialog.show();
+        mKonwBtn = (Button) auctiondialog.findViewById(R.id.iKonw_btn);
+        mKonwBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (bidFlag) {
+                    AuctionGoodsPriceDate(String.valueOf(intCount));//竞拍出价网络请求
+                    auctiondialog.dismiss();
+                } else {
+                    addFlag = true;
+                    auctiondialog.dismiss();
+                }
+
+
+            }
+        });
+    }
+
+
 
     /**
      * ScrollView 滑动的监听事件
@@ -725,29 +759,6 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 
     }
 
-    /**
-     * 出价协议Dialog
-     */
-    private void DialogAgreement() {
-        auctiondialog = new AuctionRegulationsAgreementDialog(this);
-        auctiondialog.show();
-        mKonwBtn = (Button) auctiondialog.findViewById(R.id.iKonw_btn);
-        mKonwBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (bidFlag) {
-                    AuctionGoodsPriceDate(String.valueOf(intCount));
-                    auctiondialog.dismiss();
-                } else {
-                    addFlag = true;
-                    auctiondialog.dismiss();
-                }
-
-
-            }
-        });
-    }
 
     /**
      * 隐藏手机号中间4位的方法

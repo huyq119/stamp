@@ -46,7 +46,7 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
     private ImageView Back;
     private TextView mEdit;
     private int checkNum; // 记录选中的条目数量
-    private TextView mDelete;
+    private TextView mDelete, mNoOrderTv;
     private CollectionListViewAdapter adapter;
     private LinearLayout CollEditLl, mChooseAllLl, mCollectionTabLl;
     private MyCollectionListViewEditerAdapter mListAdapter;
@@ -75,9 +75,11 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                     String mRsp_code = mCollectionBean.getRsp_code();
                     if (mRsp_code.equals("0000")) {
                         mList = mCollectionBean.getGoods_list();
-//                        if (mList != null && mList.size() != 0) {
-                        initAdapter();
-//                        }
+                        if (mList.size() != 0) {
+                            initAdapter();
+                        } else {
+                            GoneOrVisibleView(); // mList为空时显示的布局
+                        }
                     }
                     break;
                 case StaticField.DETAILSUCCESS:// 删除后再次请求的数据
@@ -86,9 +88,13 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                     String codes = mCollectionBean1.getRsp_code();
                     if (codes.equals("0000")) {
                         mList = mCollectionBean1.getGoods_list();
-                        initAdapter();
-                        adapter.flage = !adapter.flage;
-                        adapter.notifyDataSetChanged();
+                        if (mList.size() != 0) {
+                            initAdapter();
+                            adapter.flage = !adapter.flage;
+                            adapter.notifyDataSetChanged();
+                        }else{
+                            GoneOrVisibleView(); // mList为空时显示的布局
+                        }
                     }
                     break;
                 case StaticField.DeleteSUCCESS:// 删除
@@ -102,7 +108,6 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
                             initData();// 请求网络刷新列表
                             MyLog.LogShitou("----->", "------>走了吗？？");
                         }
-
                         MyLog.LogShitou("删除成功", "--->删除成功");
                     } else {
                         MyToast.showShort(MyCollectionActivity.this, mRsp_msg);
@@ -154,8 +159,16 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
         mDelete = (TextView) mCollectionContent.findViewById(R.id.delete);// 删除
         mChooseAllLl = (LinearLayout) mCollectionContent.findViewById(R.id.choose_all_ll);// 全选
         mChooseImg = (ImageView) mCollectionContent.findViewById(R.id.choose_img);// 选中图片
-
+        mNoOrderTv = (TextView) mCollectionContent.findViewById(R.id.no_order_tv);//
     }
+
+    // ListView为空时显示的布局
+    private void GoneOrVisibleView() {
+        mCollection_lv.setVisibility(View.GONE);
+        mNoOrderTv.setVisibility(View.VISIBLE); // 无信息控件显示
+        mNoOrderTv.setText("暂无收藏信息~");
+    }
+
 
     private void initData() {
         GetInitNet(num, StaticField.QB);// 收藏夹网络请求
@@ -163,6 +176,8 @@ public class MyCollectionActivity extends BaseActivity implements View.OnClickLi
 
     private void initAdapter() {
         adapter = new CollectionListViewAdapter(this, mBitmap, mList);
+        mCollection_lv.setVisibility(View.VISIBLE);
+        mNoOrderTv.setVisibility(View.GONE); // 无信息控件显示
         mCollection_lv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

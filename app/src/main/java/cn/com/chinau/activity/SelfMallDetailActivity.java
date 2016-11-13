@@ -327,7 +327,12 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
             case R.id.mall_detail_gobuy://立即购买
                 addFlag = false; // 点击立即购买的标识
                 if (mToken.equals("") || mUser_id.equals("")) {
-                    openActivityWitchAnimation(LoginActivity.class);
+                    Intent intent1 = new Intent(SelfMallDetailActivity.this, LoginActivity.class);
+                    intent1.putExtra("WithDraw", "SelfMallDetail");
+                    startActivity(intent1);
+                    finish();
+                    overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+//                    openActivityWitchAnimation(LoginActivity.class);
                 } else {
                     if (mGoods_sn != null) {
                         AddShopCartBean mAddShopCartBean = new AddShopCartBean();

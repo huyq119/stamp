@@ -166,7 +166,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                     //传递的搜索内容
                     Bundle bundle = new Bundle();
                     bundle.putString(StaticField.SEARCHBUNDLE, SearchContent);
-                    openActivityWitchAnimation(SearchDetailActivity.class, bundle);
+                    openActivityWitchAnimation(SearchDetailActivity.class, bundle); // 跳转搜索详情页面
                     //设置历史数据
                     setHistoryData(SearchContent);
                 }

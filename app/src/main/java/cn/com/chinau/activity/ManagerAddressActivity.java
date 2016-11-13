@@ -221,8 +221,6 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
                     msg.what = StaticField.SUCCESS;
                     msg.obj = result;
                     mHandler.sendMessage(msg);
-
-
             }
         });
     }

@@ -115,6 +115,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         finishWitchAnimation();
                     } else if (flag == 12) {// 邮票目录来的
                        finish();
+                    } else if (flag == 13) {// 邮市详情来的
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("Login", "StampDetail");
+                        startActivity(intent);
+                        finishWitchAnimation();
+                    } else if (flag == 14) {// 商城详情来的
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("Login", "SelfMallDetail");
+                        startActivity(intent);
+                        finishWitchAnimation();
+
+
+
                     } else {// 不是从提现页面来的
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("Login", "login");
@@ -201,6 +214,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             flag = 11;
         }else if (WithDraw != null && WithDraw.equals("StampTap")) {// 邮票目录
             flag = 12;
+        }else if (WithDraw != null && WithDraw.equals("StampDetail")) {// 邮市详情
+            flag = 13;
+        }else if (WithDraw != null && WithDraw.equals("SelfMallDetail")) {// 商城详情
+            flag = 14;
         }
 
     }

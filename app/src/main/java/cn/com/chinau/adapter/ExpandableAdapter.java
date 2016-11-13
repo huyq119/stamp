@@ -285,7 +285,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     View.OnClickListener listener = new View.OnClickListener() {
 
 
-
         @Override
         public void onClick(View v) {
             ArrayList<ShopNameBean.SellerBean> seller_list = shopNameBean.getSeller_list();
@@ -321,6 +320,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                         }
                         groupSet.put(groupPosition, childSet);
 
+
                     } else {
                         groupSet.remove(groupPosition);
                     }
@@ -351,9 +351,13 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                     setSettleInfo();  // 获取总价和总商品数量
                     notifyDataSetChanged(); // 刷新适配器
 
-                    MyLog.LogShitou("父控件添加的数据", groupSet.toString());
-
-
+                    MyLog.LogShitou("父控件添的数据", groupSet.toString() + "========条数" + groupSet.size());
+                    // 判断删除是否可点击
+//                    mSellerLists = sp.getString("SellerList", "");
+//                    if (!(count != null && price != null || !mSellerLists.equals(""))) {
+//                        tv1.setBackgroundColor(context.getResources().getColor(R.color.red_font));
+//                        tv1.setEnabled(true);
+//                    }
                     break;
 
                 case R.id.tv_add://增加的监听
@@ -413,7 +417,8 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                             goodsBeen.remove(goodsBean);
                             MyLog.LogShitou("-----子控件反选的数据goodsBeen", goodsBeen.toString());
                             groupSet.put(group, goodsBeen);
-                            MyLog.LogShitou("子反选后总添加的数据goodsBean", goodsBeen.toString());
+                            MyLog.LogShitou("子反选后总添加的数据goodsBean", goodsBeen.toString() + "=====条数" + groupSet.size());
+
                         }
                     }
                     // 遍历获取商品编号和数量
@@ -440,6 +445,14 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                     selectAll(); // 选择所有
                     setSettleInfo();  // 获取总价和总商品数量
                     notifyDataSetChanged(); // 刷新适配器
+
+                    // 判断删除是否可点击
+//                    mSellerLists = sp.getString("SellerList", "");
+//                    if (!(count != null && price != null || !mSellerLists.equals(""))) {
+//                        tv1.setBackgroundColor(context.getResources().getColor(R.color.red_font));
+//                        tv1.setEnabled(true);
+//                    }
+
 
                     MyLog.LogShitou("***************" + temp + "*****************child" + groupSet.toString());
                     break;
@@ -479,6 +492,8 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                         mEditText.setText("完成");
                         layout.setVisibility(View.INVISIBLE);// 隐藏合计Ll
                         tv1.setVisibility(View.VISIBLE); // 显示删除按钮
+//                        tv1.setBackgroundColor(context.getResources().getColor(R.color.gary));
+//                        tv1.setEnabled(false);
                         tv2.setVisibility(View.GONE); // 隐藏结算按钮
 //                        MyLog.LogShitou("isEditing这是啥值==22==",""+isEditing);
                     } else {
@@ -492,24 +507,35 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                     break;
 
                 case R.id.Shop_delete://删除
-                    DeleteDialog();// 删除弹出框
+                    // 判断删除是否可点击
+                    mSellerLists = sp.getString("SellerList", "");
+                    MyLog.LogShitou("===点击删除", mSellerLists + "--" + count + "--" + price);
+                    if (count != null && price != null || !mSellerLists.equals("")) {
+                        DeleteDialog();// 删除弹出框
+                    } else {
+                        MyToast.showShort(context, "请选择要删除的商品");
+                    }
                     break;
                 case R.id.Shop_pay://去结算
                     mSellerLists = sp.getString("SellerList", "");
                     MyLog.LogShitou("点击结算", mSellerLists + "--" + count + "--" + price);
 
-                    if (count != null && price != null || !mSellerLists.equals("")) {
-                        Intent intent = new Intent(context, FirmOrderActivity.class);
-                        intent.putExtra("Count", count);// 传数量
-                        intent.putExtra("Price", price);// 传总价钱
-                        intent.putExtra("FirmOrder", "Adapter");// 适配器的标识
-                        //这里只要是把集合遍历一下传过去就行了
-                        MyApplication.setGroupSet(groupSet);
-                        MyLog.LogShitou("去结算传的数据", "" + groupSet);
-                        context.startActivity(intent);
-                        ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                    if (count != null && !count.equals("0")) {
+//                        if (count != null && price != null || !mSellerLists.equals("")) {
+                            Intent intent = new Intent(context, FirmOrderActivity.class);
+                            intent.putExtra("Count", count);// 传数量
+                            intent.putExtra("Price", price);// 传总价钱
+                            intent.putExtra("FirmOrder", "Adapter");// 适配器的标识
+                            //这里只要是把集合遍历一下传过去就行了
+                            MyApplication.setGroupSet(groupSet);
+                            MyLog.LogShitou("去结算传的数据", "" + groupSet);
+                            context.startActivity(intent);
+                            ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+//                        } else {
+//
+//                            MyToast.showShort(context, "您还没有选择商品哦");
+//                        }
                     } else {
-
 
                         MyToast.showShort(context, "您还没有选择商品哦");
                     }
@@ -683,6 +709,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         }
     };
+
     /**
      * 购物车List网络请求
      */
@@ -715,7 +742,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
 
     // 定义一个接口给Fragment
-    public interface SellerList{
+    public interface SellerList {
         void GetSellerList(ArrayList<ShopNameBean.SellerBean> seller_list);
     }
 
