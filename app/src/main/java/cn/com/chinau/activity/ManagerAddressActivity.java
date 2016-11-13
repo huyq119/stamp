@@ -31,7 +31,7 @@ import cn.com.chinau.utils.ThreadManager;
 /**
  * 管理收获地址页面
  */
-public class ManagerAddressActivity extends BaseActivity implements View.OnClickListener {
+public class ManagerAddressActivity extends BaseActivity implements View.OnClickListener,ConfirmOrderListViewAdapter.Datas {
 
 
     private View mManagerAddressContent;
@@ -125,37 +125,7 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        MyLog.LogShitou("到这了吗1", "-->onStart");
-    }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        MyLog.LogShitou("到这了吗2", "-->onRestart");
-    }
-
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MyLog.LogShitou("到这了吗4", "-->onPause");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        MyLog.LogShitou("到这了吗5", "-->onStop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        MyLog.LogShitou("到这了吗6", "-->onDestroy");
-    }
 
 
     private void initView() {
@@ -179,11 +149,23 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
 
     }
 
+    // 回调适配器刷新list
+    @Override
+    public void GetDatas(String message) {
+        if (message.equals("成功")){
+            GetInitNet(StaticField.LB);// 管理收货地址列表网络请求
+            MyLog.LogShitou("========回调刷新list", message);
+        }else{
+            GetInitNet(StaticField.LB);// 管理收货地址列表网络请求
+            MyLog.LogShitou("========回调刷新list", message);
+        }
+
+    }
     private void initAdapter() {
         adapter = new ConfirmOrderListViewAdapter(this, mList);
         mAddressLV.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
+        adapter.SetDatas(ManagerAddressActivity.this);// 设置接口回调
         //自定义回调函数
         adapter.setOncheckChanged(new ConfirmOrderListViewAdapter.OnMyCheckChangedListener() {
 
@@ -244,7 +226,6 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
             }
         });
     }
-
 
 
 

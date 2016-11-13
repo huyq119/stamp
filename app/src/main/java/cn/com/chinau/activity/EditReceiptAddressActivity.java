@@ -93,7 +93,11 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
 //            }
             GetInitNet(StaticField.XQ); // 查询地址详情请求
             MyLog.LogShitou("这是从编辑跳过来的", mAddressId);
+        }else{
+
+
         }
+
 
 
     }
@@ -134,7 +138,7 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
         mDetailAddress = mEtDetailAddress.getText().toString().trim();
     }
 
-    // 获取保存再本地的省市区
+    // 获取保存在本地的省市区
     private void initData() {
         String mAddress = sp.getString("Address", "");
         if (mAddress != null) {
@@ -210,10 +214,14 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                     String Province = mAddressPopupWindow.mCurrentProvince;
                     String City = mAddressPopupWindow.mCurrentCity;
                     String Area = mAddressPopupWindow.mCurrentArea;
+                    // 赋值省市区name
                     mProvince.setText(Province);
+                    mCity.setVisibility(View.VISIBLE);
+                    mArea.setVisibility(View.VISIBLE);
                     mCity.setText(City);
                     mArea.setText(Area);
                     MyLog.LogShitou("省市区Name", Province + "-" + City + "--" + Area);
+                    // 获取的省市区的code
                     mProvinceCode = mAddressPopupWindow.mCurrentProvinceCode;// 省code
                     mCityCode = mAddressPopupWindow.mCurrentCityCode; // 市code
                     mAreaCode = mAddressPopupWindow.mCurrentAreaCode; // 区code
@@ -251,14 +259,22 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                     params.put(StaticField.PROV, mProvinceCode);// 省份
                     params.put(StaticField.CITY, mCityCode);// 市
                     params.put(StaticField.AREA, mAreaCode);// 区县
+                    MyLog.LogShitou(op_type+"默认北京北京市海淀区","====0000000000000======="+prov+"=="+city+"=="+area);
                 }else{
-                    params.put(StaticField.PROV, prov);// 省份
-                    params.put(StaticField.CITY, city);// 市
-                    params.put(StaticField.AREA, area);// 区县
+                    if(prov != null &&city != null &&area != null  ){
+                        params.put(StaticField.PROV, prov);// 省份
+                        params.put(StaticField.CITY, city);// 市
+                        params.put(StaticField.AREA, area);// 区县
+                        MyLog.LogShitou(op_type+"默认北京北京市海淀区","====1111111111111======="+prov+"=="+city+"=="+area);
+                    }else{
+                        params.put(StaticField.PROV, "110000");// 省份默认北京
+                        params.put(StaticField.CITY, "110000");// 市默认北京市
+                        params.put(StaticField.AREA, "110108");// 区县默认海淀区
+                        MyLog.LogShitou(op_type+"默认北京北京市海淀区","====222222222222222=======");
+                    }
                 }
-
-                MyLog.LogShitou("上传的字段-->:", mUser_id + "--" + mToken + "--" + is_default + "--" + op_type + "--" +
-                        mName + "--" + mMobile + "--" + mDetailAddress + "--" + mProvinceCode + "--" + mCityCode + "--" + mAreaCode);
+                MyLog.LogShitou(op_type+"---->上传的字段", mUser_id + "--" + mToken + "--" + is_default + "--" + op_type + "--" +
+                        mName + "--" + mMobile + "--" + mDetailAddress );
 
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
@@ -331,21 +347,24 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                         mList = mAuctionBean.getAddress_list();
                         String mNames = mList.get(0).getName();
                         String mMobiles = mList.get(0).getMobile();
-                        String mDetails = mList.get(0).getDetail();
-                         mAddress_id = mList.get(0).getAddress_id();
-                        String[] address = mDetails.split(" ");
-                        String address1 = address[0];
-                        String address2 = address[1];
-                        String address3 = address[2];
-                        String address4 = address[3];
+                         mAddress_id = mList.get(0).getAddress_id();// 获取地址
+                        String mDetails = mList.get(0).getDetail();//获取
+                        String[] address = mDetails.split(" ");  // 截取地址省市区和详情
+                        String address1 = address[0];// 获取地址省市区
+                        String address2 = address[1];// 获取地址详情
+//                        String address3 = address[2];
+//                        String address4 = address[3];
 
-                        MyLog.LogShitou("省-市-区", address1 + "-" + address2 + "-" + address3 + "-" + address4);
+                        MyLog.LogShitou("省-市-区", address1 + "-" + address2 );
                         mEtName.setText(mNames);
                         mEtMobile.setText(mMobiles);
                         mProvince.setText(address1);
-                        mCity.setText(address2);
-                        mArea.setText(address3);
-                        mEtDetailAddress.setText(address4);
+                        mEtDetailAddress.setText(address2);
+                        mCity.setVisibility(View.GONE);
+                        mArea.setVisibility(View.GONE);
+//                        mCity.setText(address2);
+//                        mArea.setText(address3);
+//                        mEtDetailAddress.setText(address4);
 
                         prov = mList.get(0).getProv();
                         city = mList.get(0).getCity();
@@ -357,15 +376,19 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                         } else {
                             mToggleBtn.setBackgroundResource(R.mipmap.toggle_red);
                         }
-
                     }
                     break;
                 case StaticField.ADDSUCCESS:// 新增地址
                     Gson gsons = new Gson();
                     BaseBean mBaseBean = gsons.fromJson((String) msg.obj, BaseBean.class);
                     String mCoode = mBaseBean.getRsp_code();
+                    String mMsg = mBaseBean.getRsp_msg();
                     if (mCoode.equals("0000")) {
                         finishWitchAnimation();
+                    }else if(mCoode.equals("2068")){
+                        MyToast.showShort(EditReceiptAddressActivity.this,"手机号格式错误");
+                    }else{
+                        MyToast.showShort(EditReceiptAddressActivity.this,mMsg);
                     }
                     break;
             }

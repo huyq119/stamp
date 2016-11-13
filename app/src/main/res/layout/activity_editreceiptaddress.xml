@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/EditReceiptAddress"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -18,7 +17,7 @@
             android:layout_marginLeft="@dimen/distance"
             android:text="收货人:"
             android:textColor="#333"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/et_address_name"
@@ -28,14 +27,14 @@
             android:layout_weight="1"
             android:background="@null"
             android:textColor="#333"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
 
     </LinearLayout>
 
     <View
         style="@style/myline"
-        android:layout_marginLeft="@dimen/distance"/>
+        android:layout_marginLeft="@dimen/distance" />
 
 
     <LinearLayout
@@ -50,7 +49,7 @@
             android:layout_marginLeft="@dimen/distance"
             android:text="联系电话:"
             android:textColor="#333"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/et_address_mobile"
@@ -62,14 +61,14 @@
             android:inputType="number"
             android:maxLength="11"
             android:textColor="#333"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
 
     </LinearLayout>
 
     <View
         style="@style/myline"
-        android:layout_marginLeft="@dimen/distance"/>
+        android:layout_marginLeft="@dimen/distance" />
 
     <LinearLayout
         android:id="@+id/EditReceiptAddress_info"
@@ -78,57 +77,60 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/distance"
-            android:text="@string/Local_area"
-            android:textColor="#333"
-            android:textSize="14sp"/>
+            android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/edit_Province"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/distance"
-            android:layout_weight="1"
-            android:text="北京市"
-            android:singleLine="true"
-            android:textColor="#333"
-            android:textSize="14sp"/>
 
-        <TextView
-            android:id="@+id/edit_City"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/distance"
-            android:layout_weight="1"
-            android:text="北京市"
-            android:singleLine="true"
-            android:textColor="#333"
-            android:textSize="14sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Local_area"
+                android:textColor="#333"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/edit_Area"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/distance"
-            android:layout_weight="1"
-            android:text="海淀区"
-            android:singleLine="true"
-            android:textColor="#333"
-            android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/edit_Province"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/distance"
+                android:singleLine="true"
+                android:text="北京市"
+                android:textColor="#333"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/edit_City"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="北京市"
+                android:textColor="#333"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/edit_Area"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="海淀区"
+                android:textColor="#333"
+                android:textSize="14sp" />
+        </LinearLayout>
 
 
         <ImageView
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:scaleType="center"
-            android:src="@mipmap/right_arrow"/>
+            android:src="@mipmap/right_arrow" />
     </LinearLayout>
 
-    <View style="@style/myline"
-        android:layout_marginLeft="@dimen/distance"/>
+    <View
+        style="@style/myline"
+        android:layout_marginLeft="@dimen/distance" />
 
     <EditText
         android:id="@+id/et_address_detail"
@@ -141,13 +143,13 @@
         android:paddingTop="10dp"
         android:textColor="#333"
         android:textColorHint="#333"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
-    <View style="@style/myline"/>
+    <View style="@style/myline" />
 
     <View
         style="@style/myline"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -157,24 +159,24 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/distance"
+            android:layout_weight="1"
             android:text="@string/set_default"
             android:textColor="#333"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <ToggleButton
             android:id="@+id/toggleBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/distance"
             android:background="@drawable/address_select"
             android:checked="false"
-            android:layout_marginRight="@dimen/distance"
             android:textOff=""
-            android:textOn=""/>
+            android:textOn="" />
     </LinearLayout>
 
-    <View style="@style/myline"/>
+    <View style="@style/myline" />
 
 </LinearLayout>

@@ -45,8 +45,8 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
     private String mAddressId, mToken, mUser_id, mAddName, mAddMobile, mAddressDetail;
     private String is_default, name, mobile, Is_default, address_id, detail, prov, city, area, xgid;
     private boolean SelectFlag; // 点击是默认按钮还是删除按钮
-
-    public ConfirmOrderListViewAdapter(Context context, List<AddressBean.Address> mList)  {
+    private int is;
+    public ConfirmOrderListViewAdapter(Context context, List<AddressBean.Address> mList) {
         this.context = context;
         this.mList = mList;
     }
@@ -70,6 +70,7 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         final ViewHolder holder;
+
         if (view == null) {
             holder = new ViewHolder();
             view = View.inflate(context, R.layout.address_listview_item, null);
@@ -118,21 +119,36 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
             holder.Select.setChecked(false);
         }
 
-        // 默认按钮
-        holder.Select.setOnClickListener(new View.OnClickListener() {
-            private int i;
+        // 系统第一条为默认条
+        // 是默认的情况下不能点击默认按钮
+        if(i != 0){
+            // 默认按钮
+            holder.Select.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SelectFlag = true;
+                    int tag = (int) view.getTag();
+                    xgid = mList.get(tag).getAddress_id();
+                    MyLog.LogShitou("点击默认获取的ID", xgid);
+                    GetTokenUserID(); // 获取标识，用户ID
+                    GetInitNet(StaticField.XQ,xgid); // 地址详情网络请求
+                    selectID = is;
+                    if (mCheckChange != null)
+                        mCheckChange.setSelectID(selectID);
+                }
+            });
+        }
+
+        // 删除
+        holder.Delete.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-//                SelectFlag = true;
-
-//                int tag = (int) view.getTag();
-//                xgid = mList.get(tag).getAddress_id();
-//                MyLog.LogShitou("点击默认获取的ID", xgid);
-//                GetInitNet(StaticField.XQ); // 地址详情网络请求
-                selectID =  i;
-                if (mCheckChange != null)
-                    mCheckChange.setSelectID(selectID);
+                SelectFlag = false;
+                int tag = (int) view.getTag();
+                xgid = mList.get(tag).getAddress_id();
+                MyLog.LogShitou("========点击删除获取的ID", xgid);
+                DeleteDialog(); // 删除弹出框
             }
         });
 
@@ -151,18 +167,6 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
             }
         });
 
-        // 删除
-        holder.Delete.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                SelectFlag = false;
-                int tag = (int) view.getTag();
-                xgid = mList.get(tag).getAddress_id();
-                MyLog.LogShitou("点击删除获取的ID", xgid);
-                DeleteDialog(); // 删除弹出框
-            }
-        });
 
 
 
@@ -171,25 +175,34 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
 
     private int selectID;
     private OnMyCheckChangedListener mCheckChange;
+
     // 回调函数，很类似OnClickListener吧
     public void setOncheckChanged(OnMyCheckChangedListener l) {
         mCheckChange = l;
     }
+
     // 自定义的选中方法
     public void setSelectID(int i) {
         selectID = i;
     }
+
     // 回調接口
     public interface OnMyCheckChangedListener {
         void setSelectID(int selectID);
     }
 
 
-
     private class ViewHolder {
         public TextView Name, Phone, Address, Status, Edit, Delete;//名字,电话,地址,状态,编辑,删除
-//        public ImageView Select;
+        //        public ImageView Select;
         public ToggleButton Select;
+    }
+
+    // 获取标识，用户ID
+    private void GetTokenUserID() {
+        SharedPreferences sp = context.getSharedPreferences(StaticField.NAME, context.MODE_PRIVATE);
+        mToken = sp.getString("token", "");
+        mUser_id = sp.getString("userId", "");
     }
 
     /**
@@ -218,7 +231,8 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
         dialog_button_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                GetInitNet(StaticField.XQ); // 地址详情网络请求
+                GetTokenUserID(); // 获取标识，用户ID
+                GetInitNet(StaticField.XQ, xgid); // 地址详情网络请求
                 prodialog.dismiss();
             }
         });
@@ -230,7 +244,7 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
      * @param is_default
      * @param op_type
      */
-    public void UpDatAddress(final int is_default, final String op_type) {
+    public void UpDatAddress(final int is_default, final String op_type, final String addressId) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -243,10 +257,10 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.OP_TYPE, op_type);// 操作类型：SC：删除；XG：修改；XZ：新增
-                params.put(StaticField.IS_DEFAULT, is_default + "");// 是否设置为默认地址：新增或修改时必传，0为非默认，1为默认
-                params.put(StaticField.ADDRESS_ID, xgid);// 地址ID
+                params.put(StaticField.ADDRESS_ID, addressId);// 地址ID
 
                 if (op_type.equals(StaticField.XG)) {
+                    params.put(StaticField.IS_DEFAULT, is_default + "");// 是否设置为默认地址：新增或修改时必传，0为非默认，1为默认
                     params.put(StaticField.MOBILE, mobile);// 收货人联系方式
                     params.put(StaticField.PROV, prov);// 省份
                     params.put(StaticField.CITY, city);// 市
@@ -287,37 +301,39 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
     /**
      * 地址详情网络请求
      *
-     * @param op_type 操作类型
+     * @param op_type   操作类型
+     * @param addressId 地址Id
      */
-    private void GetInitNet(final String op_type) {
+
+    private void GetInitNet(final String op_type, final String addressId) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
                 HashMap<String, String> params = new HashMap<String, String>();
-
                 params.put(StaticField.SERVICE_TYPE, StaticField.ADDRESSLIST);// 接口名称
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
                 params.put(StaticField.OP_TYPE, op_type);// 操作类型：LB-地址列表：XQ-查询地址详情
-                params.put(StaticField.ADDRESS_ID, xgid);// 地址ID op_type为XQ时必传
-                MyLog.LogShitou("详情请求的字段", op_type + "--" + xgid);
+                params.put(StaticField.ADDRESS_ID, addressId);// 地址ID op_type为XQ时必传
+
+
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-
-                MyLog.LogShitou("地址详情:", result);
+                MyLog.LogShitou(op_type+"=======地址详情请求需要的字段", mToken+"=="+mUser_id+"=="+op_type+"=="+addressId);
+                MyLog.LogShitou(op_type+"/=地址详情:", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
 
-                if(SelectFlag){
+                if (SelectFlag) {
                     Message msg = handler.obtainMessage();
                     msg.what = StaticField.SelectSUCCESS; //点击默认获取地址详情
                     msg.obj = result;
                     handler.sendMessage(msg);
-                }else {
+                } else {
                     Message msg = handler.obtainMessage();
                     msg.what = StaticField.QUERYSUCCESS;  // 点击删除获取地址详情
                     msg.obj = result;
@@ -342,17 +358,21 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
                         name = mList.get(0).getName();
                         mobile = mList.get(0).getMobile();
                         address_id = mList.get(0).getAddress_id();
-                        detail = mList.get(0).getDetail();
+                        String mDetails = mList.get(0).getDetail();//获取
+                        String[] address = mDetails.split(" ");  // 截取地址省市区和详情
+                        String address1 = address[0];// 获取地址省市区
+                        detail = address[1];// 获取地址详情
+                        MyLog.LogShitou("省-市-区==详情", address1 + "-" + detail );
                         Is_default = mList.get(0).getIs_default();
                         prov = mList.get(0).getProv();
                         city = mList.get(0).getCity();
                         area = mList.get(0).getArea();
 
-                        if (Is_default.equals("0")) { //0:非默认；1默认
-                            UpDatAddress(1, StaticField.XG); //修改地址网络请求
-                        } else {
-                            UpDatAddress(0, StaticField.XG);//修改地址网络请求
-                        }
+//                        if (Is_default.equals("0")) { //0:非默认；1默认
+                            UpDatAddress(1, StaticField.XG, address_id); //修改地址网络请求
+//                        } else {
+//                            UpDatAddress(0, StaticField.XG, xgid);//修改地址网络请求
+//                        }
                     }
                     break;
                 case StaticField.QUERYSUCCESS:// 点击删除获取地址详情
@@ -361,16 +381,8 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
                     String mRsp_codes = mAuctionBeans.getRsp_code();
                     if (mRsp_codes.equals("0000")) {
                         mList = mAuctionBeans.getAddress_list();
-                        name = mList.get(0).getName();
-                        mobile = mList.get(0).getMobile();
-                        address_id = mList.get(0).getAddress_id();
-                        detail = mList.get(0).getDetail();
-                        Is_default = mList.get(0).getIs_default();
-                        prov = mList.get(0).getProv();
-                        city = mList.get(0).getCity();
-                        area = mList.get(0).getArea();
-
-                        UpDatAddress(0, StaticField.SC);// 修改(删除)地址网络请求
+                        address_id = mList.get(0).getAddress_id();// 地址ID
+                        UpDatAddress(0, StaticField.SC, address_id);// 修改(删除)地址网络请求
                     }
                     break;
                 case StaticField.SUCCESS:// 修改默认
@@ -378,23 +390,29 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
                     BaseBean mBaseBeans = gsones.fromJson((String) msg.obj, BaseBean.class);
                     String mCodes = mBaseBeans.getRsp_code();
                     if (mCodes.equals("0000")) {
-                        if (Is_default.equals("0")) { //0:非默认；1默认
-                            MyLog.LogShitou("默认按钮----->", "已设为默认");
-//                            holder.Status.setText("设为默认");
-//                            holder.Select.setImageResource(R.mipmap.circle_select);
-                        } else {
-                            MyLog.LogShitou("默认按钮----->", "已设为非默认");
-//                            holder.Status.setText("默认地址");
-//                            holder.Select.setImageResource(R.mipmap.circle_select_click);
-                        }
+//                        if (Is_default.equals("0")) { //0:非默认；1默认
+//                            MyLog.LogShitou("默认按钮----->", "已设为默认");
+////                            holder.Status.setText("设为默认");
+////                            holder.Select.setImageResource(R.mipmap.circle_select);
+//                        } else {
+//                            MyLog.LogShitou("默认按钮----->", "已设为非默认");
+////                            holder.Status.setText("默认地址");
+////                            holder.Select.setImageResource(R.mipmap.circle_select_click);
+//                        }
+
+                        mDatas.GetDatas("IsDefault");// 获取回调数据
+
                     }
                     break;
                 case StaticField.DeleteSUCCESS:// 删除
                     Gson mGsons = new Gson();
                     BaseBean mBaseBean = mGsons.fromJson((String) msg.obj, BaseBean.class);
                     String mCode = mBaseBean.getRsp_code();
+                    String mMsg = mBaseBean.getRsp_msg();
                     if (mCode.equals("0000")) {
+//                        MyToast.showShort(context, mMsg);
                         prodialog.dismiss();// 删除成功关闭Dialog
+                        mDatas.GetDatas(mMsg);// 获取回调数据
                     }
                     break;
                 default:
@@ -403,6 +421,17 @@ public class ConfirmOrderListViewAdapter extends BaseAdapter {
 
         }
     };
+
+    private Datas mDatas;
+
+    // 定义一个接口给ManagerAddressActivity,删除成功，通知list刷新
+    public interface Datas {
+        void GetDatas (String message);
+    }
+
+    public void SetDatas(Datas mDatas) {
+        this.mDatas = mDatas;
+    }
 
 
 }
