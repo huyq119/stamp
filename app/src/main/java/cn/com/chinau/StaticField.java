@@ -57,6 +57,7 @@ public class StaticField {
     public final static String USER_ID = "user_id";// 用户ID，如果用户已登录，需要传
     //常用的字段
     public static final int SUCCESS = 0;
+    public static final int XG_SUCCESS = 1; // 修改
     public static final int TOUCH_EVENT_ID = 2;// SrcollView滑动的ID
     public static final int HOME_SV_COUNT = 1;// Handler发送的结果码
     public static final int ADDSUCCESS = 1;// Handler发送的结果码(加入成功)

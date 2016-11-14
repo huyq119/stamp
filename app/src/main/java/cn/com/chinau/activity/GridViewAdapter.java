@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.lidroid.xutils.BitmapUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
@@ -31,7 +31,6 @@ import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 
-import static cn.com.chinau.StaticField.OFFSETNUM;
 import static java.lang.String.valueOf;
 
 /**
@@ -42,7 +41,7 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
 
     private LayoutInflater mLayoutInflater;
     private int num = 0;//初始索引
-    private List<MyStampGridViewBean.StampList> mList;
+    private ArrayList<MyStampGridViewBean.StampList> mList;
     private int index;
     private BitmapUtils bitmap;
     //这个是编辑按钮的标记
@@ -50,13 +49,15 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
 
     //每页显示的最大的数量
     private int PagerNum;
-    private String mToken,mUser_id;
+    private String mToken, mUser_id;
     private ProgressDialog prodialog;
     private TextView Title;
-    private Button dialog_button_cancel,dialog_button_ok;
+    private Button dialog_button_cancel, dialog_button_ok;
     private String mStamp_sn;
     private DataList mDataList;
-    public GridViewAdapter(Context context, List<MyStampGridViewBean.StampList> mList, int index, BitmapUtils bitmap, boolean flag) {
+    private static int offsetnum = 1000; // 显示邮集条数 步长(item条目数)
+
+    public GridViewAdapter(Context context, ArrayList<MyStampGridViewBean.StampList> mList, int index, BitmapUtils bitmap, boolean flag) {
         this.mList = mList;
         this.index = index;
         this.bitmap = bitmap;
@@ -121,8 +122,8 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
         int pos = position + index * PagerNum;
         //标题
         holder.mName.setText(mList.get(pos).getStamp_name());
-        holder.mCount.setText(mList.get(pos).getStamp_count());
-        holder.mNotCount.setText(mList.get(pos).getStamp_count());
+        holder.mCount.setText(mList.get(pos).getStamp_count());// 编辑显示邮集数量
+        holder.mNotCount.setText(mList.get(pos).getStamp_count()); // 不编辑邮集显示的数量
         bitmap.display(holder.mImg, mList.get(pos).getStamp_img());
 
         holder.mAdd.setTag(pos);
@@ -131,7 +132,7 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
         holder.mSubtract.setOnClickListener(this);
 
         String mStampSn = mList.get(pos).getStamp_sn();
-        MyLog.LogShitou("==000000000=====获取邮集编号",mStampSn);
+        MyLog.LogShitou("==000000000=====获取邮集编号", mStampSn);
         holder.mDelete.setTag(mStampSn);
 //        holder.mDelete.setTag(pos);
         holder.mDelete.setOnClickListener(this);
@@ -141,40 +142,54 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
 
 
     public class ViewHolder {
-        public ImageView mImg,mDelete;//图片
+        public ImageView mImg, mDelete;//图片
         public TextView mName, mCount, mNotCount, mAdd, mSubtract;//名称,数量,非编辑状态下数量，添加按钮，减少按钮
         public LinearLayout mEdit, mNotEdit;
     }
 
     // 获取标识，用户ID
-    private void GetTokenUserID(){
-        SharedPreferences sp = mLayoutInflater.getContext().getSharedPreferences(StaticField.NAME,mLayoutInflater.getContext().MODE_PRIVATE);
+    private void GetTokenUserID() {
+        SharedPreferences sp = mLayoutInflater.getContext().getSharedPreferences(StaticField.NAME, mLayoutInflater.getContext().MODE_PRIVATE);
         mToken = sp.getString("token", "");
         mUser_id = sp.getString("userId", "");
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mystamp_item_add://添加
+//                addFlag = 1;
                 MyStampGridViewBean.StampList stampAdd = mList.get((int) v.getTag());
+
+                String mStampSn = stampAdd.getStamp_sn(); // 获取邮集编号
+
                 String addCount = stampAdd.getStamp_count();
                 String newAddCount = valueOf(Integer.valueOf(addCount) + 1);
+                MyLog.LogShitou("==========增加的数量", "==增加的数量=" + newAddCount + "/==/" + mStampSn);
                 mList.get((int) v.getTag()).setStamp_count(newAddCount);
-                notifyDataSetChanged();
+//                notifyDataSetChanged();
+                GetTokenUserID(); // 获取标识，用户ID
+                UpDateGetInitNet(newAddCount, StaticField.XG, mStampSn); //修改邮集网络请求
                 break;
             case R.id.mystamp_item_subtract://减少
-                MyStampGridViewBean.StampList stampSubtract= mList.get((int) v.getTag());
+//                addFlag = 2;
+                MyStampGridViewBean.StampList stampSubtract = mList.get((int) v.getTag());
+
+                String mStampSns = stampSubtract.getStamp_sn(); // 获取邮集编号
+
                 String subtractCount = stampSubtract.getStamp_count();
                 int newNum = Integer.valueOf(subtractCount) - 1;
-                if (newNum<0)
+                if (newNum < 1)
                     return;
                 String newSubtractCount = valueOf(newNum);
+                MyLog.LogShitou("==========减少的数量", "==减少的数量===" + newSubtractCount + "/==/" + mStampSns);
                 mList.get((int) v.getTag()).setStamp_count(newSubtractCount);
-                notifyDataSetChanged();
+//                notifyDataSetChanged();
+                GetTokenUserID(); // 获取标识，用户ID
+                UpDateGetInitNet(newSubtractCount, StaticField.XG, mStampSns); //修改邮集网络请求
                 break;
             case R.id.mystamp_item_delete://删除
-                mStamp_sn =  String.valueOf(v.getTag());
-//                MyLog.LogShitou("===点击删除获取的邮集编号", "===stampsn="+mStamp_sn);
+                mStamp_sn = String.valueOf(v.getTag());
                 DeleteDialog();
                 break;
         }
@@ -183,8 +198,12 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
 
     /**
      * 修改邮集网络请求
+     *
+     * @param stamp_count 邮集数量
+     * @param op_type     操作类型
+     * @param stampsn     邮票编号
      */
-    private void UpDateGetInitNet(final String stamp_count, final String op_type,final String stampsn) {
+    private void UpDateGetInitNet(final String stamp_count, final String op_type, final String stampsn) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -195,26 +214,34 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
                 params.put(StaticField.STAMP_SN, stampsn);//  邮票编号
                 params.put(StaticField.OP_TYPE, op_type);//  操作类型：SC：删除；JR加入；XG修改
 
-                if(!op_type.equals("SC")){
+                if (!op_type.equals("SC")) {
                     params.put(StaticField.STAMP_COUNT, stamp_count);//  邮票数量
-                    MyLog.LogShitou(op_type+"/======修改邮集数量", stamp_count);
+                    MyLog.LogShitou(op_type + "/======修改邮集数量", stamp_count);
                 }
-                MyLog.LogShitou("===邮集编号", "===stampsn="+stampsn);
+                MyLog.LogShitou("===邮集编号", "===stampsn=" + stampsn);
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
 
-               String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-
-                MyLog.LogShitou(op_type+"/======修改邮集", result);
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou(op_type + "/======修改邮集", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
-                Message msg = mHandler.obtainMessage();
-                msg.what = StaticField.SUCCESS;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
+
+                if (op_type.equals("SC")) {// 删除
+
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                } else { // 修改
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = StaticField.XG_SUCCESS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
 
             }
         });
@@ -225,29 +252,48 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case  StaticField.SUCCESS://修改邮集
+                case StaticField.SUCCESS://删除邮集
                     Gson gson = new Gson();
                     BaseBean mBaseBean = gson.fromJson((String) msg.obj, BaseBean.class);
                     String code = mBaseBean.getRsp_code();
                     String msg1 = mBaseBean.getRsp_msg();
-                    if (code.equals("0000")){
+                    if (code.equals("0000")) {
+
+
                         GetInitNet(num); // 我的邮集列表网络请求
-                    }else if (code.equals("1002")){
-                    MyToast.showShort(mLayoutInflater.getContext(),msg1);
+                    } else if (code.equals("1002")) {
+                        MyToast.showShort(mLayoutInflater.getContext(), msg1);
                     }
                     break;
-                case  StaticField.CG_SUCCESS://邮集list
+                case StaticField.CG_SUCCESS://邮集list
                     String msge = (String) msg.obj;
                     Gson gson1 = new Gson();
                     MyStampGridViewBean mOrderSweepBean = gson1.fromJson(msge, MyStampGridViewBean.class);
                     String mRsp_code = mOrderSweepBean.getRsp_code();
                     if (mRsp_code.equals("0000")) {
                         mList = mOrderSweepBean.getStamp_list();
-                      String mTotalPrice=  mOrderSweepBean.getTotal_amount();// 总资产
-                        MyLog.LogShitou("/======删除后邮集条数", mList.size()+"");
-                        mDataList.GetDataList(mList,mTotalPrice);// 定义接口调用
-//                        MyLog.LogShitou("/======删除邮集条数", mList.size()+"");
+                        String mTotalPrice = mOrderSweepBean.getTotal_amount();// 总资产
+                        MyLog.LogShitou("/=====邮集条数", mList.size() + "");
+                        if (mList != null && mList.size() != 0 && mTotalPrice != null) {
+                            mDataList.GetDataList(mList, mTotalPrice);// 定义接口调用
+                        }
                     }
+                    break;
+
+                case StaticField.XG_SUCCESS: // 修改
+                    Gson gson2 = new Gson();
+                    BaseBean mBaseBean1 = gson2.fromJson((String) msg.obj, BaseBean.class);
+                    String code1 = mBaseBean1.getRsp_code();
+                    String msg2 = mBaseBean1.getRsp_msg();
+                    if (code1.equals("0000")) {
+                        notifyDataSetChanged();// 刷新适配器
+                        // 修改成功后，再次请求邮集列表数据，以便刷新邮集总资产
+                        GetInitNet(num); // 我的邮集列表网络请求
+//                        MyToast.showShort(mLayoutInflater.getContext(), msg2);
+                    } else if (code1.equals("1002")) {
+                        MyToast.showShort(mLayoutInflater.getContext(), msg2);
+                    }
+
                     break;
                 default:
                     break;
@@ -280,8 +326,8 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
         dialog_button_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GetTokenUserID();
-                UpDateGetInitNet(null,StaticField.SC, mStamp_sn); //加入邮集网络请求
+                GetTokenUserID();   // 获取标识，用户ID
+                UpDateGetInitNet(null, StaticField.SC, mStamp_sn); //修改邮集网络请求
                 prodialog.dismiss();
             }
         });
@@ -289,11 +335,11 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
 
 
     // 定义一个接口给Fragment,删除成功，通知list刷新
-    public interface DataList{
-        void GetDataList( List<MyStampGridViewBean.StampList> mDataList,String str);
+    public interface DataList {
+        void GetDataList(ArrayList<MyStampGridViewBean.StampList> mDataList, String str);
     }
 
-    public void SetDataList (DataList dataList) {
+    public void SetDataList(DataList dataList) {
         this.mDataList = dataList;
     }
 
@@ -312,13 +358,13 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 当前记录索引
-                params.put(StaticField.OFFSET, String.valueOf(OFFSETNUM)); // 步长(item条目数)
+                params.put(StaticField.OFFSET, String.valueOf(offsetnum)); // 步长(item条目数)
 
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
 
-               String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
                 MyLog.LogShitou("适配器我的邮集", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
