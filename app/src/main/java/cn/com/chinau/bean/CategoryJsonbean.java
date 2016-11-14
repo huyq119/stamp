@@ -1,9 +1,12 @@
 package cn.com.chinau.bean;
 
 /**
- * Created by Administrator on 2016/10/14.
+ * Date: 2016/11/14 10:08
+ * Autor：ChenXR
+ * Mail：410529656@qq.com
  * 邮票目录筛上传Json选实体类
  */
+
 public class CategoryJsonBean {
 
     private String year; // 年代

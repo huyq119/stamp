@@ -66,6 +66,7 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
                         JSONObject json = new JSONObject(Result);
                         String order_sn = json.getString("order_sn");
                         sp.edit().putString("order_sn",order_sn).commit();
+                        sp.edit().putString("BuyBack","AffirmBuyBack").commit();
                         openActivityWitchAnimation(FastMailInfoActivity.class);// 跳转快递信息页面
                         finish();
                     } catch (JSONException e) {
@@ -223,7 +224,7 @@ public class AffirmBuyBackActivity extends BaseActivity implements View.OnClickL
                 String mResult = HttpUtils.submitPostData(StaticField.ROOT, params);
                 MyLog.LogShitou("确认回购页面--->", mResult);
 //                handler.sendEmptyMessage(DELPROGRESS);
-                if (mResult.equals("-1")) {
+                if (mResult.equals("-1") | mResult.equals("-2")  ) {
                     return;
                 }
                 Gson gson = new Gson();

@@ -1,7 +1,6 @@
 package cn.com.chinau.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 
 import cn.com.chinau.R;
 import cn.com.chinau.bean.OrderSweepBean;
+import cn.com.chinau.utils.MyLog;
 
 /**
  * Created by Administrator on 2016/8/30.
@@ -70,28 +70,29 @@ public class OrderSweepAdapter extends BaseAdapter {
         holder.percent.setText(list.get(i).getIncome()); // 预计收益
 
         String ScanCodestatus = list.get(i).getOrder_status();// 订单状态
-
+//       String ScanCodestatus = "FINISH"; // 此行测试用的后面需要删除
+        MyLog.LogShitou("======订单状态","=============="+ScanCodestatus);
         if (ScanCodestatus.equals("INIT")) {// 待寄送
             holder.Earnings.setText("预计收益:");
-            holder.Scanstatus.setTextColor(Color.parseColor("#ff9900"));
+            holder.Scanstatus.setTextColor(context.getResources().getColor(R.color.refuse));
             holder.ScanLinear.setVisibility(View.VISIBLE);
             holder.Scanstatus.setText("待寄送");
         } else if (ScanCodestatus.equals("CLOSE")) { // 订单关闭
-            holder.Scanstatus.setTextColor(Color.parseColor("#666"));
+            holder.Scanstatus.setTextColor(context.getResources().getColor(R.color.font));
             holder.ScanLinear.setVisibility(View.INVISIBLE);
             holder.Scanstatus.setText("订单关闭");
         } else if (ScanCodestatus.equals("AUDITING")) {// 审核中
             holder.Earnings.setText("预计收益:");
-            holder.Scanstatus.setTextColor(Color.parseColor("#ff9900"));
+            holder.Scanstatus.setTextColor(context.getResources().getColor(R.color.refuse));
             holder.ScanLinear.setVisibility(View.VISIBLE);
             holder.Scanstatus.setText("审核中");
         } else if (ScanCodestatus.equals("FINISH")) { // 已完成
             holder.Earnings.setText("收益:");
             holder.ScanLinear.setVisibility(View.VISIBLE);
-            holder.Scanstatus.setTextColor(Color.parseColor("#666"));
+            holder.Scanstatus.setTextColor(context.getResources().getColor(R.color.font));
             holder.Scanstatus.setText("已完成");
         } else if (ScanCodestatus.equals("REFUSE")) { //订单驳回
-            holder.Scanstatus.setTextColor(Color.parseColor("#e20000"));
+            holder.Scanstatus.setTextColor(context.getResources().getColor(R.color.red_font));
             holder.Earnings.setText("收益:");
             holder.ScanLinear.setVisibility(View.VISIBLE);
             holder.Scanstatus.setText("订单驳回");

@@ -166,7 +166,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
                 case StaticField.SC_SUCCESS://商城类别查询
                     Gson mGsones3 = new Gson();
                     String mCategory3 = (String) msg.obj;
-                    MyLog.LogShitou("商城类别数据",mCategory3);
+//                    MyLog.LogShitou("商城类别数据",mCategory3);
                     CategorySCBean mCategorySCBean2 = mGsones3.fromJson(mCategory3, CategorySCBean.class);
                     String code3 = mCategorySCBean2.getRsp_code();
                     if (code3.equals("0000")) {
@@ -518,7 +518,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
                 params.put(StaticField.SIGN, md5code);
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                MyLog.LogShitou("首页数据", result);
+                MyLog.LogShitou("===============首页数据", result);
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
@@ -677,7 +677,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.LogShitou(op_type+"类别查询数据", result);
+//                MyLog.LogShitou(op_type+"类别查询数据", result);
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }

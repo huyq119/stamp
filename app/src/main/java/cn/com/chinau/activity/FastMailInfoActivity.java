@@ -65,10 +65,10 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
     private int index = 0;// 快递的角标
     private String mFast_mail = "";// 用于接收快递信息的字符串
     private PopupWindow mPopup;
-    int colors=00000;
+    int colors = 00000;
     private ColorDrawable dw = new ColorDrawable(colors);// popup的背景
-//    private ColorDrawable dw = new ColorDrawable(getResources().getColor(R.color.express_pop));// popup的背景
-    private String phone, order_sn;
+    //    private ColorDrawable dw = new ColorDrawable(getResources().getColor(R.color.express_pop));// popup的背景
+    private String phone, order_sn, mBuyBack;
     private SussessDialog dialog;
 
     private MyHandler handler = new MyHandler(this) {
@@ -81,7 +81,7 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
                     try {
                         JSONObject json = new JSONObject(Result);
                         String order_sn = json.getString("order_sn");
-                        sp.edit().putString("order_sn",order_sn).commit();
+                        sp.edit().putString("order_sn", order_sn).commit();
                         openActivityWitchAnimation(FastMailSubmitActivity.class);// 跳转快递提交成功页面
                         finish();
                     } catch (JSONException e) {
@@ -92,7 +92,7 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
                     break;
                 case FAIL:// 失败
                     dialog = new SussessDialog(FastMailInfoActivity.this);
-                  String str = (String) msg.obj;
+                    String str = (String) msg.obj;
                     try {
                         JSONObject json = new JSONObject(str);
                         String rsg_msg = json.getString("rsg_msg");
@@ -222,21 +222,24 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
      * 上个页面传过来的值
      */
     private void getIntentData() {
-//        String result = getIntent().getExtras().getString("Result");// json串
-//        phone = getIntent().getExtras().getString("phone");// 手机号
-//        order_sn = getIntent().getExtras().getString("order_sn"); // 回购订单编号
 
-        phone = sp.getString("Phone","");
-        order_sn = sp.getString("order_sn","");// 回购订单编号
+        phone = sp.getString("phone", "");
+        order_sn = sp.getString("order_sn", "");// 回购订单编号
+        mBuyBack = sp.getString("BuyBack", "");// 从哪个页面跳转过来的标识
+
+        MyLog.LogShitou("获取本地手机号+回购订单编号+回购标识",phone+"/==/"+order_sn+"/==/"+mBuyBack);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.base_title_back://返回
-                    openActivityWitchAnimation(AffirmBuyBackActivity.class);
+                if (mBuyBack.equals("ScanOrderBuyDetail")) {//  扫码回购订单详情页面跳过来的
+                    finishWitchAnimation();
+                } else if(mBuyBack.equals("AffirmBuyBack")){
+                    openActivityWitchAnimation(AffirmBuyBackActivity.class); //  确认回购页面跳过来的
                     finish();
-//                finishWitchAnimation();
+                }
                 break;
             case R.id.express_kuaidi://选择快递公司
                 if (mPopup == null) {
@@ -252,7 +255,7 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
                 Log.e("快递单号-->:", express);
 //                pd = new ProgressDialog(this);
 //                pd.show();
-                Buyback(express); // 提交网络请求
+                Buyback(express,StaticField.WL); // 提交网络请求
                 break;
             default:
                 break;
@@ -300,7 +303,7 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
      *
      * @param express 单号
      */
-    private void Buyback(final String express) {
+    private void Buyback(final String express,final String op_type ) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -311,7 +314,7 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
                 params.put(StaticField.EXPRESS_NO, express);// 快递单号
                 // params.put(Constants.GOODS_SN, goods_sn);
                 params.put(StaticField.MOBILE, phone);// 手机号
-                params.put(StaticField.OP_TYPE, StaticField.WL);// 操作类型
+                params.put(StaticField.OP_TYPE, op_type);// 操作类型
                 // params.put(Constants.ORDER_DETAIL_SN, order_detail_sn);
                 params.put(StaticField.ORDER_SN, order_sn);// 回购订单编号
 
@@ -320,6 +323,7 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
 
                 params.put(StaticField.TOKEN, token);
                 params.put(StaticField.USER_ID, userId);
+
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
@@ -328,7 +332,7 @@ public class FastMailInfoActivity extends BaseActivity implements View.OnClickLi
 
                 MyLog.LogShitou("快递信息", mResult);
 
-                if (mResult.equals("-1") | mResult.equals("-2") ) {
+                if (mResult.equals("-1") | mResult.equals("-2")) {
                     handler.sendEmptyMessage(NOFAIL);
                     return;
                 }
