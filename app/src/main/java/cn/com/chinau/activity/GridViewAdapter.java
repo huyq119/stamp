@@ -275,6 +275,7 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
                         String mTotalPrice = mOrderSweepBean.getTotal_amount();// 总资产
                         MyLog.LogShitou("/=====邮集条数", mList.size() + "");
                         if (mList != null && mList.size() != 0 && mTotalPrice != null) {
+//                        if (mDataList != null) {
                             mDataList.GetDataList(mList, mTotalPrice);// 定义接口调用
                         }
                     }

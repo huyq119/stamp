@@ -259,7 +259,7 @@ public class ResettingPassWordActivity extends BaseActivity implements View.OnCl
                 initGetTexyString();
                 pd = new SendProgressDialog(ResettingPassWordActivity.this);
                 pd.show();
-                getLoginContext(mPhone, mPrassword, mCode);// 获取注册访问网络内容
+                getLoginContext(mPhone, mPrassword, mCode);// 点击确定访问网络内容
                 break;
             default :
                 break;
@@ -323,7 +323,7 @@ public class ResettingPassWordActivity extends BaseActivity implements View.OnCl
                     params.put(StaticField.MOBILE, phone);// 手机号
                     Log.e("输入的的手机号-->", phone);
                 }
-                params.put(StaticField.SMS_TYPE, StaticField.CZDL);// 操作类型
+                params.put(StaticField.SMS_TYPE, StaticField.WJMM);// 操作类型
 
                 if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
                     // 加入token和user_id
@@ -427,7 +427,7 @@ public class ResettingPassWordActivity extends BaseActivity implements View.OnCl
                 byte[] PWByte = Des3Encode.encryptMode(mPassWordRegister.getBytes());
                 String PWBase64 = new String(Base64.encode(PWByte, Base64.DEFAULT));
                 params.put(StaticField.NEW_PWD, PWBase64); //密码
-                params.put(StaticField.OP_TYPE, StaticField.CZDL);// 操作类型
+                params.put(StaticField.OP_TYPE, StaticField.WJMM);// 操作类型
 
                 if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
                     // 加入token和user_id

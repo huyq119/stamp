@@ -130,8 +130,8 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                             }
 
                             String mLeft_time = mStampDetailBean.getLeft_time(); // 剩余时间
-
-                            if (mLeft_time != null) {
+                            MyLog.LogShitou("==========mLeft_time时间", "============--->"+mLeft_time);
+                            if (!mLeft_time.equals("")) {
                                 startRun(); //开启倒计时
                                 // 将时间转换成时分秒格式
                                 int times = Integer.valueOf(mLeft_time).intValue(); // 转int类型
@@ -634,24 +634,24 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 } else {
                     // 是否是第一次加价
 //                    if (addFlag) {
-                        String countes = mCount.getText().toString().trim(); // 获取出价价格
-                        String mCountess = countes.replace(",", "");
-                        intCount = Double.parseDouble(mCountess);
+                    String countes = mCount.getText().toString().trim(); // 获取出价价格
+                    String mCountess = countes.replace(",", "");
+                    intCount = Double.parseDouble(mCountess);
 //                        intCount =Double.valueOf(counts).doubleValue();
-                        MyLog.LogShitou("增加后的当前价是多少", countes + "--" + intCount);
-                        if (intCount <= 50) {
-                            intCount++;
-                            mCount.setText(String.valueOf(intCount));
-                        } else if (intCount > 50 && intCount <= 100) {
-                            intCount += 2;
-                            mCount.setText(String.valueOf(intCount));
-                        } else if (intCount > 100 && intCount <= 500) {
-                            intCount += 5;
-                            mCount.setText(String.valueOf(intCount));
-                        } else if (intCount > 500 && intCount <= 10000000) {
-                            intCount += 10;
-                            mCount.setText(String.valueOf(intCount));
-                        }
+                    MyLog.LogShitou("增加后的当前价是多少", countes + "--" + intCount);
+                    if (intCount <= 50) {
+                        intCount++;
+                        mCount.setText(String.valueOf(intCount));
+                    } else if (intCount > 50 && intCount <= 100) {
+                        intCount += 2;
+                        mCount.setText(String.valueOf(intCount));
+                    } else if (intCount > 100 && intCount <= 500) {
+                        intCount += 5;
+                        mCount.setText(String.valueOf(intCount));
+                    } else if (intCount > 500 && intCount <= 10000000) {
+                        intCount += 10;
+                        mCount.setText(String.valueOf(intCount));
+                    }
 //                    } else {
 //                        DialogAgreement();// 出价协议Dialog
 //                    }
@@ -662,9 +662,9 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                 if (mToken.equals("") || mUser_id.equals("")) {
                     openActivityWitchAnimation(LoginActivity.class);
                 } else {
-                   String mUserId = mBidList.get(0).getUser_id();
+                    String mUserId = mBidList.get(0).getUser_id();
                     String myUser_id = sp.getString("userId", "");
-                    if (!myUser_id.equals(mUserId)){
+                    if (!myUser_id.equals(mUserId)) {
                         if (count.equals("0")) {
                             MyToast.showShort(this, "请先加价");
                         } else {
@@ -676,8 +676,8 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
                                 bidFlag = true;
                             }
                         }
-                    }else{
-                       MyToast.showShort(AuctionDetailActivity.this,"您已出价");
+                    } else {
+                        MyToast.showShort(AuctionDetailActivity.this, "您已出价");
                     }
 
 
@@ -710,7 +710,6 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
             }
         });
     }
-
 
 
     /**

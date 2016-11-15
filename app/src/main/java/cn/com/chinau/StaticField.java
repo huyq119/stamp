@@ -46,6 +46,7 @@ public class StaticField {
     public static final String XGDL = "XGDL";// 修改登录密码
     public static final String CZDL = "CZDL";// 重置登录密码
     public static final String XGTX = "XGTX";// 修改提现密码
+    public static final String SZTX = "SZTX";// 设置提现
 
 
     // 后期更改的值
@@ -274,17 +275,23 @@ public class StaticField {
     public static final String GOODSORDERLIST = "cn.com.chinau.orderlist.query";
     public static final String GOODSORDERDETAIL = "cn.com.chinau.order.detail.query";// 商品详情
     public static final String EXPRESSQUERY = "cn.com.chinau.express.query";// 物流详情
+    public static final String ORDERREFUND= "cn.com.chinau.order.refund";// 申请退款
     public static final String REFUNDDETAIL = "cn.com.chinau.refund.detail.query";// 退款详情查询
     public static final String ORDERSTATUS = "order_status";
     public static final String DFK = "DFK";// 待付款
     public static final String DSH = "DSH";// 待收货
     public static final String WC = "WC"; // 已完成
     public static final String TK = "TK";// 退款
+    public static final String TH = "TH";// 退款
+    public static final String PTJR = "PTJR";// 退款
+    public static final String REFUNDTYPE = "refund_type";// 退款类型
+    public static final String DETAIL = "detail";// 退款说明
     // 购物车
     public static final String SHOPCARTQUERY = "cn.com.chinau.shopcart.query";
     // 修改购物车
     public static final String SHOPCARTMODIFY = "cn.com.chinau.shopcart.modify";
     public static final String GOODESINFO = "goods_info";
+    public static final String AUCTIONSN = "auction_sn"; // 竞拍编号
     // 购物车去接算（确认订单）
     public static final String SHOPCARTSETTLE = "cn.com.chinau.shopcart.settle";
     // 订单支付

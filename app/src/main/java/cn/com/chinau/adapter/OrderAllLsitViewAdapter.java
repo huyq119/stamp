@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -33,7 +32,7 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
     private BitmapUtils bitmapUtils;
     ArrayList<OrderAllListViewGoodsBean.Order_list> order_list;
     private String mExpress_no,mExpress_comp;
-
+    private String mOrderStatus;
     /**
      *
      * @param context
@@ -101,7 +100,7 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
         }
         // 获取父控件显示的
         OrderAllListViewGoodsBean.Seller_list seller_list = order_list.get(i).getSeller_list().get(0);
-        mExpress_no = seller_list.getExpress_no();// 快递单号
+//        mExpress_no = seller_list.getExpress_no();// 快递单号
 
         String mName = seller_list.getSeller_name();// 卖家名称
         gholder.mName.setText(mName);
@@ -152,6 +151,8 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
         OrderAllListViewGoodsBean.Order_detail_list  order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
 
        String mOrder_status = order_list.get(i).getOrder_status();// 获取订单状态
+
+
 //MyLog.LogShitou("mOrder_status=============订单状态","mOrder_status="+mOrder_status);
         if (order_list !=null){
             // 获取子控件的值
@@ -175,8 +176,9 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
             DecimalFormat    df   = new DecimalFormat("######0.00");// 保留2位小数
             String mprice = df.format(price);
             goodsholder.mAllPrice.setText("￥"+mprice);// 显示的总价
-
             MyLog.LogShitou("总价",price+"");
+
+            goodsholder.mLogistics.setTag(i);
 
             if (mOrder_status.equals("INIT")){ // 待付款
                 goodsholder.mStatus.setText("待付款");
@@ -228,20 +230,23 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
 
             // 查看物流
             goodsholder.mLogistics.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View view) {
-                    MyLog.LogShitou("==========快递单号",mExpress_no+"");
-                    if (TextUtils.isEmpty(mExpress_no)){
-                        MyToast.showShort(context,"快递单号有误");
-                    }else {
+                   int tag = (int) view.getTag();
+
+                    mOrderStatus = order_list.get(tag).getOrder_status();// 获取订单状态
+
+                    mExpress_no = order_list.get(tag).getSeller_list().get(0).getExpress_no(); // 获取空布局
+
+                    MyLog.LogShitou("==========快递单号和订单状态",mExpress_no+"=="+mOrderStatus);
                         Intent intent = new Intent(context, LogisticsDetailsActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("ExpressNo", mExpress_no);
+                        bundle.putString("OrderStatus", mOrderStatus);
                         intent.putExtras(bundle);
                         context.startActivity(intent);
                         ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-//                    MyToast.showShort(context, "查看了物流...");
-                    }
                 }
             });
         }

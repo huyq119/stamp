@@ -71,6 +71,7 @@ public class LookOrderDetailRefuseActivity extends BaseActivity {
         mOrder_sn = bundle.getString(StaticField.ORDER_SN); // 交易订单号
         mGoods_sn = bundle.getString(StaticField.GOODS_SN); // 商品编号
         mOrderStatus = bundle.getString(StaticField.ORDERSTATUS); //订单状态
+
         MyLog.LogShitou("订单号+商品编号+类型",mOrder_sn+"=="+mGoods_sn+"==="+mOrderStatus);
         mBack = (ImageView) mRefuseTitle.findViewById(R.id.base_title_back);
         mTitle = (TextView) mRefuseTitle.findViewById(R.id.base_title);

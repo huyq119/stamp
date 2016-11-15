@@ -423,10 +423,11 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 //                handler.sendEmptyMessage(DELSHOWPROGRESS);
                 Gson gson = new Gson();
                 BaseBean json = gson.fromJson(result, BaseBean.class);
+                String msg_Code= json.getRsp_code();// 返回的内容
                 String msg_Data = json.getRsp_msg();// 返回的内容
                 if (msg_Data.equals("用户需要重新登录")) {
                     handler.sendEmptyMessage(AGAINLOGIN);
-                } else if (msg_Data.equals("成功")) {
+                } else if (msg_Code.equals("0000")) {
                     Message msgSuccess = handler.obtainMessage();
                     msgSuccess.what = SUCCESS;
                     msgSuccess.obj = result;

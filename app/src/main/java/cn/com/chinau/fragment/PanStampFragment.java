@@ -173,7 +173,6 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
             mPanStampAdapter.notifyDataSetChanged();
 //            MyLog.LogShitou("num=====3=======",""+num);
             if (num != 0) {
-//                MyLog.LogShitou("===1=====到这一部了吗",mList.size()+"======="+num);
                 mPanStampGV.setSelection(mPanStampAdapter.getCount() - 20);
                 //解决调用onRefreshComplete方法去停止刷新操作,无法取消刷新的bug
                 gridView.postDelayed(new Runnable() {

@@ -25,6 +25,7 @@ import cn.com.chinau.bean.AuctionRecordBean;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
+import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 
@@ -55,6 +56,7 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
                     Gson gson = new Gson();
                     AuctionRecordBean mAuctionBean = gson.fromJson(msge, AuctionRecordBean.class);
                     String mRsp_code = mAuctionBean.getRsp_code();
+                    String mRsp_msg = mAuctionBean.getRsp_msg();
                     if (mRsp_code.equals("0000")) {
                         mList = mAuctionBean.getAuction_rec_list();
                         if (mList != null && mList.size() != 0) {
@@ -62,6 +64,8 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
                         } else {
                             GoneOrVisibleView(); // ListView为空时显示的布局
                         }
+                    }else if(mRsp_code.equals("1002")){
+                        MyToast.showShort(AuctionRecordActivity.this,mRsp_msg);
                     }
                     break;
                 case StaticField.JPZ_SUCCESS: // 竞拍中
@@ -69,6 +73,7 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
                     Gson gson1 = new Gson();
                     AuctionRecordBean mAuctionBean1 = gson1.fromJson(msge1, AuctionRecordBean.class);
                     String mRsp_code1 = mAuctionBean1.getRsp_code();
+                    String mRsp_msg1 = mAuctionBean1.getRsp_msg();
                     if (mRsp_code1.equals("0000")) {
                         mList = mAuctionBean1.getAuction_rec_list();
                         if (mList != null && mList.size() != 0) {
@@ -77,6 +82,8 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
                         } else {
                             GoneOrVisibleView();// ListView为空时显示的布局
                         }
+                    }else if(mRsp_code1.equals("1002")){
+                        MyToast.showShort(AuctionRecordActivity.this,mRsp_msg1);
                     }
                     break;
                 case StaticField.CJ_SUCCESS: // 已出局
@@ -84,6 +91,7 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
                     Gson gson2 = new Gson();
                     AuctionRecordBean mAuctionBean2 = gson2.fromJson(msge2, AuctionRecordBean.class);
                     String mRsp_code2 = mAuctionBean2.getRsp_code();
+                    String mRsp_msg2 = mAuctionBean2.getRsp_msg();
                     if (mRsp_code2.equals("0000")) {
                         mList = mAuctionBean2.getAuction_rec_list();
                         if (mList != null && mList.size() != 0) {
@@ -91,6 +99,8 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
                         } else {
                             GoneOrVisibleView();// ListView为空时显示的布局
                         }
+                    }else if(mRsp_code2.equals("1002")){
+                        MyToast.showShort(AuctionRecordActivity.this,mRsp_msg2);
                     }
                     break;
                 case StaticField.CG_SUCCESS: // 竞拍成功
@@ -98,6 +108,7 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
                     Gson gson3 = new Gson();
                     AuctionRecordBean mAuctionBean3 = gson3.fromJson(msge3, AuctionRecordBean.class);
                     String mRsp_code3 = mAuctionBean3.getRsp_code();
+                    String mRsp_msg3 = mAuctionBean3.getRsp_msg();
                     if (mRsp_code3.equals("0000")) {
                         mList = mAuctionBean3.getAuction_rec_list();
                         if (mList != null && mList.size() != 0) {
@@ -105,6 +116,8 @@ public class AuctionRecordActivity extends BaseActivity implements View.OnClickL
                         } else {
                             GoneOrVisibleView();// ListView为空时显示的布局
                         }
+                    }else if(mRsp_code3.equals("1002")){
+                        MyToast.showShort(AuctionRecordActivity.this,mRsp_msg3);
                     }
                     break;
             }

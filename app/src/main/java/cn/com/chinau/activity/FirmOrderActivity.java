@@ -62,11 +62,11 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     //    private CustomExpandableListView mListView;//底部列表展示
     private ListView mListView;//底部列表展示
     private ImageView mBack, mPayImg;
-    private TextView mTitle, mOkPay, mDistributionTv, mDistributionPrice, mPayNmme, mFeeRate,mFee, mAddressName,
+    private TextView mTitle, mOkPay, mDistributionTv, mDistributionPrice, mPayNmme, mFeeRate, mFee, mAddressName,
             mAddressMobile, mAddressDetail, mNoAddressAdd, mTotalPrice, mGoodsCount;
 
     private LinearLayout mAddress1;
-    private String mAuctionRecord;
+    private String mFirmOrder;
     //    private String mShopGoodsJson;// 传过来的Json串
     private SharedPreferences sp;
     private String mToken, mUser_id;
@@ -99,6 +99,9 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private String groupSet1;
     private String mRequestId;
     private String mPayUrl;
+    private String mGoods_sn, mAuction_sn;
+    private String mToJson;
+
     @Override
     public View CreateTitle() {
         mFirmOrderTitle = View.inflate(this, R.layout.base_back_title, null);
@@ -165,14 +168,19 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     // 获取传过来的数据
     private void GetStringData() {
         Intent intent = getIntent();
+        mFirmOrder = intent.getStringExtra("FirmOrder");// 获取是哪个页面来的适配器标识，
         mCount = intent.getStringExtra("Count");// 获取传过来的数量
         mPrice = intent.getStringExtra("Price");// 获取传过来的总价钱
+        if (mFirmOrder.equals("AuctionRecordAdapter")) {
+            mGoods_sn = intent.getStringExtra("Goodes_sn");// 获取传过来的商品编号
+            mAuction_sn = intent.getStringExtra("Auction_sn");// 获取传过来的竞拍编号
+            // 添加数据到AddShopCartBean生成Json
+            mToJson = AddShopCartBean(mGoods_sn, mCount);
 
-        String mSellerList = sp.getString("SellerList", "");// 获取保存在本地的购物车总数据
-
-        MyLog.LogShitou("获取保存在本地的总数据", mSellerList);
-
-
+            MyLog.LogShitou("===========竞拍记录适配器组装Json串", mToJson);
+        } else {
+            String mSellerList = sp.getString("SellerList", "");// 获取保存在本地的购物车总数据
+            MyLog.LogShitou("获取保存在本地的总数据", mSellerList);
 //        groupSet1 = intent.getStringExtra("GroupSet");// 获取传过来的总价钱
 //        ArrayList<String> noJsonToList = getNoJsonToList(groupSet1);
 //        MyLog.LogShitou("传过来选中List", noJsonToList.toString());
@@ -187,26 +195,27 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //        returnStr="{"+returnStr+"}}";
 //        MyLog.LogShitou("传过来选中的编号+数量", returnStr);
 
-        groupSet = MyApplication.getGroupSet();// 传过来的集合数据
-        if (groupSet != null) {
-            for (HashMap.Entry<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
+            groupSet = MyApplication.getGroupSet();// 传过来的集合数据
+            if (groupSet != null) {
+                for (HashMap.Entry<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
 //            key = entry.getKey();
-                Set<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
-                for (int i = 0; i < value.size(); i++) {
-                    Iterator<ShopNameBean.SellerBean.GoodsBean> iterator = value.iterator();
-                    ShopNameBean.SellerBean.GoodsBean next = iterator.next();
-                    goods_sn = next.getGoods_sn();// 商品编号
-                    goods_count = next.getGoods_count();// 商品数量
-                    isChild = next.isChildSelected();
-                    MyLog.LogShitou("---1---编号+数量Json", goods_sn + "--" + goods_count);
+                    Set<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
+                    for (int i = 0; i < value.size(); i++) {
+                        Iterator<ShopNameBean.SellerBean.GoodsBean> iterator = value.iterator();
+                        ShopNameBean.SellerBean.GoodsBean next = iterator.next();
+                        goods_sn = next.getGoods_sn();// 商品编号
+                        goods_count = next.getGoods_count();// 商品数量
+                        isChild = next.isChildSelected();
+                        MyLog.LogShitou("---1---编号+数量Json", goods_sn + "--" + goods_count);
+                    }
+                    // 添加数据到AddShopCartBean生成Json
+                    mToJson = AddShopCartBean(goods_sn, goods_count);
+
+                    MyLog.LogShitou("购物车适配器数据转换成的Json", mToJson);
+
                 }
-                // 添加数据到AddShopCartBean生成Json
-                AddShopCartBean mAddShopCartBean = new AddShopCartBean();
-                mAddShopCartBean.setGoods_sn(goods_sn);
-                mAddShopCartBean.setGoods_count(goods_count);
-                info_list.add(mAddShopCartBean); // 添加到list
-                MyLog.LogShitou("==2===最后需要的编号+数量Json", info_list.toString());
             }
+
         }
     }
 
@@ -260,9 +269,9 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 
 
     private void initData() {
-        MyLog.LogShitou("最后需要的Json串", info_list.toString());
+        MyLog.LogShitou("最后需要的Json串", mToJson);
         setFalseData();
-        FirmOrderNet(info_list.toString());// 确认订单list网络请求
+        FirmOrderNet(mToJson);// 确认订单list网络请求
     }
 
     private void initListener() {
@@ -292,7 +301,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
      */
     private void setFalseData() {
 
-        if (groupSet !=null){
+        if (groupSet != null) {
 
             FirmOrderExpandableAdapter expandableAdapter = new FirmOrderExpandableAdapter(this, mBitmap, groupSet);
             mListView.setAdapter(expandableAdapter);
@@ -329,11 +338,11 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             case R.id.firmOrder_ok_pay://确认并付款
                 mExCompName = mDistributionTv.getText().toString().trim();
                 payNmae = mPayNmme.getText().toString().trim();
-                MyLog.LogShitou("===========地址id",mAddressId+"=="+mNoAddressId);
-                if (mAddressId !=null | mNoAddressId !=null){
+                MyLog.LogShitou("===========地址id", mAddressId + "==" + mNoAddressId);
+                if (mAddressId != null | mNoAddressId != null) {
                     OrderPayNet(); // 订单支付网络请求
-                }else{
-                   MyToast.showShort(FirmOrderActivity.this,"订单信息异常");
+                } else {
+                    MyToast.showShort(FirmOrderActivity.this, "订单信息异常");
                 }
                 break;
             case R.id.FirmOrder_Address: // 选择收货地址
@@ -366,7 +375,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     };
 
 
-
     /**
      * 确认订单list网络请求
      *
@@ -383,6 +391,10 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
                 params.put(StaticField.GOODESINFO, Goods_info);//  商品信息：所有商品的json字符串
 
+                if (mFirmOrder.equals("AuctionRecordAdapter")) {
+                    MyLog.LogShitou("============竞拍编号", "===============" + mAuction_sn);
+                    params.put(StaticField.AUCTIONSN, mAuction_sn);//  竞拍编号
+                }
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
                 params.put(StaticField.SIGN, md5code);
@@ -426,9 +438,14 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 params.put(StaticField.REQUESTID, mTimeId);// 客户订单请求号
                 params.put(StaticField.PAYAMOUNT, "0.01");// 支付金额
 
+                if (mFirmOrder.equals("AuctionRecordAdapter")) {
+                    MyLog.LogShitou("============竞拍编号", "===============" + mAuction_sn);
+                    params.put(StaticField.AUCTIONSN, mAuction_sn);//  竞拍编号
+                }
+
                 if (payNmae.equals("微信")) {
                     params.put(StaticField.PAYTYPE, StaticField.WXPAY);// 支付方式
-                    params.put(StaticField.GOODESINFO, info_list.toString());//  商品信息：所有商品的json字符串
+                    params.put(StaticField.GOODESINFO, mToJson);//  商品信息：所有商品的json字符串
 
                     String mapSort = SortUtils.MapSort(params);
                     String md5code = Encrypt.MD5(mapSort);
@@ -447,7 +464,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     MyLog.LogShitou("微信", "微信-----------------------");
                 } else if (payNmae.equals("支付宝")) {
                     params.put(StaticField.PAYTYPE, StaticField.ALIPAY);// 支付方式
-                    params.put(StaticField.GOODESINFO, info_list.toString());//  商品信息：所有商品的json字符串
+                    params.put(StaticField.GOODESINFO, mToJson);//  商品信息：所有商品的json字符串
                     MyLog.LogShitou("生成订单参数", mToken + "--" + mUser_id + "--" + mAddressId + "--" + mNoAddressId + "--" + mTimeId + "--" + info_list.toString());
 
                     String mapSort = SortUtils.MapSort(params);
@@ -484,8 +501,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     if (mCode.equals("0000")) {
                         String mFeeRates = mFirmOrderBean.getService_fee_rate();// 服务费率
 
-                        mFeeRate.setText("服务费("+mFeeRates+")");
-                        mFee.setText("￥" +mFirmOrderBean.getService_fee());
+                        mFeeRate.setText("服务费(" + mFeeRates + ")");
+                        mFee.setText("￥" + mFirmOrderBean.getService_fee());
                         // 快递公司
                         express_comp = mFirmOrderBean.getExpress_comp();
                         mDistributionTv.setText(express_comp.get(0).getValue());
@@ -584,7 +601,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     String mMsgs = mOrderPayBeans.getRsp_msg();
                     if (mCodess.equals("0000")) {
                         mPayUrl = mOrderPayBeans.getPay_url();  // 支付请求地址
-                         mRequestId = mOrderPayBeans.getRequest_id();// 交易订单号
+                        mRequestId = mOrderPayBeans.getRequest_id();// 交易订单号
 //                        String mPayRequestId = mOrderPayBeans.getPay_request_id();// 平台支付请求号
                         MyLog.LogShitou("mPayUrl+支付宝请求需要的串", mPayUrl);
                         // 发起支付宝支付
@@ -621,9 +638,9 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //                        Toast.makeText(FirmOrderActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
                         String mGoods_sn = info_list.get(0).getGoods_sn();
                         Bundle bundle = new Bundle();
-                        bundle.putString(StaticField.GOODS_SN,mGoods_sn);
-                        bundle.putString(StaticField.ORDER_SN,mRequestId);
-                        openActivityWitchAnimation(OrderBuySuccessActivity.class,bundle);
+                        bundle.putString(StaticField.GOODS_SN, mGoods_sn);
+                        bundle.putString(StaticField.ORDER_SN, mRequestId);
+                        openActivityWitchAnimation(OrderBuySuccessActivity.class, bundle);
                         finish();
                     } else {
                         // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
@@ -685,8 +702,24 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             default:
                 break;
         }
+    }
 
 
+    /**
+     * @param goodsSn    商品编号
+     * @param goodsCount 商品数量
+     * @return Json串
+     * <p>
+     * 添加数据到AddShopCartBean生成Json
+     */
+    private String AddShopCartBean(String goodsSn, String goodsCount) {
+        if (!goodsSn.equals("") && !goodsCount.equals("")) {
+            AddShopCartBean mAddShopCartBean = new AddShopCartBean();
+            mAddShopCartBean.setGoods_sn(goodsSn);
+            mAddShopCartBean.setGoods_count(goodsCount);
+            info_list.add(mAddShopCartBean); // 添加到list
+        }
+        return info_list.toString();
     }
 
 }

@@ -1,10 +1,12 @@
 package cn.com.chinau.activity;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.com.chinau.R;
+import cn.com.chinau.StaticField;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.dialog.PhoneDialog;
 
@@ -18,6 +20,7 @@ public class SuccessApplyForRefuseActivity extends BaseActivity implements View.
     private View mRefuseTitle,mRefuseContent;
     private ImageView mBack;
     private TextView mTitle,mLookOrder,mServiceTel;
+    private String mOrder_sn,mGoods_sn,mOrderStatus;
 
     @Override
     public View CreateTitle() {
@@ -39,6 +42,11 @@ public class SuccessApplyForRefuseActivity extends BaseActivity implements View.
     }
 
     private void initView() {
+        Bundle bundle = getIntent().getExtras();
+        mOrder_sn = bundle.getString(StaticField.ORDER_SN); // 交易订单号
+        mGoods_sn = bundle.getString(StaticField.GOODS_SN); // 商品编号
+        mOrderStatus = bundle.getString(StaticField.ORDERSTATUS); //订单状态
+
         mBack =(ImageView) mRefuseTitle.findViewById(R.id.base_title_back);
         mTitle =(TextView) mRefuseTitle.findViewById(R.id.base_title);
         mTitle.setText("退款/退货");
@@ -62,7 +70,11 @@ public class SuccessApplyForRefuseActivity extends BaseActivity implements View.
             break;
             case R.id.look_order:// 查看订单
                 // 跳转至查看订单详情页面
-                openActivityWitchAnimation(LookOrderDetailRefuseActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.ORDER_SN,mOrder_sn);
+                bundle.putString(StaticField.GOODS_SN,mGoods_sn);
+                bundle.putString(StaticField.ORDERSTATUS,"TK");
+                openActivityWitchAnimation(LookOrderDetailRefuseActivity.class,bundle);
             break;
             case R.id.Service_tel:// 客服电话
 

@@ -12,11 +12,14 @@ import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.chinau.R;
 import cn.com.chinau.activity.FirmOrderActivity;
+import cn.com.chinau.bean.AddShopCartBean;
 import cn.com.chinau.bean.AuctionRecordBean;
+import cn.com.chinau.utils.MyLog;
 
 /**
  * 竞拍记录的ListViewAdapter
@@ -27,6 +30,8 @@ public class AuctionRecordListViewAdapter extends BaseAdapter {
     private Context context;
     private BitmapUtils bitmapUtils;
     private List<AuctionRecordBean.Auction> mList;
+    private String mGoodes_sn, mPrice,mAuction_sn;
+    private ArrayList<AddShopCartBean> info_list = new ArrayList<>();
 
     public AuctionRecordListViewAdapter(Context context, BitmapUtils bitmapUtils, List<AuctionRecordBean.Auction> mList) {
         this.context = context;
@@ -74,6 +79,8 @@ public class AuctionRecordListViewAdapter extends BaseAdapter {
         AuctionRecordBean.Auction auction = mList.get(i);
         holder.GoodsName.setText(auction.getGoods_name());// 商品名称
 
+        holder.PaymentTv.setTag(i);
+
         //获取状态
         String AuctionStatus = auction.getAuction_status();// 竞拍状态
         //根据状态进行判断
@@ -82,7 +89,7 @@ public class AuctionRecordListViewAdapter extends BaseAdapter {
             holder.AuctionStatue.setTextColor(context.getResources().getColor(R.color.refuse));
             holder.CurrentPrice.setVisibility(View.VISIBLE);
             holder.GoodsPriceTv.setText("当前价:");
-            holder.GoodsPrice.setText("￥" +auction.getGoods_price());
+            holder.GoodsPrice.setText("￥" + auction.getGoods_price());
             holder.MarkTimeTv.setText(auction.getCreate_time());
             holder.SpareTime.setVisibility(View.GONE);
         } else if (AuctionStatus.equals("CG")) {
@@ -90,23 +97,23 @@ public class AuctionRecordListViewAdapter extends BaseAdapter {
             holder.AuctionStatue.setTextColor(context.getResources().getColor(R.color.red_font));
             holder.CurrentPrice.setVisibility(View.VISIBLE);
             holder.GoodsPriceTv.setText("订单金额:");
-            holder.GoodsPrice.setText("￥" +auction.getGoods_price());
+            holder.GoodsPrice.setText("￥" + auction.getGoods_price());
 
             String OrderStatus = auction.getOrder_status();// 订单状态
-            if (OrderStatus.equals("PAYMENT")){ // 待付款
+            if (OrderStatus.equals("PAYMENT")) { // 待付款
                 holder.PaymentTv.setVisibility(View.VISIBLE); //付款按钮显示
                 holder.OverCloseTv.setVisibility(View.GONE);// 隐藏已关闭或已完成按钮
                 holder.PaymentTv.setText("付款");
                 holder.MarkTimeTv.setText("付款剩余时间:");
                 holder.SpareTime.setText(auction.getAuction_end_time());
-            }else if(OrderStatus.equals("SUCCESS")){ // 已完成
+            } else if (OrderStatus.equals("SUCCESS")) { // 已完成
                 holder.PaymentTv.setVisibility(View.INVISIBLE); //付款按钮隐藏
                 holder.OverCloseTv.setVisibility(View.VISIBLE); //显示已完成
                 holder.OverCloseTv.setText("已完成");
                 holder.MarkTimeTv.setText(auction.getCreate_time());
                 holder.SpareTime.setVisibility(View.GONE);
 
-            }else if(OrderStatus.equals("CLOSE")){ // 已关闭
+            } else if (OrderStatus.equals("CLOSE")) { // 已关闭
                 holder.PaymentTv.setVisibility(View.INVISIBLE); //付款按钮隐藏
                 holder.OverCloseTv.setVisibility(View.VISIBLE); //显示已关闭
                 holder.OverCloseTv.setText("已关闭");
@@ -125,13 +132,24 @@ public class AuctionRecordListViewAdapter extends BaseAdapter {
         holder.PaymentTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 跳转至确认订单页面
-                Intent intent = new Intent (context,FirmOrderActivity.class);
-                intent.putExtra("AuctionRecord", "AuctionRecord");
-                context.startActivity(intent);
-                ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                int tag = (int) view.getTag();
+                mGoodes_sn = mList.get(tag).getGoods_sn();// 商品编号
+                mPrice = mList.get(tag).getGoods_price(); // 商品价格
+                mAuction_sn = mList.get(tag).getAuction_sn(); // 竞拍编浩
 
+                MyLog.LogShitou("==========点击付款获取的商品编号==价格==竞拍编号", mGoodes_sn + "==" + mPrice+"=="+mAuction_sn);
 
+                if (!mGoodes_sn.equals("") && !mPrice.equals("") && !mAuction_sn.equals("")) {
+                    // 跳转至确认订单页面
+                    Intent intent = new Intent(context, FirmOrderActivity.class);
+                    intent.putExtra("FirmOrder", "AuctionRecordAdapter"); // 适配器的标识
+                    intent.putExtra("Auction_sn", mAuction_sn);
+                    intent.putExtra("Goodes_sn", mGoodes_sn);
+                    intent.putExtra("Price", mPrice);
+                    intent.putExtra("Count", "1");
+                    context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }
             }
         });
         return view;
@@ -139,7 +157,7 @@ public class AuctionRecordListViewAdapter extends BaseAdapter {
 
     public class ViewHolder {
         public ImageView GoodsImageUrl;//商品图片
-        public TextView GoodsName,AuctionStatue,GoodsPriceTv,GoodsPrice,MarkTimeTv,SpareTime,MarkPrice,PaymentTv,OverCloseTv;//商品名称
+        public TextView GoodsName, AuctionStatue, GoodsPriceTv, GoodsPrice, MarkTimeTv, SpareTime, MarkPrice, PaymentTv, OverCloseTv;//商品名称
         public LinearLayout CurrentPrice;//当前价格的View
     }
 }

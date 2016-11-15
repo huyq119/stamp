@@ -176,8 +176,6 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
             StampTapGridViewAdapter gvAdapter = new StampTapGridViewAdapter(getActivity(), mList, mBitmap);
             gridView.setAdapter(gvAdapter);
             gvAdapter.notifyDataSetChanged();
-
-            MyLog.LogShitou("adap====444=======num","num====="+num);
             if (num != 0) {
                 mGrid.setSelection(gvAdapter.getCount() - 20);
                 //解决调用onRefreshComplete方法去停止刷新操作,无法取消刷新的bug
@@ -210,19 +208,6 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
             public void onRefresh(PullToRefreshBase<GridView> refreshView) {
                 num++;
                 RequestNet(StaticField.ZH, num, StaticField.D, ""); // 邮票目录请求网络的方法
-            }
-        });
-
-        gridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
-
-
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
-
             }
         });
     }

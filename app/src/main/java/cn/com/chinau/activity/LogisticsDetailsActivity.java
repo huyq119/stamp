@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,13 +39,16 @@ public class LogisticsDetailsActivity extends BaseActivity {
     private View mLogisticsDetailsContent;
     private ListView mLogisticsListView;//物流展示信息的ListView
     private List<LogisticsBean.Express> mList;//物流信息的集合
-    private String mExpressNo;
+    private String mExpressNo,mOrderStatus;
     private String mToken, mUser_id;// 标识，用户ID
     private SharedPreferences sp;
     private TextView mStatus, mExpress, mOrderSn, mExpressPhone;
     private String mExpress_status, mExpress_no,mExpress_comp, mExpress_phone, mGoods_image;
     private BitmapUtils mBitmap;
     private ImageView mImg;
+    private LinearLayout mLogisticsDetailsLl;
+    private TextView mOrederTv;
+
 
     @Override
     public View CreateTitle() {
@@ -63,14 +67,25 @@ public class LogisticsDetailsActivity extends BaseActivity {
     }
 
     private void initData() {
-        GetInitNet(); // 物流详情网络请求
+        if (!mExpressNo.equals("")){
+            GetInitNet(); // 物流详情网络请求
+        }
+
     }
 
     private void initView() {
         Bundle bundle = getIntent().getExtras();
         mExpressNo = bundle.getString("ExpressNo", "");
+        mOrderStatus= bundle.getString("OrderStatus", "");
+        mLogisticsDetailsLl = (LinearLayout) mLogisticsDetailsContent.findViewById(R.id.logisticsDetails_ll);
+        mOrederTv = (TextView) mLogisticsDetailsContent.findViewById(R.id.no_order_tv);
+        if (mOrderStatus.equals("UNSHIPPED")){
+            mLogisticsDetailsLl.setVisibility(View.GONE);
+            mOrederTv.setVisibility(View.VISIBLE);
+            mOrederTv.setText("暂无物流信息~");
+        }
 
-        MyLog.LogShitou("传过来的快递单号",mExpressNo);
+        MyLog.LogShitou("传过来的快递单号",mExpressNo+"=="+mOrderStatus);
         mToken = sp.getString("token", "");
         mUser_id = sp.getString("userId", "");
         ImageView mBack = (ImageView) mLogisticsDetailsTitle.findViewById(R.id.base_title_back);
@@ -88,7 +103,6 @@ public class LogisticsDetailsActivity extends BaseActivity {
         mExpress = (TextView) mLogisticsDetailsContent.findViewById(R.id.logisticsDetails_Express);
         mOrderSn = (TextView) mLogisticsDetailsContent.findViewById(R.id.logisticsDetails_OrderSn);
         mExpressPhone = (TextView) mLogisticsDetailsContent.findViewById(R.id.logisticsDetails_Express_phone);
-
 
     }
 

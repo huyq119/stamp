@@ -115,7 +115,7 @@ public class ApplyWithdrawActivity extends BaseActivity implements View.OnClickL
         if (intent != null) {
             balance = Double.valueOf(intent.getStringExtra("balance"));
             DecimalFormat df = new DecimalFormat("#0.00");
-            tv_aplay_able.setText("￥" + df.format(R.string.balance));
+            tv_aplay_able.setText("￥" + df.format(balance));
             if (TextUtils.isEmpty(phone)) {
                 StringBuffer sb = new StringBuffer(phone);
                 phone = sb.replace(3, 7, "****").toString();

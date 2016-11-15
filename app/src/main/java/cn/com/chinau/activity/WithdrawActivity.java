@@ -177,7 +177,7 @@ public class WithdrawActivity extends BaseActivity implements View.OnClickListen
                 startActivity(intent);
 //                openActivityWitchAnimation(ApplyWithdrawActivity.class);
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-                finish();
+//                finish();
                 break;
         }
     }

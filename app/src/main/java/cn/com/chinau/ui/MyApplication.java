@@ -59,8 +59,9 @@ public class MyApplication extends Application {
         sp.edit().putBoolean("isSetup", true).commit();
     }
 
+    // 注册友盟微信分享的AppId,AppSecret值
     {
-        PlatformConfig.setWeixin("wxd37d120cce012c94", "d4ff5f4137ba5b386a611979929d8f44");
+        PlatformConfig.setWeixin("wxd37d120cce012c94", "b9bff0f06f0fedd86dc94de8a5a9e346");
     }
 
     public static Context getApplication() {
