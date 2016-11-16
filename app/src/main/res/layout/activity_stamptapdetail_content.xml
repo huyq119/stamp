@@ -2,19 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical"
+    >
 
     <cn.com.chinau.view.VerticalScrollView
         android:id="@+id/home_SV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/background"
         android:overScrollMode="never"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="#f8f8f8"
             android:orientation="vertical">
 
@@ -45,7 +47,6 @@
                     android:layout_marginLeft="@dimen/left_distance"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="10000"
                     android:textColor="@color/red_font"
                     android:textSize="18sp" />
 
@@ -109,7 +110,7 @@
             <cn.com.chinau.view.CustomViewPager
                 android:id="@+id/stamptapdetail_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:overScrollMode="never"
                 android:scrollbars="none" />
         </LinearLayout>

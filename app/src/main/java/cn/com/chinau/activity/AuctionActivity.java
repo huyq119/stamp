@@ -149,13 +149,13 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     String[] mArrTitle = (String[] ) msg.obj;
                     String title0 = mArrTitle[0];
                     mNewChinese.setText(title0);
-                    String title2 = mArrTitle[2];
-                    mRepublicChina.setText(title2);
+                    String title1 = mArrTitle[1];
+                    mRepublicChina.setText(title1);
+                    String title2= mArrTitle[2];
+                    mLiberatedArea.setText(title2);
                     String title3 = mArrTitle[3];
-                    mLiberatedArea.setText(title3);
-                    String title4 = mArrTitle[4];
-                    mQingDynasty.setText(title4);
-                    MyLog.LogShitou("竞拍一级类别----->:", title0 + "--" + title2 + "--" + title3 + "--" + title4);
+                    mQingDynasty.setText(title3);
+                    MyLog.LogShitou("竞拍一级类别----->:", title0 + "--" + title2 + "--" + title3 + "--" + title1);
                     break;
                 case 2:
                     Drawable mTopDrawable0 = (Drawable) msg.obj;
@@ -177,9 +177,9 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     List<String[]> mArrList = (List<String[]>) msg.obj;
                     // 获取
                     string0 = mArrList.get(0);
-                    string2= mArrList.get(2);
-                    string3 = mArrList.get(3);
-                    string4 = mArrList.get(4);
+                    string2= mArrList.get(1);
+                    string3 = mArrList.get(2);
+                    string4 = mArrList.get(3);
                     // 横向的listView设置适配器
                     hListViewAdapter = new StampHorizontalListViewAdapter(AuctionActivity.this, string0);
                     hListView.setAdapter(hListViewAdapter);
@@ -493,9 +493,9 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     //设置点击背景的方法
                     hListViewAdapter.setSelection(i);
                     hListViewAdapter.notifyDataSetChanged();
-                    String name = subCategory1.get(2).getName();
-                    String mValue = subCategory1.get(2).getValue();
-                    String mValues = subCategory1.get(2).getSubCategory().get(i).getValue();
+                    String name = subCategory1.get(1).getName();
+                    String mValue = subCategory1.get(1).getValue();
+                    String mValues = subCategory1.get(1).getSubCategory().get(i).getValue();
                     String tojson = GoodsJsonBean(mValue, mValues);
 //                    MyLog.LogShitou("-111===转换成的Json", tojson+"=="+mValue+"=="+mValues+"=="+name);
                     RequestNet(StaticField.ZH, num, StaticField.A, tojson); // 筛选请求
@@ -503,9 +503,9 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     //设置点击背景的方法
                     hListViewAdapter.setSelection(i);
                     hListViewAdapter.notifyDataSetChanged();
-                    String name = subCategory1.get(3).getName();
-                    String mValue = subCategory1.get(3).getValue();
-                    String mValues = subCategory1.get(3).getSubCategory().get(i).getValue();
+                    String name = subCategory1.get(2).getName();
+                    String mValue = subCategory1.get(2).getValue();
+                    String mValues = subCategory1.get(2).getSubCategory().get(i).getValue();
 
                     String tojson = GoodsJsonBean(mValue, mValues);
 //                    MyLog.LogShitou("-222===转换成的Json", tojson+"=="+mValue+"=="+mValues+"=="+name);
@@ -514,9 +514,9 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     //设置点击背景的方法
                     hListViewAdapter.setSelection(i);
                     hListViewAdapter.notifyDataSetChanged();
-                    String name = subCategory1.get(4).getName();
-                    String mValue = subCategory1.get(4).getValue();
-                    String mValues = subCategory1.get(4).getSubCategory().get(i).getValue();
+                    String name = subCategory1.get(3).getName();
+                    String mValue = subCategory1.get(3).getValue();
+                    String mValues = subCategory1.get(3).getSubCategory().get(i).getValue();
                     String tojson = GoodsJsonBean(mValue, mValues);
 //                    MyLog.LogShitou("-333===转换成的Json", tojson+"=="+mValue+"=="+mValues+"=="+name);
                     RequestNet(StaticField.ZH, num, StaticField.A, tojson); // 筛选请求
@@ -624,9 +624,9 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     String url = "http://test.chinau.com.cn:8081/chinau-imgserver/attachment//designer/20160429/20160429081b712e-ed1a-4341-839f-af6571109a03.png";
                     // 获取单个的url
                     String imgurl0 = mImgUrl[0];
-                    String imgurl2 = mImgUrl[2];
-                    String imgurl3 = mImgUrl[3];
-                    String imgurl4 = mImgUrl[4];
+                    String imgurl2 = mImgUrl[1];
+                    String imgurl3 = mImgUrl[2];
+                    String imgurl4 = mImgUrl[3];
                     Drawable drawable = getResources().getDrawable(R.mipmap.weixin); // 如个url为空，设置默认图片
                     // 判断url是否为空
                     if (imgurl0.equals("")) {

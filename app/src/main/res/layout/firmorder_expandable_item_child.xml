@@ -30,7 +30,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/distance"
-            android:text="庚申年"
             android:singleLine="true"
             android:textColor="#000"
             android:textSize="15sp"/>
@@ -48,7 +47,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="￥100000"
                 android:textColor="#e20000"
                 android:textSize="14sp"/>
 
@@ -57,7 +55,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/distance"
-                android:text="*1"
                 android:textSize="12sp"/>
         </LinearLayout>
     </LinearLayout>

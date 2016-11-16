@@ -6,7 +6,7 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/base_viewpager"
-        android:layout_width="166dp"
+        android:layout_width="200dp"
         android:layout_height="166dp"
         android:layout_centerInParent="true"
         android:paddingBottom="15dp"

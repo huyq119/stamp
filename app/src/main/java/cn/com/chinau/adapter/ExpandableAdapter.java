@@ -233,6 +233,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         //子View的checkBox
         String mGoods_sn = goodsBean.getGoods_sn();// 商品编号
         itemHolder.child_selected.setTag(i + "," + i1);
+        MyLog.LogShitou("","");
 
         //子View的点击事件
         itemHolder.child_selected.setOnClickListener(listener);
@@ -283,8 +284,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
     //内部的监听
     View.OnClickListener listener = new View.OnClickListener() {
-
-
         @Override
         public void onClick(View v) {
             ArrayList<ShopNameBean.SellerBean> seller_list = shopNameBean.getSeller_list();
@@ -521,20 +520,16 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                     MyLog.LogShitou("点击结算", mSellerLists + "--" + count + "--" + price);
 
                     if (count != null && !count.equals("0")) {
-//                        if (count != null && price != null || !mSellerLists.equals("")) {
                             Intent intent = new Intent(context, FirmOrderActivity.class);
-                            intent.putExtra("Count", count);// 传数量
-                            intent.putExtra("Price", price);// 传总价钱
-                            intent.putExtra("FirmOrder", "ExpandableAdapter");// 适配器的标识
+                        intent.putExtra("FirmOrder", "ExpandableAdapter");// 适配器的标识
+                        intent.putExtra("ShopNameBean", shopNameBean+"");// 适配器的标识
+                        intent.putExtra("Count", count);// 传数量
+                        intent.putExtra("Price", price);// 传总价钱
                             //这里只要是把集合遍历一下传过去就行了
                             MyApplication.setGroupSet(groupSet);
                             MyLog.LogShitou("去结算传的数据", "" + groupSet);
                             context.startActivity(intent);
                             ((Activity) context).overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-//                        } else {
-//
-//                            MyToast.showShort(context, "您还没有选择商品哦");
-//                        }
                     } else {
 
                         MyToast.showShort(context, "您还没有选择商品哦");
@@ -569,7 +564,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     public View.OnClickListener getAdapterListener() {
         return listener;
     }
-
 
     /**
      * 选择所有

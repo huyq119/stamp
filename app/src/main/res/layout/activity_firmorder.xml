@@ -164,12 +164,14 @@
                         android:layout_height="match_parent"
                         android:overScrollMode="never"
                         android:scrollbars="none" />
-                    <!--<cn.com.chinau.view.CustomExpandableListView
+
+                   <!-- <cn.com.chinau.view.CustomExpandableListView
                         android:id="@+id/firmOrder_expandableLV"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:overScrollMode="never"
                         android:scrollbars="none" />-->
+
                 </LinearLayout>
 
             </LinearLayout>

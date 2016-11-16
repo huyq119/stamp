@@ -53,7 +53,6 @@ import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.ScreenUtils;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
-import cn.com.chinau.view.OrderGoodsViewPager;
 import cn.com.chinau.view.VerticalScrollView;
 
 /**
@@ -84,7 +83,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private String mSharedImage;
     private String mGoods_name;
     private String mShare_url;
-    private OrderGoodsViewPager mViewPager;
+    private ViewPager mViewPager;
     private LinearLayout mShoppingLl;
     private SharedPreferences sp;
     private SharedDialog dialog;
@@ -167,12 +166,12 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                         mGoodsDetail = mStampDetailBean.getGoods_detail();  // 邮票信息H5url
                         mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
 
-                        if (mGoodsDetail != null && mVerifyInfo != null) {
+//                        if (mGoodsDetail.equals("") && mVerifyInfo.equals("")) {
                             mStampInfo_wb.loadUrl(mGoodsDetail);
                             mStampPractice_wb.loadUrl(mVerifyInfo);
-                        }
-                        MyLog.LogShitou("邮票信息的H5url", mGoodsDetail);
-                        MyLog.LogShitou("鉴定信息的H5url", mVerifyInfo);
+                            MyLog.LogShitou("邮票信息的H5url", mGoodsDetail);
+                            MyLog.LogShitou("鉴定信息的H5url", mVerifyInfo);
+//                        }
 
                         mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
 //                    MyLog.LogShitou("商品收藏状态", mIsFavorite);
@@ -295,6 +294,10 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
 //        Log.e("mGoods_sn编号001~~~~>", mGoods_sn);
         //初始化控件
         mBack = (ImageView) mStampDetailTitle.findViewById(R.id.base_title_back);
+        // 这三行是为了防止展示到GridView处
+        mBack.setFocusable(true);
+        mBack.setFocusableInTouchMode(true);
+        mBack.requestFocus();
         mTitle = (TextView) mStampDetailTitle.findViewById(R.id.base_title);
         mTitle.setText("庚申年");
         mShared = (ImageView) mStampDetailTitle.findViewById(R.id.base_shared);
@@ -325,7 +328,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         mTopVPI = (CirclePageIndicator) mStampDetailContent.findViewById(R.id.base_viewpagerIndicator);
 
         // 底部viewPager页面
-        mViewPager = (OrderGoodsViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
+        mViewPager = (ViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
 
         mStampDetailRG = (RadioGroup) mStampDetailContent.findViewById(R.id.StampDetail_RG);
         mGoodsDetailBtn = (RadioButton) mStampDetailContent.findViewById(R.id.StampDetail_GoodsDetail_Btn);
@@ -349,11 +352,6 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         DesignerDetailTapViewPagerAdapter adapter = new DesignerDetailTapViewPagerAdapter(vList, arr);
         mViewPager.setAdapter(adapter);
 
-
-//        //底部ViewPager的页面
-//        mViewPager = (CustomViewPager) mStampDetailContent.findViewById(R.id.stampdetail_viewpager);
-//        mViewPager.setVisibility(View.VISIBLE);
-//        mIndicator = (TabPageIndicator) mStampDetailContent.findViewById(R.id.stampdetail_indicator);
     }
 
     private void initAdapter() {
@@ -431,12 +429,14 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                         view1.setBackgroundResource(R.color.red_font);
                         view2.setBackgroundResource(R.color.line_bg);
                         mViewPager.setCurrentItem(0); // 显示邮票信息页
+                        MyLog.LogShitou("哈哈0000000", "--->" + position);
                         break;
                     case R.id.StampDetail_VerifyInfo_Btn: // 鉴定信息
                         position = 1;
                         view1.setBackgroundResource(R.color.line_bg);
                         view2.setBackgroundResource(R.color.red_font);
                         mViewPager.setCurrentItem(1);// 显示鉴定信息页
+                        MyLog.LogShitou("哈哈1111111111", "--->" + position);
                         break;
                 }
             }

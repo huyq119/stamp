@@ -329,10 +329,16 @@
                         </LinearLayout>
                     </RelativeLayout>
 
-                    <cn.com.chinau.view.OrderGoodsViewPager
+                    <!--<cn.com.chinau.view.OrderGoodsViewPager
                         android:id="@+id/stampdetail_viewpager"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:overScrollMode="never"
+                        android:scrollbars="none" />-->
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/stampdetail_viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="500dp"
                         android:overScrollMode="never"
                         android:scrollbars="none" />
 
@@ -355,6 +361,8 @@
                 </LinearLayout>
             </cn.com.chinau.view.VerticalScrollView>
         </LinearLayout>
+
+
         <!-- 底下的代码，导航栏是不随SrcollView滑动的-->
 
         <RelativeLayout

@@ -20,11 +20,14 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,8 +62,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private LinearLayout mPay, mDistribution;//支付方式,配送方式
     private SelectPayPopupWindow mPayPopupWindow;//支付的弹出框
     private SelectDistributionPopupWindow mDistributionPopupWindow;//配送方式的弹出框
-    //    private CustomExpandableListView mListView;//底部列表展示
-    private ListView mListView;//底部列表展示
+        private ListView mListView;//底部列表展示
+//    private ListView mListView;//底部列表展示
     private ImageView mBack, mPayImg;
     private TextView mTitle, mOkPay, mDistributionTv, mDistributionPrice, mPayNmme, mFeeRate, mFee, mAddressName,
             mAddressMobile, mAddressDetail, mNoAddressAdd, mTotalPrice, mGoodsCount;
@@ -101,6 +104,13 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private String mPayUrl;
     private String mGoods_sn, mAuction_sn;
     private String mToJson;
+    private ArrayList<Integer> keylsit;
+    private String mShopNameBean;
+    private List<ShopNameBean> listShopNameBean;
+    private ShopNameBean shopNameBean;
+    private ArrayList<ShopNameBean.SellerBean> seller_list;
+    private ShopNameBean.SellerBean sellerBean;
+    private Integer integer;
 
     @Override
     public View CreateTitle() {
@@ -160,7 +170,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         mFeeRate = (TextView) mFirmOrderContent.findViewById(R.id.firmOrder_fee_rate);// 服务费率
         mFee = (TextView) mFirmOrderContent.findViewById(R.id.firmOrder_fee);// 服务费
         mTotalPrice = (TextView) mFirmOrderContent.findViewById(R.id.totl_price);// 价钱
-        mTotalPrice.setText("￥" + mPrice);// 赋值总价钱
+//        mTotalPrice.setText("￥" + mPrice);// 赋值总价钱
         mGoodsCount = (TextView) mFirmOrderContent.findViewById(R.id.goods_count);// 数量
         mGoodsCount.setText("共" + mCount + "件商品");
     }
@@ -176,7 +186,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             mAuction_sn = intent.getStringExtra("Auction_sn");// 获取传过来的竞拍编号
             // 添加数据到AddShopCartBean生成Json
             mToJson = AddShopCartBean(mGoods_sn, mCount);
-
             MyLog.LogShitou("===========竞拍记录适配器组装Json串", mToJson);
         } else {
             String mSellerList = sp.getString("SellerList", "");// 获取保存在本地的购物车总数据
@@ -194,7 +203,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //        String returnStr=strb.toString().trim().substring(0,strb.toString().trim().length()-1);
 //        returnStr="{"+returnStr+"}}";
 //        MyLog.LogShitou("传过来选中的编号+数量", returnStr);
-
             groupSet = MyApplication.getGroupSet();// 传过来的集合数据
             if (groupSet != null) {
                 for (HashMap.Entry<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
@@ -210,12 +218,9 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     }
                     // 添加数据到AddShopCartBean生成Json
                     mToJson = AddShopCartBean(goods_sn, goods_count);
-
                     MyLog.LogShitou("购物车适配器数据转换成的Json", mToJson);
-
                 }
             }
-
         }
     }
 
@@ -302,7 +307,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private void setFalseData() {
 
         if (groupSet != null) {
-
             FirmOrderExpandableAdapter expandableAdapter = new FirmOrderExpandableAdapter(this, mBitmap, groupSet);
             mListView.setAdapter(expandableAdapter);
             expandableAdapter.notifyDataSetChanged();
@@ -339,6 +343,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 mExCompName = mDistributionTv.getText().toString().trim();
                 payNmae = mPayNmme.getText().toString().trim();
                 MyLog.LogShitou("===========地址id", mAddressId + "==" + mNoAddressId);
+
                 if (mAddressId != null | mNoAddressId != null) {
                     OrderPayNet(); // 订单支付网络请求
                 } else {
@@ -502,13 +507,38 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                         String mFeeRates = mFirmOrderBean.getService_fee_rate();// 服务费率
 
                         mFeeRate.setText("服务费(" + mFeeRates + ")");
-                        mFee.setText("￥" + mFirmOrderBean.getService_fee());
+                        String servicePrice = mFirmOrderBean.getService_fee();
+                        mFee.setText("￥" + servicePrice);
+
                         // 快递公司
                         express_comp = mFirmOrderBean.getExpress_comp();
                         mDistributionTv.setText(express_comp.get(0).getValue());
                         // 快递费价格
                         express_fee = mFirmOrderBean.getExpress_fee();
                         mDistributionPrice.setText("￥" + express_fee.get(0).getValue());
+
+                        int count =Integer.valueOf(mCount).intValue(); //数量转成int
+                        String str = express_fee.get(0).getValue().trim();// 快递费去掉首尾空格
+                        String serviceFee = servicePrice.trim();// 服务费去掉首尾空格
+                        double countPrice =Double.parseDouble(str); // 快递费转double
+
+                        MyLog.LogShitou("价钱转double商品数量",countPrice+"===="+count);
+
+                        double price = countPrice * count;//快递总价钱
+                        MyLog.LogShitou("======快递费总价",price+"");
+                        DecimalFormat df   = new DecimalFormat("######0.00");// 保留2位小数
+                        String mprice = df.format(price);// 最后的快递费
+                        double douPrice =Double.parseDouble(mprice); // 最后快递费转double
+                        MyLog.LogShitou("======double快递费总价",price+"");
+
+                        double mServicePrice =Double.parseDouble(serviceFee.trim()); //最后服务费转double价钱
+                        double mtotalPrice =Double.parseDouble(mPrice.trim()); //最后商品的价钱转double
+
+                        double price1 = add(douPrice,mServicePrice); // 快递费和服务费总价
+                        double mTotalPrices =  add(price1,mtotalPrice); // 三个数相加的总费用
+
+                        mTotalPrice.setText("￥" + mTotalPrices);// 赋值总价钱
+                        MyLog.LogShitou("==============总价",mTotalPrices+"");
 
                         // 地址列表
                         address_list = mFirmOrderBean.getAddress_list();
@@ -677,8 +707,37 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     public void GetStringText(String name, String valuel) {
         mDistributionTv.setText(name);// 配送名字
         mDistributionPrice.setText(valuel); // 配送价格
-
         MyLog.LogShitou("获取的配送，价格", name + "--" + valuel);
+
+        int count =Integer.valueOf(mCount).intValue(); //数量转成int
+        String str = valuel.replaceAll("￥","").trim();// 快递费去掉首尾空格
+        double countPrice =Double.parseDouble(str); // 快递费转double
+
+        String serviceFee = mFee.getText().toString().trim().replaceAll("￥","");// 服务费去掉首尾空格
+
+        MyLog.LogShitou("价钱转double商品数量",countPrice+"===="+count);
+
+        double price = countPrice * count;//快递总价钱
+        MyLog.LogShitou("======快递费总价",price+"");
+        DecimalFormat df   = new DecimalFormat("######0.00");// 保留2位小数
+        String mprice = df.format(price);// 最后的快递费
+        double douPrice =Double.parseDouble(mprice); // 最后快递费转double
+        MyLog.LogShitou("======double快递费总价",price+"");
+
+        double mServicePrice =Double.parseDouble(serviceFee); //最后服务费转double价钱
+        double mtotalPrice =Double.parseDouble(mPrice.trim()); //最后商品的价钱转double
+
+        double price1 = add(douPrice,mServicePrice); // 快递费和服务费总价
+        double mTotalPrices =  add(price1,mtotalPrice); // 三个数相加的总费用
+
+        mTotalPrice.setText("￥" + mTotalPrices);// 赋值总价钱
+        MyLog.LogShitou("==============总价",mTotalPrices+"");
+
+
+
+
+
+
     }
 
     /**
@@ -720,6 +779,17 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             info_list.add(mAddShopCartBean); // 添加到list
         }
         return info_list.toString();
+    }
+
+    /** * 提供精确的加法运算
+     * @param v1 被加数
+     * @param v2 加数
+     * @return 两个参数的和
+     * */
+    public static double add(double v1, double v2) {
+        BigDecimal b1 = new BigDecimal(Double.toString(v1));
+        BigDecimal b2 = new BigDecimal(Double.toString(v2));
+        return b1.add(b2).doubleValue();
     }
 
 }

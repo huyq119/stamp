@@ -29,7 +29,6 @@
             android:layout_marginLeft="@dimen/distance"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="邮来邮网自营商店"
             android:textColor="#333"
             android:textSize="11sp"/>
 
@@ -39,7 +38,6 @@
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/distance"
             android:gravity="center_vertical"
-            android:text="自营"
             android:textColor="#e20000"
             android:textSize="11sp"/>
     </LinearLayout>
