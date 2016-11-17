@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ScrollView
+    <cn.com.chinau.view.VerticalScrollView
         android:id="@+id/order_details_sv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -155,21 +155,21 @@
                      android:overScrollMode="never"
                      android:scrollbars="none" />
 
-               <!-- <cn.com.chinau.view.WrapExpandableListView
-                    android:id="@+id/order_details_lv"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:listSelector="@android:color/transparent"
-                    android:overScrollMode="never"
-                    android:scrollbars="none" >
+                <!-- <cn.com.chinau.view.WrapExpandableListView
+                     android:id="@+id/order_details_lv"
+                     android:layout_width="match_parent"
+                     android:layout_height="200dp"
+                     android:listSelector="@android:color/transparent"
+                     android:overScrollMode="never"
+                     android:scrollbars="none" >
 
-                </cn.com.chinau.view.WrapExpandableListView>-->
+                 </cn.com.chinau.view.WrapExpandableListView>-->
 
             </LinearLayout>
 
 
         </LinearLayout>
-    </ScrollView>
+    </cn.com.chinau.view.VerticalScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -229,12 +229,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
-                android:background="@mipmap/look_logistics_bg"
+                android:background="@mipmap/refuse_btn_bg"
                 android:gravity="center"
                 android:text="查看物流"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                />
 
             <TextView
                 android:id="@+id/order_details_cloose_tv"

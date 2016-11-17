@@ -38,15 +38,16 @@ public class OrderAllListViewGoodsBean extends BaseBean {
         private String process_status; //处理状态
         private String create_time; //订单创建时间
         private String order_status; //订单状态
+        private String order_amount; // 订单总价
 
-        public Order_list(String order_sn, String pay_time, ArrayList<Seller_list> seller_list, String create_time, String process_status, String order_status) {
-            this.order_sn = order_sn;
-            this.pay_time = pay_time;
-            this.seller_list = seller_list;
-            this.create_time = create_time;
-            this.process_status = process_status;
-            this.order_status = order_status;
-        }
+//        public Order_list(String order_sn, String pay_time, ArrayList<Seller_list> seller_list, String create_time, String process_status, String order_status) {
+//            this.order_sn = order_sn;
+//            this.pay_time = pay_time;
+//            this.seller_list = seller_list;
+//            this.create_time = create_time;
+//            this.process_status = process_status;
+//            this.order_status = order_status;
+//        }
 
         public void setOrder_sn(String order_sn) {
             this.order_sn = order_sn;
@@ -96,6 +97,14 @@ public class OrderAllListViewGoodsBean extends BaseBean {
             return this.order_status;
         }
 
+        public String getOrder_amount() {
+            return order_amount;
+        }
+
+        public void setOrder_amount(String order_amount) {
+            this.order_amount = order_amount;
+        }
+
         @Override
         public String toString() {
             return "Order_list{" +
@@ -105,6 +114,7 @@ public class OrderAllListViewGoodsBean extends BaseBean {
                     ", process_status='" + process_status + '\'' +
                     ", create_time='" + create_time + '\'' +
                     ", order_status='" + order_status + '\'' +
+                    ", order_amount='" + order_amount + '\'' +
                     '}';
         }
     }

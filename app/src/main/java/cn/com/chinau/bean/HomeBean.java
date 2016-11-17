@@ -38,7 +38,9 @@ public class HomeBean extends BaseBean {
 
     public class Group {
         public String group_name;
+        // 区分布局类型 目前定义三种布局：取值：A-yellow，B-blue，C-red。对应UI上的A，B，C标识的布局
         public List<Child> child_list;
+        public String template;
 
         public String getGroup_name() {
             return group_name;
@@ -46,6 +48,14 @@ public class HomeBean extends BaseBean {
 
         public void setGroup_name(String group_name) {
             this.group_name = group_name;
+        }
+
+        public String getTemplate() {
+            return template;
+        }
+
+        public void setTemplate(String template) {
+            this.template = template;
         }
 
         public List<Child> getChild_list() {

@@ -1,0 +1,538 @@
+ACTIVITY MANAGER PENDING INTENTS (dumpsys activity intents)
+  * PendingIntentRecord{4196a9b0 com.sohu.inputmethod.sogou broadcastIntent}
+  * PendingIntentRecord{41d81588 com.whyp.ycuservice startActivity}
+  * PendingIntentRecord{421cec38 com.android.phone broadcastIntent}
+  * PendingIntentRecord{41b06ec8 com.tencent.mm broadcastIntent}
+  * PendingIntentRecord{41b30580 com.google.android.gsf broadcastIntent}
+  * PendingIntentRecord{41be6180 com.tencent.mm startService}
+  * PendingIntentRecord{41c943a8 com.sohu.inputmethod.sogou broadcastIntent}
+  * PendingIntentRecord{41c5f658 com.huawei.android.totemweather startActivity}
+  * PendingIntentRecord{41fa1130 android startActivity}
+  * PendingIntentRecord{41c8e730 android broadcastIntent}
+  * PendingIntentRecord{425bd670 com.tencent.mm startService}
+  * PendingIntentRecord{41d30ed8 com.eg.android.AlipayGphone startService}
+  * PendingIntentRecord{41bbfbc0 android broadcastIntent}
+  * PendingIntentRecord{4263fb58 com.android.mediacenter startService}
+  * PendingIntentRecord{41d0b080 com.yoyozhibo.yoyo broadcastIntent}
+  * PendingIntentRecord{418cc120 com.tencent.mobileqq broadcastIntent}
+  * PendingIntentRecord{41c850b8 com.wandoujia.phoenix2 broadcastIntent}
+  * PendingIntentRecord{41b61ca8 android broadcastIntent}
+  * PendingIntentRecord{41b51948 com.wandoujia.phoenix2 broadcastIntent}
+  * PendingIntentRecord{41b8e210 com.tencent.mm broadcastIntent}
+  * PendingIntentRecord{41c52d00 com.huawei.android.totemweather startActivity}
+  * PendingIntentRecord{41c93388 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41c16800 com.tencent.mm broadcastIntent}
+  * PendingIntentRecord{421c8d50 com.sohu.inputmethod.sogou broadcastIntent}
+  * PendingIntentRecord{41b24f10 com.google.android.gsf broadcastIntent}
+  * PendingIntentRecord{41c66220 com.wandoujia.phoenix2 broadcastIntent}
+  * PendingIntentRecord{41c3ac90 com.eg.android.AlipayGphone broadcastIntent}
+  * PendingIntentRecord{41c82e58 com.sohu.inputmethod.sogou broadcastIntent}
+  * PendingIntentRecord{419d8180 com.tencent.mm startService}
+  * PendingIntentRecord{41c0e828 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41b82720 android broadcastIntent}
+  * PendingIntentRecord{41ce91f8 com.kingroot.kinguser broadcastIntent}
+  * PendingIntentRecord{41d9b0a0 com.wandoujia.phoenix2 startService}
+  * PendingIntentRecord{41b29268 android broadcastIntent}
+  * PendingIntentRecord{41cda040 com.google.android.gsf broadcastIntent}
+  * PendingIntentRecord{42093648 com.eg.android.AlipayGphone startService}
+  * PendingIntentRecord{41c5fb28 com.wandoujia.phoenix2 startService}
+  * PendingIntentRecord{41c5c0b8 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41c663b8 android startActivity}
+  * PendingIntentRecord{42089970 android startActivity}
+  * PendingIntentRecord{41ae8a38 android broadcastIntent}
+  * PendingIntentRecord{41d5b580 com.eg.android.AlipayGphone startService}
+  * PendingIntentRecord{41c5edd8 com.wandoujia.phoenix2 startService}
+  * PendingIntentRecord{41b82bd8 android broadcastIntent}
+  * PendingIntentRecord{41c8e8a0 android broadcastIntent}
+  * PendingIntentRecord{41cf8c68 com.kingroot.kinguser broadcastIntent}
+  * PendingIntentRecord{41ba9320 android broadcastIntent}
+  * PendingIntentRecord{41d819d8 android startActivity}
+  * PendingIntentRecord{42288328 com.android.mediacenter startService}
+  * PendingIntentRecord{41c685c0 android startActivity}
+  * PendingIntentRecord{41f24890 com.android.systemui startActivity}
+  * PendingIntentRecord{41c719a0 com.huawei.android.totemweather startActivity}
+  * PendingIntentRecord{42809700 com.tencent.mm broadcastIntent}
+  * PendingIntentRecord{4194ac20 com.kingroot.kinguser broadcastIntent}
+  * PendingIntentRecord{41c81690 com.sohu.inputmethod.sogou broadcastIntent}
+  * PendingIntentRecord{421f32a8 com.android.calendar broadcastIntent}
+  * PendingIntentRecord{41f3e068 com.wandoujia.phoenix2 startService}
+  * PendingIntentRecord{41c0d918 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{42c02698 com.android.mediacenter startActivity}
+  * PendingIntentRecord{41c0df78 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41b9e888 com.sohu.inputmethod.sogou broadcastIntent}
+  * PendingIntentRecord{41c5ba00 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{4237a7e8 com.android.mediacenter startService}
+  * PendingIntentRecord{41c15ac0 android broadcastIntent}
+  * PendingIntentRecord{41c45720 com.kingroot.kinguser broadcastIntent}
+  * PendingIntentRecord{41ba04d0 com.sohu.inputmethod.sogou broadcastIntent}
+  * PendingIntentRecord{41d8a8d0 com.wandoujia.phoenix2 broadcastIntent}
+  * PendingIntentRecord{41c5c6f0 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41c61e98 com.wandoujia.phoenix2 startService}
+  * PendingIntentRecord{41c3c968 com.yoyozhibo.yoyo broadcastIntent}
+  * PendingIntentRecord{41c0eec8 com.huawei.android.toolbox broadcastIntent}
+  * PendingIntentRecord{41c0da18 com.wandoujia.phoenix2 startService}
+  * PendingIntentRecord{41dc0190 com.android.providers.calendar broadcastIntent}
+  * PendingIntentRecord{41b656c8 android broadcastIntent}
+  * PendingIntentRecord{42028dd0 com.tencent.mm startService}
+  * PendingIntentRecord{41c2e9d8 com.sohu.inputmethod.sogou broadcastIntent}
+  * PendingIntentRecord{41c3f340 android broadcastIntent}
+  * PendingIntentRecord{4201a118 com.tencent.mm startService}
+  * PendingIntentRecord{41b29440 android broadcastIntent}
+  * PendingIntentRecord{417f9d68 com.eg.android.AlipayGphone broadcastIntent}
+  * PendingIntentRecord{41a64420 com.eg.android.AlipayGphone broadcastIntent}
+  * PendingIntentRecord{41b1afa8 android broadcastIntent}
+  * PendingIntentRecord{418ab218 com.android.systemui broadcastIntent}
+  * PendingIntentRecord{4205f798 com.sohu.inputmethod.sogou broadcastIntent}
+  * PendingIntentRecord{41b61b48 android broadcastIntent}
+  * PendingIntentRecord{41b15cf8 com.kingroot.kinguser startService}
+  * PendingIntentRecord{41bbfd20 android broadcastIntent}
+  * PendingIntentRecord{41b1e5c8 com.sohu.inputmethod.sogou broadcastIntent}
+  * PendingIntentRecord{4175f660 com.android.gallery3d broadcastIntent}
+  * PendingIntentRecord{41b7fdf8 com.tencent.mm startActivity}
+  * PendingIntentRecord{42093520 com.tencent.mm startService}
+  * PendingIntentRecord{42039b98 com.tencent.mm startService}
+  * PendingIntentRecord{41fbba40 android broadcastIntent}
+  * PendingIntentRecord{41b41178 com.tencent.mm broadcastIntent}
+  * PendingIntentRecord{41c563d0 com.wandoujia.phoenix2 startService}
+  * PendingIntentRecord{417d1bf0 android broadcastIntent}
+  * PendingIntentRecord{41c55840 com.huawei.android.totemweather startService}
+  * PendingIntentRecord{41ad5508 com.kingroot.kinguser broadcastIntent}
+  * PendingIntentRecord{41962590 com.kingroot.kinguser broadcastIntent}
+  * PendingIntentRecord{4202ed30 com.huawei.android.totemweather broadcastIntent}
+  * PendingIntentRecord{41f54908 com.tencent.mm startService}
+  * PendingIntentRecord{41f685f0 com.tencent.mm broadcastIntent}
+ 
+ACTIVITY MANAGER BROADCAST STATE (dumpsys activity broadcasts)
+  Historical broadcasts:
+  #0: BroadcastRecord{41bca108 android.intent.action.BATTERY_CHANGED}
+  #1: BroadcastRecord{41ca9cd0 com.kingroot.common.ACTION_TOP_ACTIVITY_CHANGED}
+  #2: BroadcastRecord{41cae930 android.ActivityState.CHANGE}
+  #3: BroadcastRecord{41cebe10 android.ActivityState.CHANGE}
+  #4: BroadcastRecord{41d04380 com.android.internal.telephony.gprs-data-stall}
+  #5: BroadcastRecord{41fb8728 android.intent.action.BATTERY_CHANGED}
+  #6: BroadcastRecord{420bf388 android.intent.action.TIME_TICK}
+  #7: BroadcastRecord{4282b580 android.intent.action.BATTERY_CHANGED}
+  #8: BroadcastRecord{4201ce50 android.intent.action.BATTERY_CHANGED}
+  #9: BroadcastRecord{4209fa50 com.kingroot.common.ACTION_TOP_ACTIVITY_CHANGED}
+  #10: BroadcastRecord{420c68b8 android.ActivityState.CHANGE}
+  #11: BroadcastRecord{421eb7d8 android.ActivityState.CHANGE}
+  #12: BroadcastRecord{42893750 com.kingroot.common.ACTION_TOP_ACTIVITY_CHANGED}
+  #13: BroadcastRecord{428cf390 android.ActivityState.CHANGE}
+  #14: BroadcastRecord{4292fb20 android.ActivityState.CHANGE}
+  #15: BroadcastRecord{42d01b90 com.kingroot.common.ACTION_TOP_ACTIVITY_CHANGED}
+  #16: BroadcastRecord{41bf3d70 android.ActivityState.CHANGE}
+  #17: BroadcastRecord{42041238 android.ActivityState.CHANGE}
+  #18: BroadcastRecord{41a5bbc8 android.ActivityState.CHANGE}
+  #19: BroadcastRecord{426c3388 com.tencent.mm.plugin.openapi.Intent.ACTION_HANDLE_APP_REGISTER}
+  #20: BroadcastRecord{42020690 com.kingroot.common.ACTION_NEW_APP_STARTED}
+  #21: BroadcastRecord{41b99600 com.kingroot.common.ACTION_TOP_APP_CHANGED}
+  #22: BroadcastRecord{420ef5d8 com.kingroot.common.ACTION_SWITCH_OUT_DESKTOP}
+  #23: BroadcastRecord{41c73dc0 com.kingroot.common.ACTION_TOP_ACTIVITY_CHANGED}
+  #24: BroadcastRecord{41b0bcd8 android.ActivityState.CHANGE}
+
+  Sticky broadcasts:
+  * Sticky action android.media.SCO_AUDIO_STATE_CHANGED
+  * Sticky action android.media.ACTION_SCO_AUDIO_STATE_UPDATED
+  * Sticky action android.net.thrott.THROTTLE_ACTION
+  * Sticky action android.hardware.usb.action.USB_STATE
+  * Sticky action android.net.conn.CONNECTIVITY_CHANGE_IMMEDIATE
+  * Sticky action android.net.conn.CONNECTIVITY_CHANGE
+  * Sticky action android.net.wifi.supplicant.STATE_CHANGE
+  * Sticky action android.net.conn.TETHER_STATE_CHANGED
+  * Sticky action android.intent.action.BATTERY_CHANGED
+  * Sticky action android.net.conn.INET_CONDITION_ACTION
+  * Sticky action android.net.wifi.WIFI_STATE_CHANGED
+  * Sticky action android.net.thrott.POLL_ACTION
+  * Sticky action android.intent.action.SIM_STATE_CHANGED
+  * Sticky action android.intent.action.SIG_STR
+  * Sticky action android.intent.action.SERVICE_STATE
+  * Sticky action android.net.wifi.STATE_CHANGE
+  * Sticky action android.media.RINGER_MODE_CHANGED
+  * Sticky action android.intent.action.HDMI_PLUGGED
+  * Sticky action android.intent.action.ANY_DATA_STATE
+  * Sticky action android.net.wifi.p2p.STATE_CHANGED
+ 
+ACTIVITY MANAGER CONTENT PROVIDERS (dumpsys activity providers)
+  Published content providers (by class):
+  * QZoneConfigProvider (com.tencent.mobileqq/com.tencent.common.config.provider.QZoneConfigProvider)
+      ProcessRecord{41ca1f48 14138:com.tencent.mobileqq/10062}
+  * ExtControlProviderMsg (com.tencent.mm/.plugin.ext.provider.ExtControlProviderMsg)
+      ProcessRecord{41794348 30309:com.tencent.mm/10065}
+  * VoicemailContentProvider (com.android.providers.contacts/.VoicemailContentProvider)
+      ProcessRecord{417941b8 8552:android.process.acore/10001}
+  * WXCommProvider (com.tencent.mm/.plugin.base.stub.WXCommProvider)
+      ProcessRecord{41794348 30309:com.tencent.mm/10065}
+  * SubscribedFeedsProvider (com.google.android.gsf/.subscribedfeeds.SubscribedFeedsProvider)
+      ProcessRecord{41a95a68 3278:com.google.process.gapps/10016}
+  * GWalletQueryProvider (com.tencent.mm/.plugin.gwallet.GWalletQueryProvider)
+      ProcessRecord{41794348 30309:com.tencent.mm/10065}
+  * ExtControlProviderNearBy (com.tencent.mm/.plugin.ext.provider.ExtControlProviderNearBy)
+      ProcessRecord{41794348 30309:com.tencent.mm/10065}
+  * SettingsProvider (com.svox.pico/.providers.SettingsProvider)
+      ProcessRecord{41796d50 19208:com.svox.pico/10047}
+  * WeatherProvider (com.huawei.android.totemweather/.provider.WeatherProvider)
+      ProcessRecord{419e4c58 10354:com.huawei.android.totemweather/10055}
+  * MediaProvider (com.android.providers.media/.MediaProvider)
+      ProcessRecord{417734d0 4951:android.process.media/10012}
+  * CloudProvider (com.sohu.inputmethod.sogou/sogou.mobile.explorer.hotwordsbase.mini.cloud.db.CloudProvider)
+      ProcessRecord{41761428 30381:sogou.mobile.explorer.hotwords/10031}
+  * FriendListProvider (com.tencent.mobileqq/.content.FriendListProvider)
+      ProcessRecord{41ca1f48 14138:com.tencent.mobileqq/10062}
+  * TelephonyProvider (com.android.providers.telephony/.TelephonyProvider)
+      ProcessRecord{41c72b60 1423:com.android.phone/1001}
+  * DownloadProvider (com.android.providers.downloads/.DownloadProvider)
+      ProcessRecord{417734d0 4951:android.process.media/10012}
+  * ExtContentProviderBase (com.tencent.mm/.plugin.ext.provider.ExtContentProviderBase)
+      ProcessRecord{41794348 30309:com.tencent.mm/10065}
+  * GoogleSettingsProvider (com.google.android.gsf/.settings.GoogleSettingsProvider)
+      ProcessRecord{41a95a68 3278:com.google.process.gapps/10016}
+  * ExtControlProviderSearchContact (com.tencent.mm/.plugin.ext.provider.ExtControlProviderSearchContact)
+      ProcessRecord{41794348 30309:com.tencent.mm/10065}
+  * ContentProviderImpl (com.tencent.mobileqq/com.tencent.mqq.shared_file_accessor.ContentProviderImpl)
+      ProcessRecord{41ca1f48 14138:com.tencent.mobileqq/10062}
+  * MultiProcessSharedPreferences (com.tencent.mm/.sdk.platformtools.MultiProcessSharedPreferences)
+      ProcessRecord{41794348 30309:com.tencent.mm/10065}
+  * DrmProvider (com.android.providers.drm/.DrmProvider)
+      ProcessRecord{417734d0 4951:android.process.media/10012}
+  * ExtControlProviderAccountSync (com.tencent.mm/.plugin.ext.provider.ExtControlProviderAccountSync)
+      ProcessRecord{41794348 30309:com.tencent.mm/10065}
+  * ExtControlProviderEntry (com.tencent.mm/.plugin.ext.provider.ExtControlProviderEntry)
+      ProcessRecord{41794348 30309:com.tencent.mm/10065}
+  * HWPhoneProvider (com.android.phone/.HWPhoneProvider)
+      ProcessRecord{41c72b60 1423:com.android.phone/1001}
+  * IccProvider (com.android.phone/.IccProvider)
+      ProcessRecord{41c72b60 1423:com.android.phone/1001}
+  * ShareSdkProvider (com.eg.android.AlipayGphone/com.alipay.mobile.socialwidget.provider.ShareSdkProvider)
+      ProcessRecord{41a8e9d8 2779:com.eg.android.AlipayGphone/10060}
+  * GservicesProvider (com.google.android.gsf/.gservices.GservicesProvider)
+      ProcessRecord{41a95a68 3278:com.google.process.gapps/10016}
+  * HwIMEContentProvider (com.huawei.inputmethod.hwpal/.HwIMEContentProvider)
+      ProcessRecord{41747590 502:com.huawei.inputmethod.hwpal/10029}
+  * TempFileProvider (com.android.mms/.TempFileProvider)
+      ProcessRecord{41b0ed90 3390:com.android.mms/10040}
+  * DownloadProvider (com.sohu.inputmethod.sogou/sogou.mobile.explorer.hotwordsbase.mini.download.DownloadProvider)
+      ProcessRecord{41761428 30381:sogou.mobile.explorer.hotwords/10031}
+  * SuggestionsProvider (com.android.mms/.SuggestionsProvider)
+      ProcessRecord{41b0ed90 3390:com.android.mms/10040}
+  * LauncherProvider (com.huawei.android.launcher/.LauncherProvider)
+      ProcessRecord{41c8a680 1481:com.huawei.android.launcher/10030}
+  * SocialProvider (com.android.providers.contacts/.SocialProvider)
+      ProcessRecord{417941b8 8552:android.process.acore/10001}
+  * ApplicationsProvider (com.android.providers.applications/.ApplicationsProvider)
+      ProcessRecord{417941b8 8552:android.process.acore/10001}
+  * DownloadProvider (com.sohu.inputmethod.sogou/com.sogou.androidtool.sdk.downloads.DownloadProvider)
+      ProcessRecord{41c69188 1404:com.sohu.inputmethod.sogou/10031}
+  * ExtControlProviderSNS (com.tencent.mm/.plugin.ext.provider.ExtControlProviderSNS)
+      ProcessRecord{41794348 30309:com.tencent.mm/10065}
+  * MmsProvider (com.android.providers.telephony/.MmsProvider)
+      ProcessRecord{41c72b60 1423:com.android.phone/1001}
+  * BrowserProvider (com.sohu.inputmethod.sogou/sogou.mobile.explorer.hotwordsbase.provider.BrowserProvider)
+      ProcessRecord{41c69188 1404:com.sohu.inputmethod.sogou/10031}
+  * SmsProvider (com.android.providers.telephony/.SmsProvider)
+      ProcessRecord{41c72b60 1423:com.android.phone/1001}
+  * GalleryProvider (com.android.gallery3d/.provider.GalleryProvider)
+      ProcessRecord{41c27490 19102:com.android.gallery3d/10015}
+  * ReadInJoyDataProvider (com.tencent.mobileqq/cooperation.readinjoy.content.ReadInJoyDataProvider)
+      ProcessRecord{41ca1f48 14138:com.tencent.mobileqq/10062}
+  * KuMpStorageProvider (com.kingroot.kinguser/.filesystem.storage.KuMpStorageProvider)
+      ProcessRecord{41c4fec8 1377:com.kingroot.kinguser:service/10079}
+  * TalkProvider (com.google.android.gsf/.talk.TalkProvider)
+      ProcessRecord{41a95a68 3278:com.google.process.gapps/10016}
+  * OpenApiProvider (com.tencent.mobileqq/.openapi.OpenApiProvider)
+      ProcessRecord{41ca1f48 14138:com.tencent.mobileqq/10062}
+  * ContactsProvider2 (com.android.providers.contacts/.ContactsProvider2)
+      ProcessRecord{417941b8 8552:android.process.acore/10001}
+  * AliAuthLoginContentProvider (com.eg.android.AlipayGphone/com.alipay.mobile.authlogin.common.provider.AliAuthLoginContentProvider)
+      ProcessRecord{41a8e9d8 2779:com.eg.android.AlipayGphone/10060}
+  * MmsSmsProvider (com.android.providers.telephony/.MmsSmsProvider)
+      ProcessRecord{41c72b60 1423:com.android.phone/1001}
+  * MMPluginProvider (com.tencent.mm/.plugin.base.stub.MMPluginProvider)
+      ProcessRecord{41794348 30309:com.tencent.mm/10065}
+  * SettingsProvider (com.android.providers.settings/.SettingsProvider)
+      ProcessRecord{41871458 768:system/1000}
+      Clients:
+        - ProcessRecord{41a95a68 3278:com.google.process.gapps/10016}
+        - ProcessRecord{41add820 26900:io.rong.push/10061}
+        - ProcessRecord{41761428 30381:sogou.mobile.explorer.hotwords/10031}
+        - ProcessRecord{41867fa0 14191:com.tencent.mobileqq:tool/10062}
+        - ProcessRecord{41ca1f48 14138:com.tencent.mobileqq/10062}
+        - ProcessRecord{41794348 30309:com.tencent.mm/10065}
+        - ProcessRecord{41bac7a0 2826:com.eg.android.AlipayGphone:push/10060}
+        - ProcessRecord{41bdb960 12887:cn.com.chinau/10000}
+        - ProcessRecord{41859b30 2580:com.wandoujia.phoenix2:channel/10075}
+        - ProcessRecord{41c8a680 1481:com.huawei.android.launcher/10030}
+        - ProcessRecord{41e11d58 32249:com.eg.android.AlipayGphone:tools/10060}
+        - ProcessRecord{41c217d0 1318:com.android.systemui/1000}
+        - ProcessRecord{41793118 3583:com.tencent.mobileqq:MSF/10062}
+        - ProcessRecord{41c69188 1404:com.sohu.inputmethod.sogou/10031}
+        - ProcessRecord{41a8e9d8 2779:com.eg.android.AlipayGphone/10060}
+        - ProcessRecord{41795680 19022:com.android.defcontainer/10009}
+        - ProcessRecord{41c72b60 1423:com.android.phone/1001}
+        - ProcessRecord{41795a30 30391:com.tencent.mm:push/10065}
+        - ProcessRecord{419e4c58 10354:com.huawei.android.totemweather/10055}
+        - ProcessRecord{417941b8 8552:android.process.acore/10001}
+        - ProcessRecord{41c47bd8 2309:com.wandoujia.phoenix2/10075}
+        - ProcessRecord{41c851e0 1466:com.broadcom.bt.app.system/1002}
+        - ProcessRecord{41c4fec8 1377:com.kingroot.kinguser:service/10079}
+  * CallLogProvider (com.android.providers.contacts/.CallLogProvider)
+      ProcessRecord{417941b8 8552:android.process.acore/10001}
+ 
+ACTIVITY MANAGER SERVICES (dumpsys activity services)
+  Active services:
+  * ServiceRecord{41b18438 com.wandoujia.phoenix2/com.taobao.accs.data.MsgDistributeService}
+    app=ProcessRecord{41c47bd8 2309:com.wandoujia.phoenix2/10075}
+    created=-2d21h32m30s246ms started=true connections=0
+  * ServiceRecord{4208f1a0 com.tencent.mobileqq/.msf.service.MsfService}
+    app=ProcessRecord{41793118 3583:com.tencent.mobileqq:MSF/10062}
+    created=-2d4h20m17s784ms started=true connections=2
+    Connections:
+       -> 14138:com.tencent.mobileqq/10062
+       -> 14138:com.tencent.mobileqq/10062
+       -> 14138:com.tencent.mobileqq/10062
+       -> 14191:com.tencent.mobileqq:tool/10062
+       -> 14191:com.tencent.mobileqq:tool/10062
+       -> 14191:com.tencent.mobileqq:tool/10062
+  * ServiceRecord{41bc1e08 com.wandoujia.phoenix2/com.wandoujia.jupiter.update.UpdateService}
+    app=ProcessRecord{41c47bd8 2309:com.wandoujia.phoenix2/10075}
+    created=-2d21h32m36s757ms started=true connections=0
+  * ServiceRecord{41d054b0 com.android.smspush/.WapPushManager}
+    app=ProcessRecord{41d05ce8 1539:com.android.smspush/10057}
+    created=-2d21h32m48s780ms started=false connections=1
+    Connections:
+      act=com.android.internal.telephony.IWapPushManager -> 1423:com.android.phone/1001
+  * ServiceRecord{41bea780 com.wandoujia.phoenix2/com.fast_clean.FastCleanService}
+    app=ProcessRecord{41c47bd8 2309:com.wandoujia.phoenix2/10075}
+    created=-2d21h31m36s47ms started=true connections=0
+  * ServiceRecord{41b49328 com.wandoujia.phoenix2/com.wandoujia.jupiter.oomadj.OOMADJNotificationServiceForAgooThread}
+    app=ProcessRecord{41859b30 2580:com.wandoujia.phoenix2:channel/10075}
+    created=-2d21h32m31s71ms started=true connections=0
+  * ServiceRecord{41d978f0 com.wandoujia.phoenix2/com.wandoujia.jupiter.oomadj.OOMADJNotificationServiceForMainThread}
+    app=ProcessRecord{41c47bd8 2309:com.wandoujia.phoenix2/10075}
+    created=-2d21h32m35s727ms started=true connections=0
+  * ServiceRecord{4211cef8 com.huawei.inputmethod.hwpal/.BaiduEngineService}
+    app=ProcessRecord{41747590 502:com.huawei.inputmethod.hwpal/10029}
+    created=-1h45m38s434ms started=false connections=1
+    Connections:
+       -> 502:com.huawei.inputmethod.hwpal/10029
+  * ServiceRecord{41cf65c8 com.huawei.android.wfdft/.ftc.service.FTCService}
+    app=ProcessRecord{41797cd8 9433:com.huawei.android.wfdft:FTCserv/10033}
+    created=-4h19m36s60ms started=true connections=0
+  * ServiceRecord{420fcd00 com.eg.android.AlipayGphone/mtopsdk.xstate.XStateService}
+    app=ProcessRecord{41a8e9d8 2779:com.eg.android.AlipayGphone/10060}
+    created=-2d4h5m26s469ms started=false connections=1
+    Connections:
+      act=mtopsdk.xstate.aidl.IXState pkg=com.eg.android.AlipayGphone -> 2779:com.eg.android.AlipayGphone/10060
+  * ServiceRecord{41884ca8 com.kingroot.kinguser/com.kingroot.common.framework.service.KSysService}
+    app=ProcessRecord{41c4fec8 1377:com.kingroot.kinguser:service/10079}
+    created=-2d21h32m47s767ms started=true connections=1
+    Connections:
+       -> 1377:com.kingroot.kinguser:service/10079
+  * ServiceRecord{4207d0f8 com.huawei.android.ds/.hisync.services.HiSyncService}
+    app=ProcessRecord{41bfc4a0 19183:com.huawei.android.ds/10028}
+    created=-2d21h32m22s92ms started=true connections=0
+  * ServiceRecord{41b74b40 com.eg.android.AlipayGphone/anetwork.channel.aidl.NetworkService}
+    app=ProcessRecord{41a8e9d8 2779:com.eg.android.AlipayGphone/10060}
+    created=-2d4h5m25s832ms started=false connections=1
+    Connections:
+      act=anetwork.channel.aidl.IRemoteNetworkGetter pkg=com.eg.android.AlipayGphone -> 2779:com.eg.android.AlipayGphone/10060
+  * ServiceRecord{41c21240 com.android.systemui/.SystemUIService}
+    app=ProcessRecord{41c217d0 1318:com.android.systemui/1000}
+    created=-2d21h32m50s43ms started=true connections=0
+  * ServiceRecord{41b45db8 com.huawei.android.wfdft/.fts.service.FTSService}
+    app=ProcessRecord{428c53b0 7918:com.huawei.android.wfdft:FTSserv/10033}
+    created=-4h19m36s101ms started=true connections=0
+  * ServiceRecord{41b662f0 com.wandoujia.phoenix2/com.wandoujia.agoo.RedirectService}
+    app=ProcessRecord{41c47bd8 2309:com.wandoujia.phoenix2/10075}
+    created=-1d0h24m36s234ms started=true connections=0
+  * ServiceRecord{42004480 com.wandoujia.phoenix2/org.android.agoo.accs.AgooService}
+    app=ProcessRecord{41c47bd8 2309:com.wandoujia.phoenix2/10075}
+    created=-2d21h16m57s117ms started=true connections=0
+  * ServiceRecord{4293e8c0 com.tencent.mobileqq/.qipc.QIPCService}
+    app=ProcessRecord{41ca1f48 14138:com.tencent.mobileqq/10062}
+    created=-5h0m42s437ms started=false connections=1
+    Connections:
+       -> 14191:com.tencent.mobileqq:tool/10062
+  * ServiceRecord{41c3d1a8 com.wandoujia.phoenix2/com.wandoujia.jupiter.service.SpeedUpService}
+    app=ProcessRecord{41c47bd8 2309:com.wandoujia.phoenix2/10075}
+    created=-2d21h32m31s62ms started=true connections=0
+  * ServiceRecord{41d0e000 com.wandoujia.phoenix2/com.wandoujia.update.RemoteUpdateService}
+    app=ProcessRecord{4196b480 2479:com.wandoujia.phoenix2:update_service/10075}
+    created=-2d21h32m35s644ms started=true connections=1
+    Connections:
+       -> 2309:com.wandoujia.phoenix2/10075
+  * ServiceRecord{41fd7410 com.wandoujia.phoenix2/com.taobao.accs.ChannelService}
+    app=ProcessRecord{41859b30 2580:com.wandoujia.phoenix2:channel/10075}
+    created=-2d21h32m32s709ms started=true connections=0
+  * ServiceRecord{420a4598 com.huawei.android.totemweather/.widget.WeatherWidgetServer}
+    app=ProcessRecord{419e4c58 10354:com.huawei.android.totemweather/10055}
+    created=-2d21h32m2s446ms started=true connections=0
+  * ServiceRecord{41ccff28 com.huawei.pmqos/.PmqosService}
+    app=ProcessRecord{41c74388 1444:com.huawei.pmqos/1000}
+    created=-2d21h32m30s910ms started=true connections=0
+  * ServiceRecord{41d9d4d0 com.wandoujia.phoenix2.usbproxy/com.wandoujia.phoenix2.services.ConnectionService}
+    app=ProcessRecord{41750558 2113:com.wandoujia.phoenix2.usbproxy/10074}
+    created=-2d21h32m40s298ms started=false connections=1
+    Connections:
+       -> 2309:com.wandoujia.phoenix2/10075
+  * ServiceRecord{41be6bb8 com.tencent.mm/.booter.CoreService}
+    app=ProcessRecord{41795a30 30391:com.tencent.mm:push/10065}
+    created=-2d5h28m52s808ms started=true connections=1
+    Connections:
+       -> 30309:com.tencent.mm/10065
+       -> 30309:com.tencent.mm/10065
+  * ServiceRecord{41c27b20 com.eg.android.AlipayGphone/org.rome.android.ipp.binder.IppService}
+    app=ProcessRecord{41a8e9d8 2779:com.eg.android.AlipayGphone/10060}
+    created=-2d21h32m30s805ms started=true connections=0
+  * ServiceRecord{41ceb778 com.android.stk/.StkAppService}
+    app=ProcessRecord{41c72b60 1423:com.android.phone/1001}
+    created=-2d21h32m36s898ms started=true connections=0
+  * ServiceRecord{41fedff8 com.sohu.inputmethod.sogou/sogou.mobile.explorer.hotwords.entrance.HotwordsExtendEntranceService}
+    app=ProcessRecord{41761428 30381:sogou.mobile.explorer.hotwords/10031}
+    created=-2d21h31m47s331ms started=true connections=0
+  * ServiceRecord{4208f298 com.eg.android.AlipayGphone/com.alipay.android.launcher.service.LauncherService}
+    app=ProcessRecord{41a8e9d8 2779:com.eg.android.AlipayGphone/10060}
+    created=-2d21h32m5s562ms started=true connections=0
+  * ServiceRecord{41d0dbb8 com.android.phone/.BluetoothHeadsetService}
+    app=ProcessRecord{41c72b60 1423:com.android.phone/1001}
+    created=-2d21h32m48s598ms started=true connections=1
+    Connections:
+      act=android.bluetooth.IBluetoothHeadset -> 768:system/1000
+  * ServiceRecord{41c667e0 com.android.wallpaper.holospiral/.HoloSpiralWallpaper}
+    app=ProcessRecord{41c67120 1392:com.android.wallpaper.holospiral/10019}
+    created=-2d21h32m49s736ms started=false connections=1
+    Connections:
+      act=android.service.wallpaper.WallpaperService -> 768:system/1000
+  * ServiceRecord{41d990b0 com.eg.android.AlipayGphone/com.alipay.android.app.MspService}
+    app=ProcessRecord{41a8e9d8 2779:com.eg.android.AlipayGphone/10060}
+    created=-2d18h2m37s904ms started=true connections=0
+  * ServiceRecord{41d88738 com.yoyozhibo.yoyo/io.rong.push.PushService}
+    app=ProcessRecord{41add820 26900:io.rong.push/10061}
+    created=-2d21h32m14s822ms started=true connections=0
+  * ServiceRecord{41c689e8 com.sohu.inputmethod.sogou/.SogouIME}
+    app=ProcessRecord{41c69188 1404:com.sohu.inputmethod.sogou/10031}
+    created=-2d21h32m49s716ms started=false connections=1
+    Connections:
+      act=android.view.InputMethod -> 768:system/1000
+  * ServiceRecord{41b31588 com.eg.android.AlipayGphone/com.alipay.pushsdk.push.NotificationService}
+    app=ProcessRecord{41bac7a0 2826:com.eg.android.AlipayGphone:push/10060}
+    created=-2d21h32m26s212ms started=true connections=1
+    Connections:
+      pkg=com.eg.android.AlipayGphone -> 2779:com.eg.android.AlipayGphone/10060
+      pkg=com.eg.android.AlipayGphone -> 2779:com.eg.android.AlipayGphone/10060
+  * ServiceRecord{41b8d290 com.google.android.gsf/.gtalkservice.service.GTalkService}
+    app=ProcessRecord{41a95a68 3278:com.google.process.gapps/10016}
+    created=-2d21h31m59s717ms started=true connections=0
+ 
+ACTIVITY MANAGER ACTIVITIES (dumpsys activity activities)
+  Main stack:
+    TaskRecord{41e72c10 #417 A cn.com.chinau}
+    Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=cn.com.chinau/.activity.SplashActivity }
+      Hist #4: ActivityRecord{41c60e60 cn.com.chinau/.activity.OrdersGoodsActivity}
+        Intent { cmp=cn.com.chinau/.activity.OrdersGoodsActivity (has extras) }
+        ProcessRecord{41bdb960 12887:cn.com.chinau/10000}
+      Hist #3: ActivityRecord{41c358c0 cn.com.chinau/.MainActivity}
+        Intent { cmp=cn.com.chinau/.MainActivity }
+        ProcessRecord{41bdb960 12887:cn.com.chinau/10000}
+    TaskRecord{41c8a0d0 #2 A com.huawei.android.launcher}
+    Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10400000 cmp=com.huawei.android.launcher/.Launcher }
+      Hist #2: ActivityRecord{41c87ec8 com.huawei.android.launcher/.Launcher}
+        Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000000 cmp=com.huawei.android.launcher/.Launcher }
+        ProcessRecord{41c8a680 1481:com.huawei.android.launcher/10030}
+    TaskRecord{41b6ffb8 #321 A com.jarvis.mytaobaotest}
+    Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.jarvis.mytaobaotest/com.jarvis.mytaobao.home.Main_FA }
+      Hist #1: ActivityRecord{4179ccc0 com.jarvis.mytaobaotest/com.jarvis.mytaobao.home.Main_FA}
+        Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=com.jarvis.mytaobaotest/com.jarvis.mytaobao.home.Main_FA }
+    TaskRecord{41eed818 #320 A com.android.packageinstaller}
+    Intent { act=android.intent.action.VIEW dat=file:///mnt/sdcard/download/bzsgz_inmobi.apk typ=application/vnd.android.package-archive flg=0x10800000 cmp=com.android.packageinstaller/.PackageInstallerActivity }
+      Hist #0: ActivityRecord{421eabe0 com.android.packageinstaller/.PackageInstallerActivity}
+        Intent { act=android.intent.action.VIEW dat=file:///mnt/sdcard/download/bzsgz_inmobi.apk typ=application/vnd.android.package-archive flg=0x10800000 cmp=com.android.packageinstaller/.PackageInstallerActivity }
+ 
+  Running activities (most recent first):
+    TaskRecord{41e72c10 #417 A cn.com.chinau}
+      Run #2: ActivityRecord{41c60e60 cn.com.chinau/.activity.OrdersGoodsActivity}
+      Run #1: ActivityRecord{41c358c0 cn.com.chinau/.MainActivity}
+    TaskRecord{41c8a0d0 #2 A com.huawei.android.launcher}
+      Run #0: ActivityRecord{41c87ec8 com.huawei.android.launcher/.Launcher}
+ 
+  mResumedActivity: ActivityRecord{41c60e60 cn.com.chinau/.activity.OrdersGoodsActivity}
+  mFocusedActivity: ActivityRecord{41c60e60 cn.com.chinau/.activity.OrdersGoodsActivity}
+
+  Recent tasks:
+  * Recent #0: TaskRecord{41e72c10 #417 A cn.com.chinau}
+  * Recent #1: TaskRecord{41c8a0d0 #2 A com.huawei.android.launcher}
+  * Recent #2: TaskRecord{4189b0d8 #415 A com.kingroot.kinguser}
+  * Recent #3: TaskRecord{41f656a0 #398 A com.eg.android.AlipayGphone}
+  * Recent #4: TaskRecord{41c90590 #362 A com.android.settings}
+  * Recent #5: TaskRecord{429bdcc8 #357 A com.alipay.sdk.pay.demo}
+  * Recent #6: TaskRecord{4290a018 #351 A com.wandoujia.phoenix2.usbproxy}
+  * Recent #7: TaskRecord{42014a88 #324 A com.parfois.vmall}
+  * Recent #8: TaskRecord{4236e198 #327 A com.example.shop}
+  * Recent #9: TaskRecord{4202e3c0 #323 A com.jock.tbshopcar}
+  * Recent #10: TaskRecord{41b6ffb8 #321 A com.jarvis.mytaobaotest}
+  * Recent #11: TaskRecord{41eed818 #320 A com.android.packageinstaller}
+  * Recent #12: TaskRecord{41d84a78 #318 A com.whyp.ycuservice}
+  * Recent #13: TaskRecord{41bab8c8 #269 A com.letter.filter}
+  * Recent #14: TaskRecord{41c42628 #270 A com.pyy.viewpagerfragment}
+  * Recent #15: TaskRecord{41bc04c8 #267 A .wxpayentry}
+  * Recent #16: TaskRecord{420757f0 #264 A .sdkentry}
+  * Recent #17: TaskRecord{41ff96f8 #263 A com.sohu.inputmethod.sogou}
+  * Recent #18: TaskRecord{42265eb8 #260 A com.lnyp.selectablelist}
+  * Recent #19: TaskRecord{41c16568 #237 A com.example.sortlistview}
+ 
+ACTIVITY MANAGER RUNNING PROCESSES (dumpsys activity processes)
+  Process LRU list (sorted by oom_adj):
+    PERS # 4: adj=sys  /F  trm= 0 768:system/1000 (fixed)
+    PERS #38: adj=pers /F  trm= 0 1466:com.broadcom.bt.app.system/1002 (fixed)
+    PERS #36: adj=pers /F  trm= 0 1318:com.android.systemui/1000 (fixed)
+    PERS # 6: adj=pers /F  trm= 0 1444:com.huawei.pmqos/1000 (fixed)
+    PERS # 3: adj=pers /F  trm= 0 1423:com.android.phone/1001 (fixed)
+    Proc #37: adj=fore /F  trm= 0 3390:com.android.mms/10040 (mms)
+    Proc #35: adj=fore /F  trm= 0 2698:com.android.contacts/10001 (contacts)
+    Proc # 7: adj=fore /FA trm= 0 12887:cn.com.chinau/10000 (top-activity)
+    Proc # 2: adj=vis  /F  trm= 0 1539:com.android.smspush/10057 (service)
+        com.android.smspush/.WapPushManager<=Proc{1423:com.android.phone/1001}
+    Proc # 1: adj=vis  /F  trm= 0 1392:com.android.wallpaper.holospiral/10019 (service)
+        com.android.wallpaper.holospiral/.HoloSpiralWallpaper<=Proc{768:system/1000}
+    Proc #34: adj=prcp /FS trm= 0 2580:com.wandoujia.phoenix2:channel/10075 (foreground-service)
+    Proc #31: adj=prcp /FS trm= 0 2779:com.eg.android.AlipayGphone/10060 (foreground-service)
+    Proc #26: adj=prcp /FS trm= 0 2826:com.eg.android.AlipayGphone:push/10060 (foreground-service)
+    Proc #18: adj=prcp /FS trm= 0 2309:com.wandoujia.phoenix2/10075 (foreground-service)
+    Proc #17: adj=prcp /F  trm= 0 2479:com.wandoujia.phoenix2:update_service/10075 (service)
+        com.wandoujia.phoenix2/com.wandoujia.update.RemoteUpdateService<=Proc{2309:com.wandoujia.phoenix2/10075}
+    Proc #16: adj=prcp /F  trm= 0 2113:com.wandoujia.phoenix2.usbproxy/10074 (service)
+        com.wandoujia.phoenix2.usbproxy/com.wandoujia.phoenix2.services.ConnectionService<=Proc{2309:com.wandoujia.phoenix2/10075}
+    Proc #14: adj=prcp /FS trm= 0 3583:com.tencent.mobileqq:MSF/10062 (foreground-service)
+    Proc # 8: adj=prcp /FS trm= 0 30391:com.tencent.mm:push/10065 (foreground-service)
+    Proc # 5: adj=prcp /FS trm= 0 1377:com.kingroot.kinguser:service/10079 (foreground-service)
+    Proc # 0: adj=prcp /F  trm= 0 1404:com.sohu.inputmethod.sogou/10031 (service)
+        com.sohu.inputmethod.sogou/.SogouIME<=Proc{768:system/1000}
+    Proc #27: adj=svc  /B  trm= 0 10354:com.huawei.android.totemweather/10055 (started-services)
+    Proc #11: adj=svc  /B  trm= 0 26900:io.rong.push/10061 (started-services)
+    Proc #10: adj=home /B  trm= 0 1481:com.huawei.android.launcher/10030 (home)
+    Proc #33: adj=svcb /B  trm= 0 30381:sogou.mobile.explorer.hotwords/10031 (started-services)
+    Proc #19: adj=bak  /B  trm= 0 14191:com.tencent.mobileqq:tool/10062 (bg-empty)
+    Proc #15: adj=bak  /B  trm= 0 14138:com.tencent.mobileqq/10062 (bg-empty)
+    Proc #13: adj=bak  /B  trm= 0 8552:android.process.acore/10001 (bg-empty)
+    Proc #12: adj=bak  /B  trm= 0 19183:com.huawei.android.ds/10028 (started-bg-services)
+    Proc # 9: adj=bak  /B  trm= 0 30309:com.tencent.mm/10065 (bg-empty)
+    Proc #24: adj=bak+1/B  trm= 0 585:com.android.keychain/1000 (bg-empty)
+    Proc #23: adj=bak+1/B  trm= 0 502:com.huawei.inputmethod.hwpal/10029 (bg-empty)
+    Proc #22: adj=bak+1/B  trm= 0 19102:com.android.gallery3d/10015 (bg-empty)
+    Proc #21: adj=bak+1/B  trm= 0 3278:com.google.process.gapps/10016 (started-bg-ui-services)
+    Proc #20: adj=bak+1/B  trm= 0 19208:com.svox.pico/10047 (bg-empty)
+    Proc #32: adj=bak+2/B  trm= 0 4951:android.process.media/10012 (bg-empty)
+    Proc #30: adj=bak+2/B  trm= 0 7918:com.huawei.android.wfdft:FTSserv/10033 (started-bg-services)
+    Proc #29: adj=bak+2/B  trm= 0 32249:com.eg.android.AlipayGphone:tools/10060 (bg-empty)
+    Proc #28: adj=bak+2/B  trm= 0 9433:com.huawei.android.wfdft:FTCserv/10033 (started-bg-services)
+    Proc #25: adj=bak+2/B  trm= 0 19022:com.android.defcontainer/10009 (bg-empty)
+ 
+  Time since processes crashed:
+    Process com.testcontact uid 10078: last crashed 80692206 ms ago
+    Process com.parfois.vmall uid 10085: last crashed 49251981 ms ago
+    Process com.whyp.ycuservice uid 10083: last crashed 52089653 ms ago
+
+  mHomeProcess: ProcessRecord{41c8a680 1481:com.huawei.android.launcher/10030}
+  mPreviousProcess: ProcessRecord{41793d20 3819:cn.com.chinau/10000}
+  mConfiguration: {1.0 0mcc0mnc zh_CN layoutdir=0 sw360dp w360dp h615dp nrml long port finger -keyb/v/h -nav/h s.31}
+  mSleeping=false mShuttingDown=false
+  mDebugApp=null/orig=null mDebugTransient=true mOrigWaitForDebugger=false

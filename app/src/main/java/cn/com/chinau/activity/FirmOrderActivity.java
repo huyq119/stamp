@@ -100,7 +100,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     //    private String groupSet;
     private HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
     private String groupSet1;
-    private String mRequestId;
+    private String mRequestId,mOrder_price;
     private String mPayUrl;
     private String mGoods_sn, mAuction_sn;
     private String mToJson;
@@ -181,6 +181,9 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         mFirmOrder = intent.getStringExtra("FirmOrder");// 获取是哪个页面来的适配器标识，
         mCount = intent.getStringExtra("Count");// 获取传过来的数量
         mPrice = intent.getStringExtra("Price");// 获取传过来的总价钱
+
+        MyLog.LogShitou("===========适配器传过来的数据", mCount+"=="+mPrice);
+
         if (mFirmOrder.equals("AuctionRecordAdapter")) {
             mGoods_sn = intent.getStringExtra("Goodes_sn");// 获取传过来的商品编号
             mAuction_sn = intent.getStringExtra("Auction_sn");// 获取传过来的竞拍编号
@@ -297,8 +300,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-
-
+        FirmOrderNet(mToJson);// 确认订单list网络请求
     }
 
     /**
@@ -334,7 +336,13 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 mPayPopupWindow.showAtLocation(this.findViewById(R.id.FirmOrder), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
                 break;
             case R.id.FirmOrder_NoAddress://没有收获地址
-                openActivityWitchAnimation(ManagerAddressActivity.class);
+                Intent intent1 = new Intent(this, EditReceiptAddressActivity.class);
+                intent1.putExtra("Address", "FirOrder");
+                startActivity(intent1);
+                //跳转动画
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+
+//                openActivityWitchAnimation(EditReceiptAddressActivity.class);
                 break;
             case R.id.base_title_back://返回
                 finishWitchAnimation();
@@ -354,6 +362,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 Intent intent = new Intent();
                 intent.setClass(this, ChooseReceiverAddress.class);
                 startActivityForResult(intent, REQUESTCODE);//REQUESTCODE定义一个整型做为请求对象标识
+                //跳转动画
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 break;
         }
     }
@@ -518,8 +528,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                         mDistributionPrice.setText("￥" + express_fee.get(0).getValue());
 
                         int count =Integer.valueOf(mCount).intValue(); //数量转成int
-                        String str = express_fee.get(0).getValue().trim();// 快递费去掉首尾空格
-                        String serviceFee = servicePrice.trim();// 服务费去掉首尾空格
+                        String str = express_fee.get(0).getValue().replaceAll(",","").trim();// 快递费去掉首尾空格
+                        String serviceFee = servicePrice.replaceAll(",","").trim();// 服务费去掉首尾空格
                         double countPrice =Double.parseDouble(str); // 快递费转double
 
                         MyLog.LogShitou("价钱转double商品数量",countPrice+"===="+count);
@@ -531,8 +541,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                         double douPrice =Double.parseDouble(mprice); // 最后快递费转double
                         MyLog.LogShitou("======double快递费总价",price+"");
 
-                        double mServicePrice =Double.parseDouble(serviceFee.trim()); //最后服务费转double价钱
-                        double mtotalPrice =Double.parseDouble(mPrice.trim()); //最后商品的价钱转double
+                        double mServicePrice =Double.parseDouble(serviceFee); //最后服务费转double价钱
+                        double mtotalPrice =Double.parseDouble(mPrice.replaceAll(",","").trim()); //最后商品的价钱转double()
 
                         double price1 = add(douPrice,mServicePrice); // 快递费和服务费总价
                         double mTotalPrices =  add(price1,mtotalPrice); // 三个数相加的总费用
@@ -632,6 +642,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     if (mCodess.equals("0000")) {
                         mPayUrl = mOrderPayBeans.getPay_url();  // 支付请求地址
                         mRequestId = mOrderPayBeans.getRequest_id();// 交易订单号
+                        mOrder_price = mOrderPayBeans.getOrder_amount();// 订单金额
 //                        String mPayRequestId = mOrderPayBeans.getPay_request_id();// 平台支付请求号
                         MyLog.LogShitou("mPayUrl+支付宝请求需要的串", mPayUrl);
                         // 发起支付宝支付
@@ -666,10 +677,15 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
 //                        Toast.makeText(FirmOrderActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-                        String mGoods_sn = info_list.get(0).getGoods_sn();
+//                        String mGoods_sn = info_list.get(0).getGoods_sn();
+//                        String mGoods_count= info_list.get(0).getGoods_count();
                         Bundle bundle = new Bundle();
-                        bundle.putString(StaticField.GOODS_SN, mGoods_sn);
-                        bundle.putString(StaticField.ORDER_SN, mRequestId);
+//                        bundle.putString(StaticField.GOODS_SN, mGoods_sn);
+//                        bundle.putString(StaticField.ORDER_SN, mRequestId);
+//                        bundle.putString(StaticField.GOODS_COUNT, mGoods_count);
+//                        bundle.putString(StaticField.GOODS_PRICE, mOrder_price);
+                        bundle.putString(StaticField.ORDERS, "receiving");
+
                         openActivityWitchAnimation(OrderBuySuccessActivity.class, bundle);
                         finish();
                     } else {
@@ -732,8 +748,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 
         mTotalPrice.setText("￥" + mTotalPrices);// 赋值总价钱
         MyLog.LogShitou("==============总价",mTotalPrices+"");
-
-
 
 
 

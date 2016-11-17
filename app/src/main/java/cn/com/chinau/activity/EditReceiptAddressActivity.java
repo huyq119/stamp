@@ -1,5 +1,6 @@
 package cn.com.chinau.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -7,6 +8,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,6 +58,7 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
     private ArrayList<cn.com.chinau.base.AddressBean.Address> mList;
     private AddressBean mAddressBean;
     private String mAddress_id; // 详情请求下来的mAddress_id
+    private Boolean flag;
 
     @Override
     public View CreateTitle() {
@@ -93,11 +96,10 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
 //            }
             GetInitNet(StaticField.XQ); // 查询地址详情请求
             MyLog.LogShitou("这是从编辑跳过来的", mAddressId);
-        }else{
+        } else {
 
 
         }
-
 
 
     }
@@ -167,32 +169,31 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
         });
     }
 
+    /**
+     * 关闭键盘的方法
+     */
+    private void ClooseInputMethodManager(View view) {
+// 强制关闭键盘
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if (flag){
+
+            handler.sendEmptyMessageDelayed(10, 200); // 发送消息弹出选择地址框
+        }else{
+            handler.sendEmptyMessageDelayed(11, 200); // 发送消息弹出选择地址框
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.EditReceiptAddress_info://编辑收获地址按钮
-                if (mAddressBean != null) {
-                    mAddressPopupWindow = new AddressPopupWindow(this, mAddressBean, AddressClick);
-                    mAddressPopupWindow.showAtLocation(this.findViewById(R.id.EditReceiptAddress), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-                }
+                flag = true;
+                ClooseInputMethodManager(view);
                 break;
             case R.id.base_edit://保存按钮
-                GetEditTextString(); // 获取输入的收件人名字，手机号，详细地址
-                if (TextUtils.isEmpty(mName)) {
-                    MyToast.showShort(EditReceiptAddressActivity.this, "请填写收件人姓名");
-                } else if (TextUtils.isEmpty(mMobile)) {
-                    MyToast.showShort(EditReceiptAddressActivity.this, "请填写联系电话");
-                } else if (TextUtils.isEmpty(mDetailAddress)) {
-                    MyToast.showShort(EditReceiptAddressActivity.this, "请填写详细地址");
-                }else {
-                    if (mAddress.equals("mAddressAdapter")) {
-                        MyLog.LogShitou("编辑地址选择了几-->：", is_default + "");
-                        GetEditAddress(is_default, StaticField.XG); // 修改网络请求
-                    } else {
-                        MyLog.LogShitou("新增地址选择了几-->：", is_default + "");
-                        GetEditAddress(is_default, StaticField.XZ); // 新增网络请求
-                    }
-                }
+                flag = false;
+                ClooseInputMethodManager(view);
                 break;
             case R.id.base_title_back://返回按钮
                 finishWitchAnimation();
@@ -249,32 +250,32 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.IS_DEFAULT, is_default + "");// 是否设置为默认地址：新增或修改时必传，0为非默认，1为默认
                 params.put(StaticField.OP_TYPE, op_type);// 操作类型：SC：删除；XG：修改；XZ：新增
-                if(op_type.equals(StaticField.XG)){
+                if (op_type.equals(StaticField.XG)) {
                     params.put(StaticField.ADDRESS_ID, mAddress_id);// 地址ID
                 }
                 params.put(StaticField.MOBILE, mMobile);// 收货人联系方式
 
-            // 判断是否选择了地址，如果没选择地址，就上传地址详情请求下来的地址code值，有选择地址，就上传选中地址的code值
-                if (mProvinceCode !=null | mCityCode != null | mAreaCode != null){
+                // 判断是否选择了地址，如果没选择地址，就上传地址详情请求下来的地址code值，有选择地址，就上传选中地址的code值
+                if (mProvinceCode != null | mCityCode != null | mAreaCode != null) {
                     params.put(StaticField.PROV, mProvinceCode);// 省份
                     params.put(StaticField.CITY, mCityCode);// 市
                     params.put(StaticField.AREA, mAreaCode);// 区县
-                    MyLog.LogShitou(op_type+"默认北京北京市海淀区","====0000000000000======="+prov+"=="+city+"=="+area);
-                }else{
-                    if(prov != null &&city != null &&area != null  ){
+                    MyLog.LogShitou(op_type + "默认北京北京市海淀区", "====0000000000000=======" + prov + "==" + city + "==" + area);
+                } else {
+                    if (prov != null && city != null && area != null) {
                         params.put(StaticField.PROV, prov);// 省份
                         params.put(StaticField.CITY, city);// 市
                         params.put(StaticField.AREA, area);// 区县
-                        MyLog.LogShitou(op_type+"默认北京北京市海淀区","====1111111111111======="+prov+"=="+city+"=="+area);
-                    }else{
+                        MyLog.LogShitou(op_type + "默认北京北京市海淀区", "====1111111111111=======" + prov + "==" + city + "==" + area);
+                    } else {
                         params.put(StaticField.PROV, "110000");// 省份默认北京
                         params.put(StaticField.CITY, "110000");// 市默认北京市
                         params.put(StaticField.AREA, "110108");// 区县默认海淀区
-                        MyLog.LogShitou(op_type+"默认北京北京市海淀区","====222222222222222=======");
+                        MyLog.LogShitou(op_type + "默认北京北京市海淀区", "====222222222222222=======");
                     }
                 }
-                MyLog.LogShitou(op_type+"---->上传的字段", mUser_id + "--" + mToken + "--" + is_default + "--" + op_type + "--" +
-                        mName + "--" + mMobile + "--" + mDetailAddress );
+                MyLog.LogShitou(op_type + "---->上传的字段", mUser_id + "--" + mToken + "--" + is_default + "--" + op_type + "--" +
+                        mName + "--" + mMobile + "--" + mDetailAddress);
 
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
@@ -347,7 +348,7 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                         mList = mAuctionBean.getAddress_list();
                         String mNames = mList.get(0).getName();
                         String mMobiles = mList.get(0).getMobile();
-                         mAddress_id = mList.get(0).getAddress_id();// 获取地址
+                        mAddress_id = mList.get(0).getAddress_id();// 获取地址
                         String mDetails = mList.get(0).getDetail();//获取
                         String[] address = mDetails.split(" ");  // 截取地址省市区和详情
                         String address1 = address[0];// 获取地址省市区
@@ -355,7 +356,7 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
 //                        String address3 = address[2];
 //                        String address4 = address[3];
 
-                        MyLog.LogShitou("省-市-区", address1 + "-" + address2 );
+                        MyLog.LogShitou("省-市-区", address1 + "-" + address2);
                         mEtName.setText(mNames);
                         mEtMobile.setText(mMobiles);
                         mProvince.setText(address1);
@@ -370,7 +371,7 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                         city = mList.get(0).getCity();
                         area = mList.get(0).getArea();
 
-                      String Isdefault = mList.get(0).getIs_default();
+                        String Isdefault = mList.get(0).getIs_default();
                         if (Isdefault.equals("0")) { //0:非默认；1默认
                             mToggleBtn.setBackgroundResource(R.mipmap.toggle_grey);
                         } else {
@@ -385,10 +386,34 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                     String mMsg = mBaseBean.getRsp_msg();
                     if (mCoode.equals("0000")) {
                         finishWitchAnimation();
-                    }else if(mCoode.equals("2068")){
-                        MyToast.showShort(EditReceiptAddressActivity.this,"手机号格式错误");
-                    }else{
-                        MyToast.showShort(EditReceiptAddressActivity.this,mMsg);
+                    } else if (mCoode.equals("2068")) {
+                        MyToast.showShort(EditReceiptAddressActivity.this, "手机号格式错误");
+                    } else {
+                        MyToast.showShort(EditReceiptAddressActivity.this, mMsg);
+                    }
+                    break;
+                case 10: // 弹出选择地址框
+                    if (mAddressBean != null) {
+                        mAddressPopupWindow = new AddressPopupWindow(EditReceiptAddressActivity.this, mAddressBean, AddressClick);
+                        mAddressPopupWindow.showAtLocation(EditReceiptAddressActivity.this.findViewById(R.id.EditReceiptAddress), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                    }
+                    break;
+                case 11: //  进行保存的操作
+                    GetEditTextString(); // 获取输入的收件人名字，手机号，详细地址
+                    if (TextUtils.isEmpty(mName)) {
+                        MyToast.showShort(EditReceiptAddressActivity.this, "请填写收件人姓名");
+                    } else if (TextUtils.isEmpty(mMobile)) {
+                        MyToast.showShort(EditReceiptAddressActivity.this, "请填写联系电话");
+                    } else if (TextUtils.isEmpty(mDetailAddress)) {
+                        MyToast.showShort(EditReceiptAddressActivity.this, "请填写详细地址");
+                    } else {
+                        if (mAddress.equals("mAddressAdapter")) {
+                            MyLog.LogShitou("编辑地址选择了几-->：", is_default + "");
+                            GetEditAddress(is_default, StaticField.XG); // 修改网络请求
+                        } else {
+                            MyLog.LogShitou("新增地址选择了几-->：", is_default + "");
+                            GetEditAddress(is_default, StaticField.XZ); // 新增网络请求
+                        }
                     }
                     break;
             }

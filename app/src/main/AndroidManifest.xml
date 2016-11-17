@@ -118,6 +118,7 @@
         <activity android:name="cn.com.chinau.activity.FirmOrderActivity"
             android:exported="true"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             >
             <!--这个intent-filter不要忘了-->
             <intent-filter>
@@ -127,10 +128,18 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="cn.com.chinau.activity.ManagerAddressActivity"></activity>
-        <activity android:name="cn.com.chinau.activity.EditReceiptAddressActivity"></activity>
-        <activity android:name="cn.com.chinau.activity.AuctionRecordActivity"></activity>
-        <activity android:name="cn.com.chinau.activity.MyCollectionActivity"></activity>
+        <activity android:name="cn.com.chinau.activity.ManagerAddressActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name="cn.com.chinau.activity.EditReceiptAddressActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name="cn.com.chinau.activity.AuctionRecordActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name="cn.com.chinau.activity.MyCollectionActivity"
+            android:screenOrientation="portrait"
+            />
 
         <!--设计家详情-->
         <activity
@@ -143,13 +152,15 @@
             android:screenOrientation="portrait"
             />
 
-        <activity android:name="cn.com.chinau.activity.OrderBuyBackActivity"></activity>
-        <activity android:name="cn.com.chinau.activity.LogisticsDetailsActivity"></activity>
-        <activity android:name="cn.com.chinau.activity.OrderDetailsActivity"></activity>
-        <activity android:name="cn.com.chinau.activity.HomeImageH5Activity"></activity>
+        <activity android:name="cn.com.chinau.activity.OrderBuyBackActivity"/>
+        <activity android:name="cn.com.chinau.activity.LogisticsDetailsActivity"/>
+        <activity android:name="cn.com.chinau.activity.OrderDetailsActivity"/>
+        <activity android:name="cn.com.chinau.activity.HomeImageH5Activity"/>
         <activity
             android:name="cn.com.chinau.activity.OrdersGoodsActivity"
-            android:theme="@style/Theme.PageIndicatorDefaults" />
+            android:theme="@style/Theme.PageIndicatorDefaults"
+            android:screenOrientation="portrait"
+            />
 
         <meta-data
             android:name="com.google.android.gms.version"

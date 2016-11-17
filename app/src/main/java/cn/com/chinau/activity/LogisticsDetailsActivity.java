@@ -66,19 +66,17 @@ public class LogisticsDetailsActivity extends BaseActivity {
         return mLogisticsDetailsContent;
     }
 
-    private void initData() {
-        if (!mExpressNo.equals("")){
-            GetInitNet(); // 物流详情网络请求
-        }
 
-    }
 
     private void initView() {
         Bundle bundle = getIntent().getExtras();
         mExpressNo = bundle.getString("ExpressNo", "");
         mOrderStatus= bundle.getString("OrderStatus", "");
+
+
         mLogisticsDetailsLl = (LinearLayout) mLogisticsDetailsContent.findViewById(R.id.logisticsDetails_ll);
         mOrederTv = (TextView) mLogisticsDetailsContent.findViewById(R.id.no_order_tv);
+
         if (mOrderStatus.equals("UNSHIPPED")){
             mLogisticsDetailsLl.setVisibility(View.GONE);
             mOrederTv.setVisibility(View.VISIBLE);
@@ -86,6 +84,7 @@ public class LogisticsDetailsActivity extends BaseActivity {
         }
 
         MyLog.LogShitou("传过来的快递单号",mExpressNo+"=="+mOrderStatus);
+
         mToken = sp.getString("token", "");
         mUser_id = sp.getString("userId", "");
         ImageView mBack = (ImageView) mLogisticsDetailsTitle.findViewById(R.id.base_title_back);
@@ -103,6 +102,13 @@ public class LogisticsDetailsActivity extends BaseActivity {
         mExpress = (TextView) mLogisticsDetailsContent.findViewById(R.id.logisticsDetails_Express);
         mOrderSn = (TextView) mLogisticsDetailsContent.findViewById(R.id.logisticsDetails_OrderSn);
         mExpressPhone = (TextView) mLogisticsDetailsContent.findViewById(R.id.logisticsDetails_Express_phone);
+
+    }
+
+    private void initData() {
+        if (!mExpressNo.equals("")){
+            GetInitNet(); // 物流详情网络请求
+        }
 
     }
 

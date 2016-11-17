@@ -45,7 +45,7 @@ import static cn.com.chinau.StaticField.QB;
 public class OrdersGoodsActivity extends BaseActivity {
 
     private View mOrderTitle, mOrderContent;
-    private TextView mTitle,mOederTv1,mOederTv2,mOederTv3,mOederTv4,mOederTv5;
+    private TextView mTitle, mOederTv1, mOederTv2, mOederTv3, mOederTv4, mOederTv5;
     private ImageView mBack;
     private String tag;
     private OrderGoodsViewPager mViewPager;
@@ -66,6 +66,8 @@ public class OrdersGoodsActivity extends BaseActivity {
     private ArrayList<OrderAllListViewGoodsBean.Order_list> order_list, order_list1;
     private OrderAllLsitViewAdapter allLsitViewAdapter1;
     private OrderRefuseLsitViewAdapter refuseLsitViewAdapter;
+    private OrderAllListViewGoodsBean.Order_detail_list order_detail_list;
+    private String mOrder_sn;
 
     @Override
     public View CreateTitle() {
@@ -161,11 +163,11 @@ public class OrdersGoodsActivity extends BaseActivity {
         receiving_edListview = (ExpandableListView) v3.findViewById(R.id.all_expand_ListView);
         complete_edListview = (ExpandableListView) v4.findViewById(R.id.all_expand_ListView);
         refuse_edListview = (ExpandableListView) v5.findViewById(R.id.all_expand_ListView);
-        mOederTv1 = (TextView )v1.findViewById(R.id.no_order_tv);
-        mOederTv2 = (TextView )v2.findViewById(R.id.no_order_tv);
-        mOederTv3 = (TextView )v3.findViewById(R.id.no_order_tv);
-        mOederTv4 = (TextView )v4.findViewById(R.id.no_order_tv);
-        mOederTv5 = (TextView )v5.findViewById(R.id.no_order_tv);
+        mOederTv1 = (TextView) v1.findViewById(R.id.no_order_tv);
+        mOederTv2 = (TextView) v2.findViewById(R.id.no_order_tv);
+        mOederTv3 = (TextView) v3.findViewById(R.id.no_order_tv);
+        mOederTv4 = (TextView) v4.findViewById(R.id.no_order_tv);
+        mOederTv5 = (TextView) v5.findViewById(R.id.no_order_tv);
     }
 
     public void initListener() {
@@ -208,6 +210,7 @@ public class OrdersGoodsActivity extends BaseActivity {
             }
         });
 
+
         /**
          * 条目点击
          */
@@ -216,15 +219,9 @@ public class OrdersGoodsActivity extends BaseActivity {
 
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-                OrderAllListViewGoodsBean.Order_detail_list order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
-                String mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
-                String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
-                Bundle bundle = new Bundle();
-                bundle.putString(StaticField.ORDER_SN, mOrder_sn);
-                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
-                bundle.putString(StaticField.ORDERSTATUS, "QB");
-                MyLog.LogShitou("QB请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
-                openActivityWitchAnimation(OrderDetailsActivity.class, bundle);
+                order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
+                mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
+                GetOrderAllListViewGoodsBean(StaticField.QB);
                 return false;
             }
         });
@@ -233,15 +230,10 @@ public class OrdersGoodsActivity extends BaseActivity {
         payment_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-                OrderAllListViewGoodsBean.Order_detail_list order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
-                String mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
-                String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
-                Bundle bundle = new Bundle();
-                bundle.putString(StaticField.ORDER_SN, mOrder_sn);
-                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
-                bundle.putString(StaticField.ORDERSTATUS, "DFK");
-                MyLog.LogShitou("DFK请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
-                openActivityWitchAnimation(OrderDetailsActivity.class,bundle);
+                order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
+                mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
+                GetOrderAllListViewGoodsBean(StaticField.DFK);
+                finish();
                 return false;
             }
         });
@@ -249,15 +241,10 @@ public class OrdersGoodsActivity extends BaseActivity {
         receiving_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-                OrderAllListViewGoodsBean.Order_detail_list order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
-                String mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
-                String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
-                Bundle bundle = new Bundle();
-                bundle.putString(StaticField.ORDER_SN, mOrder_sn);
-                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
-                bundle.putString(StaticField.ORDERSTATUS, "DSH");
-                MyLog.LogShitou("DSH请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
-                openActivityWitchAnimation(OrderDetailsActivity.class,bundle);
+                order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
+                mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
+                GetOrderAllListViewGoodsBean(StaticField.DSH);
+
                 return false;
             }
         });
@@ -265,15 +252,9 @@ public class OrdersGoodsActivity extends BaseActivity {
         complete_edListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-                OrderAllListViewGoodsBean.Order_detail_list order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
-                String mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
-                String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
-                Bundle bundle = new Bundle();
-                bundle.putString(StaticField.ORDER_SN, mOrder_sn);
-                bundle.putString(StaticField.GOODS_SN, mGoods_sn);
-                bundle.putString(StaticField.ORDERSTATUS, "WC");
-                MyLog.LogShitou("WC请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
-                openActivityWitchAnimation(OrderDetailsActivity.class,bundle);
+                order_detail_list = order_list.get(i).getSeller_list().get(0).getOrder_detail_list().get(i1);
+                mOrder_sn = order_list.get(i).getOrder_sn();// 交易订单号
+                GetOrderAllListViewGoodsBean(StaticField.WC);
                 return false;
             }
         });
@@ -288,8 +269,8 @@ public class OrdersGoodsActivity extends BaseActivity {
                 bundle.putString(StaticField.ORDER_SN, mOrder_sn);
                 bundle.putString(StaticField.GOODS_SN, mGoods_sn);
                 bundle.putString(StaticField.ORDERSTATUS, "TK");
-                MyLog.LogShitou("TK请求的订单号==编号",mOrder_sn+"====="+mGoods_sn);
-                openActivityWitchAnimation(LookOrderDetailRefuseActivity.class,bundle);
+                MyLog.LogShitou("TK请求的订单号==编号", mOrder_sn + "=====" + mGoods_sn);
+                openActivityWitchAnimation(LookOrderDetailRefuseActivity.class, bundle);
                 return false;
             }
         });
@@ -315,6 +296,26 @@ public class OrdersGoodsActivity extends BaseActivity {
             }
         });
 
+    }
+
+    /**
+     * 订单列表跳转详情传的数据
+     *
+     * @param type 订单类型
+     */
+    private void GetOrderAllListViewGoodsBean(String type) {
+        String mGoods_sn = order_detail_list.getGoods_sn();// 商品编号
+        String mGoods_price = order_detail_list.getGoods_price();// 商品价格
+        String mGoods_count = order_detail_list.getGoods_count();// 商品数量
+        Bundle bundle = new Bundle();
+        bundle.putString(StaticField.ORDER_SN, mOrder_sn);
+        bundle.putString(StaticField.GOODS_SN, mGoods_sn);
+        bundle.putString(StaticField.GOODS_PRICE, mGoods_price);
+        bundle.putString(StaticField.GOODS_COUNT, mGoods_count);
+        bundle.putString(StaticField.ORDERSTATUS, type);
+        bundle.putString("OrderBuySuccess", "OrdersGoods");
+        MyLog.LogShitou(type + "==" + "请求的订单号/编号", mOrder_sn + "=====" + mGoods_sn);
+        openActivityWitchAnimation(OrderDetailsActivity.class, bundle);
     }
 
     @Override
@@ -486,7 +487,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                             for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
                                 all_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
                             }
-                        }else {
+                        } else {
                             all_edListview.setVisibility(View.GONE);
                             mOederTv1.setVisibility(View.VISIBLE); // 无信息控件显示
                             mOederTv1.setText("暂无订单信息~");
@@ -509,7 +510,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                             for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
                                 payment_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
                             }
-                        }else {
+                        } else {
                             payment_edListview.setVisibility(View.GONE);
                             mOederTv2.setVisibility(View.VISIBLE); // 无信息控件显示
                             mOederTv2.setText("暂无订单信息~");
@@ -532,7 +533,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                             for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
                                 receiving_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
                             }
-                        }else {
+                        } else {
                             receiving_edListview.setVisibility(View.GONE);
                             mOederTv3.setVisibility(View.VISIBLE); // 无信息控件显示
                             mOederTv3.setText("暂无订单信息~");
@@ -555,7 +556,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                             for (int i = 0; i < allLsitViewAdapter.getGroupCount(); i++) {
                                 complete_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
                             }
-                        }else{
+                        } else {
                             complete_edListview.setVisibility(View.GONE);
                             mOederTv4.setVisibility(View.VISIBLE); // 无信息控件显示
                             mOederTv4.setText("暂无订单信息~");
@@ -578,7 +579,7 @@ public class OrdersGoodsActivity extends BaseActivity {
                             for (int i = 0; i < refuseLsitViewAdapter.getGroupCount(); i++) {
                                 refuse_edListview.expandGroup(i);// 初始化时，将ExpandableListView以展开的方式呈现
                             }
-                        }else{
+                        } else {
                             refuse_edListview.setVisibility(View.GONE);
                             mOederTv5.setVisibility(View.VISIBLE); // 无信息控件显示
                             mOederTv5.setText("暂无订单信息~");

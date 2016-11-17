@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import cn.com.chinau.dialog.ProgressDialog;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
+import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 
@@ -64,7 +66,12 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
                         mList = mAuctionBean.getAddress_list();
                         if (mList != null && mList.size() != 0) {
                             //竖向ListView设置适配器
+                            mAddressLV.setVisibility(View.VISIBLE);
+                            mNoOrderLl.setVisibility(View.GONE);
                             initAdapter();
+                        }else{
+                            mAddressLV.setVisibility(View.GONE);
+                            mNoOrderLl.setVisibility(View.VISIBLE);
                         }
                     }
                     break;
@@ -73,6 +80,7 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
         }
     };
     private ConfirmOrderListViewAdapter adapter;
+    private LinearLayout mNoOrderLl;
 
 
     @Override
@@ -103,11 +111,19 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
                 finishWitchAnimation();
                 break;
             case R.id.managerAddress_TV://添加收获地址
-                Intent intent = new Intent(this, EditReceiptAddressActivity.class);
-                intent.putExtra("Address", "mManagerAddress");
-                startActivity(intent);
-                //跳转动画
-                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+
+              int listSize =  mList.size();
+                MyLog.LogShitou("=============listSize","listSize="+listSize);
+                if (listSize <= 9){
+                    Intent intent = new Intent(this, EditReceiptAddressActivity.class);
+                    intent.putExtra("Address", "mManagerAddress");
+                    startActivity(intent);
+                    //跳转动画
+                    overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                }else{
+                    MyToast.showShort(ManagerAddressActivity.this,"最多可添加十个地址");
+                }
+
                 break;
         }
     }
@@ -140,6 +156,7 @@ public class ManagerAddressActivity extends BaseActivity implements View.OnClick
 
         mAddressLV = (ListView) mManagerAddressContent.findViewById(R.id.managerAddress_LV);
         mAddNewAddress = (TextView) mManagerAddressContent.findViewById(R.id.managerAddress_TV);
+        mNoOrderLl = (LinearLayout) mManagerAddressContent.findViewById(R.id.no_order_ll);
     }
 
 

@@ -33,7 +33,7 @@ import cn.com.chinau.utils.ThreadManager;
 public class ChooseReceiverAddress extends BaseActivity implements View.OnClickListener {
     private View mAddressTitle, mAddressContent;
     private ImageView mBack;
-    private TextView mTitle, mEdit;
+    private TextView mTitle, mEdit,mOrderTv;
     private ListView mAddressLV;
     private String mToken, mUser_id;
     private SharedPreferences sp;
@@ -60,6 +60,12 @@ public class ChooseReceiverAddress extends BaseActivity implements View.OnClickL
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
     private void initView() {
         // 获取本地保存的标识，用户ID
         mToken = sp.getString("token", "");
@@ -71,6 +77,7 @@ public class ChooseReceiverAddress extends BaseActivity implements View.OnClickL
         mEdit = (TextView) mAddressTitle.findViewById(R.id.base_edit);
         mEdit.setText("管理");
         mAddressLV = (ListView) mAddressContent.findViewById(R.id.Address_Lv);
+        mOrderTv = (TextView) mAddressContent.findViewById(R.id.no_order_tv);
     }
 
     private void initLintener() {
@@ -170,8 +177,17 @@ public class ChooseReceiverAddress extends BaseActivity implements View.OnClickL
 
                     if (mRsp_code.equals("0000")) {
                         mList = mAuctionBean.getAddress_list();
+                        if (mList != null && mList.size() !=0){
+                            mAddressLV.setVisibility(View.VISIBLE);
+                            mOrderTv.setVisibility(View.GONE);
                             //竖向ListView设置适配器
                             initAdapter();
+                        }else {
+                            mAddressLV.setVisibility(View.GONE);
+                            mOrderTv.setVisibility(View.VISIBLE);
+                            mOrderTv.setText("暂无收货地址，点击管理去添加~");
+                        }
+
                     }
                     break;
 

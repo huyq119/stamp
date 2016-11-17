@@ -44,7 +44,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:layout_weight="1"
-                android:text="29分34秒"
                 android:textColor="#ff9900"
                 android:textSize="13sp"/>
 

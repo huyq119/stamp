@@ -87,8 +87,8 @@ public class StaticField {
     public static final int DSH_SUCCESS = 2;// Handler发送的结果码（订单查询待收货）
     public static final int WC_SUCCESS = 3;// Handler发送的结果码（订单查询已完成）
     public static final int TK_SUCCESS = 4;// Handler发送的结果码（订单查询退款）
-    public static final int WX_SUCCESS = 1;// Handler发送的结果码（微信支付）
-    public static final int ALI_SUCCESS = 2;// Handler发送的结果码（支付宝支付）
+    public static final int WX_SUCCESS = 20;// Handler发送的结果码（微信支付）
+    public static final int ALI_SUCCESS = 30;// Handler发送的结果码（支付宝支付）
 
 
 
@@ -206,6 +206,8 @@ public class StaticField {
     // 商品详情查询（不等录）
     public static final String GOODSDETAIL = "cn.com.chinau.goods.query";
     public static final String GOODS_SN = "goods_sn";
+    public static final String GOODS_PRICE = "goods_price";
+    public static final String GOODS_COUNT = "goods_count";
 
     // 个人信息查询
     public static final String PERSONQUERY = "cn.com.chinau.userinfo.query";
@@ -292,6 +294,7 @@ public class StaticField {
     public static final String SHOPCARTMODIFY = "cn.com.chinau.shopcart.modify";
     public static final String GOODESINFO = "goods_info";
     public static final String AUCTIONSN = "auction_sn"; // 竞拍编号
+    public static final String TTRXORDERSN = "trxorder_sn"; // 订单编号
     // 购物车去接算（确认订单）
     public static final String SHOPCARTSETTLE = "cn.com.chinau.shopcart.settle";
     // 订单支付

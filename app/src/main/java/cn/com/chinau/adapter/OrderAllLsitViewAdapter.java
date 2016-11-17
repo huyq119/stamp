@@ -20,7 +20,6 @@ import cn.com.chinau.R;
 import cn.com.chinau.activity.LogisticsDetailsActivity;
 import cn.com.chinau.bean.OrderAllListViewGoodsBean;
 import cn.com.chinau.utils.MyLog;
-import cn.com.chinau.utils.MyToast;
 
 /**
  * Created by Administrator on 2016/9/5.
@@ -152,7 +151,6 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
 
        String mOrder_status = order_list.get(i).getOrder_status();// 获取订单状态
 
-
 //MyLog.LogShitou("mOrder_status=============订单状态","mOrder_status="+mOrder_status);
         if (order_list !=null){
             // 获取子控件的值
@@ -160,23 +158,28 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
             String mName = order_detail_list.getGoods_name();
             String mPrice = order_detail_list.getGoods_price();
             String mCounts = order_detail_list.getGoods_count();// 商品数量
+            String nTotalPrice = order_list.get(i).getOrder_amount(); // 订单总价
+            String str = nTotalPrice.trim().replaceAll(",","");// 价钱去掉首尾空格和逗号
+            double countPrice =Double.parseDouble(str); //价钱转double
+            DecimalFormat    df   = new DecimalFormat("######0.00");// 保留2位小数
+            String mprice = df.format(countPrice);  // 最后订单总价
             // 赋值
             bitmapUtils.display(goodsholder.img, mImg);
             goodsholder.mNames.setText(mName); // 名称
             goodsholder.mPrice.setText(mPrice); // 价钱
             goodsholder.mCount.setText(mCounts); // 数量
             goodsholder.mAllCount.setText(mCounts); // 总数量
-
-            int count =Integer.valueOf(mCounts).intValue(); //转成int
-            String str = mPrice.trim().replaceAll(",","");// 价钱去掉首尾空格和逗号
-            double countPrice =Double.parseDouble(str); //价钱转double
-
-            MyLog.LogShitou("价钱转double+++商品数量",countPrice+"===="+count);
-            double price = countPrice * count;//总价钱
-            DecimalFormat    df   = new DecimalFormat("######0.00");// 保留2位小数
-            String mprice = df.format(price);
             goodsholder.mAllPrice.setText("￥"+mprice);// 显示的总价
-            MyLog.LogShitou("总价",price+"");
+            MyLog.LogShitou("===============总价",mprice+"");
+
+            // 换算商品总价
+//            int count =Integer.valueOf(mCounts).intValue(); //转成int
+//            String str = mPrice.trim().replaceAll(",","");// 价钱去掉首尾空格和逗号
+//            double countPrice =Double.parseDouble(str); //价钱转double
+//            MyLog.LogShitou("价钱转double+++商品数量",countPrice+"===="+count);
+//            double price = countPrice * count;//总价钱
+//            DecimalFormat    df   = new DecimalFormat("######0.00");// 保留2位小数
+//            String mprice = df.format(price);
 
             goodsholder.mLogistics.setTag(i);
 
@@ -220,14 +223,6 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
                 goodsholder.mPayment.setVisibility(View.GONE);
             }
 
-            // 待付款
-            goodsholder.mPayment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MyToast.showShort(context, "付款...");
-                }
-            });
-
             // 查看物流
             goodsholder.mLogistics.setOnClickListener(new View.OnClickListener() {
 
@@ -237,7 +232,7 @@ public class OrderAllLsitViewAdapter extends BaseExpandableListAdapter {
 
                     mOrderStatus = order_list.get(tag).getOrder_status();// 获取订单状态
 
-                    mExpress_no = order_list.get(tag).getSeller_list().get(0).getExpress_no(); // 获取空布局
+                    mExpress_no = order_list.get(tag).getSeller_list().get(0).getExpress_no(); // 获取快递单号
 
                     MyLog.LogShitou("==========快递单号和订单状态",mExpress_no+"=="+mOrderStatus);
                         Intent intent = new Intent(context, LogisticsDetailsActivity.class);

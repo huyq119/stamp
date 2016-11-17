@@ -22,8 +22,7 @@ public class OrderBuySuccessActivity extends BaseActivity{
     private View mOrderBuyTitle,mOrderBuyContent;
     private TextView mLookOrder,mTitle;
     private ImageView mBack;
-    private String mOrder_sn,mGoods_sn;
-    private String mOrderStatus;
+    private String mOrder;
 
     @Override
     public View CreateTitle() {
@@ -52,8 +51,7 @@ public class OrderBuySuccessActivity extends BaseActivity{
 
     private void GetIntent(){
         Bundle bundle = getIntent().getExtras();
-        mOrder_sn = bundle.getString(StaticField.ORDER_SN); // 交易订单号
-        mGoods_sn = bundle.getString(StaticField.GOODS_SN); // 商品编号
+        mOrder = bundle.getString(StaticField.ORDERS); // 页面标识
     }
 
 
@@ -69,10 +67,8 @@ public class OrderBuySuccessActivity extends BaseActivity{
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString(StaticField.GOODS_SN,mGoods_sn);
-                bundle.putString(StaticField.ORDER_SN,mOrder_sn);
-                bundle.putString(StaticField.ORDERSTATUS,"DSH");
-                openActivityWitchAnimation(OrderDetailsActivity.class,bundle);
+                bundle.putString(StaticField.ORDERS, mOrder); // 待收货
+                openActivityWitchAnimation(OrdersGoodsActivity.class,bundle); // 跳转订单列表待收货页面
                 finish();
             }
         });

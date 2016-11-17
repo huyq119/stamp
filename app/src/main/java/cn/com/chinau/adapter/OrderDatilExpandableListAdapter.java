@@ -20,7 +20,7 @@ import cn.com.chinau.utils.MyLog;
  * Date: 2016/11/4 17:32
  * Autor：ChenXR
  * Mail：410529656@qq.com
- * 订单详情适配器
+ * 订单详情ExpandableList适配器
  */
 
 public class OrderDatilExpandableListAdapter extends BaseExpandableListAdapter {
@@ -55,13 +55,13 @@ public class OrderDatilExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public Object getGroup(int groupPosition) {
         MyLog.LogShitou("======适配器33","=========="+ mOrderDetailBean.getSeller_list().get(groupPosition));
-        return mOrderDetailBean.getSeller_list().get(0);
+        return mOrderDetailBean.getSeller_list().get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
         MyLog.LogShitou("======适配器44", groupPosition+"=========="+childPosition);
-        return mOrderDetailBean.getSeller_list().get(0).getOrder_detail_list().get(childPosition);
+        return mOrderDetailBean.getSeller_list().get(groupPosition).getOrder_detail_list().get(childPosition);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class OrderDatilExpandableListAdapter extends BaseExpandableListAdapter {
 
         //换算商品总价
         int count = Integer.valueOf(mGoods_count).intValue(); //转成int
-        String str = mGoods_price.trim().replaceAll(",", "");// 价钱去掉首尾空格和逗号
+        String str = mGoods_price.trim().replaceAll(",", "").trim();// 价钱去掉首尾空格和逗号
         double countPrice = Double.parseDouble(str); //价钱转double
         MyLog.LogShitou("价钱转double+++商品数量", countPrice + "====" + count);
         double price = countPrice * count;//总价钱
@@ -161,7 +161,6 @@ public class OrderDatilExpandableListAdapter extends BaseExpandableListAdapter {
 
         mCountOrPrice.GetCountOrPrice(mGoods_count,mprice,mExpress_no);// 装载的数据
 
-//        goodsholder.mAllPrice.setText("￥"+mprice);// 显示的总价
 
         bitmap.display(itemHolder.mImg, order_detail_list.get(childPosition).getGoods_img());
 
