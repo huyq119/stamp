@@ -81,10 +81,11 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
             ArrayList<String[]> mArrListValue = new ArrayList<>();
 
             // 循环出一级分类的名字
-            for (int i = 0; i < subCategory1.size(); i++) {
+            for (int i = 0; i <subCategory1.size(); i++) {
                 mArrTitle[i] = subCategory1.get(i).getName();
 
-                MyLog.LogShitou("竞拍一级类别0001----->:", mArrTitle[i]);
+                MyLog.LogShitou("===============竞拍一级类别0001", mArrTitle[i]);
+
                 ArrayList<CategoryBean.Category.SubCategory.SmllSubCategoryData> subCategory = subCategory1.get(i).getSubCategory();
                 String[] mArr = new String[subCategory.size()];
                 String[] mArrValue = new String[subCategory.size()];
@@ -100,24 +101,24 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
             // 获取单个的一级标题Title
             String title0 = mArrTitle[0];
             mNewChinese.setText(title0);
-            String title1 = mArrTitle[2];
+            String title1 = mArrTitle[1];
             mQingMin.setText(title1);
-            String title2 = mArrTitle[3];
+            String title2 = mArrTitle[2];
             mWaiguo.setText(title2);
-            String title3 = mArrTitle[4];
+            String title3 = mArrTitle[3];
             mALLclass.setText(title3);
             MyLog.LogShitou("竞拍一级类别----->:", title0 + "--" + title1 + "--" + title2 + "--" + title3);
 
             // 获取二级分类name
             mChinese = mArrList.get(0);
-            mQingMins = mArrList.get(2);
-            mWaiguos = mArrList.get(3);
-            mAllClasss = mArrList.get(4);
+            mQingMins = mArrList.get(1);
+            mWaiguos = mArrList.get(2);
+            mAllClasss = mArrList.get(3);
             // 获取二级分类value值
             mChineseValue = mArrListValue.get(0);
-            mQingminValue = mArrListValue.get(2);
-            mWaiGuoValue = mArrListValue.get(3);
-            mAllClassValue = mArrListValue.get(4);
+            mQingminValue = mArrListValue.get(1);
+            mWaiGuoValue = mArrListValue.get(2);
+            mAllClassValue = mArrListValue.get(3);
 
         }
     }

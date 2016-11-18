@@ -93,7 +93,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                     if (mRsp_code.equals("0000")) {
                         mList = mOrderSweepBean.getStamp_list();
                         MyLog.LogShitou("我的邮集有几条-->:", mList.size() + "");
-                        if (mList != null && mList.size() != 0) {
+                        if (mList != null ) {
                             mMore.setVisibility(View.VISIBLE);// 更多显示
                             myStampViewPager.setVisibility(View.VISIBLE);
                             mContentTotalLl.setVisibility(View.VISIBLE);
@@ -125,19 +125,19 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                                 grid.setAdapter(mAdapter);
                                 //加入到ViewPager的View数据集中
                                 mViewPagerList.add(grid);
+                                initAdapter();
+                                // 条目监听事件
+                                grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        String mStamp_sn = mList.get(position).getStamp_sn();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString(StaticField.STAMPDETAIL_SN, mStamp_sn);
+                                        MyLog.LogShitou("===========mStamp_sn邮集编号", mStamp_sn);
+                                        openActivityWitchAnimation(StampTapDetailActivity.class, bundle);
+                                    }
+                                });
                             }
-                            initAdapter();
-                            // 条目监听事件
-                            grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    String mStamp_sn = mList.get(position).getStamp_sn();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(StaticField.STAMPDETAIL_SN, mStamp_sn);
-                                    MyLog.LogShitou("===========mStamp_sn邮集编号", mStamp_sn);
-                                    openActivityWitchAnimation(StampTapDetailActivity.class, bundle);
-                                }
-                            });
                         }else{
 //                            MyLog.LogShitou("========走这了吗=============", "========走这了吗=============");
                             GoneOrVisibleView(); // mList为空时显示的布局
@@ -179,7 +179,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
         mContentTotal.setText("￥" + mToalPrice);
         MyLog.LogShitou("=============回调回来的数据",str+"=="+ mList.toString());
 
-        if (mList != null && mList.size() != 0) {
+        if (mList != null ) {
             mViewPagerList.clear(); // 清空之前的mViewPagerList
             //使用For循环创建页面,并添加到集合中去
             for (int i = 0; i < pageCount; i++) {
@@ -192,9 +192,10 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                 adapter.notifyDataSetChanged();
                 //加入到ViewPager的View数据集中
                 mViewPagerList.add(grid);
+
+                adapter.SetDataList(MyStampActivity.this);// 回调刷新邮集数据
             }
 
-            adapter.SetDataList(MyStampActivity.this);// 回调刷新邮集数据
             MyStampViewPagerAdapter mMyStampViewPagerAdapter = new MyStampViewPagerAdapter(mViewPagerList);
             myStampViewPager.setAdapter(mMyStampViewPagerAdapter);
 
@@ -290,7 +291,7 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
         mEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyLog.LogShitou("=============mList数据", mList.toString());
+//                MyLog.LogShitou("=============mList数据", mList.toString());
                 EditClickDispose(); // 编辑按钮的处理方法
             }
         });
@@ -332,8 +333,9 @@ public class MyStampActivity extends BaseActivity implements View.OnClickListene
                 grid.setAdapter(adapter);
                 //加入到ViewPager的View数据集中
                 mViewPagerList.add(grid);
+
+                adapter.SetDataList(MyStampActivity.this);// 回调刷新邮集数据
             }
-            adapter.SetDataList(MyStampActivity.this);// 回调刷新邮集数据
             MyStampViewPagerAdapter mMyStampViewPagerAdapter = new MyStampViewPagerAdapter(mViewPagerList);
             myStampViewPager.setAdapter(mMyStampViewPagerAdapter);
         }

@@ -54,6 +54,8 @@ public class ScanOrderBuyDetailActivity extends BaseActivity implements View.OnC
                     String mRsp_msg = mOrderBuyDetailBean.getRsp_msg();
                     if (mRsp_code.equals("0000")) {
                         String mStatus = mOrderBuyDetailBean.getOrder_status();// 订单状态
+
+                       String Buyback_desc = mOrderBuyDetailBean.getBuyback_desc();
                         if (mStatus.equals("INIT")) {// 待寄送
                             mOrderStatus.setText("待寄送");
                             mLlOrderSend.setVisibility(View.VISIBLE);
@@ -74,7 +76,7 @@ public class ScanOrderBuyDetailActivity extends BaseActivity implements View.OnC
                             mLlOrderExpressName.setVisibility(View.VISIBLE);
                             mLlOrderExpressNum.setVisibility(View.VISIBLE);
                             mOrderStatusDes.setVisibility(View.VISIBLE);
-                            mOrderStatusDes.setText("回购款项请到余额中查收");
+                            mOrderStatusDes.setText(Buyback_desc);
                             mOrderExpressName.setText(mOrderBuyDetailBean.getExpress_comp()); // 快递公司
                             mOrderExpressNum.setText(mOrderBuyDetailBean.getExpress_no()); // 快递单号
                         } else if (mStatus.equals("REFUSE")) { //订单驳回
@@ -83,9 +85,10 @@ public class ScanOrderBuyDetailActivity extends BaseActivity implements View.OnC
                             mLlOrderExpressNum.setVisibility(View.VISIBLE);
                             mOrderStatusDes.setVisibility(View.VISIBLE);
                             mLlOrderDetailExpressName.setVisibility(View.VISIBLE);
-                            mOrderStatusDes.setText("邮品品相破损严重不予进行回购");
-                            mOrderExpressName.setText(mOrderBuyDetailBean.getBack_express_comp()); // 快递公司
-                            mOrderExpressNum.setText(mOrderBuyDetailBean.getBack_express_no()); // 快递单号
+                            mOrderStatusDes.setText(Buyback_desc);
+                            mOrderExpressName.setText(mOrderBuyDetailBean.getExpress_comp()); // 快递公司
+                            mOrderExpressNum.setText(mOrderBuyDetailBean.getExpress_no()); // 快递单号
+
                             mOrderExpressNameBack.setText(mOrderBuyDetailBean.getBack_express_comp());// 回寄快递公司
                             mOrderExpressNumBack.setText(mOrderBuyDetailBean.getBack_express_no()); // 回寄快递单号
 

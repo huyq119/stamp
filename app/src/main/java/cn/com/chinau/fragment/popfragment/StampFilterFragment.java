@@ -169,7 +169,7 @@ public class StampFilterFragment extends BaseDialogFragment implements SellMallP
         selfMallPanStampFilterDialog.setClickReset(new SelfMallPanStampFilterDialog.ClickReset() {
             @Override
             public void setReset() {
-                MyLog.e("ThreeMallFilterFragment-->");
+                MyLog.LogShitou("===========点击了重置按钮","=======================重置按钮");
                 mNewChineseListener.setPosition();
                 mQingMinListener.setPosition();
                 mThemeListener.setPosition();
@@ -191,6 +191,33 @@ public class StampFilterFragment extends BaseDialogFragment implements SellMallP
         String qingmin = (qingminNum == -1) ? "" : mQingminValue[qingminNum];
         String theme = (themeNum == -1) ? "" : mThemeValue[themeNum];
         String other = (otherNum == -1) ? "" : mOtherValue[otherNum];
+
+        if(chineseNum !=-1){
+//            mNewChineseListener.setPosition();
+            mQingMinListener.setPosition();
+            mThemeListener.setPosition();
+            mOtherListener.setPosition();
+
+        }
+        if(qingminNum !=-1){
+            mNewChineseListener.setPosition();
+//            mQingMinListener.setPosition();
+            mThemeListener.setPosition();
+            mOtherListener.setPosition();
+        }
+        if(themeNum !=-1){
+            mNewChineseListener.setPosition();
+            mQingMinListener.setPosition();
+//            mThemeListener.setPosition();
+            mOtherListener.setPosition();
+        }
+        if(otherNum !=-1){
+            mNewChineseListener.setPosition();
+            mQingMinListener.setPosition();
+            mThemeListener.setPosition();
+//            mOtherListener.setPosition();
+        }
+
 
         mData = chinese + "," + qingmin + "," + theme + "," + other;
         setData(mData);

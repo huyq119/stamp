@@ -239,37 +239,38 @@ public class SearchDetailActivity extends BaseActivity implements View.OnClickLi
         mClassifyLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String qb = mArr[0];
-               String sc = mArr[1];
-               String jp = mArr[2];
-               String ys = mArr[3];
-               String ml = mArr[4];
-//            MyLog.LogShitou("分类点击了啥",mArr[i]);
+                String qb = mArr[i];
+//               String sc = mArr[1];
+//               String jp = mArr[2];
+//               String ys = mArr[3];
+//               String ml = mArr[4];
+            MyLog.LogShitou("分类点击了啥",mArr[i]);
+
                 if(qb.equals("全部")){
                     MyLog.LogShitou("全部分类点击了啥",mArr[i]);
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
                     setDrawable(R.mipmap.top_arrow_normal, mClassify, Color.parseColor("#666666"));
                     RequestNet(StaticField.ZH, num, StaticField.D, previousData,StaticField.QB);
                     mClassifyPop.dismiss();
-                }else if(sc.equals("商城")){
+                }else if(qb.equals("商城")){
                     MyLog.LogShitou("商城分类点击了啥",mArr[i]);
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
                     setDrawable(R.mipmap.top_arrow_normal, mClassify, Color.parseColor("#666666"));
                     RequestNet(StaticField.ZH, num, StaticField.D, previousData,StaticField.SC);
                     mClassifyPop.dismiss();
-                }else if(jp.equals("竞拍")){
+                }else if(qb.equals("竞拍")){
                     MyLog.LogShitou("竞拍分类点击了啥",mArr[i]);
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
                     setDrawable(R.mipmap.top_arrow_normal, mClassify, Color.parseColor("#666666"));
                     RequestNet(StaticField.ZH, num, StaticField.D, previousData,StaticField.JP);
                     mClassifyPop.dismiss();
-                }else if(ys.equals("邮市")){
+                }else if(qb.equals("邮市")){
                     MyLog.LogShitou("邮市分类点击了啥",mArr[i]);
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
                     setDrawable(R.mipmap.top_arrow_normal, mClassify, Color.parseColor("#666666"));
                     RequestNet(StaticField.ZH, num, StaticField.D, previousData,StaticField.YS);
                     mClassifyPop.dismiss();
-                }else if(ml.equals("邮票目录")){
+                }else if(qb.equals("邮票目录")){
                     MyLog.LogShitou("邮票目录分类点击了啥",mArr[i]);
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
                     setDrawable(R.mipmap.top_arrow_normal, mClassify, Color.parseColor("#666666"));

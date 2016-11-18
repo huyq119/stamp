@@ -17,7 +17,9 @@ public class OrderBuyDetailBean extends BaseBean{
     private String buy_time; // 购买时间
     private String create_time; // 创建时间
     private String order_status; // 订单状态
-    private String desc; // 描述
+//    private String desc; // 描述
+    private String buyback_desc; // 描述
+
     private String express_comp; // 快递公司
     private String express_no; // 快递单号
     private String back_express_comp; // 回寄快递公司
@@ -135,12 +137,21 @@ public class OrderBuyDetailBean extends BaseBean{
         this.express_no = express_no;
     }
 
-    public String getDesc() {
-        return desc;
+//    public String getDesc() {
+//        return desc;
+//    }
+//
+//    public void setDesc(String desc) {
+//        this.desc = desc;
+//    }
+
+
+    public String getBuyback_desc() {
+        return buyback_desc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setBuyback_desc(String buyback_desc) {
+        this.buyback_desc = buyback_desc;
     }
 
     public String getOrder_status() {

@@ -236,7 +236,6 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
                 params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；SJ时间；JG价格)
                 params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
-
                 if (!mJson.equals("")) {
                     MyLog.LogShitou("==1111=========mJson有值吗",mJson);
                     params.put(StaticField.CATEGORY, mJson); // 类别，json串
@@ -249,14 +248,14 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.LogShitou(Order_By+"==="+mJson+"/=="+"邮票目录list", result);
+                MyLog.LogShitou(Order_By+"/===/"+mJson+"/=="+"邮票目录list", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
 
                 if (mJson.equals("")){
-                    MyLog.LogShitou("net==2222=========num","num====="+num);
+                    MyLog.LogShitou("net==1111=========num","num====="+num);
                     Message msg = mHandler.obtainMessage();
                     msg.obj = result;
                     msg.what = StaticField.CG_SUCCESS;
@@ -267,6 +266,8 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                     msg.obj = result;
                     msg.what = StaticField.SUCCESS;
                     mHandler.sendMessage(msg);
+
+                    MyLog.LogShitou("net==2222=========num","num====="+num);
                 }
             }
         });
@@ -282,7 +283,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
     public void GetJsonData(String tojson) {
         String mToJson = tojson;
         if (!mToJson.equals("")){
-            MyLog.LogShitou("传过来的Json串", mToJson);
+            MyLog.LogShitou("=====传过来的Json串", mToJson);
             setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
             RequestNet(StaticField.ZH, num, StaticField.D, mToJson); // 邮票目录请求网络的方法
         }
@@ -306,6 +307,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                 openActivityWitchAnimation(SearchActivity.class);
                 break;
             case R.id.stampTap_synthesize://综合
+                mList.clear();
                 setOtherButton(mRelease, mPrice);
                 Salesflag = true;
                 Priceflag = true;
@@ -321,6 +323,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                 }
                 break;
             case R.id.stampTap_sales://发行时间
+                mList.clear();
                 setOtherButton(mSynthesize, mPrice);
                 Synthesizeflag = true;
                 Priceflag = true;
@@ -337,6 +340,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                 }
                 break;
             case R.id.stampTap_price://价格
+                mList.clear();
                 setOtherButton(mSynthesize, mRelease);
                 Synthesizeflag = true;
                 Salesflag = true;

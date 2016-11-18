@@ -326,7 +326,7 @@ public class WithdrawPressWordActivity extends BaseActivity implements View.OnCl
                     params.put(StaticField.MOBILE, phone);// 手机号
                     Log.e("输入的的手机号-->", phone);
                 }
-                params.put(StaticField.SMS_TYPE, StaticField.XGTX);// 操作类型 设置提现
+                params.put(StaticField.SMS_TYPE, StaticField.XGTX);// 操作类型 重置提现
 
                 if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
                     // 加入token和user_id
@@ -429,7 +429,7 @@ public class WithdrawPressWordActivity extends BaseActivity implements View.OnCl
                 byte[] PWByte = Des3Encode.encryptMode(mPassWordRegister.getBytes());
                 String PWBase64 = new String(Base64.encode(PWByte, Base64.DEFAULT));
                 params.put(StaticField.NEW_PWD, PWBase64); //密码
-                params.put(StaticField.OP_TYPE, StaticField.SZTX);// 操作类型
+                params.put(StaticField.OP_TYPE, StaticField.CZTX);// 操作类型
 
                 if (!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)) {
                     // 加入token和user_id

@@ -58,7 +58,7 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
     private ArrayList<cn.com.chinau.base.AddressBean.Address> mList;
     private AddressBean mAddressBean;
     private String mAddress_id; // 详情请求下来的mAddress_id
-    private Boolean flag;
+    private boolean flag; // 关闭键盘的标识
 
     @Override
     public View CreateTitle() {
@@ -88,12 +88,6 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
         mAddress = intent.getStringExtra("Address");
         if (mAddress.equals("mAddressAdapter")) {
             mAddressId = intent.getStringExtra("AddressId");
-//            mIsDefault = intent.getStringExtra("is_default");
-//            if (mIsDefault.equals("0")) { //0:非默认；1默认
-//                mToggleBtn.setBackgroundResource(R.mipmap.toggle_grey);
-//            } else {
-//                mToggleBtn.setBackgroundResource(R.mipmap.toggle_red);
-//            }
             GetInitNet(StaticField.XQ); // 查询地址详情请求
             MyLog.LogShitou("这是从编辑跳过来的", mAddressId);
         } else {
@@ -177,10 +171,9 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         if (flag){
-
             handler.sendEmptyMessageDelayed(10, 200); // 发送消息弹出选择地址框
         }else{
-            handler.sendEmptyMessageDelayed(11, 200); // 发送消息弹出选择地址框
+            handler.sendEmptyMessageDelayed(11, 200); // 发送消息执行保存的操作
         }
     }
 
@@ -353,8 +346,6 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                         String[] address = mDetails.split(" ");  // 截取地址省市区和详情
                         String address1 = address[0];// 获取地址省市区
                         String address2 = address[1];// 获取地址详情
-//                        String address3 = address[2];
-//                        String address4 = address[3];
 
                         MyLog.LogShitou("省-市-区", address1 + "-" + address2);
                         mEtName.setText(mNames);
@@ -363,9 +354,6 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                         mEtDetailAddress.setText(address2);
                         mCity.setVisibility(View.GONE);
                         mArea.setVisibility(View.GONE);
-//                        mCity.setText(address2);
-//                        mArea.setText(address3);
-//                        mEtDetailAddress.setText(address4);
 
                         prov = mList.get(0).getProv();
                         city = mList.get(0).getCity();

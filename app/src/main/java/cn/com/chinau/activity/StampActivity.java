@@ -94,7 +94,6 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                     mGoodsStampBean = gson.fromJson((String) msg.obj, GoodsStampBean.class);
                     String mRsp_code = mGoodsStampBean.getRsp_code();
                     if (mRsp_code.equals("0000")) {
-
                         if (num == 0) {
                             initAdapter();
                         } else {
@@ -105,14 +104,18 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                     break;
                 case StaticField.YS_SUCCESS://筛选
                     Gson gson1 = new Gson();
-                    GoodsStampBean mGoodsStampBean1 = gson1.fromJson((String) msg.obj, GoodsStampBean.class);
-                    String mRsp_code1 = mGoodsStampBean1.getRsp_code();
+                    mGoodsStampBean = gson1.fromJson((String) msg.obj, GoodsStampBean.class);
+                    String mRsp_code1 = mGoodsStampBean.getRsp_code();
                     if (mRsp_code1.equals("0000")) {
                         if (num == 0) {
-                            ArrayList<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean1.getGoods_list();
-                            StampMarketGridViewAdapter mStampMarAdapter = new StampMarketGridViewAdapter(StampActivity.this, goods_list, mBitmap);
-                            gridView.setAdapter(mStampMarAdapter);
-                            mStampMarAdapter.notifyDataSetChanged();
+//                            ArrayList<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean1.getGoods_list();
+//                            StampMarketGridViewAdapter mStampMarAdapter = new StampMarketGridViewAdapter(StampActivity.this, goods_list, mBitmap);
+//                            gridView.setAdapter(mStampMarAdapter);
+//                            mStampMarAdapter.notifyDataSetChanged();
+                            mList.clear(); // 清除之前的mList
+                            initAdapter();
+                        }else {
+                            initAdapter();
                         }
                     }
                     break;
@@ -161,7 +164,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
 
         mBack = (ImageView) mStampTitle.findViewById(R.id.base_title_back);
         mSearch = (ImageView) mStampTitle.findViewById(R.id.base_search);
-        hListView = (HorizontalListView) mStampContent.findViewById(R.id.stamp_hl);
+//        hListView = (HorizontalListView) mStampContent.findViewById(R.id.stamp_hl);
         gridView = (PullToRefreshGridView) mStampContent.findViewById(R.id.stamp_gl);
 
         mTopBtn = (Button) mStampContent.findViewById(R.id.base_top_btn);// 置顶
@@ -221,7 +224,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         if (mGoodsStampBean != null) {
             List<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean.getGoods_list();
             mList.addAll(goods_list);
-            StampMarketGridViewAdapter mStampMarAdapter = new StampMarketGridViewAdapter(this, mList, mBitmap);
+             mStampMarAdapter = new StampMarketGridViewAdapter(this, mList, mBitmap);
             gridView.setAdapter(mStampMarAdapter);
             mStampMarAdapter.notifyDataSetChanged();
 
@@ -391,7 +394,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                num =0;
                 if (Flag == 0) {
                     //设置点击背景的方法
                     hListViewAdapter.setSelection(i);
@@ -411,6 +414,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                     String mValues = subCategory1.get(1).getSubCategory().get(i).getValue();
                     String tojson = GoodsJsonBean(mValue, mValues);
                     MyLog.LogShitou("-111===转换成的Json", tojson);
+
                     RequestNet(StaticField.ZH, num, StaticField.A, tojson); // 筛选请求
                 } else if (Flag == 2) {
                     //设置点击背景的方法
@@ -494,7 +498,6 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                     return;
                 }
                 if (mJson.equals("")) {
-
                     Message msg = mHandler.obtainMessage();
                     msg.what = StaticField.SUCCESS;
                     msg.obj = result;
@@ -505,8 +508,6 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                     msg.obj = result;
                     mHandler.sendMessage(msg);
                 }
-
-
             }
         });
     }
@@ -551,6 +552,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 mTopBtn.setVisibility(View.GONE);// 回到顶部后置顶按钮隐藏
                 break;
             case R.id.stamp_synthesize://综合
+                mList.clear();
                 setOtherButton(mSales, mPrice);// (销量，价格)
                 Salesflag = true;
                 Priceflag = true;
@@ -566,6 +568,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 }
                 break;
             case R.id.stamp_sales://销量
+                mList.clear();
                 setOtherButton(mSynthesize, mPrice);// (综合，价格)
                 Synthesizeflag = true;
                 Priceflag = true;
@@ -582,6 +585,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 }
                 break;
             case R.id.stamp_price://价格
+                mList.clear();
                 setOtherButton(mSynthesize, mSales);// (综合，销量)
                 Synthesizeflag = true;
                 Salesflag = true;

@@ -210,7 +210,9 @@
             android:scrollbars="none"
             android:stretchMode="columnWidth"
             android:verticalSpacing="10dp"
-            ptr:ptrMode="pullFromEnd" />
+            ptr:ptrMode="pullFromEnd"
+
+            />
     </LinearLayout>
 
     <!--置顶按钮-->

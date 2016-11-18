@@ -65,6 +65,8 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
         MyLog.e("传入的" + flag);
         this.mLayoutInflater = LayoutInflater.from(context);
         PagerNum = context.getResources().getInteger(R.integer.PagerCount) * 2;
+
+
     }
 
     @Override
@@ -274,8 +276,9 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
                         mList = mOrderSweepBean.getStamp_list();
                         String mTotalPrice = mOrderSweepBean.getTotal_amount();// 总资产
                         MyLog.LogShitou("/=====邮集条数", mList.size() + "");
-                        if (mList != null && mList.size() != 0 && mTotalPrice != null) {
+                        if (mList != null && mTotalPrice != null) {
 //                        if (mDataList != null) {
+                            MyLog.LogShitou("================",mList.toString()+"/==/"+mTotalPrice+"/===/"+mDataList);
                             mDataList.GetDataList(mList, mTotalPrice);// 定义接口调用
                         }
                     }

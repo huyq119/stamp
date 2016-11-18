@@ -211,7 +211,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
     };
 
 
-
     @Override
     public View CreateTitle() {
         View HomeTitle = View.inflate(getActivity(), R.layout.fragment_home_title, null);

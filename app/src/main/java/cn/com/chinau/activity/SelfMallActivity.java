@@ -281,6 +281,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 mSelfPanDialog.setClickEnsure(this);
                 break;
             case R.id.self_synthesize://综合
+                mList.clear();
                 setOtherButton(mSales, mPrice);
                 Salesflag = true;
                 Priceflag = true;
@@ -296,6 +297,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case R.id.self_sales://销量
+                mList.clear();
                 setOtherButton(mSynthesize, mPrice);
                 Synthesizeflag = true;
                 Priceflag = true;
@@ -311,6 +313,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case R.id.self_price://价格
+                mList.clear();
                 setOtherButton(mSynthesize, mSales);
                 Synthesizeflag = true;
                 Salesflag = true;
@@ -444,7 +447,7 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
         }
         if(mJson!=null){
             RequestNet(StaticField.ZH, num, StaticField.SC_DSF,StaticField.A,mJson);
-            MyLog.LogShitou("第三方请求","-=====第三方请求"+"=="+mToJson);
+            MyLog.LogShitou("第三方请求","-=====第三方请求"+"=="+mJson);
         }
         mSelfPanDialog.dismiss();
     }

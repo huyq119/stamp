@@ -47,6 +47,7 @@ public class StaticField {
     public static final String CZDL = "CZDL";// 重置登录密码
     public static final String XGTX = "XGTX";// 修改提现密码
     public static final String SZTX = "SZTX";// 设置提现
+    public static final String CZTX = "CZTX";// 重置提现
 
 
     // 后期更改的值

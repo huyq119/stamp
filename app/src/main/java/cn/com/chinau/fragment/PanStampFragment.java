@@ -100,7 +100,6 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
 
                         if (num == 0) {
                             ArrayList<GoodsStampBean.GoodsList> stamp_list = mGoodsStampBean1.getGoods_list();
-                            ;
                             PanStampGridViewAdapter mPanStampAdapter = new PanStampGridViewAdapter(getActivity(), stamp_list, mBitmap);
                             gridView.setAdapter(mPanStampAdapter);
                             mPanStampAdapter.notifyDataSetChanged();
@@ -304,6 +303,8 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                 openActivityWitchAnimation(SearchActivity.class);
                 break;
             case R.id.panStamp_synthesize://综合
+                mList.clear();
+
                 Log.e("综合~~>", "综合。。。。。");
                 setOtherButton(mSales, mValue);
                 SalesFlag = true;// 销量为true
@@ -320,6 +321,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                 }
                 break;
             case R.id.panStamp_sales://销量
+                mList.clear();
                 Log.e("销量~~>", "销量。。。。。");
                 setOtherButton(mSynthesize, mValue);
                 SynthesizeFlag = true;// 综合为true
@@ -336,6 +338,7 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                 }
                 break;
             case R.id.panStamp_value://价格
+                mList.clear();
                 Log.e("价格~~>", "价格。。。。。");
                 setOtherButton(mSynthesize, mSales);
                 SynthesizeFlag = true;// 综合为true

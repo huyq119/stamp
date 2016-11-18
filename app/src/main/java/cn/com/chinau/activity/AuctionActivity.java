@@ -94,8 +94,12 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                    String mRsp_code =  mGoodsStampBean.getRsp_code();
                     if (mRsp_code.equals("0000")){
                         if (num == 0) {
+//                            mList.clear(); // 清除之前的mList
                             initAdapter();
+                            MyLog.LogShitou("====initAdapter==============num","============"+num);
+
                         } else {
+
                             //设置GridView的适配器
                             setGridViewAdapter();
                         }
@@ -103,21 +107,26 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     break;
                 case 12://筛选
                     Gson gson1 = new Gson();
-                    GoodsStampBean mGoodsStampBean1 = gson1.fromJson((String) msg.obj, GoodsStampBean.class);
-                    String mRsp_code1 = mGoodsStampBean1.getRsp_code();
+                    mGoodsStampBean = gson1.fromJson((String) msg.obj, GoodsStampBean.class);
+                    String mRsp_code1 = mGoodsStampBean.getRsp_code();
                     if (mRsp_code1.equals("0000")) {
                         if (num == 0) {
-                            ArrayList<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean1.getGoods_list();
-                            if (goods_list !=null && goods_list.size() != 0){
-                                mListView.setVisibility(View.GONE);
-                                AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, goods_list);
-                                mListView.setAdapter(mListAdapter);
-                                mListAdapter.notifyDataSetChanged();
-                            }else{
-                                GoneOrVisibleView(); // ListView为空时显示的布局
-                            }
+//                            ArrayList<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean1.getGoods_list();
+//                            if (goods_list !=null && goods_list.size() != 0){
+//                                mListView.setVisibility(View.GONE);
+//                                AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, goods_list);
+//                                mListView.setAdapter(mListAdapter);
+//                                mListAdapter.notifyDataSetChanged();
+//                            }else{
+//                                initAdapter();
+//                            }
 
+                            mList.clear(); // 清除之前的mList
+                            initAdapter();
+                        }else{
+                            initAdapter();
                         }
+
                     }
                     break;
 //                case 1:
@@ -261,6 +270,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
             mList = new ArrayList<>();
         }
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
+
         RequestNet(StaticField.ZH, num, StaticField.D,"");
     }
 
@@ -275,7 +285,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         if (mGoodsStampBean != null) {
             List<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean.getGoods_list();
             mList.addAll(goods_list);
-           if (mList !=null && mList.size() != 0){
+           if (mList !=null){
                listView.setVisibility(View.VISIBLE);
                AuctionListViewAdapter mListAdapter = new AuctionListViewAdapter(AuctionActivity.this, mBitmap, mList);
                mListView.setAdapter(mListAdapter);
@@ -477,6 +487,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
         hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                num =0; // 初始化索引
                 if (Flag == 0) {
                     //设置点击背景的方法
                     hListViewAdapter.setSelection(i);
@@ -716,7 +727,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 params.put(StaticField.SERVICE_TYPE, StaticField.GOODSLIST);// 接口名称
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(index)); // 当前记录索引
                 params.put(StaticField.GOODS_SOURCE, StaticField.JP); // 商品类型
-                params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；XL销量；JG价格)
+                params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；JS即将结束；KP等待开拍)
                 params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
                 params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目数)
 
@@ -729,8 +740,8 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 }
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.LogShitou(mJson+"=="+"result+竞拍List", result);
-                if (result.equals("-1") |result.equals("-2")) {
+                MyLog.LogShitou(Order_By+"/=="+"result+竞拍List", result);
+                if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
                 if (mJson.equals("")){
@@ -739,11 +750,13 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                     msg.what = StaticField.SUCCESS;
                     msg.obj = result;
                     mHandler.sendMessage(msg);
+                    MyLog.LogShitou("走到这了==========111111111111111", "走到哪了=========1111");
                 }else{
                     Message msg = mHandler.obtainMessage();
                     msg.what = 12;// 筛选
                     msg.obj = result;
                     mHandler.sendMessage(msg);
+                    MyLog.LogShitou("走到这了吗==========2222222222222222", "走到哪了=========2222");
                 }
             }
         });
@@ -787,6 +800,7 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 mTopBtn.setVisibility(View.GONE);// 回到顶部后置顶按钮隐藏
                 break;
             case R.id.auction_synthesize://综合
+                    mList.clear();
                 setOtherButton(mOver, mCamera);
                 Overflag = true;
                 Cameraflag = true;
@@ -794,14 +808,17 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 if (Synthesizeflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
                     RequestNet(StaticField.ZH, num, StaticField.D,"");
+                    MyLog.LogShitou("00000======DDDDD=======num","============"+num);
                     Synthesizeflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mSynthesize, Color.parseColor("#ff0000"));
                     RequestNet(StaticField.ZH, num, StaticField.A,"");
+                    MyLog.LogShitou("00000=====AAAA========num","============"+num);
                     Synthesizeflag = true;
                 }
                 break;
             case R.id.auction_over://即将结束
+                mList.clear();
                 setOtherButton(mSynthesize, mCamera);
                 Synthesizeflag = true;
                 Cameraflag = true;
@@ -809,14 +826,18 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 if (Overflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mOver, Color.parseColor("#ff0000"));
                     RequestNet(StaticField.JS, num, StaticField.D,"");
+                    MyLog.LogShitou("111111111========DDDDDDD=====num","============"+num);
                     Overflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mOver, Color.parseColor("#ff0000"));
                     RequestNet(StaticField.JS, num, StaticField.A,"");
+                    MyLog.LogShitou("11111111111=======AAAAAAAAAAAA=====num","============"+num);
                     Overflag = true;
                 }
                 break;
             case R.id.auction_camera://等待开拍
+                mList.clear();
+
                 setOtherButton(mSynthesize, mOver);
                 Synthesizeflag = true;
                 Overflag = true;
@@ -824,10 +845,12 @@ public class AuctionActivity extends BaseActivity implements View.OnClickListene
                 if (Cameraflag) {
                     setDrawable(R.mipmap.top_arrow_bottom, mCamera, Color.parseColor("#ff0000"));
                     RequestNet(StaticField.KP, num, StaticField.D,"");
+                    MyLog.LogShitou("2222222=======DDDDDDDDDD=====num","============"+num);
                     Cameraflag = false;
                 } else {
                     setDrawable(R.mipmap.top_arrow_top, mCamera, Color.parseColor("#ff0000"));
                     RequestNet(StaticField.KP, num, StaticField.A,"");
+                    MyLog.LogShitou("22222=======AAAAAA=====num","============"+num);
                     Cameraflag = true;
                 }
                 break;

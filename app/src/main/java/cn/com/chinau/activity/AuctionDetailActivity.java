@@ -292,7 +292,6 @@ public class AuctionDetailActivity extends BaseActivity implements View.OnClickL
 //                        mTime.setVisibility(View.GONE);
                         mTimeLl.setVisibility(View.GONE);
                     }
-
                     break;
             }
         }
