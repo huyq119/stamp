@@ -42,6 +42,7 @@ import cn.com.chinau.adapter.HomeViewPagerAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.AddShopCartBean;
 import cn.com.chinau.bean.BaseBean;
+import cn.com.chinau.bean.ShopNameBean;
 import cn.com.chinau.bean.StampDetailBean;
 import cn.com.chinau.dialog.SharedDialog;
 import cn.com.chinau.fragment.stampfragment.StampInfoFragment;
@@ -51,6 +52,7 @@ import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.ScreenUtils;
+import cn.com.chinau.utils.ShopUtils;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 import cn.com.chinau.view.VerticalScrollView;
@@ -93,8 +95,14 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private String mPrice;
     private RadioButton mGoodsDetailBtn, mVerifyInfoBtn;
     private RadioGroup mStampDetailRG;
+    private StampDetailBean mMStampDetailBean;
     private ArrayList<AddShopCartBean> info_list = new ArrayList<>();
+    /**
+     * 这个是本页面的所有数据
+     **/
     private Handler mHandler = new Handler() {
+
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -112,10 +120,11 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                     Gson gson = new Gson();
                     String data = (String) msg.obj;
                     if (data != null) {
-                        StampDetailBean mStampDetailBean = gson.fromJson(data, StampDetailBean.class);
+                        mMStampDetailBean = gson.fromJson(data, StampDetailBean.class);
+
                         // 赋值头布局显示的图片
-                        if (mStampDetailBean.getGoods_images() != null) {
-                            String[] mGoods_images = mStampDetailBean.getGoods_images();
+                        if (mMStampDetailBean.getGoods_images() != null) {
+                            String[] mGoods_images = mMStampDetailBean.getGoods_images();
 //                       MyLog.LogShitou("mGoods_images商品图片001-->:", mGoods_images.length + "");
                             small_images = new String[mGoods_images.length];
                             big_images = new String[mGoods_images.length];
@@ -125,23 +134,23 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                                 big_images[i] = image[1];// 大图集合
                             }
                             mSharedImage = small_images[0];
-//                        MyLog.LogShitou("需要分享显示图片url", mSharedImage);
+                            MyLog.LogShitou("需要分享显示图片url", mSharedImage);
                         }
 
-                        mGoods_name = mStampDetailBean.getGoods_name();
+                        mGoods_name = mMStampDetailBean.getGoods_name();
                         mTitle.setText(mGoods_name);
                         mGoodsName.setText(mGoods_name);
-                        mPrice = mStampDetailBean.getCurrent_price();
+                        mPrice = mMStampDetailBean.getCurrent_price();
                         mCurrentPrice.setText("￥" + mPrice);
-                        String mFreights = mStampDetailBean.getFreight();
+                        String mFreights = mMStampDetailBean.getFreight();
                         mFreight.setText("￥" + mFreights);
-                        String mSaleCounts = mStampDetailBean.getSale_count();
+                        String mSaleCounts = mMStampDetailBean.getSale_count();
                         mSaleCount.setText(mSaleCounts);
-                        String mFeeRates = mStampDetailBean.getService_fee_rate();
+                        String mFeeRates = mMStampDetailBean.getService_fee_rate();
                         mFeeRate.setText("(" + mFeeRates + "):");
-                        String mFees = mStampDetailBean.getService_fee();
+                        String mFees = mMStampDetailBean.getService_fee();
                         mFee.setText("￥" + mFees);
-                        String mGoodsSources = mStampDetailBean.getGoods_source();
+                        String mGoodsSources = mMStampDetailBean.getGoods_source();
                         MyLog.LogShitou("邮票类型-->:", mGoodsSources);
                         if (mGoodsSources.equals("YS")) {
                             mGoodsSource.setText("邮市");
@@ -152,28 +161,28 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                         } else if (mGoodsSources.equals("SC_DSF")) {
                             mGoodsSource.setText("第三方");
                         }
-                        String mSellerNames = mStampDetailBean.getSeller_name();
+                        String mSellerNames = mMStampDetailBean.getSeller_name();
                         mSellerName.setText(mSellerNames);
-                        String mSellerNos = mStampDetailBean.getSeller_no();
+                        String mSellerNos = mMStampDetailBean.getSeller_no();
                         if (mSellerNos.length() < 11) {
                             mSellerNo.setText(mSellerNos);
                         } else {
                             String mPhone = mSellerNos.substring(0, 3) + "****" + mSellerNos.substring(7, mSellerNos.length());
                             mSellerNo.setText(mPhone);
                         }
-                        mShare_url = mStampDetailBean.getShare_url();// 分享地址url
+                        mShare_url = mMStampDetailBean.getShare_url();// 分享地址url
 
-                        mGoodsDetail = mStampDetailBean.getGoods_detail();  // 邮票信息H5url
-                        mVerifyInfo = mStampDetailBean.getVerify_info(); // 鉴定信息H5url
+                        mGoodsDetail = mMStampDetailBean.getGoods_detail();  // 邮票信息H5url
+                        mVerifyInfo = mMStampDetailBean.getVerify_info(); // 鉴定信息H5url
 
 //                        if (mGoodsDetail.equals("") && mVerifyInfo.equals("")) {
-                            mStampInfo_wb.loadUrl(mGoodsDetail);
-                            mStampPractice_wb.loadUrl(mVerifyInfo);
-                            MyLog.LogShitou("邮票信息的H5url", mGoodsDetail);
-                            MyLog.LogShitou("鉴定信息的H5url", mVerifyInfo);
+                        mStampInfo_wb.loadUrl(mGoodsDetail);
+                        mStampPractice_wb.loadUrl(mVerifyInfo);
+                        MyLog.LogShitou("邮票信息的H5url", mGoodsDetail);
+                        MyLog.LogShitou("鉴定信息的H5url", mVerifyInfo);
 //                        }
 
-                        mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
+                        mIsFavorite = mMStampDetailBean.getIs_favorite();// 收藏状态
 //                    MyLog.LogShitou("商品收藏状态", mIsFavorite);
                         if (mIsFavorite.equals("0")) { // 未收藏
                             mCollect.setImageResource(R.mipmap.collection);
@@ -181,7 +190,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
                             mCollect.setImageResource(R.mipmap.collections);
                         }
 
-                        mCartGoodsCount = mStampDetailBean.getCart_goods_count();// 购物车里的商品数量
+                        mCartGoodsCount = mMStampDetailBean.getCart_goods_count();// 购物车里的商品数量
 
                         MyLog.LogShitou("商品数量-->:", mCartGoodsCount);
                         if (!mCartGoodsCount.equals("0") && !mCartGoodsCount.equals("")) {
@@ -190,7 +199,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
 //                        MyLog.LogShitou("商品数量---002>", "走了吗。。。。。。。。。。");
                         }
 
-                        String mGoodsStatuss = mStampDetailBean.getGoods_status();// 商品状态
+                        String mGoodsStatuss = mMStampDetailBean.getGoods_status();// 商品状态
                         MyLog.LogShitou("商品状态-->:", mGoodsStatuss);
                         if (mGoodsStatuss.equals("0")) {
                             mGoodsStatus.setVisibility(View.VISIBLE);
@@ -267,6 +276,10 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     private WebView mStampInfo_wb, mStampPractice_wb;
     private int mPosition;
     private int position = 0;
+
+    private int num = 0;
+    private ShopNameBean.SellerBean.GoodsBean mGoodsListBean;//父控件的bean
+    private ShopNameBean.SellerBean mSellerListBean;//子控件的bean
 
     @Override
     public View CreateTitle() {
@@ -351,6 +364,7 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
         //底部导航的ViewPager
         DesignerDetailTapViewPagerAdapter adapter = new DesignerDetailTapViewPagerAdapter(vList, arr);
         mViewPager.setAdapter(adapter);
+
 
     }
 
@@ -486,9 +500,44 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
 
                 break;
             case R.id.stamp_details_addShoppingCart:// 加入购物车
+
+
                 addFlag = true; // 点击加入购物车的标识
                 if (mToken.equals("") || mUser_id.equals("")) {
-                    openActivityWitchAnimation(LoginActivity.class);
+                    if (mGoodsListBean != null && mSellerListBean != null) {
+                        num = Integer.valueOf(mGoodsListBean.getGoods_count());
+                        num++;
+                        mGoodsListBean.setGoods_count(String.valueOf(num));
+//                        List<ShopBean.SellerListBean.GoodsListBean> goods_list = mSellerListBean.getGoods_list();
+                        ArrayList<ShopNameBean.SellerBean.GoodsBean> goods_list = mSellerListBean.getGoods_list();
+                        goods_list.clear();
+                        goods_list.add(mGoodsListBean);
+                    } else {
+                        //1.创建GoodsListBean对象
+                        //数量的标记进行添加
+                        //这个goods_count要把之前的取出来然后再进行++操作
+//                        mGoodsListBean = new ShopNameBean.SellerBean.GoodsBean(small_images[0],
+//                                mMStampDetailBean.getGoods_name(), mGoods_sn, mMStampDetailBean.getCurrent_price(),
+//                                //这个goods_count要把之前的取出来然后再进行++操作
+//                                String.valueOf(1), mMStampDetailBean.getGoods_status());
+                        mGoodsListBean = new ShopNameBean.SellerBean.GoodsBean(small_images[0], mMStampDetailBean.getGoods_name(),
+                                mGoods_sn, mMStampDetailBean.getCurrent_price(), String.valueOf(1), false);
+
+                        //自己新建的一个集合，并且了利用这个集合新创建一个对象
+                        ArrayList<ShopNameBean.SellerBean.GoodsBean> goodsListBeen = new ArrayList<>();
+                        goodsListBeen.add(mGoodsListBean);
+
+                        mSellerListBean = new ShopNameBean.SellerBean(mMStampDetailBean.getSeller_name(),
+                                mMStampDetailBean.getGoods_source(), mMStampDetailBean.getSeller_no(), goodsListBeen);
+                    }
+
+
+                    //这里应该是添加把这个集合添加到之前那个
+                    ShopUtils.SynData(this, mSellerListBean);
+                    Toast.makeText(this, "添加购物车成功", Toast.LENGTH_SHORT).show();
+
+
+//                    openActivityWitchAnimation(LoginActivity.class);
                 } else {
                     if (mGoods_sn != null) {
                         AddShopCartBean mAddShopCartBean = new AddShopCartBean();
@@ -513,7 +562,6 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
 //                    openActivityWitchAnimation(LoginActivity.class);
                 } else {
                     if (mGoods_sn != null) {
-
                         AddShopCartBean mAddShopCartBean = new AddShopCartBean();
                         mAddShopCartBean.setGoods_count("1");
                         mAddShopCartBean.setGoods_sn(mGoods_sn);
@@ -788,5 +836,13 @@ public class StampDetailActivity extends BaseActivity implements View.OnClickLis
     public void onCancel(SHARE_MEDIA share_media) {
 //        Toast.makeText(StampDetailActivity.this, " 分享取消了", Toast.LENGTH_SHORT).show();
         MyLog.LogShitou("platform分享33", share_media + "");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        num = 0;
+        mGoodsListBean = null;
+        mSellerListBean = null;
     }
 }

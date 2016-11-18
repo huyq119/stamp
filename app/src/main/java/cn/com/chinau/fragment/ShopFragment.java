@@ -28,6 +28,7 @@ import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.listener.ShopListenerFace;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
+import cn.com.chinau.utils.SPUtils;
 import cn.com.chinau.utils.ShoppingCartBiz;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
@@ -36,7 +37,7 @@ import cn.com.chinau.utils.ThreadManager;
  * 购物车页面
  */
 
-public class ShopFragment extends BaseFragment implements ExpandableAdapter.SellerList{
+public class ShopFragment extends BaseFragment implements ExpandableAdapter.SellerList {
     private View mShopContent;
     private View mShopTitle;
     private ExpandableListView mContentListView;//主要的ListView
@@ -52,6 +53,8 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
     private SharedPreferences sp;
     private LinearLayout mShopLayout, mShopLinear;
     private String mTotalAmount;
+
+    private ShopNameBean mShopNameBean;
 
     @Override
     public View CreateTitle() {
@@ -85,10 +88,14 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
         mToken = sp.getString("token", "");
         mUser_id = sp.getString("userId", "");
         if (TextUtils.isEmpty(mToken) && TextUtils.isEmpty(mUser_id)) {
-            mEdit.setVisibility(View.GONE);
-            mContentListView.setVisibility(View.GONE);// list隐藏
-            mShopLayout.setVisibility(View.GONE); // 结算ll
-            mShopTv.setVisibility(View.VISIBLE); // 购物车为空是显示的布局
+//            mEdit.setVisibility(View.GONE);
+//            mContentListView.setVisibility(View.GONE);// list隐藏
+//            mShopLayout.setVisibility(View.GONE); // 结算ll
+//            mShopTv.setVisibility(View.VISIBLE); // 购物车为空是显示的布局
+            String sg = (String) SPUtils.get(getActivity(), StaticField.SHOPJSON, "");
+            shopNameBean = new Gson().fromJson(sg, ShopNameBean.class);
+            initAdapter();
+            initListener();
         } else {
             ShopRequestNet(); //  购物车网络请求
         }
@@ -137,7 +144,7 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
      * 添加数据
      */
     private void initAdapter() {
-        shopNameBean = new ShopNameBean(mSellerList, mTotalAmount);
+//        shopNameBean = new ShopNameBean(mSellerList, mTotalAmount);
         expandableAdapter = new ExpandableAdapter(getActivity(), mBitmap, shopNameBean, mShopLinear, mShopDelete, mGoToPay);
         mContentListView.setAdapter(expandableAdapter);
         //让子控件全部展开
@@ -180,7 +187,6 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
     }*/
 
 
-
     @Override
     public void AgainRequest() {
 
@@ -218,18 +224,20 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
     }
 
     private Handler mHandler = new Handler() {
+
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case StaticField.SUCCESS:
                     Gson gson = new Gson();
-                    ShopNameBean shopNameBean = gson.fromJson((String) msg.obj, ShopNameBean.class);
-                    String code = shopNameBean.getRsp_code();
+                    mShopNameBean = gson.fromJson((String) msg.obj, ShopNameBean.class);
+                    String code = mShopNameBean.getRsp_code();
                     if (code.equals("0000")) {
-                        // 总价
-                        mTotalAmount = shopNameBean.getGoods_total_amount();
-                        mSellerList = shopNameBean.getSeller_list(); // 商品List
-                        MyLog.LogShitou("mSellerList=================",""+mSellerList);
+//                        // 总价
+//                        mTotalAmount = mShopNameBean.getGoods_total_amount();
+//                        mSellerList = mShopNameBean.getSeller_list(); // 商品List
+//                        MyLog.LogShitou("mSellerList=================", "" + mSellerList);
                         initAdapter(); // 添加数据
                         initListener();
                     }

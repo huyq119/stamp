@@ -12,12 +12,17 @@ public class ShopNameBean extends BaseBean {
     public String goods_total_amount;//商品总金额
 
 
+    public ShopNameBean() {
+    }
+
     public ShopNameBean(ArrayList<SellerBean> seller_list, String goods_total_amount) {
         this.seller_list = seller_list;
         this.goods_total_amount = goods_total_amount;
     }
 
     public ArrayList<SellerBean> getSeller_list() {
+        if (seller_list == null)
+            seller_list = new ArrayList<>();
         return seller_list;
     }
 
@@ -152,14 +157,23 @@ public class ShopNameBean extends BaseBean {
                 isChildSelected = childSelected;
             }
 
-            public GoodsBean(String goods_img, String goods_name, String goods_sn, String goods_price, String goods_count) {
+//            public GoodsBean(String small_image, String goods_img, String goods_name, String goods_sn, String goods_price, String goods_count) {
+//                this.goods_img = goods_img;
+//                this.goods_name = goods_name;
+//                this.goods_sn = goods_sn;
+//                this.goods_price = goods_price;
+//                this.goods_count = goods_count;
+//            }
+
+
+            public GoodsBean(String goods_img, String goods_name, String goods_sn, String goods_price, String goods_count, boolean isChildSelected) {
                 this.goods_img = goods_img;
                 this.goods_name = goods_name;
                 this.goods_sn = goods_sn;
                 this.goods_price = goods_price;
                 this.goods_count = goods_count;
+                this.isChildSelected = isChildSelected;
             }
-
 
             public String getGoods_img() {
                 return goods_img;
@@ -254,7 +268,6 @@ public class ShopNameBean extends BaseBean {
         }
 
     }
-
 
 
 }

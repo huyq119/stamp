@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
+import com.google.gson.Gson;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.socialize.PlatformConfig;
@@ -21,6 +22,7 @@ import java.util.Set;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.bean.ShopNameBean;
 import cn.com.chinau.utils.MyLog;
+import cn.com.chinau.utils.SPUtils;
 
 /**
  * 全局上下文
@@ -57,6 +59,7 @@ public class MyApplication extends Application {
         MyLog.LogShitou("什么时候执行-------------->>001", "执行了001");
         SharedPreferences sp = getSharedPreferences("stamp", MODE_PRIVATE);
         sp.edit().putBoolean("isSetup", true).commit();
+        SPUtils.put(this, StaticField.SHOPJSON, new Gson().toJson(new ShopNameBean()));
     }
 
     // 注册友盟微信分享的AppId,AppSecret值

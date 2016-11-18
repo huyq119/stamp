@@ -23,6 +23,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import cn.com.chinau.MainActivity;
@@ -32,26 +33,28 @@ import cn.com.chinau.adapter.HomeViewPagerAdapter;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.AddShopCartBean;
 import cn.com.chinau.bean.BaseBean;
+import cn.com.chinau.bean.ShopNameBean;
 import cn.com.chinau.bean.StampDetailBean;
 import cn.com.chinau.dialog.SharedDialog;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyToast;
+import cn.com.chinau.utils.ShopUtils;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 
 /**
  * 商城详情页
  */
-public class SelfMallDetailActivity extends BaseActivity implements View.OnClickListener ,UMShareListener{
+public class SelfMallDetailActivity extends BaseActivity implements View.OnClickListener, UMShareListener {
 
     private View mSelfMallDetailTitle;
     private View mSelfMallDetailContent;
     private TextView mTitle, mGoodsName, mCurrentPrice, mMarketPrice, mFreight, mSaleCount, mGoodsSource,
-            mGoodsStatus, mAddShopping, mGoBuy, mShoppingCount,tv_cancel;
+            mGoodsStatus, mAddShopping, mGoBuy, mShoppingCount, tv_cancel;
 
-    private ImageView mBack, mShared, mCollection, mShopping,mWeiXin,mPengYouQuan;
+    private ImageView mBack, mShared, mCollection, mShopping, mWeiXin, mPengYouQuan;
     private ViewPager mTopVP;
     private CirclePageIndicator mTopVPI;
     private String mGoods_sn, mGoodsDetai, mToken, mUser_id, mIsFavorite;
@@ -61,18 +64,23 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
     private boolean addFlag = true; // 点击加入购物车，立即购买的的标识
     private String mSharedImage;
     private String mShare_url;
+
+    private int num = 0;
+    private ShopNameBean.SellerBean.GoodsBean mGoodsListBean;//父控件的bean
+    private ShopNameBean.SellerBean mSellerListBean;//子控件的bean
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case StaticField.SUCCESS:// 商城详情数据
                     Gson gson = new Gson();
-                    StampDetailBean mStampDetailBean = gson.fromJson((String) msg.obj, StampDetailBean.class);
-                    String mCode = mStampDetailBean.getRsp_code();
+                    mMStampDetailBean = gson.fromJson((String) msg.obj, StampDetailBean.class);
+                    String mCode = mMStampDetailBean.getRsp_code();
                     if (mCode.equals("0000")) {
                         // 赋值头布局显示的图片
-                        if (mStampDetailBean.getGoods_images() != null) {
-                            String[] mGoods_images = mStampDetailBean.getGoods_images();
+                        if (mMStampDetailBean.getGoods_images() != null) {
+                            String[] mGoods_images = mMStampDetailBean.getGoods_images();
                             small_images = new String[mGoods_images.length];
                             big_images = new String[mGoods_images.length];
                             for (int i = 0; i < mGoods_images.length; i++) {
@@ -84,17 +92,17 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                             MyLog.LogShitou("需要分享显示图片url", mSharedImage);
                         }
 
-                        mGoods_name = mStampDetailBean.getGoods_name();
+                        mGoods_name = mMStampDetailBean.getGoods_name();
                         mTitle.setText(mGoods_name); // 标题
                         mGoodsName.setText(mGoods_name);// 商品名称
-                        String mPrice = mStampDetailBean.getCurrent_price();
+                        String mPrice = mMStampDetailBean.getCurrent_price();
                         mCurrentPrice.setText("￥" + mPrice);// 售价
-                        String mMarketPrices = mStampDetailBean.getMarket_price();
+                        String mMarketPrices = mMStampDetailBean.getMarket_price();
                         mMarketPrice.setText("￥" + mMarketPrices);// 市场价
-                        String mSaleCounts = mStampDetailBean.getSale_count();
+                        String mSaleCounts = mMStampDetailBean.getSale_count();
                         mSaleCount.setText(mSaleCounts);// 销量
 
-                        String mGoodsSources = mStampDetailBean.getGoods_source();
+                        String mGoodsSources = mMStampDetailBean.getGoods_source();
                         MyLog.LogShitou("邮票类型-->:", mGoodsSources);
                         if (mGoodsSources.equals("YS")) {
                             mGoodsSource.setText("邮市");
@@ -105,15 +113,15 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                         } else if (mGoodsSources.equals("SC_DSF")) {
                             mGoodsSource.setText("第三方");
                         }
-                        mShare_url = mStampDetailBean.getShare_url(); // 分享地址url
-                        mGoodsDetai = mStampDetailBean.getGoods_detail();  // 商家信息H5url
+                        mShare_url = mMStampDetailBean.getShare_url(); // 分享地址url
+                        mGoodsDetai = mMStampDetailBean.getGoods_detail();  // 商家信息H5url
                         MyLog.LogShitou("商城详情H5url-->:", mGoodsDetai);
                         if (mGoodsDetai != null) {
                             if (mWeb != null) {
                                 mWeb.loadUrl(mGoodsDetai);
                             }
                         }
-                        String mGoodsStatuss = mStampDetailBean.getGoods_status();// 商品状态
+                        String mGoodsStatuss = mMStampDetailBean.getGoods_status();// 商品状态
                         MyLog.LogShitou("商品状态-->:", mGoodsStatuss);
                         if (mGoodsStatuss.equals("0")) {
                             mGoodsStatus.setVisibility(View.VISIBLE);
@@ -126,7 +134,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                             mAddShopping.setEnabled(false);
                             mGoBuy.setEnabled(false);
                         }
-                        mIsFavorite = mStampDetailBean.getIs_favorite();// 收藏状态
+                        mIsFavorite = mMStampDetailBean.getIs_favorite();// 收藏状态
                         MyLog.LogShitou("商品收藏状态-->:", mIsFavorite);
                         if (mIsFavorite.equals("0")) { // 未收藏
                             mCollection.setImageResource(R.mipmap.collection);
@@ -134,12 +142,12 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                             mCollection.setImageResource(R.mipmap.collections);
                         }
 
-                        String mCartGoodsCount = mStampDetailBean.getCart_goods_count();// 购物车里的商品数量
+                        String mCartGoodsCount = mMStampDetailBean.getCart_goods_count();// 购物车里的商品数量
                         MyLog.LogShitou("商品数量-->:", mCartGoodsCount);
-                        if (!mCartGoodsCount.equals("0")&& !mCartGoodsCount.equals("")) {
+                        if (!mCartGoodsCount.equals("0") && !mCartGoodsCount.equals("")) {
                             mShoppingCount.setVisibility(View.VISIBLE);
-                            mShoppingCount.setText("+"+mCartGoodsCount);
-                            MyLog.LogShitou("商品数量---002>","走了吗。。。。。。。。。。");
+                            mShoppingCount.setText("+" + mCartGoodsCount);
+                            MyLog.LogShitou("商品数量---002>", "走了吗。。。。。。。。。。");
                         }
 
                         initAdapter();
@@ -166,19 +174,19 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                     break;
                 case StaticField.ADDSHOPPINGCARTSUCCESS://  加入购物车
                     Gson gsones = new Gson();
-                    BaseBean mBasebean = gsones.fromJson((String) msg.obj,BaseBean.class);
-                    if (mBasebean.getRsp_code().equals("0000")){
+                    BaseBean mBasebean = gsones.fromJson((String) msg.obj, BaseBean.class);
+                    if (mBasebean.getRsp_code().equals("0000")) {
                         String mCount = mShoppingCount.getText().toString().trim();
                         String count = mCount.substring(1);// 去掉"+"号
-                        int mShopCount=Integer.valueOf(count).intValue();// 转int
-                        MyLog.LogShitou("请求下来的数量","--->:"+mCount+"--"+mShopCount);
+                        int mShopCount = Integer.valueOf(count).intValue();// 转int
+                        MyLog.LogShitou("请求下来的数量", "--->:" + mCount + "--" + mShopCount);
                         mShopCount++; // 数量自增
                         mShoppingCount.setVisibility(View.VISIBLE);// 加入购物车成功后显示数量
                         mShoppingCount.setText("+" + String.valueOf(mShopCount));
-                        MyLog.LogShitou("加入后的数量","--->:"+mShopCount);
+                        MyLog.LogShitou("加入后的数量", "--->:" + mShopCount);
                         mHandler.sendEmptyMessage(5);// 发送提示添加成功
                     }
-                    break ;
+                    break;
                 case StaticField.GOBUY: // 立即购买
                     Gson gsones1 = new Gson();
                     BaseBean mBasebean1 = gsones1.fromJson((String) msg.obj, BaseBean.class);
@@ -191,7 +199,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                     }
                     break;
                 case 5:
-                    MyToast.showShort(SelfMallDetailActivity.this,"添加成功");
+                    MyToast.showShort(SelfMallDetailActivity.this, "添加成功");
                     break;
             }
         }
@@ -200,6 +208,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
     private String mGoods_name;
     private SharedDialog dialog;
     private View dialog_finsih;
+    private StampDetailBean mMStampDetailBean;
 
 
     @Override
@@ -222,7 +231,6 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
     public void AgainRequest() {
 
     }
-
 
 
     private void initView() {
@@ -284,11 +292,12 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
                 finishWitchAnimation();
                 break;
             case R.id.base_shared://分享按钮
-            SharedDialog(); // 分享弹出Dialog
+                SharedDialog(); // 分享弹出Dialog
                 break;
             case R.id.mall_detail_collection://收藏
 
                 if (mToken.equals("") || mUser_id.equals("")) {
+
                     openActivityWitchAnimation(LoginActivity.class);
                 } else {
 
@@ -311,16 +320,46 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
             case R.id.mall_detail_addshopping://加入购物车
 
                 if (mToken.equals("") || mUser_id.equals("")) {
-                    openActivityWitchAnimation(LoginActivity.class);
+                    if (mGoodsListBean != null && mSellerListBean != null) {
+                        num = Integer.valueOf(mGoodsListBean.getGoods_count());
+                        num++;
+                        mGoodsListBean.setGoods_count(String.valueOf(num));
+//                        List<ShopBean.SellerListBean.GoodsListBean> goods_list = mSellerListBean.getGoods_list();
+                        ArrayList<ShopNameBean.SellerBean.GoodsBean> goods_list = mSellerListBean.getGoods_list();
+                        goods_list.clear();
+                        goods_list.add(mGoodsListBean);
+                    } else {
+                        //1.创建GoodsListBean对象
+                        //数量的标记进行添加
+                        //这个goods_count要把之前的取出来然后再进行++操作
+//                        mGoodsListBean = new ShopNameBean.SellerBean.GoodsBean(small_images[0],
+//                                mMStampDetailBean.getGoods_name(), mGoods_sn, mMStampDetailBean.getCurrent_price(),
+//                                //这个goods_count要把之前的取出来然后再进行++操作
+//                                String.valueOf(1), mMStampDetailBean.getGoods_status());
+                        mGoodsListBean = new ShopNameBean.SellerBean.GoodsBean(small_images[0], mMStampDetailBean.getGoods_name(),
+                                mGoods_sn, mMStampDetailBean.getCurrent_price(), String.valueOf(1), false);
+
+                        //自己新建的一个集合，并且了利用这个集合新创建一个对象
+                        ArrayList<ShopNameBean.SellerBean.GoodsBean> goodsListBeen = new ArrayList<>();
+                        goodsListBeen.add(mGoodsListBean);
+
+                        mSellerListBean = new ShopNameBean.SellerBean(mMStampDetailBean.getSeller_name(),
+                                mMStampDetailBean.getGoods_source(), mMStampDetailBean.getSeller_no(), goodsListBeen);
+                    }
+
+
+                    //这里应该是添加把这个集合添加到之前那个
+                    ShopUtils.SynData(this, mSellerListBean);
+                    Toast.makeText(this, "添加购物车成功", Toast.LENGTH_SHORT).show();
                 } else {
-                    if(mGoods_sn != null){
+                    if (mGoods_sn != null) {
                         AddShopCartBean mAddShopCartBean = new AddShopCartBean();
                         mAddShopCartBean.setGoods_count("1");
                         mAddShopCartBean.setGoods_sn(mGoods_sn);
                         String mSnJson = new Gson().toJson(mAddShopCartBean); // 转json串
-                        String toJson = "["+mSnJson+"]"; // 转数组
+                        String toJson = "[" + mSnJson + "]"; // 转数组
                         AddShopCart(toJson); // 加入购物车网络请求
-                        MyLog.LogShitou("加入购物车转换的Json",toJson);
+                        MyLog.LogShitou("加入购物车转换的Json", toJson);
                     }
                 }
                 break;
@@ -440,7 +479,8 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
 
     /**
      * 加入购物车网络请求
-     * @param Goods_info  商品信息：所有商品的json字符串
+     *
+     * @param Goods_info 商品信息：所有商品的json字符串
      */
     private void AddShopCart(final String Goods_info) {
         ThreadManager.getInstance().createShortPool().execute(new Runnable() {
@@ -482,7 +522,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
     /**
      * 分享弹出Dialog
      */
-    private void SharedDialog(){
+    private void SharedDialog() {
         dialog = new SharedDialog(this);
         Window window = dialog.getWindow();
         window.setGravity(Gravity.BOTTOM);
@@ -526,9 +566,10 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
 
     /**
      * 调起微信分享的方法
+     *
      * @param share_media // 分享类型
      */
-    private void SharedDes(SHARE_MEDIA share_media ){
+    private void SharedDes(SHARE_MEDIA share_media) {
         UMImage image = new UMImage(this.getApplicationContext(), mSharedImage);
         ShareAction shareAction = new ShareAction(this);
         shareAction.withText("微信分享"); // 显示的内容
@@ -543,6 +584,7 @@ public class SelfMallDetailActivity extends BaseActivity implements View.OnClick
 
     /**
      * 友盟微信分享回调 (成功，失败，取消)
+     *
      * @param share_media 分享类型
      */
     @Override

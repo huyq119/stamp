@@ -91,7 +91,10 @@ public class StaticField {
     public static final int ALI_SUCCESS = 30;// Handler发送的结果码（支付宝支付）
 
 
-
+    /**
+     * 购物车保存的Json
+     **/
+    public final static String SHOPJSON = "shopJson";
 
     //步长
     public final static int OFFSETNUM = 20;
@@ -271,13 +274,13 @@ public class StaticField {
     public static final String CITY = "city";
     public static final String AREA = "area";
     // 修改地址url（删除；修改；新增 ）
-    public static final String UPDATERESSMODIFY= "cn.com.chinau.address.modify";
+    public static final String UPDATERESSMODIFY = "cn.com.chinau.address.modify";
 
     // 商品订单list
     public static final String GOODSORDERLIST = "cn.com.chinau.orderlist.query";
     public static final String GOODSORDERDETAIL = "cn.com.chinau.order.detail.query";// 商品详情
     public static final String EXPRESSQUERY = "cn.com.chinau.express.query";// 物流详情
-    public static final String ORDERREFUND= "cn.com.chinau.order.refund";// 申请退款
+    public static final String ORDERREFUND = "cn.com.chinau.order.refund";// 申请退款
     public static final String REFUNDDETAIL = "cn.com.chinau.refund.detail.query";// 退款详情查询
     public static final String ORDERSTATUS = "order_status";
     public static final String DFK = "DFK";// 待付款
@@ -301,12 +304,12 @@ public class StaticField {
     public static final String ORDERPAY = "cn.com.chinau.order.pay";
     public static final String REQUESTID = "client_request_id"; //客户订单请求号
     public static final String PAYAMOUNT = "pay_amount"; //支付金额
-    public static final String PAYTYPE= "pay_type"; //支付方式
-    public static final String ALIPAY= "ALIPAY"; //支付宝
-    public static final String WXPAY= "WXPAY"; // 微信
+    public static final String PAYTYPE = "pay_type"; //支付方式
+    public static final String ALIPAY = "ALIPAY"; //支付宝
+    public static final String WXPAY = "WXPAY"; // 微信
     // APPID
-    public static final String APP_ID= "wxf9abf6e67f0caed4";
-    public static final String PACKAGE= "Sign=WXPay";
+    public static final String APP_ID = "wxf9abf6e67f0caed4";
+    public static final String PACKAGE = "Sign=WXPay";
 
     public static class ShowMsgActivity {
         public static final String STitle = "showmsg_title";
