@@ -56,7 +56,6 @@ public class MyApplication extends Application {
 
         UMShareAPI.get(this); // 初始化友盟sdk
 
-        MyLog.LogShitou("什么时候执行-------------->>001", "执行了001");
         SharedPreferences sp = getSharedPreferences("stamp", MODE_PRIVATE);
         sp.edit().putBoolean("isSetup", true).commit();
         SPUtils.put(this, StaticField.SHOPJSON, new Gson().toJson(new ShopNameBean()));

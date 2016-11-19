@@ -39,7 +39,7 @@ public class StaticField {
     public static final String ZC = "ZC";// 注册
     public static final String DL = "DL";// 登录
     // 忘记密码，重置密码，设置提现密码
-    public static final String NAME = "stamp";// 保存在本地的文件名
+    public static final String NAME = "Stamp";// 保存在本地的文件名
     public static final String WJMM = "WJMM";// 忘记密码
     public static final String PWD_MODIFY = "cn.com.chinau.pwd.modify";// 修改密码
     public static final String NEW_PWD = "new_pwd";// 新密码

@@ -40,6 +40,7 @@ import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyHandler;
 import cn.com.chinau.utils.MyToast;
+import cn.com.chinau.utils.SPUtils;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
 
@@ -383,6 +384,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.my_quit_login: // 退出登录
                 showDialog(getActivity());
+                SPUtils.clear(getContext());
                 break;
             default:
                 break;

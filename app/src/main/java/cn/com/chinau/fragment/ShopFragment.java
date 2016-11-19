@@ -23,6 +23,8 @@ import cn.com.chinau.activity.SelfMallDetailActivity;
 import cn.com.chinau.activity.StampDetailActivity;
 import cn.com.chinau.adapter.ExpandableAdapter;
 import cn.com.chinau.base.BaseFragment;
+import cn.com.chinau.bean.AddShopCartBean;
+import cn.com.chinau.bean.BaseBean;
 import cn.com.chinau.bean.ShopNameBean;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.listener.ShopListenerFace;
@@ -97,8 +99,69 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
             initAdapter();
             initListener();
         } else {
-            ShopRequestNet(); //  购物车网络请求
+            String sg = (String) SPUtils.get(getActivity(), StaticField.SHOPJSON, "");
+            shopNameBean = new Gson().fromJson(sg, ShopNameBean.class);
+            ArrayList<ShopNameBean.SellerBean> seller_list = shopNameBean.getSeller_list();
+            if (seller_list.size() != 0) {
+                commitData();
+            } else {
+                ShopRequestNet(); //  购物车网络请求
+            }
         }
+    }
+
+    /**
+     * 提交本地数据的网络请求
+     */
+    private void commitData() {
+        //保存提交服务器的集合
+        final ArrayList<AddShopCartBean> list = new ArrayList<>();
+        //保存的实体类
+        ArrayList<ShopNameBean.SellerBean> seller_list = shopNameBean.getSeller_list();
+        for (int i = 0; i < seller_list.size(); i++) {
+            ArrayList<ShopNameBean.SellerBean.GoodsBean> goods_list = seller_list.get(i).getGoods_list();
+            for (int j = 0; j < goods_list.size(); j++) {
+                ShopNameBean.SellerBean.GoodsBean goodsBean = goods_list.get(j);
+                String goods_sn = goodsBean.getGoods_sn();
+                String goods_count = goodsBean.getGoods_count();
+                AddShopCartBean addShopCartBean = new AddShopCartBean(goods_sn, goods_count);
+                list.add(addShopCartBean);
+            }
+        }
+        MyLog.e("提交数据的信息" + seller_list.toString());
+
+        //开始请求网络
+        ThreadManager.getInstance().createShortPool().execute(new Runnable() {
+
+            @Override
+            public void run() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put(StaticField.SERVICE_TYPE, StaticField.SHOPCARTMODIFY);// 接口名称
+
+                params.put(StaticField.TOKEN, mToken);// 标识
+                params.put(StaticField.USER_ID, mUser_id);// 用户ID
+                params.put(StaticField.GOODESINFO, list.toString());//  商品信息：所有商品的json字符串
+                params.put(StaticField.OP_TYPE, StaticField.SC);// 操作类型：
+
+                String mapSort = SortUtils.MapSort(params);
+                String md5code = Encrypt.MD5(mapSort);
+                params.put(StaticField.SIGN, md5code);
+
+                String result = HttpUtils.submitPostData(StaticField.ROOT, params);
+                MyLog.LogShitou("提交数据接口已经执行" + mToken + mUser_id, result);
+
+                mHandler.sendEmptyMessage(1);
+                if (result.equals("-1") | result.equals("-2")) {
+                    return;
+                }
+
+                BaseBean mBasebean = new Gson().fromJson(result, BaseBean.class);
+                if (mBasebean.getRsp_code().equals("0000")) {
+                    MyLog.LogShitou("提交数据接口已经成功清除数据", result);
+                    SPUtils.put(getContext(), StaticField.SHOPJSON, new Gson().toJson(new ShopNameBean()));
+                }
+            }
+        });
     }
 
     private void initListener() {
@@ -144,7 +207,6 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
      * 添加数据
      */
     private void initAdapter() {
-//        shopNameBean = new ShopNameBean(mSellerList, mTotalAmount);
         expandableAdapter = new ExpandableAdapter(getActivity(), mBitmap, shopNameBean, mShopLinear, mShopDelete, mGoToPay);
         mContentListView.setAdapter(expandableAdapter);
         //让子控件全部展开
@@ -235,12 +297,16 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
                     String code = mShopNameBean.getRsp_code();
                     if (code.equals("0000")) {
 //                        // 总价
-//                        mTotalAmount = mShopNameBean.getGoods_total_amount();
-//                        mSellerList = mShopNameBean.getSeller_list(); // 商品List
-//                        MyLog.LogShitou("mSellerList=================", "" + mSellerList);
+                        mTotalAmount = mShopNameBean.getGoods_total_amount();
+                        mSellerList = mShopNameBean.getSeller_list(); // 商品List
+                        MyLog.LogShitou("mSellerList=================", "" + mSellerList);
+                        shopNameBean = new ShopNameBean(mSellerList, mTotalAmount);
                         initAdapter(); // 添加数据
                         initListener();
                     }
+                    break;
+                case 1://购物车提交网路的请求
+                    ShopRequestNet(); //  购物车网络请求
                     break;
             }
         }

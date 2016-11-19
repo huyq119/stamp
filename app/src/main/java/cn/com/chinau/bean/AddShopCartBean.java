@@ -8,6 +8,15 @@ public class AddShopCartBean {
     private String goods_sn;// 商品编号
     private String goods_count; // 商品数量
 
+
+    public AddShopCartBean() {
+    }
+
+    public AddShopCartBean(String goods_sn, String goods_count) {
+        this.goods_sn = goods_sn;
+        this.goods_count = goods_count;
+    }
+
     public String getGoods_sn() {
         return goods_sn;
     }
