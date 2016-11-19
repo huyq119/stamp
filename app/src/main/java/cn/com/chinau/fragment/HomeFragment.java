@@ -27,12 +27,12 @@ import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.activity.AuctionActivity;
 import cn.com.chinau.activity.DesignerActivity;
-import cn.com.chinau.activity.HomeImageH5Activity;
 import cn.com.chinau.activity.ScanActivity;
 import cn.com.chinau.activity.SearchActivity;
 import cn.com.chinau.activity.SelfMallActivity;
 import cn.com.chinau.activity.SelfMallDetailActivity;
 import cn.com.chinau.activity.StampActivity;
+import cn.com.chinau.adapter.HomeFragmentLVAdapter;
 import cn.com.chinau.adapter.HomeGridViewAdapter;
 import cn.com.chinau.adapter.HomeViewPagerAdapter;
 import cn.com.chinau.base.BaseFragment;
@@ -50,6 +50,7 @@ import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
+import cn.com.chinau.view.NoScrollListView;
 import cn.com.chinau.view.ToTopImageView;
 import cn.com.chinau.view.WrapGridView;
 import cn.com.chinau.zxing.activity.CaptureActivity;
@@ -78,11 +79,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
     private int num = 0;//网络请求的角标
     private final static int SYSPARAM = 1;//系统参数请求成功标识
     protected static final int AUTO = 10;// 自动轮训
-    //第一个小布局的图片
-    private ImageView mFirstImage1;
-    private ImageView mFirstImage2;
-    private ImageView mFirstImage3;
-    private ImageView mFirstImage4;
+//    //第一个小布局的图片
+//    private ImageView mFirstImage1;
+//    private ImageView mFirstImage2;
+//    private ImageView mFirstImage3;
+//    private ImageView mFirstImage4;
     //第二个小布局的图片
     private ImageView mSecondImage1;
     private ImageView mSecondImage2;
@@ -107,6 +108,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
                 case StaticField.SUCCESS: // 首页数据
                     Gson gson = new Gson();
                     mHomeBean = gson.fromJson((String) msg.obj, HomeBean.class);
+                    mGroup_list = mHomeBean.getGroup_list();
                     String code = mHomeBean.getRsp_code();
                     if (code.equals("0000")) {
                         if (num == 0) {
@@ -209,6 +211,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
             }
         }
     };
+    private NoScrollListView mNoScrollLV;
+    private List<HomeBean.Group> mGroup_list;//图片那里的集合
 
 
     @Override
@@ -253,26 +257,29 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
         mGridView = (WrapGridView) mHomeView.findViewById(R.id.home_WGV);
         mScrollView = (PullToRefreshScrollView) mHomeView.findViewById(home_SV);
         mTopBtn= (ToTopImageView) mHomeView.findViewById(R.id.stamp_top_btn);// 置顶按钮
-        //三个小布局的题目
-        mFirstTitle = (TextView) mHomeView.findViewById(R.id.home_first_title);
-        mSecondTitle = (TextView) mHomeView.findViewById(R.id.home_second_title);
-        mThreeTitle = (TextView) mHomeView.findViewById(R.id.home_three_title);
-        //第一个小布局的图片
-        mFirstImage1 = (ImageView) mHomeView.findViewById(R.id.home_chinese_image1);
-        mFirstImage2 = (ImageView) mHomeView.findViewById(R.id.home_chinese_image2);
-        mFirstImage3 = (ImageView) mHomeView.findViewById(R.id.home_chinese_image3);
-        mFirstImage4 = (ImageView) mHomeView.findViewById(R.id.home_chinese_image4);
-        //第二个小布局的图片
-        mSecondImage1 = (ImageView) mHomeView.findViewById(R.id.home_classical_image1);
-        mSecondImage2 = (ImageView) mHomeView.findViewById(R.id.home_classical_image2);
-        mSecondImage3 = (ImageView) mHomeView.findViewById(R.id.home_classical_image3);
-        mSecondImage4 = (ImageView) mHomeView.findViewById(R.id.home_classical_image4);
-        //第三个小布局的图片
-        mThreeImage1 = (ImageView) mHomeView.findViewById(R.id.home_folk_image1);
-        mThreeImage2 = (ImageView) mHomeView.findViewById(R.id.home_folk_image2);
-        mThreeImage3 = (ImageView) mHomeView.findViewById(R.id.home_folk_image3);
-        mThreeImage4 = (ImageView) mHomeView.findViewById(R.id.home_folk_image4);
-        mThreeImage5 = (ImageView) mHomeView.findViewById(R.id.home_folk_image5);
+
+        mNoScrollLV = (NoScrollListView) mHomeView.findViewById(R.id.home_list);
+
+//        //三个小布局的题目
+//        mFirstTitle = (TextView) mHomeView.findViewById(R.id.home_first_title);
+//        mSecondTitle = (TextView) mHomeView.findViewById(R.id.home_second_title);
+//        mThreeTitle = (TextView) mHomeView.findViewById(R.id.home_three_title);
+//        //第一个小布局的图片
+//        mFirstImage1 = (ImageView) mHomeView.findViewById(R.id.home_chinese_image1);
+//        mFirstImage2 = (ImageView) mHomeView.findViewById(R.id.home_chinese_image2);
+//        mFirstImage3 = (ImageView) mHomeView.findViewById(R.id.home_chinese_image3);
+//        mFirstImage4 = (ImageView) mHomeView.findViewById(R.id.home_chinese_image4);
+//        //第二个小布局的图片
+//        mSecondImage1 = (ImageView) mHomeView.findViewById(R.id.home_classical_image1);
+//        mSecondImage2 = (ImageView) mHomeView.findViewById(R.id.home_classical_image2);
+//        mSecondImage3 = (ImageView) mHomeView.findViewById(R.id.home_classical_image3);
+//        mSecondImage4 = (ImageView) mHomeView.findViewById(R.id.home_classical_image4);
+//        //第三个小布局的图片
+//        mThreeImage1 = (ImageView) mHomeView.findViewById(R.id.home_folk_image1);
+//        mThreeImage2 = (ImageView) mHomeView.findViewById(R.id.home_folk_image2);
+//        mThreeImage3 = (ImageView) mHomeView.findViewById(R.id.home_folk_image3);
+//        mThreeImage4 = (ImageView) mHomeView.findViewById(R.id.home_folk_image4);
+//        mThreeImage5 = (ImageView) mHomeView.findViewById(R.id.home_folk_image5);
     }
 
 
@@ -294,7 +301,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
         mHomeVPI.setViewPager(mHomeVP);
 
         //设置标题的数据
-        setChildContent();
+//        setChildContent();
+        mNoScrollLV.setAdapter(new HomeFragmentLVAdapter(getActivity(),mGroup_list));
         //设置GridView的适配器
         setGridViewAdapter();
 
@@ -337,20 +345,20 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
         // mScrollView他里面提供了一个方法可以或得到Scrollview
         scrollView = mScrollView.getRefreshableView();
         scrollView.setOnTouchListener(this);
-        //图片的点击事件
-        mFirstImage1.setOnClickListener(this);
-        mFirstImage2.setOnClickListener(this);
-        mFirstImage3.setOnClickListener(this);
-        mFirstImage4.setOnClickListener(this);
-        mSecondImage1.setOnClickListener(this);
-        mSecondImage2.setOnClickListener(this);
-        mSecondImage3.setOnClickListener(this);
-        mSecondImage4.setOnClickListener(this);
-        mThreeImage1.setOnClickListener(this);
-        mThreeImage2.setOnClickListener(this);
-        mThreeImage3.setOnClickListener(this);
-        mThreeImage4.setOnClickListener(this);
-        mThreeImage5.setOnClickListener(this);
+//        //图片的点击事件
+//        mFirstImage1.setOnClickListener(this);
+//        mFirstImage2.setOnClickListener(this);
+//        mFirstImage3.setOnClickListener(this);
+//        mFirstImage4.setOnClickListener(this);
+//        mSecondImage1.setOnClickListener(this);
+//        mSecondImage2.setOnClickListener(this);
+//        mSecondImage3.setOnClickListener(this);
+//        mSecondImage4.setOnClickListener(this);
+//        mThreeImage1.setOnClickListener(this);
+//        mThreeImage2.setOnClickListener(this);
+//        mThreeImage3.setOnClickListener(this);
+//        mThreeImage4.setOnClickListener(this);
+//        mThreeImage5.setOnClickListener(this);
         // 上拉加载数据
         mScrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
             @Override
@@ -402,100 +410,100 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
             case R.id.home_designer://设计家按钮
                 openActivityWitchAnimation(DesignerActivity.class);
                 break;
-            //第一个View的
-            case R.id.home_chinese_image1:
-                child_list = mHomeBean.getGroup_list().get(0).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(0).getTitle());// 标题
-                bundle.putString(StaticField.HOMEURL, child_list.get(0).getH5_url()); // 显示页面的url
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            case R.id.home_chinese_image2:
-                child_list = mHomeBean.getGroup_list().get(0).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(1).getTitle());
-                bundle.putString(StaticField.HOMEURL, child_list.get(1).getH5_url());
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            case R.id.home_chinese_image3:
-                child_list = mHomeBean.getGroup_list().get(0).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(2).getTitle());
-                bundle.putString(StaticField.HOMEURL, child_list.get(2).getH5_url());
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            case R.id.home_chinese_image4:
-                child_list = mHomeBean.getGroup_list().get(0).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(3).getTitle());
-                bundle.putString(StaticField.HOMEURL, child_list.get(3).getH5_url());
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            //第二个View
-            case R.id.home_classical_image1:
-                child_list = mHomeBean.getGroup_list().get(1).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(0).getTitle());//标题
-                bundle.putString(StaticField.HOMEURL, child_list.get(0).getH5_url()); // 显示页面url
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            case R.id.home_classical_image2:
-                child_list = mHomeBean.getGroup_list().get(1).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(1).getTitle());
-                bundle.putString(StaticField.HOMEURL, child_list.get(1).getH5_url());
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            case R.id.home_classical_image3:
-                child_list = mHomeBean.getGroup_list().get(1).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(2).getTitle());
-                bundle.putString(StaticField.HOMEURL, child_list.get(2).getH5_url());
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            case R.id.home_classical_image4:
-                child_list = mHomeBean.getGroup_list().get(1).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(3).getTitle());
-                bundle.putString(StaticField.HOMEURL, child_list.get(3).getH5_url());
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            //第三个View
-            case R.id.home_folk_image1:
-                child_list = mHomeBean.getGroup_list().get(2).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(0).getTitle());
-                bundle.putString(StaticField.HOMEURL, child_list.get(0).getH5_url());
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            case R.id.home_folk_image2:
-                child_list = mHomeBean.getGroup_list().get(2).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(1).getTitle());
-                bundle.putString(StaticField.HOMEURL, child_list.get(1).getH5_url());
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            case R.id.home_folk_image3:
-                child_list = mHomeBean.getGroup_list().get(2).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(2).getTitle());
-                bundle.putString(StaticField.HOMEURL, child_list.get(2).getH5_url());
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            case R.id.home_folk_image4:
-                child_list = mHomeBean.getGroup_list().get(2).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(3).getTitle());
-                bundle.putString(StaticField.HOMEURL, child_list.get(3).getH5_url());
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
-            case R.id.home_folk_image5:
-                child_list = mHomeBean.getGroup_list().get(2).getChild_list();
-                bundle = new Bundle();
-                bundle.putString(StaticField.HOMETITLE, child_list.get(4).getTitle());
-                bundle.putString(StaticField.HOMEURL, child_list.get(4).getH5_url());
-                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
-                break;
+//            //第一个View的
+//            case R.id.home_chinese_image1:
+//                child_list = mHomeBean.getGroup_list().get(0).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(0).getTitle());// 标题
+//                bundle.putString(StaticField.HOMEURL, child_list.get(0).getH5_url()); // 显示页面的url
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            case R.id.home_chinese_image2:
+//                child_list = mHomeBean.getGroup_list().get(0).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(1).getTitle());
+//                bundle.putString(StaticField.HOMEURL, child_list.get(1).getH5_url());
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            case R.id.home_chinese_image3:
+//                child_list = mHomeBean.getGroup_list().get(0).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(2).getTitle());
+//                bundle.putString(StaticField.HOMEURL, child_list.get(2).getH5_url());
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            case R.id.home_chinese_image4:
+//                child_list = mHomeBean.getGroup_list().get(0).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(3).getTitle());
+//                bundle.putString(StaticField.HOMEURL, child_list.get(3).getH5_url());
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            //第二个View
+//            case R.id.home_classical_image1:
+//                child_list = mHomeBean.getGroup_list().get(1).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(0).getTitle());//标题
+//                bundle.putString(StaticField.HOMEURL, child_list.get(0).getH5_url()); // 显示页面url
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            case R.id.home_classical_image2:
+//                child_list = mHomeBean.getGroup_list().get(1).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(1).getTitle());
+//                bundle.putString(StaticField.HOMEURL, child_list.get(1).getH5_url());
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            case R.id.home_classical_image3:
+//                child_list = mHomeBean.getGroup_list().get(1).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(2).getTitle());
+//                bundle.putString(StaticField.HOMEURL, child_list.get(2).getH5_url());
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            case R.id.home_classical_image4:
+//                child_list = mHomeBean.getGroup_list().get(1).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(3).getTitle());
+//                bundle.putString(StaticField.HOMEURL, child_list.get(3).getH5_url());
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            //第三个View
+//            case R.id.home_folk_image1:
+//                child_list = mHomeBean.getGroup_list().get(2).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(0).getTitle());
+//                bundle.putString(StaticField.HOMEURL, child_list.get(0).getH5_url());
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            case R.id.home_folk_image2:
+//                child_list = mHomeBean.getGroup_list().get(2).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(1).getTitle());
+//                bundle.putString(StaticField.HOMEURL, child_list.get(1).getH5_url());
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            case R.id.home_folk_image3:
+//                child_list = mHomeBean.getGroup_list().get(2).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(2).getTitle());
+//                bundle.putString(StaticField.HOMEURL, child_list.get(2).getH5_url());
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            case R.id.home_folk_image4:
+//                child_list = mHomeBean.getGroup_list().get(2).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(3).getTitle());
+//                bundle.putString(StaticField.HOMEURL, child_list.get(3).getH5_url());
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
+//            case R.id.home_folk_image5:
+//                child_list = mHomeBean.getGroup_list().get(2).getChild_list();
+//                bundle = new Bundle();
+//                bundle.putString(StaticField.HOMETITLE, child_list.get(4).getTitle());
+//                bundle.putString(StaticField.HOMEURL, child_list.get(4).getH5_url());
+//                openActivityWitchAnimation(HomeImageH5Activity.class, bundle);
+//                break;
         }
     }
 
@@ -547,37 +555,37 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener ,
      * @return 标题的数组
      */
     public void setChildContent() {
-        List<HomeBean.Group> group_list = mHomeBean.getGroup_list();
-        String[] Title = new String[group_list.size()];
-        for (int i = 0; i < group_list.size(); i++) {
-            Title[i] = group_list.get(i).getGroup_name();
-        }
-        mFirstTitle.setText(Title[0]);
-        mSecondTitle.setText(Title[1]);
-        mThreeTitle.setText(Title[2]);
+//        List<HomeBean.Group> group_list = mHomeBean.getGroup_list();
+//        String[] Title = new String[group_list.size()];
+//        for (int i = 0; i < group_list.size(); i++) {
+//            Title[i] = group_list.get(i).getGroup_name();
+//        }
+//        mFirstTitle.setText(Title[0]);
+//        mSecondTitle.setText(Title[1]);
+//        mThreeTitle.setText(Title[2]);
 
-        //设置第一个View的图片
-        List<HomeBean.Child> child_list = mHomeBean.getGroup_list().get(0).getChild_list();
-//        MyLog.e(child_list.get(0).getImg_url());
-        mBitmap.display(mFirstImage1, child_list.get(0).getImg_url());
-        mBitmap.display(mFirstImage2, child_list.get(1).getImg_url());
-        mBitmap.display(mFirstImage3, child_list.get(2).getImg_url());
-        mBitmap.display(mFirstImage4, child_list.get(3).getImg_url());
-
-        //设置第二个View的图片
-        List<HomeBean.Child> child_list1 = mHomeBean.getGroup_list().get(1).getChild_list();
-        mBitmap.display(mSecondImage1, child_list1.get(0).getImg_url());
-        mBitmap.display(mSecondImage2, child_list1.get(1).getImg_url());
-        mBitmap.display(mSecondImage3, child_list1.get(2).getImg_url());
-        mBitmap.display(mSecondImage4, child_list1.get(3).getImg_url());
-
-        //设置第三个View的图片
-        List<HomeBean.Child> child_list2 = mHomeBean.getGroup_list().get(2).getChild_list();
-        mBitmap.display(mThreeImage1, child_list2.get(0).getImg_url());
-        mBitmap.display(mThreeImage2, child_list2.get(1).getImg_url());
-        mBitmap.display(mThreeImage3, child_list2.get(2).getImg_url());
-        mBitmap.display(mThreeImage4, child_list2.get(3).getImg_url());
-        mBitmap.display(mThreeImage5, child_list2.get(4).getImg_url());
+//        //设置第一个View的图片
+//        List<HomeBean.Child> child_list = mHomeBean.getGroup_list().get(0).getChild_list();
+////        MyLog.e(child_list.get(0).getImg_url());
+//        mBitmap.display(mFirstImage1, child_list.get(0).getImg_url());
+//        mBitmap.display(mFirstImage2, child_list.get(1).getImg_url());
+//        mBitmap.display(mFirstImage3, child_list.get(2).getImg_url());
+//        mBitmap.display(mFirstImage4, child_list.get(3).getImg_url());
+//
+//        //设置第二个View的图片
+//        List<HomeBean.Child> child_list1 = mHomeBean.getGroup_list().get(1).getChild_list();
+//        mBitmap.display(mSecondImage1, child_list1.get(0).getImg_url());
+//        mBitmap.display(mSecondImage2, child_list1.get(1).getImg_url());
+//        mBitmap.display(mSecondImage3, child_list1.get(2).getImg_url());
+//        mBitmap.display(mSecondImage4, child_list1.get(3).getImg_url());
+//
+//        //设置第三个View的图片
+//        List<HomeBean.Child> child_list2 = mHomeBean.getGroup_list().get(2).getChild_list();
+//        mBitmap.display(mThreeImage1, child_list2.get(0).getImg_url());
+//        mBitmap.display(mThreeImage2, child_list2.get(1).getImg_url());
+//        mBitmap.display(mThreeImage3, child_list2.get(2).getImg_url());
+//        mBitmap.display(mThreeImage4, child_list2.get(3).getImg_url());
+//        mBitmap.display(mThreeImage5, child_list2.get(4).getImg_url());
     }
 
 

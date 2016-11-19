@@ -53,7 +53,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private static String CURRENT = "logincurrent";
     private static String CURRENTTIME = "logincurrentTime";
     private SharedPreferences sp;
-    public static final String name = "stamp";
+    public static final String name = "tamp";
     public static final long GIVENTIME = 1000 * 60 * 10;// 设定时间
     private int flag = 0;// 判断是否从哪个页面来的数据
 
