@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--设计家页面-->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
-   <cn.com.chinau.view.IndexListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/designer_lv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
-</LinearLayout>
+    <cn.com.chinau.utils.pinyin.HintSideBar
+        android:id="@+id/designer_SideBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"/>
+
+</RelativeLayout>

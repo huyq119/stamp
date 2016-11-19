@@ -1,6 +1,9 @@
 package cn.com.chinau.bean;
 
+
 import java.util.ArrayList;
+
+import cn.com.chinau.utils.pinyin.Utils;
 
 /**
  * 设计家List
@@ -24,6 +27,15 @@ public class DesignerBean extends BaseBean {
         public String english_name;// 英文名称
         public String resume;//简历
         public String header_img;//头像
+
+
+//        public Designer() {
+//            headLetter = Utils.getHeadChar(english_name);
+//        }
+
+        public char getHeadLetter() {
+            return Utils.getHeadChar(english_name);
+        }
 
 
         public String getDesigner_sn() {
