@@ -95,9 +95,11 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
 //            mShopLayout.setVisibility(View.GONE); // 结算ll
 //            mShopTv.setVisibility(View.VISIBLE); // 购物车为空是显示的布局
             String sg = (String) SPUtils.get(getActivity(), StaticField.SHOPJSON, "");
-            shopNameBean = new Gson().fromJson(sg, ShopNameBean.class);
-            initAdapter();
-            initListener();
+            if(!TextUtils.isEmpty(sg)) {
+                shopNameBean = new Gson().fromJson(sg, ShopNameBean.class);
+                initAdapter();
+                initListener();
+            }
         } else {
             String sg = (String) SPUtils.get(getActivity(), StaticField.SHOPJSON, "");
             shopNameBean = new Gson().fromJson(sg, ShopNameBean.class);
