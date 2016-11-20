@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,14 +56,12 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
     private Button dialog_button_cancel, dialog_button_ok;
     private String mStamp_sn;
     private DataList mDataList;
-    private static int offsetnum = 1000; // 显示邮集条数 步长(item条目数)
 
     public GridViewAdapter(Context context, ArrayList<MyStampGridViewBean.StampList> mList, int index, BitmapUtils bitmap, boolean flag) {
         this.mList = mList;
         this.index = index;
         this.bitmap = bitmap;
         this.flag = flag;
-        MyLog.e("传入的" + flag);
         this.mLayoutInflater = LayoutInflater.from(context);
         PagerNum = context.getResources().getInteger(R.integer.PagerCount) * 2;
 
@@ -260,8 +259,6 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
                     String code = mBaseBean.getRsp_code();
                     String msg1 = mBaseBean.getRsp_msg();
                     if (code.equals("0000")) {
-
-
                         GetInitNet(num); // 我的邮集列表网络请求
                     } else if (code.equals("1002")) {
                         MyToast.showShort(mLayoutInflater.getContext(), msg1);
@@ -273,13 +270,13 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
                     MyStampGridViewBean mOrderSweepBean = gson1.fromJson(msge, MyStampGridViewBean.class);
                     String mRsp_code = mOrderSweepBean.getRsp_code();
                     if (mRsp_code.equals("0000")) {
-                        mList = mOrderSweepBean.getStamp_list();
+                        ArrayList<MyStampGridViewBean.StampList> stamp_list = mOrderSweepBean.getStamp_list();
                         String mTotalPrice = mOrderSweepBean.getTotal_amount();// 总资产
-                        MyLog.LogShitou("/=====邮集条数", mList.size() + "");
-                        if (mList != null && mTotalPrice != null) {
+                        MyLog.LogShitou("/=====邮集条数", stamp_list.size() + "");
+                        if (stamp_list != null && mTotalPrice != null) {
 //                        if (mDataList != null) {
-                            MyLog.LogShitou("================",mList.toString()+"/==/"+mTotalPrice+"/===/"+mDataList);
-                            mDataList.GetDataList(mList, mTotalPrice);// 定义接口调用
+                            MyLog.LogShitou("================", stamp_list.toString() + "/==/" + mTotalPrice + "/===/" + mDataList);
+                            mDataList.GetDataList(stamp_list, mTotalPrice);// 定义接口调用
                         }
                     }
                     break;
@@ -291,13 +288,13 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
                     String msg2 = mBaseBean1.getRsp_msg();
                     if (code1.equals("0000")) {
                         notifyDataSetChanged();// 刷新适配器
+                        Log.e("我的滑板鞋","成功");
                         // 修改成功后，再次请求邮集列表数据，以便刷新邮集总资产
-                        GetInitNet(num); // 我的邮集列表网络请求
+//                        GetInitNet(num); // 我的邮集列表网络请求
 //                        MyToast.showShort(mLayoutInflater.getContext(), msg2);
                     } else if (code1.equals("1002")) {
                         MyToast.showShort(mLayoutInflater.getContext(), msg2);
                     }
-
                     break;
                 default:
                     break;
@@ -362,7 +359,8 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
                 params.put(StaticField.CURRENT_INDEX, String.valueOf(num)); // 当前记录索引
-                params.put(StaticField.OFFSET, String.valueOf(offsetnum)); // 步长(item条目数)
+
+                params.put(StaticField.OFFSET, String.valueOf(Integer.MAX_VALUE)); // 步长(item条目数)
 
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
@@ -381,5 +379,15 @@ public class GridViewAdapter extends BaseAdapter implements View.OnClickListener
 
             }
         });
+    }
+
+
+    /**
+     * 根据标记传入的标记设置刷新数据
+     * @param flag
+     */
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+        notifyDataSetChanged();
     }
 }
