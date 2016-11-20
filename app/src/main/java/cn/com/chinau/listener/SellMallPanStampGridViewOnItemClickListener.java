@@ -13,6 +13,7 @@ public class SellMallPanStampGridViewOnItemClickListener implements AdapterView.
     private int position;
     private SelfMallPanStampGridViewAdapter adapter;
     private SelfMallItemClick mSelfMallItemClick;
+    private StampItemClick mStampItemClick;
 
 
     public SellMallPanStampGridViewOnItemClickListener(int position, SelfMallPanStampGridViewAdapter adapter) {
@@ -32,7 +33,18 @@ public class SellMallPanStampGridViewOnItemClickListener implements AdapterView.
             adapter.notifyDataSetChanged();
         }
         //TODO 这里写个回调,这里是改变的数据
-        mSelfMallItemClick.GetClickItem();
+        if (mSelfMallItemClick != null)
+            mSelfMallItemClick.GetClickItem();
+        if (mStampItemClick != null)
+            mStampItemClick.GetClickItem(adapter);
+    }
+
+    public interface StampItemClick {
+        void GetClickItem(SelfMallPanStampGridViewAdapter adapter);
+    }
+
+    public void setStampItemClick(StampItemClick stampItemClick) {
+        mStampItemClick = stampItemClick;
     }
 
     /**
@@ -41,6 +53,7 @@ public class SellMallPanStampGridViewOnItemClickListener implements AdapterView.
     public interface SelfMallItemClick {
         void GetClickItem();
     }
+
     public void setSelfMallItemClick(SelfMallItemClick selfMallItemClick) {
         mSelfMallItemClick = selfMallItemClick;
     }

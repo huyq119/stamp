@@ -25,17 +25,21 @@ import cn.com.chinau.view.NoScrollGridView;
 /**
  * 淘邮票筛选（邮市）Fragment
  */
-public class StampFilterFragment extends BaseDialogFragment implements SellMallPanStampGridViewOnItemClickListener.SelfMallItemClick {
+public class StampFilterFragment extends BaseDialogFragment implements SellMallPanStampGridViewOnItemClickListener.StampItemClick {
 
 
     private int Current = -1;//当前选择的年代角标
     private View mStampView;
     private String mData;
     private TextView mNewChinese, mQingMin, mTheme, mOther;
-    private SellMallPanStampGridViewOnItemClickListener mNewChineseListener, mQingMinListener, getmThemeListener, mThemeListener, mOtherListener;
+    private SellMallPanStampGridViewOnItemClickListener mNewChineseListener, mQingMinListener, mThemeListener, mOtherListener;
     private ArrayList<CategoryBean.Category.SubCategory> subCategory1;
     private SharedPreferences sp;
     private String[] mChinese, mQingMins, mThemes, mOthers, mChineseValue, mQingminValue, mThemeValue, mOtherValue;
+    private SelfMallPanStampGridViewAdapter mMNewChineseAdapter;
+    private SelfMallPanStampGridViewAdapter mMQingMinAdapter;
+    private SelfMallPanStampGridViewAdapter mMThemeAdapter;
+    private SelfMallPanStampGridViewAdapter mMOtherAdapter;
 
 
     public StampFilterFragment() {
@@ -136,40 +140,40 @@ public class StampFilterFragment extends BaseDialogFragment implements SellMallP
         NoScrollGridView mOtherGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_other);
 
         //创建适配器
-        SelfMallPanStampGridViewAdapter mNewChineseAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mChinese);
-        SelfMallPanStampGridViewAdapter mQingMinAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mQingMins);
-        SelfMallPanStampGridViewAdapter mThemeAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mThemes);
-        SelfMallPanStampGridViewAdapter mOtherAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mOthers);
+        mMNewChineseAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mChinese);
+        mMQingMinAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mQingMins);
+        mMThemeAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mThemes);
+        mMOtherAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mOthers);
 
         //设置适配器
-        mNewChineseGV.setAdapter(mNewChineseAdapter);
-        mQingMinGV.setAdapter(mQingMinAdapter);
-        mThemeGV.setAdapter(mThemeAdapter);
-        mOtherGV.setAdapter(mOtherAdapter);
+        mNewChineseGV.setAdapter(mMNewChineseAdapter);
+        mQingMinGV.setAdapter(mMQingMinAdapter);
+        mThemeGV.setAdapter(mMThemeAdapter);
+        mOtherGV.setAdapter(mMOtherAdapter);
 
         //设置监听
         //新中国的监听
-        mNewChineseListener = new SellMallPanStampGridViewOnItemClickListener(Current, mNewChineseAdapter);
-        mNewChineseListener.setSelfMallItemClick(this);
+        mNewChineseListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMNewChineseAdapter);
+        mNewChineseListener.setStampItemClick(this);
         mNewChineseGV.setOnItemClickListener(mNewChineseListener);
         //清民的监听
-        mQingMinListener = new SellMallPanStampGridViewOnItemClickListener(Current, mQingMinAdapter);
-        mQingMinListener.setSelfMallItemClick(this);
+        mQingMinListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMQingMinAdapter);
+        mQingMinListener.setStampItemClick(this);
         mQingMinGV.setOnItemClickListener(mQingMinListener);
         //题材的监听
-        mThemeListener = new SellMallPanStampGridViewOnItemClickListener(Current, mThemeAdapter);
-        mThemeListener.setSelfMallItemClick(this);
+        mThemeListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMThemeAdapter);
+        mThemeListener.setStampItemClick(this);
         mThemeGV.setOnItemClickListener(mThemeListener);
         //其他的监听
-        mOtherListener = new SellMallPanStampGridViewOnItemClickListener(Current, mOtherAdapter);
-        mOtherListener.setSelfMallItemClick(this);
+        mOtherListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMOtherAdapter);
+        mOtherListener.setStampItemClick(this);
         mOtherGV.setOnItemClickListener(mOtherListener);
 
         SelfMallPanStampFilterDialog selfMallPanStampFilterDialog = (SelfMallPanStampFilterDialog) getParentFragment();
         selfMallPanStampFilterDialog.setClickReset(new SelfMallPanStampFilterDialog.ClickReset() {
             @Override
             public void setReset() {
-                MyLog.LogShitou("===========点击了重置按钮","=======================重置按钮");
+                MyLog.LogShitou("===========点击了重置按钮", "=======================重置按钮");
                 mNewChineseListener.setPosition();
                 mQingMinListener.setPosition();
                 mThemeListener.setPosition();
@@ -179,7 +183,26 @@ public class StampFilterFragment extends BaseDialogFragment implements SellMallP
     }
 
     @Override
-    public void GetClickItem() {
+    public void GetClickItem(SelfMallPanStampGridViewAdapter adapter) {
+        if (adapter == mMNewChineseAdapter) {
+            mQingMinListener.setPosition();
+            mThemeListener.setPosition();
+            mOtherListener.setPosition();
+        } else if (adapter == mMQingMinAdapter) {
+            mNewChineseListener.setPosition();
+            mThemeListener.setPosition();
+            mOtherListener.setPosition();
+        } else if (adapter == mMThemeAdapter) {
+            mNewChineseListener.setPosition();
+            mQingMinListener.setPosition();
+            mOtherListener.setPosition();
+        } else {
+            mNewChineseListener.setPosition();
+            mQingMinListener.setPosition();
+            mThemeListener.setPosition();
+        }
+
+
         int chineseNum = mNewChineseListener.getPosition();
         int qingminNum = mQingMinListener.getPosition();
         int themeNum = mThemeListener.getPosition();
@@ -192,31 +215,31 @@ public class StampFilterFragment extends BaseDialogFragment implements SellMallP
         String theme = (themeNum == -1) ? "" : mThemeValue[themeNum];
         String other = (otherNum == -1) ? "" : mOtherValue[otherNum];
 
-        if(chineseNum !=-1){
-//            mNewChineseListener.setPosition();
-            mQingMinListener.setPosition();
-            mThemeListener.setPosition();
-            mOtherListener.setPosition();
-
-        }
-        if(qingminNum !=-1){
-            mNewChineseListener.setPosition();
+//        if (chineseNum != -1) {
+////            mNewChineseListener.setPosition();
 //            mQingMinListener.setPosition();
-            mThemeListener.setPosition();
-            mOtherListener.setPosition();
-        }
-        if(themeNum !=-1){
-            mNewChineseListener.setPosition();
-            mQingMinListener.setPosition();
 //            mThemeListener.setPosition();
-            mOtherListener.setPosition();
-        }
-        if(otherNum !=-1){
-            mNewChineseListener.setPosition();
-            mQingMinListener.setPosition();
-            mThemeListener.setPosition();
 //            mOtherListener.setPosition();
-        }
+//
+//        }
+//        if (qingminNum != -1) {
+//            mNewChineseListener.setPosition();
+////            mQingMinListener.setPosition();
+//            mThemeListener.setPosition();
+//            mOtherListener.setPosition();
+//        }
+//        if (themeNum != -1) {
+//            mNewChineseListener.setPosition();
+//            mQingMinListener.setPosition();
+////            mThemeListener.setPosition();
+//            mOtherListener.setPosition();
+//        }
+//        if (otherNum != -1) {
+//            mNewChineseListener.setPosition();
+//            mQingMinListener.setPosition();
+//            mThemeListener.setPosition();
+////            mOtherListener.setPosition();
+//        }
 
 
         mData = chinese + "," + qingmin + "," + theme + "," + other;

@@ -25,7 +25,7 @@ import cn.com.chinau.view.NoScrollGridView;
 /**
  * 淘邮票筛选（竞拍）Fragment
  */
-public class AuctionFilterFragment extends BaseDialogFragment implements SellMallPanStampGridViewOnItemClickListener.SelfMallItemClick{
+public class AuctionFilterFragment extends BaseDialogFragment implements SellMallPanStampGridViewOnItemClickListener.StampItemClick {
 
     private View mAuctionView;
     private int Current = -1;//当前选择的年代角标
@@ -36,6 +36,11 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
     private SharedPreferences sp;
     private ArrayList<CategoryBean.Category.SubCategory> subCategory1;
     private String[] mChinese, mQingMins, mWaiguos, mAllClasss, mChineseValue, mQingminValue, mWaiGuoValue, mAllClassValue;
+
+    private SelfMallPanStampGridViewAdapter mMNewChineseAdapter;
+    private SelfMallPanStampGridViewAdapter mMQingMinAdapter;
+    private SelfMallPanStampGridViewAdapter mMWaiGuoAdapter;
+    private SelfMallPanStampGridViewAdapter mMAllClassAdapter;
 
 
     public AuctionFilterFragment() {
@@ -140,33 +145,33 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
         NoScrollGridView mAllClassGV = (NoScrollGridView) mAuctionView.findViewById(R.id.auction_pop_allClass);
 
         //创建适配器
-        SelfMallPanStampGridViewAdapter mNewChineseAdapter =  new SelfMallPanStampGridViewAdapter(getActivity(), mChinese);
-        SelfMallPanStampGridViewAdapter mQingMinAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mQingMins);
-        SelfMallPanStampGridViewAdapter mWaiGuoAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mWaiguos);
-        SelfMallPanStampGridViewAdapter mAllClassAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mAllClasss);
+        mMNewChineseAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mChinese);
+        mMQingMinAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mQingMins);
+        mMWaiGuoAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mWaiguos);
+        mMAllClassAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mAllClasss);
 
         //设置适配器
-        mNewChinesGV.setAdapter(mNewChineseAdapter);
-        mQingMinGV.setAdapter(mQingMinAdapter);
-        mWaiGuoGV.setAdapter(mWaiGuoAdapter);
-        mAllClassGV.setAdapter(mAllClassAdapter);
+        mNewChinesGV.setAdapter(mMNewChineseAdapter);
+        mQingMinGV.setAdapter(mMQingMinAdapter);
+        mWaiGuoGV.setAdapter(mMWaiGuoAdapter);
+        mAllClassGV.setAdapter(mMAllClassAdapter);
 
         //设置监听
-        //竞品邮集的监听
-        mGoodsListener = new SellMallPanStampGridViewOnItemClickListener(Current, mNewChineseAdapter);
-        mGoodsListener.setSelfMallItemClick(this);
+        //新中国邮票
+        mGoodsListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMNewChineseAdapter);
+        mGoodsListener.setStampItemClick(this);
         mNewChinesGV.setOnItemClickListener(mGoodsListener);
-        //贵金属邮票的监听
-        mMetalListener = new SellMallPanStampGridViewOnItemClickListener(Current, mQingMinAdapter);
-        mMetalListener.setSelfMallItemClick(this);
+        //清民邮票
+        mMetalListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMQingMinAdapter);
+        mMetalListener.setStampItemClick(this);
         mQingMinGV.setOnItemClickListener(mMetalListener);
-        //邮品的监听
-        mItemsListener = new SellMallPanStampGridViewOnItemClickListener(Current, mWaiGuoAdapter);
-        mItemsListener.setSelfMallItemClick(this);
+        //外国邮票监听
+        mItemsListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMWaiGuoAdapter);
+        mItemsListener.setStampItemClick(this);
         mWaiGuoGV.setOnItemClickListener(mItemsListener);
-        //品牌的监听
-        mBrandListener = new SellMallPanStampGridViewOnItemClickListener(Current, mAllClassAdapter);
-        mBrandListener.setSelfMallItemClick(this);
+        //其他邮票
+        mBrandListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMAllClassAdapter);
+        mBrandListener.setStampItemClick(this);
         mAllClassGV.setOnItemClickListener(mBrandListener);
 
         SelfMallPanStampFilterDialog selfMallPanStampFilterDialog = (SelfMallPanStampFilterDialog) getParentFragment();
@@ -183,13 +188,34 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
     }
 
     @Override
-    public void GetClickItem() {
+    public void GetClickItem(SelfMallPanStampGridViewAdapter adapter) {
+        if (adapter == mMNewChineseAdapter) {
+//            mGoodsListener.setPosition();
+            mItemsListener.setPosition();
+            mMetalListener.setPosition();
+            mBrandListener.setPosition();
+        } else if (adapter == mMQingMinAdapter) {
+            mGoodsListener.setPosition();
+            mItemsListener.setPosition();
+//            mMetalListener.setPosition();
+            mBrandListener.setPosition();
+        } else if (adapter == mMWaiGuoAdapter) {
+            mGoodsListener.setPosition();
+//            mItemsListener.setPosition();
+            mMetalListener.setPosition();
+            mBrandListener.setPosition();
+        } else {
+            mGoodsListener.setPosition();
+            mItemsListener.setPosition();
+            mMetalListener.setPosition();
+//            mBrandListener.setPosition();
+        }
+
         int GoodsNum = mGoodsListener.getPosition();
         int MetalNum = mMetalListener.getPosition();
         int ItemsNum = mItemsListener.getPosition();
         int BrandNum = mBrandListener.getPosition();
         MyLog.e(GoodsNum + "-" + MetalNum + "-" + ItemsNum+"-"+BrandNum);
-
 
         String Goods = (GoodsNum == -1) ? "" : mChineseValue[GoodsNum];
         String Metal = (MetalNum == -1) ? "" : mQingminValue[MetalNum];
@@ -209,5 +235,6 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
     public void setData(String data) {
         mData = data;
     }
+
 
 }
