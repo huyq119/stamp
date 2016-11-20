@@ -198,7 +198,7 @@ public class HomeFragmentLVAdapter extends BaseAdapter implements View.OnClickLi
     }
 
     private class YellowHolder {
-        private TextView FirstTitle;
+        private TextView FirstTitle;//第一个标题
         //第一个小布局的图片
         private ImageView FirstImage1;
         private ImageView FirstImage2;
@@ -352,7 +352,9 @@ public class HomeFragmentLVAdapter extends BaseAdapter implements View.OnClickLi
         }
         mContext.startActivity(intent);
         //跳转动画
-//        (MainActivity) mContext.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+//        (getActivity) mContext.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
+
+
 
 }

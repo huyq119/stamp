@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -18,28 +19,25 @@ import cn.com.chinau.adapter.SelfMallPanStampGridViewAdapter;
 import cn.com.chinau.base.BaseDialogFragment;
 import cn.com.chinau.bean.CategoryBean;
 import cn.com.chinau.dialog.SelfMallPanStampFilterDialog;
-import cn.com.chinau.listener.SellMallPanStampGridViewOnItemClickListener;
+import cn.com.chinau.listener.AuctionStampGridViewOnItemClickListener;
 import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.view.NoScrollGridView;
 
 /**
  * 淘邮票筛选（邮市）Fragment
  */
-public class StampFilterFragment extends BaseDialogFragment implements SellMallPanStampGridViewOnItemClickListener.StampItemClick {
+public class StampFilterFragment extends BaseDialogFragment{
 
 
     private int Current = -1;//当前选择的年代角标
     private View mStampView;
     private String mData;
     private TextView mNewChinese, mQingMin, mTheme, mOther;
-    private SellMallPanStampGridViewOnItemClickListener mNewChineseListener, mQingMinListener, mThemeListener, mOtherListener;
+    private AuctionStampGridViewOnItemClickListener mNewChineseListener, mQingMinListener, getmThemeListener, mThemeListener, mOtherListener;
     private ArrayList<CategoryBean.Category.SubCategory> subCategory1;
     private SharedPreferences sp;
     private String[] mChinese, mQingMins, mThemes, mOthers, mChineseValue, mQingminValue, mThemeValue, mOtherValue;
-    private SelfMallPanStampGridViewAdapter mMNewChineseAdapter;
-    private SelfMallPanStampGridViewAdapter mMQingMinAdapter;
-    private SelfMallPanStampGridViewAdapter mMThemeAdapter;
-    private SelfMallPanStampGridViewAdapter mMOtherAdapter;
+    private NoScrollGridView mNewChineseGV,mQingMinGV,mThemeGV,mOtherGV;
 
 
     public StampFilterFragment() {
@@ -125,128 +123,220 @@ public class StampFilterFragment extends BaseDialogFragment implements SellMallP
         }
     }
 
-
     /**
      * 设置PopupWindow页面的数据
      */
     private void setPopupWindowData() {
         //新中国GridView
-        NoScrollGridView mNewChineseGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_newchinese);
+        mNewChineseGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_newchinese);
         //清民区GridView
-        NoScrollGridView mQingMinGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_qingmin);
+         mQingMinGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_qingmin);
         //主题GridView
-        NoScrollGridView mThemeGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_theme);
+         mThemeGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_theme);
         //其他GridView
-        NoScrollGridView mOtherGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_other);
+         mOtherGV = (NoScrollGridView) mStampView.findViewById(R.id.stamp_pop_other);
 
         //创建适配器
-        mMNewChineseAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mChinese);
-        mMQingMinAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mQingMins);
-        mMThemeAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mThemes);
-        mMOtherAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mOthers);
+        SelfMallPanStampGridViewAdapter mNewChineseAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mChinese);
+        SelfMallPanStampGridViewAdapter mQingMinAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mQingMins);
+        SelfMallPanStampGridViewAdapter mThemeAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mThemes);
+        SelfMallPanStampGridViewAdapter mOtherAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mOthers);
 
         //设置适配器
-        mNewChineseGV.setAdapter(mMNewChineseAdapter);
-        mQingMinGV.setAdapter(mMQingMinAdapter);
-        mThemeGV.setAdapter(mMThemeAdapter);
-        mOtherGV.setAdapter(mMOtherAdapter);
+        mNewChineseGV.setAdapter(mNewChineseAdapter);
+        mQingMinGV.setAdapter(mQingMinAdapter);
+        mThemeGV.setAdapter(mThemeAdapter);
+        mOtherGV.setAdapter(mOtherAdapter);
+
+// =============GridView条目监听
+
+        // 新中国
+        mNewChineseGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mNewChineseListener.getPosition();
+                mQingMinListener.setPosition();
+                mThemeListener.setPosition();
+                mOtherListener.setPosition();
+
+            }
+        });
+
+        // 清明
+        mQingMinGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mNewChineseListener.setPosition();
+                mQingMinListener.getPosition();
+                mThemeListener.setPosition();
+                mOtherListener.setPosition();
+            }
+        });
+
+        // 主题
+        mThemeGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mNewChineseListener.setPosition();
+                mQingMinListener.setPosition();
+                mThemeListener.getPosition();
+                mOtherListener.setPosition();
+            }
+        });
+
+        // 其他
+        mOtherGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mNewChineseListener.setPosition();
+                mQingMinListener.setPosition();
+                mThemeListener.setPosition();
+                mThemeListener.getPosition();
+            }
+        });
+
 
         //设置监听
         //新中国的监听
-        mNewChineseListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMNewChineseAdapter);
-        mNewChineseListener.setStampItemClick(this);
-        mNewChineseGV.setOnItemClickListener(mNewChineseListener);
-        //清民的监听
-        mQingMinListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMQingMinAdapter);
-        mQingMinListener.setStampItemClick(this);
-        mQingMinGV.setOnItemClickListener(mQingMinListener);
-        //题材的监听
-        mThemeListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMThemeAdapter);
-        mThemeListener.setStampItemClick(this);
-        mThemeGV.setOnItemClickListener(mThemeListener);
-        //其他的监听
-        mOtherListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMOtherAdapter);
-        mOtherListener.setStampItemClick(this);
-        mOtherGV.setOnItemClickListener(mOtherListener);
+//        mNewChineseListener = new AuctionStampGridViewOnItemClickListener(Current, mNewChineseAdapter);
+//        mNewChineseListener.setSelfMallItemClick(this);
+//        mNewChineseGV.setOnItemClickListener(mNewChineseListener);
+//        //清民的监听
+//        mQingMinListener = new AuctionStampGridViewOnItemClickListener(Current, mQingMinAdapter);
+//        mQingMinListener.setSelfMallItemClick(this);
+//        mQingMinGV.setOnItemClickListener(mQingMinListener);
+//        //题材的监听
+//        mThemeListener = new AuctionStampGridViewOnItemClickListener(Current, mThemeAdapter);
+//        mThemeListener.setSelfMallItemClick(this);
+//        mThemeGV.setOnItemClickListener(mThemeListener);
+//        //其他的监听
+//        mOtherListener = new AuctionStampGridViewOnItemClickListener(Current, mOtherAdapter);
+//        mOtherListener.setSelfMallItemClick(this);
+//        mOtherGV.setOnItemClickListener(mOtherListener);
 
         SelfMallPanStampFilterDialog selfMallPanStampFilterDialog = (SelfMallPanStampFilterDialog) getParentFragment();
         selfMallPanStampFilterDialog.setClickReset(new SelfMallPanStampFilterDialog.ClickReset() {
             @Override
             public void setReset() {
-                MyLog.LogShitou("===========点击了重置按钮", "=======================重置按钮");
+                MyLog.LogShitou("===========点击了重置按钮","=======================重置按钮");
                 mNewChineseListener.setPosition();
                 mQingMinListener.setPosition();
                 mThemeListener.setPosition();
                 mOtherListener.setPosition();
             }
         });
+
+//        // 条目监听
+//        // 新中国
+//        mNewChineseGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+////               mNewChineseListener.getPosition();
+//                mQingMinListener.setPosition();
+//                mThemeListener.setPosition();
+//                mOtherListener.setPosition();
+//            }
+//        });
+//
+//        // 清明
+//        mQingMinGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                mNewChineseListener.setPosition();
+////                mQingMinListener.getPosition();
+//                mThemeListener.setPosition();
+//                mOtherListener.setPosition();
+//            }
+//        });
+//
+//        // 主题
+//        mThemeGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                mNewChineseListener.setPosition();
+//                mQingMinListener.setPosition();
+////                mThemeListener.getPosition();
+//                mOtherListener.setPosition();
+//            }
+//        });
+//
+//        // 其他
+//        mOtherGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                mNewChineseListener.setPosition();
+//                mQingMinListener.setPosition();
+//                mThemeListener.setPosition();
+////                mThemeListener.getPosition();
+//            }
+//        });
     }
 
-    @Override
-    public void GetClickItem(SelfMallPanStampGridViewAdapter adapter) {
-        if (adapter == mMNewChineseAdapter) {
-            mQingMinListener.setPosition();
-            mThemeListener.setPosition();
-            mOtherListener.setPosition();
-        } else if (adapter == mMQingMinAdapter) {
-            mNewChineseListener.setPosition();
-            mThemeListener.setPosition();
-            mOtherListener.setPosition();
-        } else if (adapter == mMThemeAdapter) {
-            mNewChineseListener.setPosition();
-            mQingMinListener.setPosition();
-            mOtherListener.setPosition();
-        } else {
-            mNewChineseListener.setPosition();
-            mQingMinListener.setPosition();
-            mThemeListener.setPosition();
-        }
-
-
+    /*@Override
+    public void GetClickItem() {
         int chineseNum = mNewChineseListener.getPosition();
         int qingminNum = mQingMinListener.getPosition();
         int themeNum = mThemeListener.getPosition();
         int otherNum = mOtherListener.getPosition();
         MyLog.e(chineseNum + "-" + qingminNum + "-" + themeNum + "-" + otherNum);
 
-
         String chinese = (chineseNum == -1) ? "" : mChineseValue[chineseNum];
         String qingmin = (qingminNum == -1) ? "" : mQingminValue[qingminNum];
         String theme = (themeNum == -1) ? "" : mThemeValue[themeNum];
         String other = (otherNum == -1) ? "" : mOtherValue[otherNum];
 
-//        if (chineseNum != -1) {
-////            mNewChineseListener.setPosition();
-//            mQingMinListener.setPosition();
-//            mThemeListener.setPosition();
-//            mOtherListener.setPosition();
-//
-//        }
-//        if (qingminNum != -1) {
-//            mNewChineseListener.setPosition();
-////            mQingMinListener.setPosition();
-//            mThemeListener.setPosition();
-//            mOtherListener.setPosition();
-//        }
-//        if (themeNum != -1) {
-//            mNewChineseListener.setPosition();
-//            mQingMinListener.setPosition();
-////            mThemeListener.setPosition();
-//            mOtherListener.setPosition();
-//        }
-//        if (otherNum != -1) {
-//            mNewChineseListener.setPosition();
-//            mQingMinListener.setPosition();
-//            mThemeListener.setPosition();
-////            mOtherListener.setPosition();
-//        }
+        // =============GridView条目监听
 
+        // 新中国
+        mNewChineseGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mNewChineseListener.getPosition();
+                mQingMinListener.setPosition();
+                mThemeListener.setPosition();
+                mOtherListener.setPosition();
+
+            }
+        });
+
+        // 清明
+        mQingMinGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mNewChineseListener.setPosition();
+                mQingMinListener.getPosition();
+                mThemeListener.setPosition();
+                mOtherListener.setPosition();
+            }
+        });
+
+        // 主题
+        mThemeGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mNewChineseListener.setPosition();
+                mQingMinListener.setPosition();
+                mThemeListener.getPosition();
+                mOtherListener.setPosition();
+            }
+        });
+
+        // 其他
+        mOtherGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mNewChineseListener.setPosition();
+                mQingMinListener.setPosition();
+                mThemeListener.setPosition();
+                mThemeListener.getPosition();
+            }
+        });
 
         mData = chinese + "," + qingmin + "," + theme + "," + other;
         setData(mData);
         MyLog.e("点击了啥002--->" + mData);
 
-    }
+    }*/
 
     public String getData() {
         return mData;

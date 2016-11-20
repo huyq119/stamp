@@ -39,6 +39,7 @@ import cn.com.chinau.dialog.SussessDialog;
 import cn.com.chinau.http.HttpUtils;
 import cn.com.chinau.utils.Encrypt;
 import cn.com.chinau.utils.MyHandler;
+import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.SPUtils;
 import cn.com.chinau.utils.SortUtils;
@@ -132,7 +133,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     public View CreateSuccess() {
         myContentView = View.inflate(getActivity(), R.layout.fragment_my_content, null);
         sp = getActivity().getSharedPreferences(StaticField.NAME, Context.MODE_PRIVATE);
-        Log.e("跳转后的--->", mToken + "-->" + mUser_id + "-->" + phone);
+       MyLog.LogShitou("CreateSuccess跳转后的", mToken + "-->" + mUser_id + "-->" + phone);
         initView();
         judgeView();// 判断view的方法(判断页面是否显示)
         initListener();
@@ -147,7 +148,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         mUser_id = sp.getString("userId", "");
         phone = sp.getString("phone", "");
 
-        Log.e("跳转后的--->", mToken + "-->" + mUser_id + "-->" + phone);
+        Log.e("=======initView跳转后的", mToken + "-->" + mUser_id + "-->" + phone);
         mLogin = (LinearLayout) myContentView.findViewById(R.id.my_login);
         mPhone = (TextView) myContentView.findViewById(R.id.my_phone);
         mNoLogin = (LinearLayout) myContentView.findViewById(R.id.my_noLogin);

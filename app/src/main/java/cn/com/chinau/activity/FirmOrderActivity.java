@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +99,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private boolean isChild;
     private String mPrice, mCount, mSellerList;// 价钱，数量
     //    private String groupSet;
-    private HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
+    private Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
     private String groupSet1;
     private String mRequestId,mOrder_price;
     private String mPayUrl;
@@ -207,8 +208,9 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 //        returnStr="{"+returnStr+"}}";
 //        MyLog.LogShitou("传过来选中的编号+数量", returnStr);
             groupSet = MyApplication.getGroupSet();// 传过来的集合数据
+
             if (groupSet != null) {
-                for (HashMap.Entry<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
+                for (HashMap.Entry<String, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
 //            key = entry.getKey();
                     Set<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
                     for (int i = 0; i < value.size(); i++) {
@@ -312,12 +314,14 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             FirmOrderExpandableAdapter expandableAdapter = new FirmOrderExpandableAdapter(this, mBitmap, groupSet);
             mListView.setAdapter(expandableAdapter);
             expandableAdapter.notifyDataSetChanged();
+
             //让子控件全部展开
 //        for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
 //            mListView.expandGroup(i);
 //        }
 //        //去掉自带按钮
 //        mListView.setGroupIndicator(null);
+
         }
     }
 

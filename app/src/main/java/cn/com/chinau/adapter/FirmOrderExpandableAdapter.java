@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.lidroid.xutils.BitmapUtils;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 import cn.com.chinau.R;
@@ -18,12 +19,12 @@ import cn.com.chinau.utils.MyLog;
  */
 public class FirmOrderExpandableAdapter extends BaseAdapter {
     //    private ShopNameBean shopNameBean;
-    private HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
+    private Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
     private Context context;
     private BitmapUtils bitmap;
     private String goods_count,goods_img,goods_name,goods_price;
     private Set<ShopNameBean.SellerBean.GoodsBean> goodsBeen;
-    public FirmOrderExpandableAdapter(Context context, BitmapUtils bitmap,HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet) {
+    public FirmOrderExpandableAdapter(Context context, BitmapUtils bitmap,Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet) {
         this.groupSet = groupSet;
         this.context = context;
         this.bitmap = bitmap;
@@ -68,7 +69,7 @@ public class FirmOrderExpandableAdapter extends BaseAdapter {
 //        itemHolder.mPrice.setText("￥"+goods_price);
 //        bitmap.display(itemHolder.mImg, goods_img);
         // 循环出组件数据
-        for (HashMap.Entry<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
+        for (HashMap.Entry<String, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
             Set<ShopNameBean.SellerBean.GoodsBean>  value = entry.getValue(); // 拿到循环后的value值
             for (int i = 0; i < value.size(); i++) {
                 Iterator<ShopNameBean.SellerBean.GoodsBean> iterator = value.iterator();

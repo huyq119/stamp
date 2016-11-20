@@ -59,7 +59,7 @@ public class OrderBuyBackActivity extends BaseActivity implements View.OnClickLi
                     String mRsp_code = mOrderSweepBean.getRsp_code();
                     if (mRsp_code.equals("0000")) {
                         mList = mOrderSweepBean.getOrder_list();
-                        if (mList != null && mList.size() != 0) {
+                        if (mList != null ) {
                             mOederListview.setVisibility(View.VISIBLE);
                             initAdapter();
                         }else {

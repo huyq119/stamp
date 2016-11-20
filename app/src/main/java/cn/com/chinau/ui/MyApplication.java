@@ -16,7 +16,7 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Set;
 
 import cn.com.chinau.StaticField;
@@ -34,8 +34,10 @@ public class MyApplication extends Application {
     private static MyApplication application = new MyApplication();
     private static int MainID;// 主线程的id
     private static Handler handler;// 获取主线程的handler
-    private static HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
+//    private static Hashtable<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
     private IWXAPI api;
+
+    private static Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
 
     public MyApplication() {
     }
@@ -59,6 +61,10 @@ public class MyApplication extends Application {
         SharedPreferences sp = getSharedPreferences("stamp", MODE_PRIVATE);
         sp.edit().putBoolean("isSetup", true).commit();
         SPUtils.put(this, StaticField.SHOPJSON, new Gson().toJson(new ShopNameBean()));
+
+
+//        GoodsHashtable = new Hashtable<>();
+//        childGoodsBean = new ArrayList<>();
     }
 
     // 注册友盟微信分享的AppId,AppSecret值
@@ -86,11 +92,13 @@ public class MyApplication extends Application {
         sp.edit().putBoolean("isSetup", true).commit();
     }
 
-    public static HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> getGroupSet() {
+    public static Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> getGroupSet() {
         return groupSet;
     }
 
-    public static void setGroupSet(HashMap<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet) {
+    public static void setGroupSet(Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet) {
         MyApplication.groupSet = groupSet;
     }
+
+
 }

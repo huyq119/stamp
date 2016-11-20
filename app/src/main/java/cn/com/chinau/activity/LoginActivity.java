@@ -176,7 +176,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public View CreateSuccess() {
         mLoginContent = View.inflate(this, R.layout.activity_login_content, null);
-        sp = getSharedPreferences(name, MODE_PRIVATE);
+        sp = getSharedPreferences(StaticField.NAME, MODE_PRIVATE);
         getLogInIntent();
         initView();
         initListener();
@@ -388,6 +388,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     sp.edit().putString("phone", mAccount).commit();
                     sp.edit().putString("token", mLogRegBean.getToken()).commit();
                     sp.edit().putString("userId", mLogRegBean.getUserId()).commit();
+
                     Log.e("登录--->", mAccount+"-->"+mLogRegBean.getToken()+"-->"+mLogRegBean.getUserId());
                     handler.sendEmptyMessage(SUCCESS);
                 } else {

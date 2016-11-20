@@ -149,6 +149,9 @@ public class ShopNameBean extends BaseBean {
             public String goods_count;//商品数量
             public boolean isChildSelected;//子View是否显示
 
+
+
+
             public boolean isChildSelected() {
                 return isChildSelected;
             }

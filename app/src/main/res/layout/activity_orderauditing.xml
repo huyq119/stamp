@@ -61,6 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:background="#ffff"
+                    android:layout_marginRight="12dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -86,6 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:background="#ffff"
+                    android:layout_marginRight="12dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -111,6 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:background="#ffff"
+                    android:layout_marginRight="12dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -128,6 +131,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:textColor="#000"
+                        android:lineSpacingExtra="3dp"
                         android:textSize="15sp" />
                 </LinearLayout>
 
@@ -136,6 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:background="#ffff"
+                    android:layout_marginRight="12dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -161,6 +166,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:background="#ffff"
+                    android:layout_marginRight="12dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -186,6 +192,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:background="#ffff"
+                    android:layout_marginRight="12dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -211,6 +218,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:background="#ffff"
+                    android:layout_marginRight="12dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -220,6 +228,7 @@
                         android:layout_marginLeft="@dimen/distance"
                         android:layout_weight="1"
                         android:text="服务费(1%):"
+
                         android:textColor="#999"
                         android:textSize="14sp" />
 
@@ -237,6 +246,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:background="#ffff"
+                    android:layout_marginRight="12dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -262,6 +272,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:background="#ffff"
+                    android:layout_marginRight="12dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -288,6 +299,7 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginTop="15dp"
                     android:background="#ffff"
+                    android:layout_marginRight="12dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -313,6 +325,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#ffff"
+                    android:layout_marginRight="12dp"
                     android:orientation="horizontal"
                     android:visibility="gone">
 
