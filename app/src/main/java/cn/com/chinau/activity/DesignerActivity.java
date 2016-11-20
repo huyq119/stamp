@@ -1,5 +1,6 @@
 package cn.com.chinau.activity;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -67,6 +68,7 @@ public class DesignerActivity extends BaseActivity implements SideBar.OnChooseLe
                     Gson gson = new Gson();
                     DesignerBean designerBean = gson.fromJson((String) msg.obj, DesignerBean.class);
                     initAdapter(designerBean);
+                    initListener();
                     break;
             }
         }
@@ -80,7 +82,7 @@ public class DesignerActivity extends BaseActivity implements SideBar.OnChooseLe
 
         initView();
         initData();
-        initListener();
+
         return mDesignerContent;
     }
 
@@ -103,6 +105,16 @@ public class DesignerActivity extends BaseActivity implements SideBar.OnChooseLe
 
     private void initListener() {
         mSideBar.setOnChooseLetterChangedListener(this);
+        mMLVAdapter.setOnItemClickListener(new DesignerListViewAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, DesignerBean.Designer data) {
+                // 跳转设计家详情页面
+                String Designer_sn = data.getDesigner_sn();// 设计家编号
+                Bundle bundle = new Bundle();
+                bundle.putString(StaticField.DESIGNERSN, Designer_sn);
+                openActivityWitchAnimation(DesignerDetailActivity.class, bundle);
+            }
+        });
     }
 
 

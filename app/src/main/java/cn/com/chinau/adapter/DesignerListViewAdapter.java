@@ -19,11 +19,12 @@ import cn.com.chinau.bean.DesignerBean;
  * 设计家适配器
  * Created by Administrator on 2016/8/4.
  */
-public class DesignerListViewAdapter extends RecyclerView.Adapter<DesignerListViewAdapter.UserHolder> {
+public class DesignerListViewAdapter extends RecyclerView.Adapter<DesignerListViewAdapter.UserHolder> implements View.OnClickListener {
 
     private List<DesignerBean.Designer> mList;
     private LayoutInflater inflate;
     private BitmapUtils bitmapUtils;
+    private OnRecyclerViewItemClickListener mOnItemClickListener = null;
 
     public DesignerListViewAdapter(Context context, BitmapUtils bitmapUtils, List<DesignerBean.Designer> mList) {
         this.mList = mList;
@@ -34,11 +35,15 @@ public class DesignerListViewAdapter extends RecyclerView.Adapter<DesignerListVi
     @Override
     public UserHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflate.inflate(R.layout.designer_listview_item, parent, false);
+        //将创建的View注册点击事件
+        view.setOnClickListener(this);
         return new UserHolder(view);
     }
 
     @Override
     public void onBindViewHolder(UserHolder holder, int position) {
+        holder.itemView.setTag(mList.get(position));
+
         holder.mChName.setText(mList.get(position).getChinese_name());
         holder.mEnName.setText(mList.get(position).getEnglish_name());
         holder.mDetail.setText(mList.get(position).getResume());
@@ -56,6 +61,12 @@ public class DesignerListViewAdapter extends RecyclerView.Adapter<DesignerListVi
     public void setData(List<DesignerBean.Designer> list) {
         this.mList.clear();
         this.mList = list;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        mOnItemClickListener.onItemClick(v, (DesignerBean.Designer) v.getTag());
     }
 
 //
@@ -115,6 +126,15 @@ public class DesignerListViewAdapter extends RecyclerView.Adapter<DesignerListVi
             mEnName = (TextView) itemView.findViewById(R.id.designer_item_enName);
             mDetail = (TextView) itemView.findViewById(R.id.designer_item_detail);
         }
+    }
+
+    //定义条目的点击事件
+    public interface OnRecyclerViewItemClickListener {
+        void onItemClick(View view, DesignerBean.Designer data);
+    }
+
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
     public int getFirstPositionByChar(char sign) {
