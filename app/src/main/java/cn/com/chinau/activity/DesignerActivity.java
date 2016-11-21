@@ -96,6 +96,7 @@ public class DesignerActivity extends BaseActivity implements SideBar.OnChooseLe
     }
 
     private void initAdapter(DesignerBean designerBean) {
+
         manager = new LinearLayoutManager(this, LinearLayoutCompat.VERTICAL, false);
         mMLVAdapter = new DesignerListViewAdapter(this, mBitmap, mList);
         mDesignerLV.setLayoutManager(manager);
@@ -104,6 +105,12 @@ public class DesignerActivity extends BaseActivity implements SideBar.OnChooseLe
     }
 
     private void initListener() {
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishWitchAnimation();
+            }
+        });
         mSideBar.setOnChooseLetterChangedListener(this);
 
         mBack.setOnClickListener(new View.OnClickListener() {

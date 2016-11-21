@@ -8,9 +8,9 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +25,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -34,7 +35,7 @@ import java.util.Set;
 
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
-import cn.com.chinau.adapter.FirmOrderExpandableAdapter;
+import cn.com.chinau.adapter.Expandable1Adapter;
 import cn.com.chinau.aliapi.PayResult;
 import cn.com.chinau.base.BaseActivity;
 import cn.com.chinau.bean.AddShopCartBean;
@@ -50,6 +51,7 @@ import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.utils.MyToast;
 import cn.com.chinau.utils.SortUtils;
 import cn.com.chinau.utils.ThreadManager;
+import cn.com.chinau.view.CustomExpandableListView;
 import cn.com.chinau.view.VerticalScrollView;
 
 /**
@@ -57,14 +59,15 @@ import cn.com.chinau.view.VerticalScrollView;
  */
 public class FirmOrderActivity extends BaseActivity implements View.OnClickListener, SelectDistributionPopupWindow.StringText {
 
+
     private View mFirmOrderTitle;
     private View mFirmOrderContent;
     private LinearLayout mAddress, mNoAddress;//有收货地址,没有收货地址
     private LinearLayout mPay, mDistribution;//支付方式,配送方式
     private SelectPayPopupWindow mPayPopupWindow;//支付的弹出框
     private SelectDistributionPopupWindow mDistributionPopupWindow;//配送方式的弹出框
-        private ListView mListView;//底部列表展示
-//    private ListView mListView;//底部列表展示
+//        private ListView mListView;//底部列表展示
+    private CustomExpandableListView mListView;//底部列表展示
     private ImageView mBack, mPayImg;
     private TextView mTitle, mOkPay, mDistributionTv, mDistributionPrice, mPayNmme, mFeeRate, mFee, mAddressName,
             mAddressMobile, mAddressDetail, mNoAddressAdd, mTotalPrice, mGoodsCount;
@@ -99,7 +102,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private boolean isChild;
     private String mPrice, mCount, mSellerList;// 价钱，数量
     //    private String groupSet;
-    private Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
+    private Hashtable<ShopNameBean.SellerBean, ArrayList<ShopNameBean.SellerBean.GoodsBean>> groupSet;
     private String groupSet1;
     private String mRequestId,mOrder_price;
     private String mPayUrl;
@@ -112,6 +115,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private ArrayList<ShopNameBean.SellerBean> seller_list;
     private ShopNameBean.SellerBean sellerBean;
     private Integer integer;
+    private double mTotalPrices;
 
     @Override
     public View CreateTitle() {
@@ -146,6 +150,11 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         api.registerApp(StaticField.APP_ID);
 
         mBack = (ImageView) mFirmOrderTitle.findViewById(R.id.base_title_back);
+        // 这三行是为了防止展示到ListView处
+        mBack.setFocusable(true);
+        mBack.setFocusableInTouchMode(true);
+        mBack.requestFocus();
+
         mTitle = (TextView) mFirmOrderTitle.findViewById(R.id.base_title);
         mTitle.setText("确认订单");
 
@@ -162,7 +171,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 
         mPay = (LinearLayout) mFirmOrderContent.findViewById(R.id.FirmOrder_pay);
         mDistribution = (LinearLayout) mFirmOrderContent.findViewById(R.id.FirmOrder_distribution);
-        mListView = (ListView) mFirmOrderContent.findViewById(R.id.firmOrder_expandableLV);
+        mListView = (CustomExpandableListView) mFirmOrderContent.findViewById(R.id.firmOrder_expandableLV);
         mOkPay = (TextView) mFirmOrderContent.findViewById(R.id.firmOrder_ok_pay);
         mDistributionTv = (TextView) mFirmOrderContent.findViewById(R.id.distribution_tv);
         mDistributionPrice = (TextView) mFirmOrderContent.findViewById(R.id.distribution_price_tv);
@@ -192,33 +201,25 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             mToJson = AddShopCartBean(mGoods_sn, mCount);
             MyLog.LogShitou("===========竞拍记录适配器组装Json串", mToJson);
         } else {
-            String mSellerList = sp.getString("SellerList", "");// 获取保存在本地的购物车总数据
-            MyLog.LogShitou("获取保存在本地的总数据", mSellerList);
-//        groupSet1 = intent.getStringExtra("GroupSet");// 获取传过来的总价钱
-//        ArrayList<String> noJsonToList = getNoJsonToList(groupSet1);
-//        MyLog.LogShitou("传过来选中List", noJsonToList.toString());
-//        StringBuffer  strb=new StringBuffer();
-//        strb.append("\"aaa\":{");
-//        for(int i=0;i<noJsonToList.size();i++){
-////	     		list.set(i, "{"+list.get(i)+"}");
-//            strb.append(noJsonToList.get(i));
-//            strb.append(",");
-//        }
-//        String returnStr=strb.toString().trim().substring(0,strb.toString().trim().length()-1);
-//        returnStr="{"+returnStr+"}}";
-//        MyLog.LogShitou("传过来选中的编号+数量", returnStr);
-            groupSet = MyApplication.getGroupSet();// 传过来的集合数据
+            shopNameBean = (ShopNameBean)getIntent().getSerializableExtra("shopNameBean_data");
+
+//            groupSet_data = getIntent().getSerializableExtra("groupSet_data");
+            groupSet = MyApplication.getGroupSet();
+
+            MyLog.LogShitou("传过来的groupSet", groupSet.toString());
 
             if (groupSet != null) {
-                for (HashMap.Entry<String, Set<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
+                for (Hashtable.Entry<ShopNameBean.SellerBean, ArrayList<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
 //            key = entry.getKey();
-                    Set<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
+
+                    ArrayList<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
                     for (int i = 0; i < value.size(); i++) {
                         Iterator<ShopNameBean.SellerBean.GoodsBean> iterator = value.iterator();
                         ShopNameBean.SellerBean.GoodsBean next = iterator.next();
                         goods_sn = next.getGoods_sn();// 商品编号
                         goods_count = next.getGoods_count();// 商品数量
                         isChild = next.isChildSelected();
+
                         MyLog.LogShitou("---1---编号+数量Json", goods_sn + "--" + goods_count);
                     }
                     // 添加数据到AddShopCartBean生成Json
@@ -227,6 +228,27 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 }
             }
         }
+    }
+
+    public List<AddShopCartBean> TabtoString(Hashtable<ShopNameBean.SellerBean, Set<ShopNameBean.SellerBean.GoodsBean>> tab) {
+
+        List<AddShopCartBean> list = new ArrayList<>();
+
+        Enumeration<Set<ShopNameBean.SellerBean.GoodsBean>> elements = tab.elements();
+        while (elements.hasMoreElements()) {
+            Set<ShopNameBean.SellerBean.GoodsBean> goodsBeen = elements.nextElement();
+//            for (int i = 0; i < goodsBeen.size(); i++) {
+            Iterator<ShopNameBean.SellerBean.GoodsBean> it = goodsBeen.iterator();
+            while (it.hasNext()) {
+                ShopNameBean.SellerBean.GoodsBean next = it.next();
+                String goods_count = next.getGoods_count();
+                String goods_sn = next.getGoods_sn();
+                AddShopCartBean bean = new AddShopCartBean(goods_sn, goods_count);
+                list.add(bean);
+//                }
+            }
+        }
+        return list;
     }
 
     /**
@@ -291,6 +313,13 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         mOkPay.setOnClickListener(this);
         mAddress.setOnClickListener(this);
         mNoAddress.setOnClickListener(this);
+        // 点击不可回缩
+        mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                return true;
+            }
+        });
     }
 
     @Override
@@ -302,7 +331,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        FirmOrderNet(mToJson);// 确认订单list网络请求
+//        FirmOrderNet(mToJson);// 确认订单list网络请求
     }
 
     /**
@@ -311,16 +340,18 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private void setFalseData() {
 
         if (groupSet != null) {
-            FirmOrderExpandableAdapter expandableAdapter = new FirmOrderExpandableAdapter(this, mBitmap, groupSet);
+//            FirmOrderExpandableAdapter expandableAdapter = new FirmOrderExpandableAdapter(this, mBitmap, groupSet);
+
+            Expandable1Adapter expandableAdapter = new Expandable1Adapter(this, mBitmap, groupSet,shopNameBean);
             mListView.setAdapter(expandableAdapter);
             expandableAdapter.notifyDataSetChanged();
 
             //让子控件全部展开
-//        for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
-//            mListView.expandGroup(i);
-//        }
-//        //去掉自带按钮
-//        mListView.setGroupIndicator(null);
+        for (int i = 0; i < expandableAdapter.getGroupCount(); i++) {
+            mListView.expandGroup(i);
+        }
+        //去掉自带按钮
+        mListView.setGroupIndicator(null);
 
         }
     }
@@ -354,7 +385,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             case R.id.firmOrder_ok_pay://确认并付款
                 mExCompName = mDistributionTv.getText().toString().trim();
                 payNmae = mPayNmme.getText().toString().trim();
-                MyLog.LogShitou("===========地址id", mAddressId + "==" + mNoAddressId);
+                MyLog.LogShitou("===========地址id", mExCompName + "==" + payNmae);
 
                 if (mAddressId != null | mNoAddressId != null) {
                     OrderPayNet(); // 订单支付网络请求
@@ -419,7 +450,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 params.put(StaticField.SIGN, md5code);
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
-                MyLog.LogShitou("result结算列表", result);
+                MyLog.LogShitou(Goods_info+"/==/"+"result结算列表", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
@@ -455,7 +486,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     params.put(StaticField.EXPRESS_COMP, "ems");// 快递公司
                 }
                 params.put(StaticField.REQUESTID, mTimeId);// 客户订单请求号
-                params.put(StaticField.PAYAMOUNT, "0.01");// 支付金额
+                params.put(StaticField.PAYAMOUNT, String.valueOf(mTotalPrices));// 支付金额
 
                 if (mFirmOrder.equals("AuctionRecordAdapter")) {
                     MyLog.LogShitou("============竞拍编号", "===============" + mAuction_sn);
@@ -484,6 +515,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 } else if (payNmae.equals("支付宝")) {
                     params.put(StaticField.PAYTYPE, StaticField.ALIPAY);// 支付方式
                     params.put(StaticField.GOODESINFO, mToJson);//  商品信息：所有商品的json字符串
+
                     MyLog.LogShitou("生成订单参数", mToken + "--" + mUser_id + "--" + mAddressId + "--" + mNoAddressId + "--" + mTimeId + "--" + info_list.toString());
 
                     String mapSort = SortUtils.MapSort(params);
@@ -549,7 +581,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                         double mtotalPrice =Double.parseDouble(mPrice.replaceAll(",","").trim()); //最后商品的价钱转double()
 
                         double price1 = add(douPrice,mServicePrice); // 快递费和服务费总价
-                        double mTotalPrices =  add(price1,mtotalPrice); // 三个数相加的总费用
+                         mTotalPrices =  add(price1,mtotalPrice); // 三个数相加的总费用
 
                         mTotalPrice.setText("￥" + mTotalPrices);// 赋值总价钱
                         MyLog.LogShitou("==============总价",mTotalPrices+"");
@@ -748,10 +780,11 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         double mtotalPrice =Double.parseDouble(mPrice.trim()); //最后商品的价钱转double
 
         double price1 = add(douPrice,mServicePrice); // 快递费和服务费总价
-        double mTotalPrices =  add(price1,mtotalPrice); // 三个数相加的总费用
+        // 三个数相加的总费用
+        mTotalPrices = add(price1,mtotalPrice);
 
         mTotalPrice.setText("￥" + mTotalPrices);// 赋值总价钱
-        MyLog.LogShitou("==============总价",mTotalPrices+"");
+        MyLog.LogShitou("==============总价", mTotalPrices +"");
 
 
 
@@ -790,7 +823,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
      * 添加数据到AddShopCartBean生成Json
      */
     private String AddShopCartBean(String goodsSn, String goodsCount) {
-        if (!goodsSn.equals("") && !goodsCount.equals("")) {
+        if (goodsSn != null && !goodsSn.equals("") && goodsCount != null && !goodsCount.equals("")) {
             AddShopCartBean mAddShopCartBean = new AddShopCartBean();
             mAddShopCartBean.setGoods_sn(goodsSn);
             mAddShopCartBean.setGoods_count(goodsCount);

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Set;
 
 import cn.com.chinau.R;
@@ -45,6 +44,7 @@ import cn.com.chinau.utils.ThreadManager;
  * 购物车的适配器
  * Created by Administrator on 2016/8/15.
  */
+
 public class ExpandableAdapter extends BaseExpandableListAdapter {
 
     private SharedPreferences sp;
@@ -62,8 +62,8 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     private ArrayList<ShopNameBean.SellerBean> mGoodsList;
     private int temp;
 
-    private Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
-    private Set<ShopNameBean.SellerBean.GoodsBean> childSet;//相当于一个Map结合被
+    private Hashtable<ShopNameBean.SellerBean, ArrayList<ShopNameBean.SellerBean.GoodsBean>> groupSet;
+    private ArrayList<ShopNameBean.SellerBean.GoodsBean> childSet;//相当于一个Map结合被
 
     private ArrayList<AddShopCartBean> info_list;
     private String mToken, mUser_id;
@@ -79,7 +79,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     private String mSellerList1;
     private ArrayList<ShopNameBean.SellerBean> seller_list;
     // 选中的商品卖家账号集合
-    private static Hashtable<String, String> selectedNOtable;
+//    private static Hashtable<String, String> selectedNOtable;
 
     public ExpandableAdapter(Context context, BitmapUtils bitmap, ShopNameBean shopNameBean
             , LinearLayout layout, TextView tv1, TextView tv2) {
@@ -96,7 +96,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         mUser_id = sp.getString("userId", "");
 
         //子控件的存放集合
-        childSet = new HashSet<>();
+        childSet = new ArrayList<>();
         //父控件的存放集合
         groupSet = new Hashtable<>();
     }
@@ -317,13 +317,13 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
                             for (int i = 0; i < seller_lists.size(); i++) {
 
-                                ShopNameBean.SellerBean sellerBeans = seller_lists.get(i);
+                                 sellerBean = seller_lists.get(i);
 
-                                seller_no = sellerBeans.getSeller_no();
+                                seller_no = sellerBean.getSeller_no();
 
-                                Set<ShopNameBean.SellerBean.GoodsBean> childSets = new HashSet<>();
+                                ArrayList<ShopNameBean.SellerBean.GoodsBean> childSets = new ArrayList<>();
                                 //选中的所有子空间
-                                ArrayList<ShopNameBean.SellerBean.GoodsBean> goods_lists = sellerBeans.getGoods_list();
+                                ArrayList<ShopNameBean.SellerBean.GoodsBean> goods_lists = sellerBean.getGoods_list();
 //                                childSet.clear();
 
                                 for (int j = 0; j < goods_lists.size(); j++) {
@@ -334,11 +334,11 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
                                         if (!childSets.contains(goodsBeans)) {
                                             childSets.add(goodsBeans);
-
                                         }
                                     }
                                 }
-                                groupSet.put(seller_no, childSets);
+//                                groupSet.put(seller_no, childSets);
+                                groupSet.put(sellerBean, childSets);
                             }
 
                         } else {
@@ -362,43 +362,42 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
 //                    MyLog.LogShitou("=========父控件的选择按钮" + "==========父控件的选择按钮/"+isSelectAll);
                     //子控件的存放集合
-                    childSet = new HashSet<>();
+                    childSet = new ArrayList<>();
 
                     //这里获取的是选择父控件的内容,如果为真的话应该把数据存起来，否则的话应该把数据删除
-                    ShopNameBean.SellerBean sellerBean = shopNameBean.getSeller_list().get(groupPosition);
+                     sellerBean = shopNameBean.getSeller_list().get(groupPosition);
 
                     MyLog.LogShitou("=========父控件的选择按钮" + "==========父控件的选择按钮/" + sellerBean.isGroupSelected);
 
                     //选中的所有子空间
                     ArrayList<ShopNameBean.SellerBean.GoodsBean> goods_list = sellerBean.getGoods_list();
 
-                    seller_no = sellerBean.getSeller_no();
+//                    seller_no = sellerBean.getSeller_no();
 
                     MyLog.LogShitou("父选后号=====", "父选后号=====" + seller_no);
 
                     if (sellerBean.isGroupSelected) {//如果为真的情况下是选中
-//                        String seller_name = sellerBean.getSeller_name();
-//                        String seller_type = sellerBean.getSeller_type();
-//                        MyLog.LogShitou("父控件内容", groupPosition + "--" + seller_name + "--" + seller_type);
-
 
                         //这里遍历所有子控件并且把所有内容都存起来
                         for (int i = 0; i < goods_list.size(); i++) {
                             ShopNameBean.SellerBean.GoodsBean goodsBean = goods_list.get(i);
                             childSet.add(goodsBean);
                         }
-                        groupSet.put(seller_no, childSet);
+//                        groupSet.put(seller_no, childSet);
+                        groupSet.put(sellerBean, childSet);
 
                     } else {
                         MyLog.LogShitou("===反父选isSelectAll=====", "============" + isSelectAll);
                         if (!isSelectAll) {
-                            groupSet.remove(seller_no);
+//                            groupSet.remove(seller_no);
+                            groupSet.remove(sellerBean);
                             MyLog.LogShitou("====点击后====", "============" + isSelectAll);
 
 
                             if (groupSet.contains(childSet) && childSet.size() > 0) {
 
-                                groupSet.remove(seller_no);
+//                                groupSet.remove(seller_no);
+                                groupSet.remove(sellerBean);
                                 MyLog.LogShitou("====groupSet====", "============" + groupSet);
 
                             }
@@ -424,61 +423,91 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                         int child = Integer.parseInt(s[1]);
 
                         isSelectAll = ShoppingCartBiz.selectOne(seller_list, group, child);
-                        ArrayList<ShopNameBean.SellerBean> seller_listss = shopNameBean.getSeller_list();
+                        sellerBean = shopNameBean.getSeller_list().get(group);
+
+
+
                         //这里获取的是选择父控件的内容,如果为真的话应该把数据存起来，否则的话应该把数据删除
                         ShopNameBean.SellerBean.GoodsBean goodsBean = shopNameBean.getSeller_list().get(group).getGoods_list().get(child);
 
-//                        ShopNameBean.SellerBean sellerBean2 = shopNameBean.getSeller_list().get(group);
+//                       ShopNameBean.SellerBean sellerBean2 = shopNameBean.getSeller_list().get(group);
 
                         MyLog.LogShitou("=====0000子====" + goodsBean.isChildSelected + "============fu/" + isSelectAll);
 
-                        seller_nos = seller_listss.get(group).getSeller_no();
+                        shopNameBean.getSeller_list();
+                        seller_nos = sellerBean.getSeller_no();
+//                        ArrayList<ShopNameBean.SellerBean.GoodsBean> goodsList = null;
+//                        sellerBean.setGoods_list(goodsList);
 
-                        List<String> mArr = new ArrayList();
+                        MyLog.LogShitou("修改后的sellerBean","===="+sellerBean);
+//                        List<ShopNameBean.SellerBean> mArr = new ArrayList();
 
-                        if (!mArr.contains(seller_nos)) {
-                            mArr.add(seller_nos);
-//                            MyLog.LogShitou("000000000000=============卖家账号", "000000000卖家账号====" + seller_nos);
-                        }
-                        ShopNameBean.SellerBean sellerBeans = shopNameBean.getSeller_list().get(group);
+//                        if (!mArr.contains(seller_nos)) {
+//                            mArr.add(seller_nos);
+////                            MyLog.LogShitou("000000000000=============卖家账号", "000000000卖家账号====" + seller_nos);
+//                        }
 
-                        MyLog.LogShitou("====11111父=====" + sellerBeans.isGroupSelected + "============fu/" + sellerBeans.isGroupSelected);
+//                        if (!mArr.contains(sellerBean)) {
+//                            mArr.add(sellerBean);
+////                            MyLog.LogShitou("000000000000=============卖家账号", "000000000卖家账号====" + seller_nos);
+//                        }
+//                        ShopNameBean.SellerBean sellerBeans = shopNameBean.getSeller_list().get(group);
+
+                        MyLog.LogShitou("====11111父=====" + sellerBean.isGroupSelected + "============fu/" + sellerBean.isGroupSelected);
 
                         if (goodsBean.isChildSelected) {
 
-                            if (!groupSet.containsKey(seller_nos)) {
-                                childSet = new HashSet<>();
+//                            if (!groupSet.containsKey(seller_nos)) {
+//                                childSet = new HashSet<>();
+//
+//                                childSet.add(goodsBean);
+//                                groupSet.put(seller_nos, childSet);
+//                            } else {
+//                                Set<ShopNameBean.SellerBean.GoodsBean> goodsSet = groupSet.get(seller_nos);
+//                                goodsSet.add(goodsBean);
+//                            }
 
+                            if (!groupSet.containsKey(sellerBean)) {
+
+                                MyLog.LogShitou("00000=========", sellerBean + "");
+
+                                childSet = new ArrayList<>();
                                 childSet.add(goodsBean);
-                                groupSet.put(seller_nos, childSet);
-                            } else {
-                                Set<ShopNameBean.SellerBean.GoodsBean> goodsSet = groupSet.get(seller_nos);
-                                goodsSet.add(goodsBean);
-                            }
-                            //}
+                                groupSet.put(sellerBean, childSet);
+                                // sellerBean 需要拿出来重新复值
 
-                            MyLog.LogShitou("子控件总共添加的数据", groupSet + "");
+                            } else {
+                                ArrayList<ShopNameBean.SellerBean.GoodsBean> goodsSet = groupSet.get(sellerBean);
+                                MyLog.LogShitou("1111=========子控件总共添加的数据", goodsSet + "");
+                                goodsSet.add(goodsBean);
+
+                            }
+
+
+
+                            MyLog.LogShitou("aaaaaaaaa========子控件总共添加的数据", groupSet + "===="+groupSet.size());
+
+
+
                         } else {
 
                             MyLog.LogShitou("子点击选中的数据========0001==", "===============" + goodsBean);
 
-                            if (!sellerBeans.isGroupSelected) {
-
+                            if (!sellerBean.isGroupSelected) {
                                 MyLog.LogShitou("======isSelectAll====", "===============" + isSelectAll);
-
 
                                 MyLog.LogShitou("======childSet.size()====", "==========大小=====" + childSet.size());//1
                                 if (groupSet.contains(childSet) && childSet.size() == 0) {
-
-
                                     MyLog.LogShitou("1111111111222222222222====childSet======", "===============" + childSet);
-                                    groupSet.get(seller_nos).remove(goodsBean);
+//                                    groupSet.get(seller_nos).remove(goodsBean);
+                                    groupSet.get(sellerBean).remove(goodsBean);
 //
                                 }
 
                                 if (groupSet.contains(childSet) && childSet.size() > 0) {
 
-                                    groupSet.get(seller_nos).remove(goodsBean);
+//                                    groupSet.get(seller_nos).remove(goodsBean);
+                                    groupSet.get(sellerBean).remove(goodsBean);
 
                                     MyLog.LogShitou("0000000000000====childSet======", "===============" + childSet);
 
@@ -488,7 +517,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
                             if (groupSet.contains(childSet) && childSet.size() > 0) {
 
-                                groupSet.get(seller_nos).remove(goodsBean);
+                                groupSet.get(sellerBean).remove(goodsBean);
 
                                 MyLog.LogShitou("0000000000000====childSet======", "===============" + childSet);
 
@@ -497,21 +526,20 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
                             if (!isSelectAll && !(goodsBean).equals(null)) {
 
-                                groupSet.get(seller_nos).remove(goodsBean);
+                                groupSet.get(sellerBean).remove(goodsBean);
                             }
 
+                            if (!isSelectAll&&!sellerBean.isGroupSelected&&groupSet.contains(childSet) ) {
 
-                            if (!isSelectAll&&!sellerBeans.isGroupSelected&&groupSet.contains(childSet) ) {
+                                groupSet.get(sellerBean).remove(goodsBean);
 
-                                groupSet.get(seller_nos).remove(goodsBean);
                                 MyLog.LogShitou("==========AAAAAAAAAAAAAAAAAA","==========AAAAAAAAAAA");
                             }
 
 
                             if (groupSet.contains(childSet) && childSet.contains(goodsBean) && childSet.size() > 0) {
 
-                                groupSet.get(seller_nos).remove(goodsBean);
-
+                                groupSet.get(sellerBean).remove(goodsBean);
                                 MyLog.LogShitou("==========111111111111111", "===============" + groupSet.get(seller_nos));
                             }
 
@@ -572,8 +600,8 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                     }
                     break;
                 case R.id.Shop_pay://去结算
-                    mSellerLists = sp.getString("SellerList", "");
-                    MyLog.LogShitou("点击结算", mSellerLists + "--" + count + "--" + price);
+//                    mSellerLists = sp.getString("SellerList", "");
+//                    MyLog.LogShitou("点击结算", mSellerLists + "--" + count + "--" + price);
 
                     if (count != null && !count.equals("0")) {
                         Intent intent = new Intent(context, FirmOrderActivity.class);
@@ -581,6 +609,16 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                         intent.putExtra("ShopNameBean", shopNameBean + "");// 适配器的标识
                         intent.putExtra("Count", count);// 传数量
                         intent.putExtra("Price", price);// 传总价钱
+
+
+
+
+
+
+//                        intent.putExtra("groupSet_data",groupSet);
+
+                        intent.putExtra("shopNameBean_data",shopNameBean);
+
                         //这里只要是把集合遍历一下传过去就行了
                         MyApplication.setGroupSet(groupSet);
                         MyLog.LogShitou("去结算传的数据", "" + groupSet);

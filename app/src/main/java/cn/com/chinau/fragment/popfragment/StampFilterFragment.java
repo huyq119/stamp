@@ -195,25 +195,6 @@ public class StampFilterFragment extends BaseDialogFragment{
             }
         });
 
-
-        //设置监听
-        //新中国的监听
-//        mNewChineseListener = new AuctionStampGridViewOnItemClickListener(Current, mNewChineseAdapter);
-//        mNewChineseListener.setSelfMallItemClick(this);
-//        mNewChineseGV.setOnItemClickListener(mNewChineseListener);
-//        //清民的监听
-//        mQingMinListener = new AuctionStampGridViewOnItemClickListener(Current, mQingMinAdapter);
-//        mQingMinListener.setSelfMallItemClick(this);
-//        mQingMinGV.setOnItemClickListener(mQingMinListener);
-//        //题材的监听
-//        mThemeListener = new AuctionStampGridViewOnItemClickListener(Current, mThemeAdapter);
-//        mThemeListener.setSelfMallItemClick(this);
-//        mThemeGV.setOnItemClickListener(mThemeListener);
-//        //其他的监听
-//        mOtherListener = new AuctionStampGridViewOnItemClickListener(Current, mOtherAdapter);
-//        mOtherListener.setSelfMallItemClick(this);
-//        mOtherGV.setOnItemClickListener(mOtherListener);
-
         SelfMallPanStampFilterDialog selfMallPanStampFilterDialog = (SelfMallPanStampFilterDialog) getParentFragment();
         selfMallPanStampFilterDialog.setClickReset(new SelfMallPanStampFilterDialog.ClickReset() {
             @Override
@@ -226,117 +207,10 @@ public class StampFilterFragment extends BaseDialogFragment{
             }
         });
 
-//        // 条目监听
-//        // 新中国
-//        mNewChineseGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-////               mNewChineseListener.getPosition();
-//                mQingMinListener.setPosition();
-//                mThemeListener.setPosition();
-//                mOtherListener.setPosition();
-//            }
-//        });
-//
-//        // 清明
-//        mQingMinGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mNewChineseListener.setPosition();
-////                mQingMinListener.getPosition();
-//                mThemeListener.setPosition();
-//                mOtherListener.setPosition();
-//            }
-//        });
-//
-//        // 主题
-//        mThemeGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mNewChineseListener.setPosition();
-//                mQingMinListener.setPosition();
-////                mThemeListener.getPosition();
-//                mOtherListener.setPosition();
-//            }
-//        });
-//
-//        // 其他
-//        mOtherGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mNewChineseListener.setPosition();
-//                mQingMinListener.setPosition();
-//                mThemeListener.setPosition();
-////                mThemeListener.getPosition();
-//            }
-//        });
+
     }
 
-    /*@Override
-    public void GetClickItem() {
-        int chineseNum = mNewChineseListener.getPosition();
-        int qingminNum = mQingMinListener.getPosition();
-        int themeNum = mThemeListener.getPosition();
-        int otherNum = mOtherListener.getPosition();
-        MyLog.e(chineseNum + "-" + qingminNum + "-" + themeNum + "-" + otherNum);
 
-        String chinese = (chineseNum == -1) ? "" : mChineseValue[chineseNum];
-        String qingmin = (qingminNum == -1) ? "" : mQingminValue[qingminNum];
-        String theme = (themeNum == -1) ? "" : mThemeValue[themeNum];
-        String other = (otherNum == -1) ? "" : mOtherValue[otherNum];
-
-        // =============GridView条目监听
-
-        // 新中国
-        mNewChineseGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mNewChineseListener.getPosition();
-                mQingMinListener.setPosition();
-                mThemeListener.setPosition();
-                mOtherListener.setPosition();
-
-            }
-        });
-
-        // 清明
-        mQingMinGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mNewChineseListener.setPosition();
-                mQingMinListener.getPosition();
-                mThemeListener.setPosition();
-                mOtherListener.setPosition();
-            }
-        });
-
-        // 主题
-        mThemeGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mNewChineseListener.setPosition();
-                mQingMinListener.setPosition();
-                mThemeListener.getPosition();
-                mOtherListener.setPosition();
-            }
-        });
-
-        // 其他
-        mOtherGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mNewChineseListener.setPosition();
-                mQingMinListener.setPosition();
-                mThemeListener.setPosition();
-                mThemeListener.getPosition();
-            }
-        });
-
-        mData = chinese + "," + qingmin + "," + theme + "," + other;
-        setData(mData);
-        MyLog.e("点击了啥002--->" + mData);
-
-    }*/
 
     public String getData() {
         return mData;

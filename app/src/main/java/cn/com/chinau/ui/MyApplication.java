@@ -16,8 +16,8 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Set;
 
 import cn.com.chinau.StaticField;
 import cn.com.chinau.bean.ShopNameBean;
@@ -37,7 +37,8 @@ public class MyApplication extends Application {
 //    private static Hashtable<Integer, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
     private IWXAPI api;
 
-    private static Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
+//    private static Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet;
+    private static Hashtable<ShopNameBean.SellerBean, ArrayList<ShopNameBean.SellerBean.GoodsBean>> groupSet;
 
     public MyApplication() {
     }
@@ -92,13 +93,20 @@ public class MyApplication extends Application {
         sp.edit().putBoolean("isSetup", true).commit();
     }
 
-    public static Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> getGroupSet() {
+    public static Hashtable<ShopNameBean.SellerBean, ArrayList<ShopNameBean.SellerBean.GoodsBean>> getGroupSet() {
         return groupSet;
     }
 
-    public static void setGroupSet(Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet) {
+    public static void setGroupSet(Hashtable<ShopNameBean.SellerBean, ArrayList<ShopNameBean.SellerBean.GoodsBean>> groupSet) {
         MyApplication.groupSet = groupSet;
     }
+//    public static Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> getGroupSet() {
+//        return groupSet;
+//    }
+//
+//    public static void setGroupSet(Hashtable<String, Set<ShopNameBean.SellerBean.GoodsBean>> groupSet) {
+//        MyApplication.groupSet = groupSet;
+//    }
 
 
 }

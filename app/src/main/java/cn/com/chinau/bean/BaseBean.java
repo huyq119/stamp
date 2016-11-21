@@ -1,10 +1,12 @@
 package cn.com.chinau.bean;
 
+import java.io.Serializable;
+
 /**
  * 所有请求返回数据的基类
  * Created by Administrator on 2016/8/10.
  */
-public class BaseBean {
+public class BaseBean implements Serializable {
 
     public String timestamp;
     public String rsp_code;

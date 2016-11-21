@@ -1,12 +1,15 @@
 package cn.com.chinau.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * 商城名称,对应的字段是Seller_list
  * Created by Administrator on 2016/8/15.
  */
-public class ShopNameBean extends BaseBean {
+public class ShopNameBean extends BaseBean implements Serializable {
+
+
 
     public ArrayList<SellerBean> seller_list;//卖家列表
     public String goods_total_amount;//商品总金额
@@ -58,7 +61,7 @@ public class ShopNameBean extends BaseBean {
     /**
      * 卖家列表数据
      */
-    public static class SellerBean {
+    public static class SellerBean implements Serializable{
         public String seller_name;//卖家名称
         public String seller_type;//卖家类型
         public String seller_no;//卖家账号
@@ -141,7 +144,7 @@ public class ShopNameBean extends BaseBean {
         /**
          * 商品信息对象
          */
-        public static class GoodsBean {
+        public static class GoodsBean implements Serializable{
             public String goods_img;//商品图片
             public String goods_name;//商品名称
             public String goods_sn;//商品编号
