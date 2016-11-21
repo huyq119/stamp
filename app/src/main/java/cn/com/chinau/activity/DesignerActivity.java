@@ -105,6 +105,13 @@ public class DesignerActivity extends BaseActivity implements SideBar.OnChooseLe
 
     private void initListener() {
         mSideBar.setOnChooseLetterChangedListener(this);
+
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishWitchAnimation();
+            }
+        });
         mMLVAdapter.setOnItemClickListener(new DesignerListViewAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, DesignerBean.Designer data) {
