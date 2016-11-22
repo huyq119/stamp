@@ -101,13 +101,20 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
                 initListener();
             }
         } else {
+
             String sg = (String) SPUtils.get(getActivity(), StaticField.SHOPJSON, "");
-            shopNameBean = new Gson().fromJson(sg, ShopNameBean.class);
-            ArrayList<ShopNameBean.SellerBean> seller_list = shopNameBean.getSeller_list();
-            if (seller_list.size() != 0) {
-                commitData();
-            } else {
-                ShopRequestNet(); //  购物车网络请求
+            if(!TextUtils.isEmpty(sg)) {
+                shopNameBean = new Gson().fromJson(sg, ShopNameBean.class);
+                MyLog.LogShitou("====sg","====/"+sg+"/==/"+shopNameBean);
+                if (shopNameBean != null){
+
+                    ArrayList<ShopNameBean.SellerBean> seller_list = shopNameBean.getSeller_list();
+                    if (seller_list != null && seller_list.size() != 0) {
+                        commitData();
+                    } else {
+                        ShopRequestNet(); //  购物车网络请求
+                    }
+                }
             }
         }
     }
@@ -143,7 +150,7 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
                 params.put(StaticField.TOKEN, mToken);// 标识
                 params.put(StaticField.USER_ID, mUser_id);// 用户ID
                 params.put(StaticField.GOODESINFO, list.toString());//  商品信息：所有商品的json字符串
-                params.put(StaticField.OP_TYPE, StaticField.SC);// 操作类型：
+                params.put(StaticField.OP_TYPE, "HB");// 操作类型：
 
                 String mapSort = SortUtils.MapSort(params);
                 String md5code = Encrypt.MD5(mapSort);
@@ -317,8 +324,8 @@ public class ShopFragment extends BaseFragment implements ExpandableAdapter.Sell
 
     // 回调删除后刷新的List
     @Override
-    public void GetSellerList(ArrayList<ShopNameBean.SellerBean> seller_list) {
-        mSellerList = seller_list;
+    public void GetSellerList(ShopNameBean shopNameBeans) {
+        shopNameBean = shopNameBeans;
         initAdapter(); // 添加数据
         initListener();
     }

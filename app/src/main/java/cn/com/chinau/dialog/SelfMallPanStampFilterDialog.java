@@ -45,7 +45,6 @@ public class SelfMallPanStampFilterDialog extends BaseDialogFragment implements 
         //创建显示的View
         mFilterView = CreateBaseView(inflater, R.layout.base_viewpagerindicator);
 
-
         //初始化控件
         FragmentPagerAdapter adapter = new PanStampDialogPagerAdapter(getChildFragmentManager(), mList, arr);
         ViewPager pager = (ViewPager) mFilterView.findViewById(R.id.baseStamp_vp);

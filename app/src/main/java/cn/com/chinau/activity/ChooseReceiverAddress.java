@@ -120,10 +120,17 @@ public class ChooseReceiverAddress extends BaseActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.base_title_back:
+
+                setResult(22);
+
+
                 finishWitchAnimation();
                 break;
             case R.id.base_edit:
+
+
                 openActivityWitchAnimation(ManagerAddressActivity.class);
+
                 break;
             default:
                 break;

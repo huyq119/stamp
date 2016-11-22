@@ -183,9 +183,9 @@
         <activity
             android:name="cn.com.chinau.wxapi.WXPayEntryActivity"
             android:exported="true"
-
             android:launchMode="singleTop">
         </activity>
+
         <!--app注册到微信-->
         <receiver android:name="cn.com.chinau.ui.AppRegister">
             <intent-filter>

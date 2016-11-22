@@ -126,8 +126,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         startActivity(intent);
                         finishWitchAnimation();
 
-
-
+                    } else if (flag == 15) {// 购物车
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("Login", "ExpandableAdapter");
+                        startActivity(intent);
+                        finishWitchAnimation();
                     } else {// 不是从提现页面来的
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("Login", "login");
@@ -218,6 +221,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             flag = 13;
         }else if (WithDraw != null && WithDraw.equals("SelfMallDetail")) {// 商城详情
             flag = 14;
+        }else if (WithDraw != null && WithDraw.equals("ExpandableAdapter")) {// 购物车来的
+            flag = 15;
         }
 
     }

@@ -1,7 +1,10 @@
 package cn.com.chinau.listener;
+
 import android.view.View;
 import android.widget.AdapterView;
+
 import cn.com.chinau.adapter.SelfMallPanStampGridViewAdapter;
+
 /**
  * (商城，淘邮票)GridViewOnItemClickListener的条目点击监听
  * Created by Administrator on 2016/8/2.
@@ -11,10 +14,13 @@ public class SellMallPanStampGridViewOnItemClickListener implements AdapterView.
     private SelfMallPanStampGridViewAdapter adapter;
     private SelfMallItemClick mSelfMallItemClick;
     private StampItemClick mStampItemClick;
+
+
     public SellMallPanStampGridViewOnItemClickListener(int position, SelfMallPanStampGridViewAdapter adapter) {
         this.position = position;
         this.adapter = adapter;
     }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if (position != i) {
@@ -32,24 +38,30 @@ public class SellMallPanStampGridViewOnItemClickListener implements AdapterView.
         if (mStampItemClick != null)
             mStampItemClick.GetClickItem(adapter);
     }
+
     public interface StampItemClick {
         void GetClickItem(SelfMallPanStampGridViewAdapter adapter);
     }
+
     public void setStampItemClick(StampItemClick stampItemClick) {
         mStampItemClick = stampItemClick;
     }
+
     /**
      * 这个是接口的点击回调
      */
     public interface SelfMallItemClick {
         void GetClickItem();
     }
+
     public void setSelfMallItemClick(SelfMallItemClick selfMallItemClick) {
         mSelfMallItemClick = selfMallItemClick;
     }
+
     public int getPosition() {
         return position;
     }
+
     public void setPosition() {
         position = -1;
         adapter.setSeclection(adapter.getCount() + 1);

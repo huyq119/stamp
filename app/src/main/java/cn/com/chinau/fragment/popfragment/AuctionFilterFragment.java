@@ -1,12 +1,17 @@
 package cn.com.chinau.fragment.popfragment;
+
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
+
 import java.util.ArrayList;
+
 import cn.com.chinau.R;
 import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.SelfMallPanStampGridViewAdapter;
@@ -16,10 +21,12 @@ import cn.com.chinau.dialog.SelfMallPanStampFilterDialog;
 import cn.com.chinau.listener.SellMallPanStampGridViewOnItemClickListener;
 import cn.com.chinau.utils.MyLog;
 import cn.com.chinau.view.NoScrollGridView;
+
 /**
  * 淘邮票筛选（竞拍）Fragment
  */
 public class AuctionFilterFragment extends BaseDialogFragment implements SellMallPanStampGridViewOnItemClickListener.StampItemClick {
+
     private View mAuctionView;
     private int Current = -1;//当前选择的年代角标
     private SellMallPanStampGridViewOnItemClickListener mGoodsListener, mMetalListener,mItemsListener,mBrandListener;
@@ -29,12 +36,16 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
     private SharedPreferences sp;
     private ArrayList<CategoryBean.Category.SubCategory> subCategory1;
     private String[] mChinese, mQingMins, mWaiguos, mAllClasss, mChineseValue, mQingminValue, mWaiGuoValue, mAllClassValue;
+
     private SelfMallPanStampGridViewAdapter mMNewChineseAdapter;
     private SelfMallPanStampGridViewAdapter mMQingMinAdapter;
     private SelfMallPanStampGridViewAdapter mMWaiGuoAdapter;
     private SelfMallPanStampGridViewAdapter mMAllClassAdapter;
+
+
     public AuctionFilterFragment() {
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,12 +58,14 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
 //        RequestNet();
         return mAuctionView;
     }
+
     private void initView() {
         mNewChinese = (TextView) mAuctionView.findViewById(R.id.auction_pop_newchinese_title);
         mQingMin = (TextView) mAuctionView.findViewById(R.id.auction_pop_qingmin_title);
         mWaiguo = (TextView) mAuctionView.findViewById(R.id.auction_pop_waiguo_title);
         mALLclass = (TextView) mAuctionView.findViewById(R.id.auction_pop_allClass_title);
     }
+
     // 获取保存在本地邮市类别数据
     private void GetCategoryData() {
         String category6 = sp.getString("Category6", "");
@@ -63,16 +76,21 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
             ArrayList<CategoryBean.Category> mCategory = mCategoryBean.getCategory();// 一级标题list
             CategoryBean.Category category = mCategory.get(0);
             subCategory1 = category.getSubCategory();// 二级标题list
+
             int sub = subCategory1.size();// 获取subCategory1的个数
             MyLog.LogShitou("-==============sub", "sub==" + sub);
+
             String[] mArrTitle = new String[sub];// 一级分类
             //二级分类
             ArrayList<String[]> mArrList = new ArrayList<>();
             ArrayList<String[]> mArrListValue = new ArrayList<>();
+
             // 循环出一级分类的名字
             for (int i = 0; i <subCategory1.size(); i++) {
                 mArrTitle[i] = subCategory1.get(i).getName();
+
                 MyLog.LogShitou("===============竞拍一级类别0001", mArrTitle[i]);
+
                 ArrayList<CategoryBean.Category.SubCategory.SmllSubCategoryData> subCategory = subCategory1.get(i).getSubCategory();
                 String[] mArr = new String[subCategory.size()];
                 String[] mArrValue = new String[subCategory.size()];
@@ -95,6 +113,7 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
             String title3 = mArrTitle[3];
             mALLclass.setText(title3);
             MyLog.LogShitou("竞拍一级类别----->:", title0 + "--" + title1 + "--" + title2 + "--" + title3);
+
             // 获取二级分类name
             mChinese = mArrList.get(0);
             mQingMins = mArrList.get(1);
@@ -105,8 +124,13 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
             mQingminValue = mArrListValue.get(1);
             mWaiGuoValue = mArrListValue.get(2);
             mAllClassValue = mArrListValue.get(3);
+
         }
     }
+
+
+
+
     /**
      * 设置PopupWindow页面的数据
      */
@@ -119,16 +143,19 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
         NoScrollGridView mWaiGuoGV = (NoScrollGridView) mAuctionView.findViewById(R.id.auction_pop_waiguo);
         //的GridView
         NoScrollGridView mAllClassGV = (NoScrollGridView) mAuctionView.findViewById(R.id.auction_pop_allClass);
+
         //创建适配器
         mMNewChineseAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mChinese);
         mMQingMinAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mQingMins);
         mMWaiGuoAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mWaiguos);
         mMAllClassAdapter = new SelfMallPanStampGridViewAdapter(getActivity(), mAllClasss);
+
         //设置适配器
         mNewChinesGV.setAdapter(mMNewChineseAdapter);
         mQingMinGV.setAdapter(mMQingMinAdapter);
         mWaiGuoGV.setAdapter(mMWaiGuoAdapter);
         mAllClassGV.setAdapter(mMAllClassAdapter);
+
         //设置监听
         //新中国邮票
         mGoodsListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMNewChineseAdapter);
@@ -146,6 +173,7 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
         mBrandListener = new SellMallPanStampGridViewOnItemClickListener(Current, mMAllClassAdapter);
         mBrandListener.setStampItemClick(this);
         mAllClassGV.setOnItemClickListener(mBrandListener);
+
         SelfMallPanStampFilterDialog selfMallPanStampFilterDialog = (SelfMallPanStampFilterDialog) getParentFragment();
         selfMallPanStampFilterDialog.setClickReset(new SelfMallPanStampFilterDialog.ClickReset() {
             @Override
@@ -158,6 +186,7 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
             }
         });
     }
+
     @Override
     public void GetClickItem(SelfMallPanStampGridViewAdapter adapter) {
         if (adapter == mMNewChineseAdapter) {
@@ -181,23 +210,31 @@ public class AuctionFilterFragment extends BaseDialogFragment implements SellMal
             mMetalListener.setPosition();
 //            mBrandListener.setPosition();
         }
+
         int GoodsNum = mGoodsListener.getPosition();
         int MetalNum = mMetalListener.getPosition();
         int ItemsNum = mItemsListener.getPosition();
         int BrandNum = mBrandListener.getPosition();
         MyLog.e(GoodsNum + "-" + MetalNum + "-" + ItemsNum+"-"+BrandNum);
+
         String Goods = (GoodsNum == -1) ? "" : mChineseValue[GoodsNum];
         String Metal = (MetalNum == -1) ? "" : mQingminValue[MetalNum];
         String Items = (ItemsNum == -1) ? "" : mWaiGuoValue[ItemsNum];
         String Brand = (BrandNum == -1) ? "" : mAllClassValue[BrandNum];
+
         mData = Goods + "," + Metal + "," + Items+","+Brand;
         setData(mData);
         MyLog.e("点击了啥002--->"+mData);
+
     }
+
     public String getData() {
         return mData;
     }
+
     public void setData(String data) {
         mData = data;
     }
+
+
 }

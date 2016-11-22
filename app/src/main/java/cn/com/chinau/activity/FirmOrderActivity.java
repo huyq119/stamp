@@ -83,7 +83,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private ArrayList<FirmOrderBean.ExpreeComp> express_comp;
     private VerticalScrollView mFirmOrder_SV;
 
-    private static final int REQUESTCODE = 1;
+    private static final int REQUESTCODE = 1111;
     private String mNoAddressId;// 没有去选择地址获取的地址id
     private String mAddressId;// 去选择地址回调回来的地址id
     private String mTimeId; // 客户订单请求号
@@ -203,32 +203,35 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         } else {
             shopNameBean = (ShopNameBean)getIntent().getSerializableExtra("shopNameBean_data");
 
-//            groupSet_data = getIntent().getSerializableExtra("groupSet_data");
             groupSet = MyApplication.getGroupSet();
 
             MyLog.LogShitou("传过来的groupSet", groupSet.toString());
 
+
+            ArrayList<HashMap<String,String>> jsonList = new ArrayList<>();
             if (groupSet != null) {
                 for (Hashtable.Entry<ShopNameBean.SellerBean, ArrayList<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
-//            key = entry.getKey();
-
                     ArrayList<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
-                    for (int i = 0; i < value.size(); i++) {
-                        Iterator<ShopNameBean.SellerBean.GoodsBean> iterator = value.iterator();
-                        ShopNameBean.SellerBean.GoodsBean next = iterator.next();
-                        goods_sn = next.getGoods_sn();// 商品编号
-                        goods_count = next.getGoods_count();// 商品数量
-                        isChild = next.isChildSelected();
 
-                        MyLog.LogShitou("---1---编号+数量Json", goods_sn + "--" + goods_count);
+                    for (ShopNameBean.SellerBean.GoodsBean bean:
+                    value) {
+                        String a = bean.getGoods_sn();
+                        String b = bean.getGoods_count();
+                        HashMap<String,String> map = new HashMap<>();
+                        map.put("goods_sn",a);
+                        map.put("goods_count",b);
+                        jsonList.add(map);
                     }
-                    // 添加数据到AddShopCartBean生成Json
-                    mToJson = AddShopCartBean(goods_sn, goods_count);
-                    MyLog.LogShitou("购物车适配器数据转换成的Json", mToJson);
+
+
                 }
+                mToJson = new Gson().toJson(jsonList);
+                MyLog.LogShitou("购物车适配器数据转换成的Json", mToJson);
             }
         }
     }
+
+
 
     public List<AddShopCartBean> TabtoString(Hashtable<ShopNameBean.SellerBean, Set<ShopNameBean.SellerBean.GoodsBean>> tab) {
 
@@ -332,6 +335,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
 //        FirmOrderNet(mToJson);// 确认订单list网络请求
+        MyLog.LogShitou("==========onResume","-=================onResume");
     }
 
     /**
@@ -373,7 +377,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             case R.id.FirmOrder_NoAddress://没有收获地址
                 Intent intent1 = new Intent(this, EditReceiptAddressActivity.class);
                 intent1.putExtra("Address", "FirOrder");
-                startActivity(intent1);
+
+                startActivityForResult(intent1,3333);
                 //跳转动画
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 
@@ -383,6 +388,12 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                 finishWitchAnimation();
                 break;
             case R.id.firmOrder_ok_pay://确认并付款
+
+                if(mNoAddress.getVisibility() == View.VISIBLE && mAddress.getVisibility() == View.GONE){
+                    Toast.makeText(getApplicationContext(),"请选择收货地址",Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 mExCompName = mDistributionTv.getText().toString().trim();
                 payNmae = mPayNmme.getText().toString().trim();
                 MyLog.LogShitou("===========地址id", mExCompName + "==" + payNmae);
@@ -516,7 +527,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     params.put(StaticField.PAYTYPE, StaticField.ALIPAY);// 支付方式
                     params.put(StaticField.GOODESINFO, mToJson);//  商品信息：所有商品的json字符串
 
-                    MyLog.LogShitou("生成订单参数", mToken + "--" + mUser_id + "--" + mAddressId + "--" + mNoAddressId + "--" + mTimeId + "--" + info_list.toString());
+                    MyLog.LogShitou("生成订单参数", mToken + "--" + mUser_id + "--" + mAddressId + "--" + mNoAddressId + "--" + mTimeId + "--" + mToJson);
 
                     String mapSort = SortUtils.MapSort(params);
                     String md5code = Encrypt.MD5(mapSort);
@@ -646,7 +657,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                             String prepayid = mPrepayid[1];
                             String appid = mAppid[1];
 
-                            MyLog.LogShitou("微信支付需要的值", sign + "--" + timestamp + "--" + noncestr + "--" + partnerid + "--" + prepayid + "--" + appid);
+//                            MyLog.LogShitou("微信支付需要的值", sign + "--" + timestamp + "--" + noncestr + "--" + partnerid + "--" + prepayid + "--" + appid);
                             // app注册微信
                             api = WXAPIFactory.createWXAPI(FirmOrderActivity.this, StaticField.APP_ID);
                             api.registerApp(StaticField.APP_ID);
@@ -654,15 +665,37 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                                 // 微信支付请求
                                 PayReq req = new PayReq();
                                 req.appId = appid; // 应用ID
+                                MyLog.LogShitou("微信支付需要的值appid",appid);
                                 req.partnerId = partnerid; // 商户号
+                                MyLog.LogShitou("微信支付需要的值partnerid",partnerid);
                                 req.prepayId = prepayid; // 预支付交易会话ID
-                                req.packageValue = "Sign=WXPay"; // 	暂填写固定值Sign=WXPay
+                                MyLog.LogShitou("微信支付需要的值prepayid",prepayid);
+                                req.packageValue = "Sign=WXPay"; // 暂填写固定值Sign=WXPay
                                 req.nonceStr = noncestr; // 随机字符串
+                                MyLog.LogShitou("微信支付需要的值noncestr",noncestr);
                                 req.timeStamp = timestamp; // 时间戳
+                                MyLog.LogShitou("微信支付需要的值timestamp",timestamp);
+
+//
+//                                List<NameValuePair> signParams = new LinkedList<NameValuePair>();
+//                                signParams.add(new BasicNameValuePair("appid", req.appId));
+//                                signParams.add(new BasicNameValuePair("noncestr", req.nonceStr));
+//                                signParams.add(new BasicNameValuePair("package", req.packageValue));
+//                                signParams.add(new BasicNameValuePair("partnerid", req.partnerId));
+//                                signParams.add(new BasicNameValuePair("prepayid", req.prepayId));
+//                                signParams.add(new BasicNameValuePair("timestamp", req.timeStamp));
+
+
+
                                 req.sign = sign; // 签名
-                                req.extData = "app data";
+                                MyLog.LogShitou("微信支付需要的值sign",sign);
+//                                req.extData = "app data";
                                 api.sendReq(req);
-                                MyLog.LogShitou("这值是啥00req", api.sendReq(req) + "");
+
+                                MyLog.LogShitou("微信支付需要的值", sign + "--" + timestamp + "--" + noncestr + "--" + partnerid + "--" + prepayid + "--" + appid);
+
+
+//                                MyLog.LogShitou("这值是啥00req", api.sendReq(req) + "");
                             }
                         }
                     } else {
@@ -797,7 +830,13 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case 1:
+            case 3333:
+                if (resultCode == 33){
+                    FirmOrderNet(mToJson);// 确认订单list网络请求
+                }
+
+                break;
+            case REQUESTCODE:
                 if (resultCode == RESULT_OK) {
                     String mName = data.getStringExtra("name");
                     String mMobile = data.getStringExtra("mobile");
@@ -807,6 +846,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     mAddressMobile.setText(mMobile);
                     mAddressDetail.setText(mDetail);
                     MyLog.LogShitou("回调回来的地址详细信息", mName + "--" + mMobile + "--" + mDetail + "--" + mAddressId);
+                }else if(resultCode == 22){
+                    FirmOrderNet(mToJson);// 确认订单list网络请求
                 }
                 break;
             default:

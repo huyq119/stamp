@@ -373,6 +373,8 @@ public class EditReceiptAddressActivity extends BaseActivity implements View.OnC
                     String mCoode = mBaseBean.getRsp_code();
                     String mMsg = mBaseBean.getRsp_msg();
                     if (mCoode.equals("0000")) {
+                        setResult(33);
+
                         finishWitchAnimation();
                     } else if (mCoode.equals("2068")) {
                         MyToast.showShort(EditReceiptAddressActivity.this, "手机号格式错误");

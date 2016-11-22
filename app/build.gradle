@@ -5,9 +5,10 @@ android {
         config {
             keyAlias 'aa'
             keyPassword '123456'
-            storeFile file('D:/StudioTestCode/001/stamp/app/build/outputs/key.jks')
+            storeFile file('D:/StudioTestCode/001/stamp/app/build/outputs/mykey.jks')
             storePassword '123456'
         }
+
     }
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
@@ -20,6 +21,12 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.config
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

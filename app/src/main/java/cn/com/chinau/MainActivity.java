@@ -105,6 +105,9 @@ public class MainActivity extends FragmentActivity implements LazyViewPager.OnPa
             } else if (Login.equals("StampDetail")) {
                 mViewPager.setCurrentItem(3);
                 mRadioGroup.check(R.id.Radio_shop);
+            } else if (Login.equals("ExpandableAdapter")) {
+                mViewPager.setCurrentItem(3);
+                mRadioGroup.check(R.id.Radio_shop);
             }
         }
 
