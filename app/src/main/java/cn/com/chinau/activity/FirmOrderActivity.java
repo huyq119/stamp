@@ -116,6 +116,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
     private ShopNameBean.SellerBean sellerBean;
     private Integer integer;
     private double mTotalPrices;
+    private int mSellerNo;
 
     @Override
     public View CreateTitle() {
@@ -204,13 +205,14 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
             shopNameBean = (ShopNameBean)getIntent().getSerializableExtra("shopNameBean_data");
 
             groupSet = MyApplication.getGroupSet();
-
+            mSellerNo =  groupSet.size();// 获取卖家数(计算总价用)
             MyLog.LogShitou("传过来的groupSet", groupSet.toString());
 
 
             ArrayList<HashMap<String,String>> jsonList = new ArrayList<>();
             if (groupSet != null) {
                 for (Hashtable.Entry<ShopNameBean.SellerBean, ArrayList<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
+
                     ArrayList<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
 
                     for (ShopNameBean.SellerBean.GoodsBean bean:
@@ -551,6 +553,8 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
 
     private Handler mHandler = new Handler() {
 
+        private double douPrice;
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -574,25 +578,38 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                         express_fee = mFirmOrderBean.getExpress_fee();
                         mDistributionPrice.setText("￥" + express_fee.get(0).getValue());
 
-                        int count =Integer.valueOf(mCount).intValue(); //数量转成int
                         String str = express_fee.get(0).getValue().replaceAll(",","").trim();// 快递费去掉首尾空格
-                        String serviceFee = servicePrice.replaceAll(",","").trim();// 服务费去掉首尾空格
                         double countPrice =Double.parseDouble(str); // 快递费转double
 
-                        MyLog.LogShitou("价钱转double商品数量",countPrice+"===="+count);
+                        if (mFirmOrder.equals("AuctionRecordAdapter")) {
+                            int count =Integer.valueOf(mCount).intValue(); //数量转成int
+                            MyLog.LogShitou("价钱转double商品数量",countPrice+"===="+count);
+                            double price = countPrice * count;//快递总价钱
+                            MyLog.LogShitou("======快递费总价",price+"");
 
-                        double price = countPrice * count;//快递总价钱
-                        MyLog.LogShitou("======快递费总价",price+"");
-                        DecimalFormat df   = new DecimalFormat("######0.00");// 保留2位小数
-                        String mprice = df.format(price);// 最后的快递费
-                        double douPrice =Double.parseDouble(mprice); // 最后快递费转double
-                        MyLog.LogShitou("======double快递费总价",price+"");
+                            DecimalFormat df   = new DecimalFormat("######0.00");// 保留2位小数
+                            String mprice = df.format(price);// 最后的快递费
+                             douPrice =Double.parseDouble(mprice); // 最后快递费转double
+                            MyLog.LogShitou("======double快递费总价",price+"");
+                        }else{
+                            int count =Integer.valueOf(mSellerNo).intValue(); //数量转成int
+//                            String str = express_fee.get(0).getValue().replaceAll(",","").trim();// 快递费去掉首尾空格
+//                            double countPrice =Double.parseDouble(str); // 快递费转double
+                            double price = countPrice * count;//快递总价钱
+                            MyLog.LogShitou("======快递费总价",price+"");
 
+                            DecimalFormat df   = new DecimalFormat("######0.00");// 保留2位小数
+                            String mprice = df.format(price);// 最后的快递费
+                             douPrice =Double.parseDouble(mprice); // 最后快递费转double
+                            MyLog.LogShitou("======double快递费总价",price+"");
+                        }
+
+                        String serviceFee = servicePrice.replaceAll(",","").trim();// 服务费去掉首尾空格
                         double mServicePrice =Double.parseDouble(serviceFee); //最后服务费转double价钱
                         double mtotalPrice =Double.parseDouble(mPrice.replaceAll(",","").trim()); //最后商品的价钱转double()
 
                         double price1 = add(douPrice,mServicePrice); // 快递费和服务费总价
-                         mTotalPrices =  add(price1,mtotalPrice); // 三个数相加的总费用
+                        mTotalPrices =  add(price1,mtotalPrice); // 三个数相加的总费用
 
                         mTotalPrice.setText("￥" + mTotalPrices);// 赋值总价钱
                         MyLog.LogShitou("==============总价",mTotalPrices+"");
@@ -676,17 +693,6 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                                 req.timeStamp = timestamp; // 时间戳
                                 MyLog.LogShitou("微信支付需要的值timestamp",timestamp);
 
-//
-//                                List<NameValuePair> signParams = new LinkedList<NameValuePair>();
-//                                signParams.add(new BasicNameValuePair("appid", req.appId));
-//                                signParams.add(new BasicNameValuePair("noncestr", req.nonceStr));
-//                                signParams.add(new BasicNameValuePair("package", req.packageValue));
-//                                signParams.add(new BasicNameValuePair("partnerid", req.partnerId));
-//                                signParams.add(new BasicNameValuePair("prepayid", req.prepayId));
-//                                signParams.add(new BasicNameValuePair("timestamp", req.timeStamp));
-
-
-
                                 req.sign = sign; // 签名
                                 MyLog.LogShitou("微信支付需要的值sign",sign);
 //                                req.extData = "app data";
@@ -713,7 +719,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                         mRequestId = mOrderPayBeans.getRequest_id();// 交易订单号
                         mOrder_price = mOrderPayBeans.getOrder_amount();// 订单金额
 //                        String mPayRequestId = mOrderPayBeans.getPay_request_id();// 平台支付请求号
-                        MyLog.LogShitou("mPayUrl+支付宝请求需要的串", mPayUrl);
+//                        MyLog.LogShitou("mPayUrl+支付宝请求需要的串", mPayUrl);
                         // 发起支付宝支付
                         Runnable payRunnable = new Runnable() {
                             @Override
@@ -742,21 +748,16 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
                     String resultInfo = payResult.getResult();// 同步返回需要验证的信息
                     MyLog.LogShitou("result+支付宝请求", payResult.toString() + "--" + resultInfo);
                     String resultStatus = payResult.getResultStatus();
+//                    payResult.getMemo()
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
 //                        Toast.makeText(FirmOrderActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-//                        String mGoods_sn = info_list.get(0).getGoods_sn();
-//                        String mGoods_count= info_list.get(0).getGoods_count();
                         Bundle bundle = new Bundle();
-//                        bundle.putString(StaticField.GOODS_SN, mGoods_sn);
-//                        bundle.putString(StaticField.ORDER_SN, mRequestId);
-//                        bundle.putString(StaticField.GOODS_COUNT, mGoods_count);
-//                        bundle.putString(StaticField.GOODS_PRICE, mOrder_price);
                         bundle.putString(StaticField.ORDERS, "receiving");
-
-                        openActivityWitchAnimation(OrderBuySuccessActivity.class, bundle);
+                        openActivityWitchAnimation(OrderBuySuccessActivity.class, bundle); // 跳转至成功页面
                         finish();
+
                     } else {
                         // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
@@ -794,7 +795,7 @@ public class FirmOrderActivity extends BaseActivity implements View.OnClickListe
         mDistributionPrice.setText(valuel); // 配送价格
         MyLog.LogShitou("获取的配送，价格", name + "--" + valuel);
 
-        int count =Integer.valueOf(mCount).intValue(); //数量转成int
+        int count =Integer.valueOf(mSellerNo).intValue(); //数量转成int
         String str = valuel.replaceAll("￥","").trim();// 快递费去掉首尾空格
         double countPrice =Double.parseDouble(str); // 快递费转double
 

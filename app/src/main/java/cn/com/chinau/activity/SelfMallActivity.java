@@ -80,16 +80,20 @@ public class SelfMallActivity extends BaseActivity implements View.OnClickListen
                     break;
                 case StaticField.CG_SUCCESS://筛选
                     Gson gson1 = new Gson();
-                    GoodsStampBean mGoodsStampBean1 = gson1.fromJson((String) msg.obj, GoodsStampBean.class);
-                   String mCode1 = mGoodsStampBean1.getRsp_code();
+                    mGoodsStampBean = gson1.fromJson((String) msg.obj, GoodsStampBean.class);
+                   String mCode1 = mGoodsStampBean.getRsp_code();
                     if (mCode1.equals("0000")){
                         if (num == 0) {
-                            ArrayList<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean1.getGoods_list();
-                            //为GridView设置适配器
-                            StampMarketGridViewAdapter mStampMarAdapter = new StampMarketGridViewAdapter(SelfMallActivity.this, goods_list, mBitmap);
-                            //内容GridView设置适配器
-                            mGridView.setAdapter(mStampMarAdapter);
-                            mStampMarAdapter.notifyDataSetChanged();
+//                            ArrayList<GoodsStampBean.GoodsList> goods_list = mGoodsStampBean1.getGoods_list();
+//                            //为GridView设置适配器
+//                            StampMarketGridViewAdapter mStampMarAdapter = new StampMarketGridViewAdapter(SelfMallActivity.this, goods_list, mBitmap);
+//                            //内容GridView设置适配器
+//                            mGridView.setAdapter(mStampMarAdapter);
+//                            mStampMarAdapter.notifyDataSetChanged();
+                            mList.clear();
+                            initAdapter();
+                        }else{
+                            initAdapter();
                         }
                     }
                     break;

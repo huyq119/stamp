@@ -3,6 +3,7 @@ package cn.com.chinau.fragment.popfragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import cn.com.chinau.StaticField;
 import cn.com.chinau.adapter.SelfMallPanStampGridViewAdapter;
 import cn.com.chinau.base.BaseDialogFragment;
 import cn.com.chinau.bean.CategoryBean;
+import cn.com.chinau.bean.CategoryGoodsJsonBean;
 import cn.com.chinau.dialog.SelfMallPanStampFilterDialog;
 import cn.com.chinau.listener.SellMallPanStampGridViewOnItemClickListener;
 import cn.com.chinau.utils.MyLog;
@@ -40,6 +42,8 @@ public class StampFilterFragment extends BaseDialogFragment implements SellMallP
     private SelfMallPanStampGridViewAdapter mMQingMinAdapter;
     private SelfMallPanStampGridViewAdapter mMThemeAdapter;
     private SelfMallPanStampGridViewAdapter mMOtherAdapter;
+    private String[] mArryValue;
+    private String mToJson;
 
 
     public StampFilterFragment() {
@@ -79,15 +83,18 @@ public class StampFilterFragment extends BaseDialogFragment implements SellMallP
             int sub = subCategory1.size();// 获取subCategory1的个数
             MyLog.LogShitou("-==============sub", "sub==" + sub);
 
-            String[] mArrTitle = new String[sub];// 一级分类
+            String[] mArrTitle = new String[sub];// 一级分类name
+            // 一级分类Value
+            mArryValue = new String[sub];
             //二级分类
             ArrayList<String[]> mArrList = new ArrayList<>();
             ArrayList<String[]> mArrListValue = new ArrayList<>();
             // 循环出一级分类的名字
             for (int i = 0; i < subCategory1.size(); i++) {
                 mArrTitle[i] = subCategory1.get(i).getName();
+                mArryValue[i] = subCategory1.get(i).getValue();
 
-                MyLog.LogShitou("邮市一级类别0001----->:", mArrTitle[i]);
+                MyLog.LogShitou("邮市一级类别0001----->:", mArrTitle[i]+"=="+mArryValue[i]);
                 ArrayList<CategoryBean.Category.SubCategory.SmllSubCategoryData> subCategory = subCategory1.get(i).getSubCategory();
                 String[] mArr = new String[subCategory.size()];
                 String[] mArrValue = new String[subCategory.size()];
@@ -215,12 +222,55 @@ public class StampFilterFragment extends BaseDialogFragment implements SellMallP
         String theme = (themeNum == -1) ? "" : mThemeValue[themeNum];
         String other = (otherNum == -1) ? "" : mOtherValue[otherNum];
 
+        // 选中组装Json串
+        CategoryGoodsJsonBean mGoodsJsonBean = new CategoryGoodsJsonBean();
+        CategoryGoodsJsonBean.CategoryBean mCategoryBean = new CategoryGoodsJsonBean.CategoryBean();
+//        mCategoryBean.setCategory(CategoryValue);// 一级类别Value
+//        CategoryGoodsJsonBean.CategoryBean.SubBean mSubBean = new CategoryGoodsJsonBean.CategoryBean.SubBean();
+
+        if(!TextUtils.isEmpty(chinese)){ // 新中国
+            mCategoryBean.setCategory(mArryValue[0]);// 一级类别Value
+            CategoryGoodsJsonBean.CategoryBean.SubBean mSubBean = new CategoryGoodsJsonBean.CategoryBean.SubBean();
+            mSubBean.setSub(chinese);// 二级Value
+            mCategoryBean.setSubCategory(mSubBean);
+            mGoodsJsonBean.setCategory(mCategoryBean);
+            mToJson = new Gson().toJson(mGoodsJsonBean);
+            MyLog.LogShitou("Goods======选中一类别的Json串", "mToJson===" + mToJson);
+
+        }else if(!TextUtils.isEmpty(qingmin)){ // 清民区
+            mCategoryBean.setCategory(mArryValue[1]);// 一级类别Value
+            CategoryGoodsJsonBean.CategoryBean.SubBean mSubBean = new CategoryGoodsJsonBean.CategoryBean.SubBean();
+            mSubBean.setSub(qingmin);// 二级Value
+            mCategoryBean.setSubCategory(mSubBean);
+            mGoodsJsonBean.setCategory(mCategoryBean);
+            mToJson = new Gson().toJson(mGoodsJsonBean);
+            MyLog.LogShitou("Metal======选中一类别的Json串", "mToJson===" + mToJson);
+
+        }else if(!TextUtils.isEmpty(theme)){ // 外国
+            mCategoryBean.setCategory(mArryValue[2]);// 一级类别Value
+            CategoryGoodsJsonBean.CategoryBean.SubBean mSubBean = new CategoryGoodsJsonBean.CategoryBean.SubBean();
+            mSubBean.setSub(theme);// 二级Value
+            mCategoryBean.setSubCategory(mSubBean);
+            mGoodsJsonBean.setCategory(mCategoryBean);
+            mToJson = new Gson().toJson(mGoodsJsonBean);
+            MyLog.LogShitou("Items======选中一类别的Json串", "mToJson===" + mToJson);
+
+        }else if(!TextUtils.isEmpty(other)){ // 各类
+            mCategoryBean.setCategory(mArryValue[3]);// 一级类别Value
+            CategoryGoodsJsonBean.CategoryBean.SubBean mSubBean = new CategoryGoodsJsonBean.CategoryBean.SubBean();
+            mSubBean.setSub(other);// 二级Value
+            mCategoryBean.setSubCategory(mSubBean);
+            mGoodsJsonBean.setCategory(mCategoryBean);
+            mToJson = new Gson().toJson(mGoodsJsonBean);
+
+            MyLog.LogShitou("Brand======选中一类别的Json串", "mToJson===" + mToJson);
+        }
 
 
 
         mData = chinese + "," + qingmin + "," + theme + "," + other;
-        setData(mData);
-        MyLog.e("点击了啥002--->" + mData);
+        setData(mToJson);
+        MyLog.LogShitou("点击了邮市啥002--->","=="+mToJson);
 
 
 

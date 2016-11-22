@@ -68,7 +68,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
     private int lastVisibleItemPosition = 0;// 标记上次滑动位置
     private int mCount;
     private SharedPreferences sp;
-    private String[] mTitle, mArrTitle0, mArrTitle1, mArrTitle2,mArrValue0,mArrValue1,mArrValue2;
+    private String[] mTitle, mArrTitle0, mArrTitle1, mArrTitle2, mArrValue0, mArrValue1, mArrValue2;
     private StampTapBean stampTapBean;
     private Handler mHandler = new Handler() {
 
@@ -83,7 +83,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                     stampTapBean = gson.fromJson((String) msg.obj, StampTapBean.class);
                     String code = stampTapBean.getRsp_code();
                     if (code.equals("0000")) {
-                        MyLog.LogShitou("hand==3333=========num","num====="+num);
+                        MyLog.LogShitou("hand==3333=========num", "num=====" + num);
                         if (num == 0) {
                             initAdapter();
                         } else {
@@ -92,26 +92,25 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                         }
                     }
                     break;
-                case  StaticField.SUCCESS://筛选后的邮票信息内容
+                case StaticField.SUCCESS://筛选后的邮票信息内容
                     Gson gson1 = new Gson();
-                    StampTapBean stampTapBean1 = gson1.fromJson((String) msg.obj, StampTapBean.class);
-                    String code1 = stampTapBean1.getRsp_code();
-                    String msg1 = stampTapBean1.getRsp_msg();
-
+                    stampTapBean = gson1.fromJson((String) msg.obj, StampTapBean.class);
+                    String code1 = stampTapBean.getRsp_code();
+                    String msg1 = stampTapBean.getRsp_msg();
                     if (code1.equals("0000")) {
                         if (num == 0) {
+//                            initAdapter();
+//                            ArrayList<StampTapBean.StampList> stamp_list = stampTapBean1.getStamp_list();
+//                            StampTapGridViewAdapter gvAdapter = new StampTapGridViewAdapter(getActivity(), stamp_list, mBitmap);
+//                            gridView.setAdapter(gvAdapter);
+//                            gvAdapter.notifyDataSetChanged();
+                            mList.clear();
                             initAdapter();
-                            ArrayList<StampTapBean.StampList> stamp_list = stampTapBean1.getStamp_list();
-                            StampTapGridViewAdapter gvAdapter = new StampTapGridViewAdapter(getActivity(), stamp_list, mBitmap);
-                            gridView.setAdapter(gvAdapter);
-                            gvAdapter.notifyDataSetChanged();
+                        } else {
+                            initAdapter();
                         }
-//                       else {
-//                            //设置GridView的适配器
-//                            setGridViewAdapter();
-//                        }
-                    }else if(code1.equals("1002")){
-                        MyToast.showShort(getActivity(),msg1);
+                    } else if (code1.equals("1002")) {
+                        MyToast.showShort(getActivity(), msg1);
                     }
                     break;
             }
@@ -157,7 +156,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
         // 初始化第一个按钮
         setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
         RequestNet(StaticField.ZH, num, StaticField.D, ""); // 邮票目录请求网络的方法
-        MyLog.LogShitou("init===1111========num","num====="+num);
+        MyLog.LogShitou("init===1111========num", "num=====" + num);
     }
 
 
@@ -227,7 +226,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
      * @param index    角标
      * @param Sort     排序
      */
-        private void RequestNet(final String Order_By, final int index, final String Sort, final String mJson) {
+    private void RequestNet(final String Order_By, final int index, final String Sort, final String mJson) {
         ThreadManager.getInstance().createLongPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -237,7 +236,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
                 params.put(StaticField.ORDER_BY, Order_By); // 排序条件(排序的维度：ZH综合；SJ时间；JG价格)
                 params.put(StaticField.SORT_TYPE, Sort); // 排序方式(A：升序；D：降序)
                 if (!mJson.equals("")) {
-                    MyLog.LogShitou("==1111=========mJson有值吗",mJson);
+                    MyLog.LogShitou("==1111=========mJson有值吗", mJson);
                     params.put(StaticField.CATEGORY, mJson); // 类别，json串
                 }
                 params.put(StaticField.OFFSET, String.valueOf(StaticField.OFFSETNUM)); // 步长(item条目)
@@ -248,26 +247,26 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
 
                 String result = HttpUtils.submitPostData(StaticField.ROOT, params);
 
-                MyLog.LogShitou(Order_By+"/===/"+mJson+"/=="+"邮票目录list", result);
+                MyLog.LogShitou(Order_By + "/===/" + mJson + "/==" + "邮票目录list", result);
 
                 if (result.equals("-1") | result.equals("-2")) {
                     return;
                 }
 
-                if (mJson.equals("")){
-                    MyLog.LogShitou("net==1111=========num","num====="+num);
+                if (mJson.equals("")) {
+                    MyLog.LogShitou("net==1111=========num", "num=====" + num);
                     Message msg = mHandler.obtainMessage();
                     msg.obj = result;
                     msg.what = StaticField.CG_SUCCESS;
                     mHandler.sendMessage(msg);
-                }else{ // 筛选后请求的数据
+                } else { // 筛选后请求的数据
 
                     Message msg = mHandler.obtainMessage();
                     msg.obj = result;
                     msg.what = StaticField.SUCCESS;
                     mHandler.sendMessage(msg);
 
-                    MyLog.LogShitou("net==2222=========num","num====="+num);
+                    MyLog.LogShitou("net==2222=========num", "num=====" + num);
                 }
             }
         });
@@ -282,7 +281,7 @@ public class StampTapFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void GetJsonData(String tojson) {
         String mToJson = tojson;
-        if (!mToJson.equals("")){
+        if (!mToJson.equals("")) {
             MyLog.LogShitou("=====传过来的Json串", mToJson);
             setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
             RequestNet(StaticField.ZH, num, StaticField.D, mToJson); // 邮票目录请求网络的方法

@@ -49,7 +49,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="cn.com.chinau.MainActivity" />
+        <activity android:name="cn.com.chinau.MainActivity"
+            android:screenOrientation="portrait"
+            />
 
         <!-- 扫描二维码 -->
         <activity android:name="cn.com.chinau.zxing.activity.CaptureActivity" />
@@ -177,6 +179,13 @@
         <!--扫码详情页-->
         <activity android:name="cn.com.chinau.activity.ScanOrderBuyDetailActivity" />
 
+        <!--未安装支付宝的时候自动跳转到网页支付，需配置此页面-->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
 
         <!--回调微信支付成功后跳转页面-->
@@ -202,7 +211,6 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!--设置你注册的友盟appkey-->
-
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="580f2166a40fa337f20002ca">

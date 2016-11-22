@@ -529,7 +529,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                     break;
                 case R.id.tv_add://增加的监听
 
-                    if(!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)){
+                    if(!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)){// 已登录情况
                         String tag = (String) v.getTag();
                         String[] tags = tag.split(",");
                         String tag1 = tags[0];
@@ -552,21 +552,17 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
                         ShoppingCartBiz.addOrReduceGoodsNum(seller_list, true, (String) v.getTag());
 
-                    }else {
+                    }else { // 未登录情况
                         String tag = (String) v.getTag();
                         String[] tags = tag.split(",");
                         String tag1 = tags[0];
                         String tag2 = tags[1];
                         // 获取商品的编号
                         String goods_sn = shopNameBean.getSeller_list().get(Integer.valueOf(tag1)).getGoods_list().get(Integer.valueOf(tag2)).getGoods_sn();
-//                    MyLog.LogShitou("======增加的商品goods_sn", "增加的商品goods_sn=" + goods_sn);
                         // 获取商品数量
                         String goods_cunt = shopNameBean.getSeller_list().get(Integer.valueOf(tag1)).getGoods_list().get(Integer.valueOf(tag2)).getGoods_count();
                         int counts = Integer.valueOf(goods_cunt);
                         counts++;
-
-//                        shopNameBean.getSeller_list().get(Integer.valueOf(tag1)).getGoods_list().get(Integer.valueOf(tag2)).setGoods_count(counts + "");
-
 
                         ShoppingCartBiz.addOrReduceGoodsNum(seller_list, true, (String) v.getTag());
                         setSettleInfo();
@@ -575,12 +571,10 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                         SPUtils.put(context,StaticField.SHOPJSON,sg);
                     }
 
-
-
                     break;
 
                 case R.id.tv_reduce://减少的监听
-                    if(!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)){
+                    if(!TextUtils.isEmpty(mToken) && !TextUtils.isEmpty(mUser_id)){ // 登录情况下
                         String tages = (String) v.getTag();
                         String[] tags2 = tages.split(",");
                         String tages1 = tags2[0];
@@ -603,9 +597,8 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                             ShoppingCartBiz.addOrReduceGoodsNum(seller_list, false, (String) v.getTag());
                         }else if(counts1 == 1){
                             MyLog.LogShitou("====不能小于1件");
-
                         }
-                    }else {
+                    }else { // 未登录情况下
                         String tages = (String) v.getTag();
                         String[] tags2 = tages.split(",");
                         String tages1 = tags2[0];
@@ -620,9 +613,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                             counts1--;
                             MyLog.LogShitou("=============counts减少的数量", "减少的数量" + counts1);
 
-//                            shopNameBean.getSeller_list().get(Integer.valueOf(tages1)).getGoods_list().get(Integer.valueOf(tages2)).setGoods_count(counts1 + "");
-
-
                             ShoppingCartBiz.addOrReduceGoodsNum(seller_list, false, (String) v.getTag());
                             setSettleInfo();
                             notifyDataSetChanged();
@@ -633,9 +623,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
                         }
                     }
-
-
-
 
 
                     break;
@@ -665,7 +652,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
                     // 判断删除是否可点击
                     MyLog.LogShitou("===点击删除", count + "--" + price);
-                    if (count != null && price != null || !mSellerLists.equals("")) {
+                    if (count != null && price != null ) {
                         mJson = getJson(groupSet);  // 获取选中的商品Json串
                         DeleteDialog();// 删除弹出框
                     } else {
@@ -712,25 +699,9 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     private String getJson(Hashtable<ShopNameBean.SellerBean, ArrayList<ShopNameBean.SellerBean.GoodsBean>> groupSets) {
         ArrayList<HashMap<String,String>> jsonList = new ArrayList<>();
         if (groupSets != null) {
-            /*for (Hashtable.Entry<ShopNameBean.SellerBean, ArrayList<ShopNameBean.SellerBean.GoodsBean>> entry : groupSets.entrySet()) {
-                ArrayList<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
-                for (int i = 0; i < value.size(); i++) {
-                    Iterator<ShopNameBean.SellerBean.GoodsBean> iterator = value.iterator();
-                    ShopNameBean.SellerBean.GoodsBean next = iterator.next();
-                    goods_sn = next.getGoods_sn();// 商品编号
-                    goods_count = next.getGoods_count();// 商品数量
-                    isChild = next.isChildSelected();
-
-                    MyLog.LogShitou("---1---编号+数量Json", goods_sn + "--" + goods_count);
-                }
-                // 添加数据到AddShopCartBean生成Json
-                mToJson = AddShopCartBean(goods_sn, goods_count);
-                MyLog.LogShitou("购物车适配器数据转换成的Json", mToJson);
-            }*/
 
             for (Hashtable.Entry<ShopNameBean.SellerBean, ArrayList<ShopNameBean.SellerBean.GoodsBean>> entry : groupSet.entrySet()) {
                 ArrayList<ShopNameBean.SellerBean.GoodsBean> value = entry.getValue(); // 拿到循环后的value值
-
                 for (ShopNameBean.SellerBean.GoodsBean bean:
                         value) {
                     String a = bean.getGoods_sn();
@@ -897,9 +868,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                 case StaticField.SUCCESS:// 修改
                     Gson gson = new Gson();
                     BaseBean mBasebeans = gson.fromJson((String) msg.obj, BaseBean.class);
-                    if (mBasebeans.getRsp_code().equals("0000")) {
-//                        MyToast.showShort(context, "修改成功");
-
+                    if (mBasebeans.getRsp_code().equals("0000")) { // 修改成功
                         setSettleInfo();
                         notifyDataSetChanged();
                     }
@@ -909,7 +878,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                     ShopNameBean shopNameBean = gsons.fromJson((String) msg.obj, ShopNameBean.class);
                     String code = shopNameBean.getRsp_code();
                     if (code.equals("0000")) {
-//                        seller_list = shopNameBean.getSeller_list();
                         ShopNameBeans.GetSellerList(shopNameBean);// 接口调用
                     }
                     break;

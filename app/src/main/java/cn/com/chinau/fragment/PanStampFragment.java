@@ -94,15 +94,19 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
                     break;
                 case StaticField.CG_SUCCESS://筛选
                     Gson gson1 = new Gson();
-                    GoodsStampBean mGoodsStampBean1 = gson1.fromJson((String) msg.obj, GoodsStampBean.class);
-                    String mRsp_code1 = mGoodsStampBean1.getRsp_code();
+                     mGoodsStampBean = gson1.fromJson((String) msg.obj, GoodsStampBean.class);
+                    String mRsp_code1 = mGoodsStampBean.getRsp_code();
                     if (mRsp_code1.equals("0000")) {
 
                         if (num == 0) {
-                            ArrayList<GoodsStampBean.GoodsList> stamp_list = mGoodsStampBean1.getGoods_list();
-                            PanStampGridViewAdapter mPanStampAdapter = new PanStampGridViewAdapter(getActivity(), stamp_list, mBitmap);
-                            gridView.setAdapter(mPanStampAdapter);
-                            mPanStampAdapter.notifyDataSetChanged();
+                            mList.clear();
+                            initAdapter();
+//                            ArrayList<GoodsStampBean.GoodsList> stamp_list = mGoodsStampBean1.getGoods_list();
+//                            PanStampGridViewAdapter mPanStampAdapter = new PanStampGridViewAdapter(getActivity(), stamp_list, mBitmap);
+//                            gridView.setAdapter(mPanStampAdapter);
+//                            mPanStampAdapter.notifyDataSetChanged();
+                        }else {
+                            initAdapter();
                         }
                     }
                     break;
@@ -495,37 +499,40 @@ public class PanStampFragment extends BaseFragment implements View.OnClickListen
      */
     @Override
     public void setEnsureData() {
-        String mToJson = mallFragment.getData();
-        String mJson = mThreeFragment.getJson();
-        String mStampdata = mStampFragment.getData();
-        String mAuctiondata = mAuctionFragment.getData();
+        String mSCJson = mallFragment.getData();
+        String mDSFJson = mThreeFragment.getJson();
+        String mYSJson = mStampFragment.getData();
+        String mJPJson = mAuctionFragment.getData();
 
-        MyLog.LogShitou("===========请求上传的Json串", mToJson+"==/"+mJson+"==/"+mStampdata+"==/"+mAuctiondata);
+        MyLog.LogShitou("===========请求上传的Json串", mSCJson+"==/"+mDSFJson+"==/"+mYSJson+"==/"+mJPJson);
 
         //  此处注意请求网络里面的字段数据StaticField.SC_ZY,StaticField.SC_DSF
         //  筛选商品类型不同，传不同类型
         // 自营商城
-        if (mToJson != null) {
+        if (mSCJson != null) {
             setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-            RequestNet(StaticField.ZH, num, StaticField.SC_ZY,StaticField.D, mToJson); // 淘邮票请求网络的方法
-            MyLog.LogShitou("===点中了自营商城-->" , mToJson );
+            RequestNet(StaticField.ZH, num, StaticField.SC_ZY,StaticField.D, mSCJson); // 淘邮票请求网络的方法
+            MyLog.LogShitou("===点中了自营商城-->" , mSCJson );
         }
         // 第三方
-        if (mJson != null) {
+        if (mDSFJson != null) {
             setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
-            RequestNet(StaticField.ZH, num, StaticField.SC_DSF,StaticField.D, mJson); // 淘邮票请求网络的方法
-            MyLog.LogShitou("===点中了第三方-->" , mJson);
+            RequestNet(StaticField.ZH, num, StaticField.SC_DSF,StaticField.D, mDSFJson); // 淘邮票请求网络的方法
+            MyLog.LogShitou("===点中了第三方-->" , mDSFJson);
         }
 
 
         // 邮市
-        if (mStampdata != null) {
-
+        if (mYSJson != null) {
+            setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
+            RequestNet(StaticField.ZH, num, StaticField.YS,StaticField.A, mYSJson); // 淘邮票请求网络的方法
+            MyLog.LogShitou("===点中了邮市-->" , mYSJson);
         }
         // 竞拍
-        if (mAuctiondata != null) {
-
-
+        if (mJPJson != null) {
+            setDrawable(R.mipmap.top_arrow_bottom, mSynthesize, Color.parseColor("#ff0000"));
+            RequestNet(StaticField.ZH, num, StaticField.JP,StaticField.A, mJPJson); // 淘邮票请求网络的方法
+            MyLog.LogShitou("===点中了竞拍-->" , mJPJson);
         }
 
         mSelfPanDialog.dismiss();
