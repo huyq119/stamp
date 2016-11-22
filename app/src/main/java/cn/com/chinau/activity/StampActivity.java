@@ -142,6 +142,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
     };
     private String name;
     private ArrayList<CategoryBean.Category.SubCategory> subCategory1;
+    private CategoryBean mCategoryBean;
 
     @Override
     public View CreateTitle() {
@@ -253,7 +254,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
         if (category5 != null) {
 
             Gson gson = new Gson();
-            CategoryBean mCategoryBean = gson.fromJson(category5, CategoryBean.class);
+             mCategoryBean = gson.fromJson(category5, CategoryBean.class);
 
             MyLog.LogShitou("======这个有值吗mCategoryBean", "====" + mCategoryBean);
 
@@ -303,7 +304,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 MyLog.LogShitou("新中国二级筛选内容string0", "=====" + string0.length);
                 // 横向的listView设置适配器
 
-                if (string0.length != 0) {
+                if (string0.length !=0) {
                     hListViewAdapter = new StampHorizontalListViewAdapter(StampActivity.this, string0);
                     hListView.setAdapter(hListViewAdapter);
                 } else {
@@ -536,8 +537,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case R.id.stamp_newchinese_btn://新中国邮票
                 Flag = 0;
-                MyLog.LogShitou("=========string0.length ","===========/"+string0.length );
-                if (string0.length != 0) {
+                if (mCategoryBean != null) {
                     hListViewAdapter = new StampHorizontalListViewAdapter(this, string0);
                     hListView.setAdapter(hListViewAdapter);
                     hListViewAdapter.notifyDataSetChanged();
@@ -547,7 +547,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
             case R.id.stamp_republicChina_btn:// 民国邮票
                 Flag = 1;
 
-                if (string1.length != 0) {
+                if (mCategoryBean != null) {
                     hListViewAdapter = new StampHorizontalListViewAdapter(this, string1);
                     hListView.setAdapter(hListViewAdapter);
                     hListViewAdapter.notifyDataSetChanged();
@@ -555,8 +555,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case R.id.stamp_liberatedArea_btn://解放区邮票
                 Flag = 2;
-                if (string2.length != 0) {
-
+                if (mCategoryBean != null) {
                     hListViewAdapter = new StampHorizontalListViewAdapter(this, string2);
                     hListView.setAdapter(hListViewAdapter);
                     hListViewAdapter.notifyDataSetChanged();
@@ -565,7 +564,7 @@ public class StampActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case R.id.stamp_qingDynasty_btn://清代邮票
                 Flag = 3;
-                if (string3.length != 0) {
+                if (mCategoryBean != null) {
                     hListViewAdapter = new StampHorizontalListViewAdapter(this, string3);
                     hListView.setAdapter(hListViewAdapter);
                     hListViewAdapter.notifyDataSetChanged();
